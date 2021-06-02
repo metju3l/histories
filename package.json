@@ -12,11 +12,13 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^1.13.1",
+    "@supabase/ui": "^0.26.6",
     "i18n": "^0.13.3",
     "next": "10.2.3",
     "prettier": "^2.3.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "swr": "^0.5.6"
   },
   "devDependencies": {
     "@types/react": "17.0.9",
