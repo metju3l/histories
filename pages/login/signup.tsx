@@ -2,16 +2,22 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { supabase } from '../../utils/initSupabase';
 
-const createUser = async (credentials: {
+const createUser = async ({
+  firstName,
+  lastName,
+  username,
+  email,
+  password,
+}: {
   firstName: string;
   lastName: string;
   username: string;
   email: string;
   password: string;
 }) => {
-  const { user, session, error } = await supabase.auth.signUp({
-    email: credentials.email,
-    password: credentials.password,
+  const { error, data } = await supabase.auth.signUp({
+    email: email,
+    password: password,
   });
 };
 
