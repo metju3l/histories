@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { supabase } from '../../utils/initSupabase';
 import React from 'react';
+import 'tailwindcss/tailwind.css';
 
 const createUser = async ({
   firstName,
@@ -16,10 +17,11 @@ const createUser = async ({
   email: string;
   password: string;
 }) => {
-  const { error, data } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email: email,
     password: password,
   });
+  return error;
 };
 
 const Sign_up = ({ setForm }: { setForm: () => void }) => {
@@ -29,13 +31,17 @@ const Sign_up = ({ setForm }: { setForm: () => void }) => {
     username: '',
     email: '',
     password: '',
+    repeatPassword: '',
   });
+  const [errorMessage, setErrorMessage] = useState('');
+
   return (
     <>
       <Head>
         <title>sign up</title>
         <meta name="description" content="login to histories" />
       </Head>
+      <div className="bg-red-500">{errorMessage}</div>
       first name
       <input
         type="text"
@@ -84,10 +90,24 @@ const Sign_up = ({ setForm }: { setForm: () => void }) => {
         }
       />
       <br />
+      repeat password
+      <input
+        type="password"
+        value={credentials.repeatPassword}
+        onChange={(e) =>
+          setCredentials({ ...credentials, repeatPassword: e.target.value })
+        }
+      />
+      <br />
       <button
-        onClick={() => {
-          createUser(credentials);
-          setForm('login');
+        onClick={async () => {
+          if (credentials.password === credentials.repeatPassword) {
+            const msg = await createUser(credentials);
+            if (msg === null) setForm('login');
+            else setErrorMessage(msg.message);
+          } else {
+            setErrorMessage('passwords do not match');
+          }
         }}
       >
         sign up
