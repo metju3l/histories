@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import { supabase } from '../../utils/initSupabase';
+import React from 'react';
 
 const createUser = async ({
   firstName,
@@ -21,7 +22,7 @@ const createUser = async ({
   });
 };
 
-const Sign_up = () => {
+const Sign_up = ({ setForm }: { setForm: () => void }) => {
   const [credentials, setCredentials] = useState({
     firstName: '',
     lastName: '',
@@ -29,7 +30,6 @@ const Sign_up = () => {
     email: '',
     password: '',
   });
-
   return (
     <>
       <Head>
@@ -41,7 +41,10 @@ const Sign_up = () => {
         type="text"
         value={credentials.firstName}
         onChange={(e) =>
-          setCredentials({ ...credentials, firstName: e.target.value })
+          setCredentials({
+            ...credentials,
+            firstName: e.target.value,
+          })
         }
       />
       <br />
@@ -81,7 +84,14 @@ const Sign_up = () => {
         }
       />
       <br />
-      <button onClick={() => createUser(credentials)}>sign up</button>
+      <button
+        onClick={() => {
+          createUser(credentials);
+          setForm('login');
+        }}
+      >
+        sign up
+      </button>
     </>
   );
 };

@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { NextPageContext } from 'next';
+import React from 'react';
 
 const user = ({ username }: { username: string }) => {
   return (
