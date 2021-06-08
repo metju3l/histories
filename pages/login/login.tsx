@@ -14,7 +14,7 @@ const checkCredentials = async ({
 };
 
 const Log_in = () => {
-   const [credentials, setCredentials] = useState({
+  const [credentials, setCredentials] = useState({
     email: '',
     password: '',
   });
