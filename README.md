@@ -9,3 +9,4 @@
    yarn
    yarn dev
    ```
+Help translate the project at [Hosted Weblate](https://hosted.weblate.org/projects/histories/#components)
