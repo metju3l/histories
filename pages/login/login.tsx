@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import { useState } from 'react';
-import { supabase } from '../../utils/initSupabase';
 import React from 'react';
 import { useRouter } from 'next/router';
 
@@ -11,11 +10,8 @@ const checkCredentials = async ({
   email: string;
   password: string;
 }) => {
-  const { error, data } = await supabase.auth.signIn({
-    email: email,
-    password: password,
-  });
-  return error;
+  
+  return;
 };
 
 const Log_in = () => {
@@ -55,22 +51,13 @@ const Log_in = () => {
       <br />
       <button
         className="bg-blue-100 border-gray-700 border-2"
-        onClick={async () => {
-          const err = await checkCredentials(credentials);
-
-          if (err == null) router.push('/user');
-          else setErrorMessage(err.message);
-        }}
       >
         log in
       </button>
       <br />
       <button
         className="bg-blue-100 border-gray-700 border-2"
-        onClick={async () => {
-          const { error } = await supabase.auth.signOut();
-          console.log(error);
-        }}
+        
       >
         log out
       </button>

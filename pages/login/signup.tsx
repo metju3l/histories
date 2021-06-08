@@ -17,11 +17,7 @@ const createUser = async ({
   email: string;
   password: string;
 }) => {
-  const { error } = await supabase.auth.signUp({
-    email: email,
-    password: password,
-  });
-  return error;
+ return;
 };
 
 const Sign_up = ({ setForm }: { setForm: () => void }) => {
@@ -101,14 +97,8 @@ const Sign_up = ({ setForm }: { setForm: () => void }) => {
       <br />
       <button
         onClick={async () => {
-          if (credentials.password === credentials.repeatPassword) {
-            const msg = await createUser(credentials);
-            if (msg === null) setForm('login');
-            else setErrorMessage(msg.message);
-          } else {
             setErrorMessage('passwords do not match');
-          }
-        }}
+          }}
       >
         sign up
       </button>
