@@ -1,6 +1,6 @@
 # hiStories
 
-## deploy:
+## setup:
 
 1. rename `.env.local.example` to `.env.local`
 2. change credentials
@@ -9,4 +9,10 @@
    yarn
    yarn dev
    ```
+
+## before pushing:
+
+- check eslint `yarn lint`
+- format `yarn format`
+
 Help translate the project at [Hosted Weblate](https://hosted.weblate.org/projects/histories/#components)

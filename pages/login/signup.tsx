@@ -17,7 +17,7 @@ const createUser = async ({
   email: string;
   password: string;
 }) => {
- return;
+  return;
 };
 
 const Sign_up = ({ setForm }: { setForm: () => void }) => {
@@ -97,8 +97,8 @@ const Sign_up = ({ setForm }: { setForm: () => void }) => {
       <br />
       <button
         onClick={async () => {
-            setErrorMessage('passwords do not match');
-          }}
+          setErrorMessage('passwords do not match');
+        }}
       >
         sign up
       </button>
