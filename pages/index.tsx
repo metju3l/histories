@@ -1,6 +1,11 @@
 import 'tailwindcss/tailwind.css';
 import Head from 'next/head';
 import React from 'react';
+import dynamic from 'next/dynamic';
+
+const MapWithNoSSR = dynamic(() => import('../src/components/map'), {
+  ssr: false,
+});
 
 export default function Home() {
   return (
@@ -11,7 +16,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main></main>
+      <main>
+        hiStories
+        <MapWithNoSSR />
+      </main>
     </div>
   );
 }

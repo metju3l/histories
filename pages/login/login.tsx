@@ -47,7 +47,6 @@ const Log_in = () => {
           setCredentials({ ...credentials, password: e.target.value })
         }
       />
-      miluju sebe
       <br />
       <button className="bg-blue-100 border-gray-700 border-2">log in</button>
       <br />
