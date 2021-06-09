@@ -1,15 +1,12 @@
 import { useState } from 'react';
-import { supabase } from '../../utils/initSupabase';
 import Log_in from './login';
 import Sign_up from './signup';
 import React from 'react';
 
 const Login = () => {
   const [form, setForm] = useState('login');
-  const [user] = useState(supabase.auth.user());
   return (
     <>
-      logged in: {user !== null && user.email}
       <br />
       {form == 'signup' ? <Sign_up setForm={setForm} /> : <Log_in />}
       <br />

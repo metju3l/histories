@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import { useState } from 'react';
-import { supabase } from '../../utils/initSupabase';
 import React from 'react';
 import 'tailwindcss/tailwind.css';
 
