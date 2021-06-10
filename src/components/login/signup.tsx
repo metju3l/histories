@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import React from 'react';
-import 'tailwindcss/tailwind.css';
+import { useTranslation } from 'react-i18next';
 
 const createUser = async ({
   firstName,
@@ -18,8 +18,8 @@ const createUser = async ({
 }) => {
   return;
 };
-
-const Sign_up = ({ setForm }: { setForm: () => void }) => {
+const Sign_up = (setForm) => {
+  const { t } = useTranslation();
   const [credentials, setCredentials] = useState({
     firstName: '',
     lastName: '',
@@ -33,11 +33,11 @@ const Sign_up = ({ setForm }: { setForm: () => void }) => {
   return (
     <>
       <Head>
-        <title>sign up</title>
+        <title>{t('sign up')}</title>
         <meta name="description" content="login to histories" />
       </Head>
       <div className="bg-red-500">{errorMessage}</div>
-      first name
+      {t('first name')}
       <input
         type="text"
         value={credentials.firstName}
@@ -49,7 +49,7 @@ const Sign_up = ({ setForm }: { setForm: () => void }) => {
         }
       />
       <br />
-      last name
+      {t('last name')}
       <input
         type="text"
         value={credentials.lastName}
@@ -58,7 +58,7 @@ const Sign_up = ({ setForm }: { setForm: () => void }) => {
         }
       />
       <br />
-      username
+      {t('username')}
       <input
         type="text"
         value={credentials.username}
@@ -67,7 +67,7 @@ const Sign_up = ({ setForm }: { setForm: () => void }) => {
         }
       />
       <br />
-      email
+      {t('email')}
       <input
         type="email"
         value={credentials.email}
@@ -76,7 +76,7 @@ const Sign_up = ({ setForm }: { setForm: () => void }) => {
         }
       />
       <br />
-      password
+      {t('password')}
       <input
         type="password"
         value={credentials.password}
@@ -85,7 +85,7 @@ const Sign_up = ({ setForm }: { setForm: () => void }) => {
         }
       />
       <br />
-      repeat password
+      {t('repeat password')}
       <input
         type="password"
         value={credentials.repeatPassword}
@@ -99,7 +99,7 @@ const Sign_up = ({ setForm }: { setForm: () => void }) => {
           setErrorMessage('passwords do not match');
         }}
       >
-        sign up
+        {t('sign up')}
       </button>
     </>
   );

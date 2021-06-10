@@ -21,11 +21,14 @@
     "apollo-server-micro": "^2.25.1",
     "graphql": "^15.5.0",
     "i18n": "^0.13.3",
+    "i18next": "^20.3.1",
+    "js-cookie": "^2.2.1",
     "leaflet": "^1.7.1",
     "next": "10.2.3",
     "prettier": "^2.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-i18next": "^11.10.0",
     "react-leaflet": "^3.2.0"
   },
   "devDependencies": {

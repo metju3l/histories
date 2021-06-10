@@ -1,13 +1,8 @@
 import 'tailwindcss/tailwind.css';
 import Head from 'next/head';
-import React from 'react';
-import dynamic from 'next/dynamic';
+import React, { useMemo } from 'react';
 
-const MapWithNoSSR = dynamic(() => import('../src/components/map'), {
-  ssr: false,
-});
-
-export default function Home() {
+const Home = () => {
   return (
     <div className="">
       <Head>
@@ -16,10 +11,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        hiStories
-        <MapWithNoSSR />
-      </main>
+      <main>hiStories</main>
     </div>
   );
-}
+};
+
+export default Home;

@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { useState } from 'react';
 import React from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 const checkCredentials = async ({
   email,
@@ -14,6 +15,7 @@ const checkCredentials = async ({
 };
 
 const Log_in = () => {
+  const { t } = useTranslation();
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
@@ -24,11 +26,11 @@ const Log_in = () => {
   return (
     <>
       <Head>
-        <title>log in</title>
+        <title>{t('log in')}</title>
         <meta name="description" content="login to histories" />
       </Head>
       <div className="bg-red-500">{errorMessage}</div>
-      email
+      {t('email')}
       <input
         className="bg-blue-100 border-gray-700 border-2"
         type="email"
@@ -38,7 +40,7 @@ const Log_in = () => {
         }
       />
       <br />
-      password
+      {t('password')}
       <input
         className="bg-blue-100 border-gray-700 border-2"
         type="password"
