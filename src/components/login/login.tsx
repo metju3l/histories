@@ -32,27 +32,25 @@ const Log_in = () => {
       <div className="bg-red-500">{errorMessage}</div>
       {t('email')}
       <input
-        className="bg-blue-100 border-gray-700 border-2"
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
         type="email"
         value={credentials.email}
         onChange={(e) =>
           setCredentials({ ...credentials, email: e.target.value })
         }
       />
-      <br />
-      {t('password')}
+      <label>{t('password')}</label>
       <input
-        className="bg-blue-100 border-gray-700 border-2"
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
         type="password"
         value={credentials.password}
         onChange={(e) =>
           setCredentials({ ...credentials, password: e.target.value })
         }
       />
-      <br />
-      <button className="bg-blue-100 border-gray-700 border-2">log in</button>
-      <br />
-      <button className="bg-blue-100 border-gray-700 border-2">log out</button>
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        log in
+      </button>
     </>
   );
 };

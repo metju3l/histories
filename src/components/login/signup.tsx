@@ -37,9 +37,10 @@ const Sign_up = (setForm) => {
         <meta name="description" content="login to histories" />
       </Head>
       <div className="bg-red-500">{errorMessage}</div>
-      {t('first name')}
+
+      <label className="block">{t('first name')}</label>
       <input
-        type="text"
+        className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
         value={credentials.firstName}
         onChange={(e) =>
           setCredentials({
@@ -48,53 +49,53 @@ const Sign_up = (setForm) => {
           })
         }
       />
-      <br />
-      {t('last name')}
+      <label>{t('last name')}</label>
       <input
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
         type="text"
         value={credentials.lastName}
         onChange={(e) =>
           setCredentials({ ...credentials, lastName: e.target.value })
         }
       />
-      <br />
-      {t('username')}
+      <label>{t('username')}</label>
       <input
+        className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
         type="text"
         value={credentials.username}
         onChange={(e) =>
           setCredentials({ ...credentials, username: e.target.value })
         }
       />
-      <br />
-      {t('email')}
+      <label>{t('email')}</label>
       <input
+        className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
         type="email"
         value={credentials.email}
         onChange={(e) =>
           setCredentials({ ...credentials, email: e.target.value })
         }
       />
-      <br />
-      {t('password')}
+      <label>{t('password')}</label>
       <input
+        className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
         type="password"
         value={credentials.password}
         onChange={(e) =>
           setCredentials({ ...credentials, password: e.target.value })
         }
       />
-      <br />
-      {t('repeat password')}
+      <label>{t('repeat password')}</label>
       <input
+        className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
         type="password"
         value={credentials.repeatPassword}
         onChange={(e) =>
           setCredentials({ ...credentials, repeatPassword: e.target.value })
         }
       />
-      <br />
       <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         onClick={async () => {
           setErrorMessage('passwords do not match');
         }}
