@@ -19,6 +19,7 @@ const user = ({ post }: { post: string }) => {
 export const getServerSideProps = async (context: NextPageContext) => {
   return {
     props: {
+      // @ts-ignore
       post: context.query.post.toString(),
     },
   };

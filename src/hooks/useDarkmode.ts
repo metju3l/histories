@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+// @ts-ignore
 import Cookie from 'js-cookie';
 
 const useDarkMode = (): { theme: string; setTheme: () => void } => {
@@ -22,6 +23,7 @@ const useDarkMode = (): { theme: string; setTheme: () => void } => {
     return;
   }, [theme]);
 
+  // @ts-ignore
   return [theme, setTheme];
 };
 

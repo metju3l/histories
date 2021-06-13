@@ -4,11 +4,8 @@
 
 1. rename `.env.local.example` to `.env.local`
 2. change credentials
-3. run
-   ```bash
-   yarn
-   yarn dev
-   ```
+3. install dependencies `yarn install`
+4. run dev server `yarn dev` / run with ssl for phone testing geolocation `yarn dev-ssl`
 
 ## before pushing:
 

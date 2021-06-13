@@ -8,6 +8,7 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
+    // @ts-ignore
     hello: (_parent, _args, _context) => {
       return 'Hello';
     },

@@ -18,6 +18,7 @@ const createUser = async ({
 }) => {
   return;
 };
+// @ts-ignore
 const Sign_up = (setForm) => {
   const { t } = useTranslation();
   const [credentials, setCredentials] = useState({
