@@ -18,7 +18,6 @@ const createUser = async ({
 }) => {
   return;
 };
-// @ts-ignore
 const Sign_up = (setForm) => {
   const { t } = useTranslation();
   const [credentials, setCredentials] = useState({
@@ -98,7 +97,8 @@ const Sign_up = (setForm) => {
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         onClick={async () => {
-          setErrorMessage('passwords do not match');
+          if (credentials.password !== credentials.repeatPassword)
+            setErrorMessage('passwords do not match');
         }}
       >
         {t('sign up')}
