@@ -9,6 +9,9 @@ module.exports = {
       colors: {
         yellow: '#FCAF58',
       },
+      height: {
+        content: '95%',
+      },
     },
   },
   variants: {
