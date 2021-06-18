@@ -9,6 +9,7 @@ import {
   HiShare,
   HiOutlineLocationMarker,
 } from 'react-icons/hi';
+import { Map, MarkerLayer, Marker, KeyboardControl } from 'react-mapycz';
 
 const Img = ({ url, username }: { url: string; username: string }) => {
   return (
@@ -107,6 +108,15 @@ const Home = () => {
             />
           </div>
         </div>
+        <Map center={{ lat: 55.604890000000005, lng: 8.97171 }}>
+          <KeyboardControl />
+          <MarkerLayer>
+            <Marker coords={{ lat: 55.60501000000001, lng: 8.97171 }} />
+            <Marker
+              coords={{ lat: 55.547290000000004, lng: 8.897590000000001 }}
+            />
+          </MarkerLayer>
+        </Map>
       </div>
     </>
   );
