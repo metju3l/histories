@@ -1,7 +1,7 @@
 import 'tailwindcss/tailwind.css';
 import Head from 'next/head';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React from 'react';
 import dynamic from 'next/dynamic';
 
 import { BiShare, BiCollection } from 'react-icons/bi';
@@ -18,7 +18,7 @@ const DynamicMap = () => {
 
 const Img = ({ url, username }: { url: string; username: string }) => {
   return (
-    <div className="w-full p-4 mb-12 border-t-2 border-gray-50">
+    <div className="w-full p-4 mb-12 border-t-2 border-gray-50 shadow-xl">
       <div className="w-full">
         <div className="float-left flex">
           <div className="h-10 w-10 bg-gray-600 rounded-full mb-4"></div>
@@ -57,33 +57,6 @@ const Img = ({ url, username }: { url: string; username: string }) => {
 };
 
 const Home = () => {
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);
-  const [status, setStatus] = useState(null);
-
-  const getLocation = () => {
-    if (!navigator.geolocation) {
-      // @ts-ignore
-      setStatus('Geolocation is not supported by your browser');
-    } else {
-      // @ts-ignore
-      setStatus('Locating...');
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setStatus(null);
-          // @ts-ignore
-          setLat(position.coords.latitude);
-          // @ts-ignore
-          setLng(position.coords.longitude);
-        },
-        () => {
-          // @ts-ignore
-          setStatus('Unable to retrieve your location');
-        }
-      );
-    }
-  };
-
   return (
     <>
       <Head>
@@ -91,7 +64,10 @@ const Home = () => {
         <meta name="description" content="hiStories" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="w-screen h-screen bg-blue-100"></div>
+      <div className="absolute z-0 w-screen h-screen bg-blue-100">
+        <DynamicMap />
+      </div>
+
       <div className="absolute left-0 top-0 z-10 h-screen w-2/5 py-4 pl-4">
         <div className="bg-white w-full h-full rounded-widget p-2">
           <div className="overflow-y-scroll scrollbar-hide overflow-x-hidden h-content">
@@ -113,7 +89,6 @@ const Home = () => {
             />
           </div>
         </div>
-        <DynamicMap />
       </div>
     </>
   );
