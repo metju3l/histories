@@ -1,15 +1,20 @@
 import 'tailwindcss/tailwind.css';
 import Head from 'next/head';
 import Link from 'next/link';
-import React, { useMemo, useState } from 'react';
-import { BiSearchAlt2, BiShare, BiCollection } from 'react-icons/bi';
+import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
+
+import { BiShare, BiCollection } from 'react-icons/bi';
 import { FaRegComment } from 'react-icons/fa';
-import {
-  HiOutlineHeart,
-  HiShare,
-  HiOutlineLocationMarker,
-} from 'react-icons/hi';
-import { Map, MarkerLayer, Marker, KeyboardControl } from 'react-mapycz';
+import { HiOutlineHeart, HiOutlineLocationMarker } from 'react-icons/hi';
+
+const DynamicMap = () => {
+  const DynamicMap = dynamic(
+    () => import('../src/components/map'), // replace '@components/map' with your component's location
+    { ssr: false } // This line is important. It's what prevents server-side render
+  );
+  return <DynamicMap />;
+};
 
 const Img = ({ url, username }: { url: string; username: string }) => {
   return (
@@ -108,15 +113,7 @@ const Home = () => {
             />
           </div>
         </div>
-        <Map center={{ lat: 55.604890000000005, lng: 8.97171 }}>
-          <KeyboardControl />
-          <MarkerLayer>
-            <Marker coords={{ lat: 55.60501000000001, lng: 8.97171 }} />
-            <Marker
-              coords={{ lat: 55.547290000000004, lng: 8.897590000000001 }}
-            />
-          </MarkerLayer>
-        </Map>
+        <DynamicMap />
       </div>
     </>
   );

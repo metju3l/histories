@@ -3,9 +3,9 @@
 ## Setup dev:
 
 1. rename `.env.local.example` to `.env.local` and change values
-2. ```bash
+2. generate certificate
+   ```bash
    yarn install
-   mkdir certificate
    cd certificate
    mkcert localhost
    ```
