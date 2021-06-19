@@ -4,9 +4,11 @@ import Link from 'next/link';
 import React from 'react';
 import dynamic from 'next/dynamic';
 
-import { BiShare, BiCollection } from 'react-icons/bi';
+import { BiShare, BiCollection, BiSearchAlt2 } from 'react-icons/bi';
 import { FaRegComment } from 'react-icons/fa';
 import { HiOutlineHeart, HiOutlineLocationMarker } from 'react-icons/hi';
+import { IoIosArrowBack, IoMdAdd } from 'react-icons/io';
+import { AiOutlineUser } from 'react-icons/ai';
 
 const DynamicMap = () => {
   const DynamicMap = dynamic(
@@ -18,7 +20,7 @@ const DynamicMap = () => {
 
 const Img = ({ url, username }: { url: string; username: string }) => {
   return (
-    <div className="w-full p-4 mb-12 border-t-2 border-gray-50 shadow-xl">
+    <div className="w-full p-4 mb-12 border-t-2 border-gray-50">
       <div className="w-full">
         <div className="float-left flex">
           <div className="h-10 w-10 bg-gray-600 rounded-full mb-4"></div>
@@ -68,8 +70,8 @@ const Home = () => {
         <DynamicMap />
       </div>
 
-      <div className="absolute left-0 top-0 z-10 h-screen w-2/5 py-4 pl-4">
-        <div className="bg-white w-full h-full rounded-widget p-2">
+      <div className="absolute flex left-0 top-0 z-10 h-screen w-2/5 py-4 pl-4 ">
+        <div className="bg-white w-full h-full rounded-widget p-2 ">
           <div className="overflow-y-scroll scrollbar-hide overflow-x-hidden h-content">
             <Img
               username="czM1K3"
@@ -88,6 +90,24 @@ const Home = () => {
               url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
             />
           </div>
+        </div>
+        <div className="">
+          <BiSearchAlt2
+            className="ml-2 mb-2 bg-white text-black rounded-full"
+            size={36}
+          />
+          <AiOutlineUser
+            className="ml-2 mb-2 bg-white text-black rounded-full"
+            size={36}
+          />
+          <IoMdAdd
+            className="ml-2 mb-2 bg-white text-black rounded-full"
+            size={36}
+          />
+          <IoIosArrowBack
+            className="pl-2 bg-white rounded-r-2xl text-black h-12 w-11"
+            size={36}
+          />
         </div>
       </div>
     </>
