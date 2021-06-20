@@ -10,12 +10,18 @@ const driver = neo4j.driver(
   )
 );
 
-const session = driver.session();
-session.run('CREATE (n:Person {name: "Kahy", title: "Developer"})');
-
 const typeDefs = gql`
   type Query {
     hello: String!
+  }
+  type Mutation {
+    createUser(
+      username: String!
+      email: String!
+      first_name: String!
+      last_name: String!
+      password: String!
+    ): String!
   }
 `;
 
@@ -24,6 +30,34 @@ const resolvers = {
     // @ts-ignore
     hello: (_parent, _args, _context) => {
       return 'Hello';
+    },
+  },
+  Mutation: {
+    // @ts-ignore
+    createUser: (_parent, args, _context) => {
+      console.log(args.username);
+      var session = driver.session();
+
+      session
+        .run(
+          `Create (n:user {username : "${args.username}", first_name:"${
+            args.first_name
+          }",last_name:"${args.last_name}", email:"${args.email}", password:"${
+            args.password
+          }", authenticated:"false", created_at:"${new Date().getTime()}"} )`
+        )
+        .then(function (result) {
+          result.records.forEach(function (record) {
+            console.log(record.get('name'));
+          });
+          session.close();
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+      driver.close();
+      return 'done';
     },
   },
 };
