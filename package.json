@@ -21,7 +21,7 @@
     "@apollo/client": "^3.3.20",
     "@neo4j/graphql": "^1.0.2",
     "apollo-server-micro": "^2.25.1",
-    "graphql": "^15.5.0",
+    "graphql": "^15.5.1",
     "i18n": "^0.13.3",
     "i18next": "^20.3.1",
     "js-cookie": "^2.2.1",
