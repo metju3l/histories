@@ -41,8 +41,8 @@ const Sign_up = (setForm) => {
 
   // check username
   useEffect(() => {
-    const res = /^[a-zA-Z0-9_\.\-]+$/.exec(credentials.username);
-    let error: string = '';
+    const res = /^[a-zA-Z0-9_.-]+$/.exec(credentials.username);
+    let error = '';
 
     if (credentials.username.length === 0) error = '';
     else if (!res) error = 'username cannot contain special characters';
@@ -53,7 +53,7 @@ const Sign_up = (setForm) => {
 
   // check password and repeatPassword
   useEffect(() => {
-    let error: [string, string] = ['', ''];
+    const error = ['', ''];
     if (credentials.password.length > 0 && credentials.password.length < 8)
       error[0] = 'password is too short';
     else error[0] = '';
@@ -77,10 +77,10 @@ const Sign_up = (setForm) => {
     const res = credentials.email.match(
       /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
     );
-    let error: string = '';
+    let error = '';
 
     if (credentials.email.length === 0) error = '';
-    else if (!res) error = "This doens't look like a valid email address";
+    else if (!res) error = 'This does not look like a valid email address';
     else error = '';
 
     setErrorMessage({ ...errorMessages, email: error });
