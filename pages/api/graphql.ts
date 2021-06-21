@@ -2,14 +2,6 @@ import ApollerServer, { gql, ApolloServer } from 'apollo-server-micro';
 import { Neo4jGraphQL } from '@neo4j/graphql';
 import neo4j from 'neo4j-driver';
 
-const driver = neo4j.driver(
-  process.env.NEO4J_HOST || 'bolt://localhost:7687',
-  neo4j.auth.basic(
-    process.env.NEO4J_USER || 'neo4j',
-    process.env.NEO4J_PASSWORD || 'password'
-  )
-);
-
 const typeDefs = gql`
   type Query {
     hello: String!
@@ -35,8 +27,15 @@ const resolvers = {
   Mutation: {
     // @ts-ignore
     createUser: (_parent, args, _context) => {
-      console.log(args.username);
-      var session = driver.session();
+      const driver = neo4j.driver(
+        process.env.NEO4J_HOST || 'bolt://localhost:7687',
+        neo4j.auth.basic(
+          process.env.NEO4J_USER || 'neo4j',
+          process.env.NEO4J_PASSWORD || 'password'
+        )
+      );
+
+      const session = driver.session();
 
       session
         .run(
