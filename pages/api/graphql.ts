@@ -1,21 +1,11 @@
 import ApollerServer, { gql, ApolloServer } from 'apollo-server-micro';
-import { Neo4jGraphQL } from '@neo4j/graphql';
+import { mergeTypeDefs } from '@graphql-tools/merge';
+import { loadFilesSync } from '@graphql-tools/load-files';
+import { join } from 'path';
 import neo4j from 'neo4j-driver';
 
-const typeDefs = gql`
-  type Query {
-    hello: String!
-  }
-  type Mutation {
-    createUser(
-      username: String!
-      email: String!
-      first_name: String!
-      last_name: String!
-      password: String!
-    ): String!
-  }
-`;
+const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
+const typeDefs = mergeTypeDefs(loadedFiles);
 
 const resolvers = {
   Query: {
