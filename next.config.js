@@ -1,7 +1,7 @@
-const withNextCircularDeps = require('next-circular-dependency');
-const withPlugins = require('next-compose-plugins');
-
-const nextConfig = {
+module.exports = {
+  typescript: {
+    ignoreBuildErrors: false,
+  },
   webpack(config, options) {
     config.module.rules.push({
       test: /\.graphql$/,
@@ -24,15 +24,3 @@ const nextConfig = {
     return config;
   },
 };
-
-const plugins = [
-  [
-    withNextCircularDeps,
-    {
-      exclude: /node_modules/,
-      failOnError: false,
-    },
-  ],
-];
-
-module.exports = withPlugins(plugins, nextConfig);

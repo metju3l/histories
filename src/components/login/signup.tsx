@@ -1,7 +1,8 @@
-import Head from 'next/head';
-import { useState, useEffect } from 'react';
-import React from 'react';
+import { useCreateUserMutation } from '../../graphql/user.graphql';
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
+import Head from 'next/head';
+import React from 'react';
 
 const createUser = async ({
   firstName,
@@ -21,6 +22,7 @@ const createUser = async ({
 
 // @ts-ignore
 const Sign_up = (setForm) => {
+  const [createUser] = useCreateUserMutation();
   const { t } = useTranslation();
   const [credentials, setCredentials] = useState({
     firstName: '',
@@ -156,7 +158,24 @@ const Sign_up = (setForm) => {
           }
         />
       </div>
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        onClick={async () => {
+          try {
+            await createUser({
+              variables: {
+                username: credentials.username,
+                first_name: credentials.firstName,
+                last_name: credentials.lastName,
+                email: credentials.email,
+                password: credentials.password,
+              },
+            });
+          } catch (error) {
+            console.log(error);
+          }
+        }}
+      >
         {t('sign up')}
       </button>
     </>

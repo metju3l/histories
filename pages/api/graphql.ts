@@ -1,4 +1,8 @@
-import ApollerServer, { gql, ApolloServer } from 'apollo-server-micro';
+import ApollerServer, {
+  gql,
+  ApolloServer,
+  makeExecutableSchema,
+} from 'apollo-server-micro';
 import { mergeTypeDefs } from '@graphql-tools/merge';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { join } from 'path';
@@ -53,9 +57,13 @@ const resolvers = {
   },
 };
 
-const apolloServer = new ApolloServer({
+export const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
+});
+
+const apolloServer = new ApolloServer({
+  schema,
 });
 
 const handler = apolloServer.createHandler({ path: '/api/graphql' });

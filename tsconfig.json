@@ -15,5 +15,5 @@
     "jsx": "preserve"
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/database/driver.js"],
-  "exclude": ["node_modules",".cache"]
+  "exclude": ["node_modules", ".cache"]
 }
