@@ -24,6 +24,7 @@
     "@neo4j/graphql": "^1.0.2",
     "apollo-server-micro": "^2.25.1",
     "graphql": "^15.5.1",
+    "graphql-let": "^0.18.4",
     "i18n": "^0.13.3",
     "i18next": "^20.3.1",
     "js-cookie": "^2.2.1",
@@ -40,6 +41,11 @@
     "tailwind-scrollbar-hide": "^1.0.3"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.21.5",
+    "@graphql-codegen/import-types-preset": "^1.18.4",
+    "@graphql-codegen/typescript": "^1.22.3",
+    "@graphql-codegen/typescript-operations": "^1.18.2",
+    "@graphql-codegen/typescript-react-apollo": "^2.2.7",
     "@types/react": "17.0.11",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",

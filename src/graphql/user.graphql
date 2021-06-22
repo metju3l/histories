@@ -6,10 +6,12 @@ mutation createUser(
   $password: String!
 ) {
   createUser(
-    username: $username
-    email: $email
-    first_name: $first_name
-    last_name: $last_name
-    password: $password
+    input: {
+      username: $username
+      email: $email
+      first_name: $first_name
+      last_name: $last_name
+      password: $password
+    }
   )
 }

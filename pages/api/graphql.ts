@@ -16,7 +16,7 @@ const resolvers = {
   },
   Mutation: {
     // @ts-ignore
-    createUser: (_parent, args, _context) => {
+    createUser: (_parent, { input }, _context) => {
       const driver = neo4j.driver(
         process.env.NEO4J_HOST || 'bolt://localhost:7687',
         neo4j.auth.basic(
@@ -29,10 +29,12 @@ const resolvers = {
 
       session
         .run(
-          `Create (n:user {username : "${args.username}", first_name:"${
-            args.first_name
-          }",last_name:"${args.last_name}", email:"${args.email}", password:"${
-            args.password
+          `Create (n:user {username : "${input.username}", first_name:"${
+            input.first_name
+          }",last_name:"${input.last_name}", email:"${
+            input.email
+          }", password:"${
+            input.password
           }", authenticated:"false", created_at:"${new Date().getTime()}"} )`
         )
         .then(function (result) {
