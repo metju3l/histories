@@ -9,6 +9,7 @@
   },
   "private": true,
   "scripts": {
+    "codegen": "graphql-let",
     "dev": "next dev",
     "dev-ssl": "node server.js",
     "build": "next build",
