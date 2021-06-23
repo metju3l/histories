@@ -22,7 +22,7 @@
     "@apollo/client": "^3.3.20",
     "@graphql-tools/load-files": "^6.3.2",
     "@graphql-tools/merge": "^6.2.14",
-    "@neo4j/graphql": "^1.0.2",
+    "@neo4j/graphql": "^1.0.3",
     "apollo-server-micro": "^2.25.1",
     "formik": "^2.2.9",
     "graphql": "^15.5.1",
