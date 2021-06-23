@@ -1,92 +1,37 @@
 import { useCreateUserMutation } from '../../graphql/user.graphql';
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import React from 'react';
-
-const createUser = async ({
-  firstName,
-  lastName,
-  username,
-  email,
-  password,
-}: {
-  firstName: string;
-  lastName: string;
-  username: string;
-  email: string;
-  password: string;
-}) => {
-  return;
-};
+import { ErrorMessage, Formik } from 'formik';
+import * as Yup from 'yup';
 
 // @ts-ignore
 const Sign_up = (setForm) => {
   const [createUser] = useCreateUserMutation();
   const { t } = useTranslation();
-  const [credentials, setCredentials] = useState({
-    firstName: '',
-    lastName: '',
-    username: '',
-    email: '',
-    password: '',
-    repeatPassword: '',
+
+  const ValidateSchema = Yup.object().shape({
+    firstName: Yup.string()
+      .min(2, 'Too Short!')
+      .max(50, 'Too Long!')
+      .required('Required'),
+    lastName: Yup.string()
+      .min(2, 'Too Short!')
+      .max(50, 'Too Long!')
+      .required('Required'),
+    username: Yup.string()
+      .min(2, 'Too Short!')
+      .max(50, 'Too Long!')
+      .required('Required'),
+    email: Yup.string().email('Invalid email').required('Required'),
+    password: Yup.string()
+      .min(8, 'Too Short!')
+      .max(50, 'Too Long!')
+      .required('Required'),
+    repeatPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], "Passwords don't match")
+      .required('Required'),
   });
-  const [errorMessages, setErrorMessage] = useState({
-    firstName: '',
-    lastName: '',
-    username: '',
-    email: '',
-    password: '',
-    repeatPassword: '',
-  });
-
-  // check username
-  useEffect(() => {
-    const res = /^[a-zA-Z0-9_.-]+$/.exec(credentials.username);
-    let error = '';
-
-    if (credentials.username.length === 0) error = '';
-    else if (!res) error = 'username cannot contain special characters';
-    else error = '';
-
-    setErrorMessage({ ...errorMessages, username: error });
-  }, [credentials.username]);
-
-  // check password and repeatPassword
-  useEffect(() => {
-    const error = ['', ''];
-    if (credentials.password.length > 0 && credentials.password.length < 8)
-      error[0] = 'password is too short';
-    else error[0] = '';
-
-    if (
-      credentials.password !== credentials.repeatPassword &&
-      credentials.repeatPassword.length > 0
-    )
-      error[1] = 'Passwords do not match';
-    else error[1] = '';
-
-    setErrorMessage({
-      ...errorMessages,
-      password: error[0],
-      repeatPassword: error[1],
-    });
-  }, [credentials.password, credentials.repeatPassword]);
-
-  // check email
-  useEffect(() => {
-    const res = credentials.email.match(
-      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
-    );
-    let error = '';
-
-    if (credentials.email.length === 0) error = '';
-    else if (!res) error = 'This does not look like a valid email address';
-    else error = '';
-
-    setErrorMessage({ ...errorMessages, email: error });
-  }, [credentials.email]);
 
   return (
     <>
@@ -94,81 +39,27 @@ const Sign_up = (setForm) => {
         <title>{t('sign up')}</title>
         <meta name="description" content="login to histories" />
       </Head>
-      <div className="w-1/2 ">
-        <label className="block">{t('first name')}</label>
-        <div className="bg-red-500">{errorMessages.firstName}</div>
-        <input
-          className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          value={credentials.firstName}
-          onChange={(e) =>
-            setCredentials({
-              ...credentials,
-              firstName: e.target.value,
-            })
-          }
-        />
-        <label>{t('last name')}</label>
-        <div className="bg-red-500">{errorMessages.lastName}</div>
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          type="text"
-          value={credentials.lastName}
-          onChange={(e) =>
-            setCredentials({ ...credentials, lastName: e.target.value })
-          }
-        />
-        <label>{t('username')}</label>
-        <div className="bg-red-500">{errorMessages.username}</div>
-        <input
-          className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          type="text"
-          value={credentials.username}
-          onChange={(e) =>
-            setCredentials({ ...credentials, username: e.target.value })
-          }
-        />
-        <label>{t('email')}</label>
-        <div className="bg-red-500">{errorMessages.email}</div>
-        <input
-          className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          type="email"
-          value={credentials.email}
-          onChange={(e) =>
-            setCredentials({ ...credentials, email: e.target.value })
-          }
-        />
-        <label>{t('password')}</label>
-        <div className="bg-red-500">{errorMessages.password}</div>
-        <input
-          className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          type="password"
-          value={credentials.password}
-          onChange={(e) =>
-            setCredentials({ ...credentials, password: e.target.value })
-          }
-        />
-        <label>{t('repeat password')}</label>
-        <div className="bg-red-500">{errorMessages.repeatPassword}</div>
-        <input
-          className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          type="password"
-          value={credentials.repeatPassword}
-          onChange={(e) =>
-            setCredentials({ ...credentials, repeatPassword: e.target.value })
-          }
-        />
-      </div>
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        onClick={async () => {
+
+      <Formik
+        initialValues={{
+          firstName: '',
+          lastName: '',
+          username: '',
+          email: '',
+          password: '',
+          repeatPassword: '',
+        }}
+        validationSchema={ValidateSchema}
+        onSubmit={async (values) => {
+          console.log(values);
           try {
             await createUser({
               variables: {
-                username: credentials.username,
-                first_name: credentials.firstName,
-                last_name: credentials.lastName,
-                email: credentials.email,
-                password: credentials.password,
+                username: values.username,
+                first_name: values.firstName,
+                last_name: values.lastName,
+                email: values.email,
+                password: values.password,
               },
             });
           } catch (error) {
@@ -176,8 +67,78 @@ const Sign_up = (setForm) => {
           }
         }}
       >
-        {t('sign up')}
-      </button>
+        {(props) => (
+          <div>
+            <label>First name</label>
+            <input
+              type="text"
+              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              onChange={props.handleChange('firstName')}
+              value={props.values.firstName}
+            />
+            <ErrorMessage name="firstName" />
+            <br />
+
+            <label>Last name</label>
+            <input
+              type="text"
+              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              onChange={props.handleChange('lastName')}
+              value={props.values.lastName}
+            />
+            <ErrorMessage name="lastName" />
+            <br />
+
+            <label>Username</label>
+            <input
+              type="text"
+              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              onChange={props.handleChange('username')}
+              value={props.values.username}
+            />
+            <ErrorMessage name="username" />
+            <br />
+
+            <label>Email</label>
+            <input
+              type="email"
+              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              onChange={props.handleChange('email')}
+              value={props.values.email}
+            />
+            <ErrorMessage name="email" />
+            <br />
+
+            <label>Password</label>
+            <input
+              type="password"
+              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              onChange={props.handleChange('password')}
+              value={props.values.password}
+            />
+            <ErrorMessage name="password" />
+            <br />
+
+            <label>Repeat password</label>
+            <input
+              type="password"
+              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              onChange={props.handleChange('repeatPassword')}
+              value={props.values.repeatPassword}
+            />
+            <ErrorMessage name="repeatPassword" />
+            <br />
+
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+              onClick={() => props.handleSubmit()}
+            >
+              submit
+            </button>
+          </div>
+        )}
+      </Formik>
     </>
   );
 };
