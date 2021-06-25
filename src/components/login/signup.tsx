@@ -2,7 +2,7 @@ import { useCreateUserMutation } from '../../graphql/user.graphql';
 import { useTranslation } from 'react-i18next';
 import Head from 'next/head';
 import React from 'react';
-import { ErrorMessage, Formik } from 'formik';
+import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 // @ts-ignore
@@ -29,7 +29,7 @@ const Sign_up = (setForm) => {
       .max(50, 'Too Long!')
       .required('Required'),
     repeatPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], "Passwords don't match")
+      .oneOf([Yup.ref('password'), null], 'Passwords do not match')
       .required('Required'),
   });
 
@@ -67,8 +67,12 @@ const Sign_up = (setForm) => {
           }
         }}
       >
-        {(props) => (
-          <div>
+        {(props: {
+          handleChange: (e: React.ChangeEvent<any>) => void;
+          handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+          values: { [field: string]: any };
+        }) => (
+          <form>
             <label>First name</label>
             <input
               type="text"
@@ -136,7 +140,7 @@ const Sign_up = (setForm) => {
             >
               submit
             </button>
-          </div>
+          </form>
         )}
       </Formik>
     </>
