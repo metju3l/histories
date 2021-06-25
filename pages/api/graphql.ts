@@ -1,16 +1,27 @@
-import ApollerServer, {
-  gql,
-  ApolloServer,
-  makeExecutableSchema,
-} from 'apollo-server-micro';
+import { ApolloServer, makeExecutableSchema } from 'apollo-server-micro';
 import { mergeTypeDefs } from '@graphql-tools/merge';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { join } from 'path';
-import neo4j from 'neo4j-driver';
 import DbConnector from '../../src/database/driver';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
+
+const GetUserInfo = async (user: string) => {
+  const query = `MATCH (n:User {${
+    user.includes('@') ? 'email' : 'username'
+  }: "${user}"}) RETURN n`;
+
+  const driver = DbConnector();
+  const session = driver.session();
+
+  const result = await session.run(query);
+  driver.close();
+
+  return result.records[0] === undefined
+    ? null
+    : result.records[0].get('n').properties;
+};
 
 const resolvers = {
   Query: {
@@ -20,32 +31,50 @@ const resolvers = {
     },
     // @ts-ignore
     getUserInfo: async (_parent, { input }, _context) => {
-      const query = `MATCH (n:User) WHERE n.username = "${input.username}" RETURN n`;
-
-      const driver = DbConnector();
-      const session = driver.session();
-
-      const result = await session.run(query);
-
-      driver.close();
-
-      return result.records[0] === undefined
-        ? null
-        : result.records[0].get('n').properties;
+      return GetUserInfo(input.user);
     },
   },
   Mutation: {
     // @ts-ignore
     createUser: async (_parent, { input }, _context) => {
-      const query = `MATCH (n:User) WHERE n.username = "${input.username}" RETURN n`;
+      if ((await GetUserInfo(input.username)) !== null)
+        return 'username is already used';
+      else if ((await GetUserInfo(input.email)) !== null)
+        return 'email is already used';
+      else {
+        const query = `Create (n:User {username : "${
+          input.username
+        }", first_name:"${input.first_name}",last_name:"${
+          input.last_name
+        }", email:"${input.email}", password:"${
+          input.password
+        }", authenticated:"false", created_at:"${new Date().getTime()}"} )`;
+
+        const driver = DbConnector();
+        const session = driver.session();
+
+        await session.run(query);
+        driver.close();
+
+        return 'done';
+      }
+    },
+    // @ts-ignore
+    deleteUser: async (_parent, { input }, _context) => {
+      if ((await GetUserInfo(input.user)) === null)
+        return 'user does not exist';
+
+      const query = `MATCH (n:User {${
+        input.user.includes('@') ? 'email' : 'username'
+      }: "${input.user}"}) DETACH DELETE n`;
 
       const driver = DbConnector();
       const session = driver.session();
 
-      await session.run(query);
+      const result = await session.run(query);
       driver.close();
 
-      return 'done';
+      return 'user deleted';
     },
   },
 };

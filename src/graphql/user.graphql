@@ -16,8 +16,12 @@ mutation createUser(
   )
 }
 
-query getUserInfo($username: String!) {
-  getUserInfo(input: { username: $username }) {
+mutation deleteUser($user: String!, $password: String!) {
+  deleteUser(input: { user: $user, password: $password })
+}
+
+query getUserInfo($user: String!) {
+  getUserInfo(input: { user: $user }) {
     username
     email
     first_name

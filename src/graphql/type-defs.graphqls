@@ -1,12 +1,18 @@
 type Query {
   hello: String!
-  getUserInfo(input: GetUserInfo!): UserInfo
+  getUserInfo(input: GetUserInfoInput!): UserInfo
 }
 type Mutation {
-  createUser(input: CreateUser!): String!
+  createUser(input: CreateUserInput!): String!
+  deleteUser(input: DeleteUserInput!): String!
 }
 
-input CreateUser {
+input DeleteUserInput {
+  user: String!
+  password: String!
+}
+
+input CreateUserInput {
   username: String!
   email: String!
   first_name: String!
@@ -14,8 +20,8 @@ input CreateUser {
   password: String!
 }
 
-input GetUserInfo {
-  username: String!
+input GetUserInfoInput {
+  user: String!
 }
 
 type UserInfo {
