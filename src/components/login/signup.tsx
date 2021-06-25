@@ -2,11 +2,44 @@ import { useCreateUserMutation } from '../../graphql/user.graphql';
 import { useTranslation } from 'react-i18next';
 import Head from 'next/head';
 import React from 'react';
-import { Formik, ErrorMessage } from 'formik';
+import {
+  Formik,
+  FormikHelpers,
+  FormikProps,
+  Form,
+  Field,
+  FieldProps,
+  ErrorMessage,
+} from 'formik';
 import * as Yup from 'yup';
 
-// @ts-ignore
-const Sign_up = (setForm) => {
+const Input = ({
+  type,
+  name,
+  autoComplete,
+  label,
+}: {
+  type: string;
+  name: string;
+  autoComplete: string;
+  label: string;
+}) => {
+  return (
+    <div>
+      <label htmlFor={name}>{label}</label>
+      <Field
+        type={type}
+        className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+        name={name}
+        autoComplete={autoComplete}
+      />
+      <ErrorMessage name={name} />
+      <br />
+    </div>
+  );
+};
+
+const Sign_up = (props: { setForm: (string: any) => void }) => {
   const [createUser] = useCreateUserMutation();
   const { t } = useTranslation();
 
@@ -51,9 +84,8 @@ const Sign_up = (setForm) => {
         }}
         validationSchema={ValidateSchema}
         onSubmit={async (values) => {
-          console.log(values);
           try {
-            await createUser({
+            const result = await createUser({
               variables: {
                 username: values.username,
                 first_name: values.firstName,
@@ -62,85 +94,59 @@ const Sign_up = (setForm) => {
                 password: values.password,
               },
             });
+            // @ts-ignore
+            if (result.data.createUser === 'user created')
+              props.setForm('login');
           } catch (error) {
             console.log(error);
           }
         }}
       >
-        {(props: {
-          handleChange: (e: React.ChangeEvent<any>) => void;
-          handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-          values: { [field: string]: any };
-        }) => (
-          <form>
-            <label>First name</label>
-            <input
+        {(props) => (
+          <Form>
+            <Input
+              label="First name"
+              name="firstName"
               type="text"
-              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={props.handleChange('firstName')}
-              value={props.values.firstName}
+              autoComplete="given-name"
             />
-            <ErrorMessage name="firstName" />
-            <br />
-
-            <label>Last name</label>
-            <input
+            <Input
+              label="Last name"
+              name="lastName"
               type="text"
-              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={props.handleChange('lastName')}
-              value={props.values.lastName}
+              autoComplete="family-name"
             />
-            <ErrorMessage name="lastName" />
-            <br />
-
-            <label>Username</label>
-            <input
+            <Input
+              label="Username"
+              name="username"
               type="text"
-              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={props.handleChange('username')}
-              value={props.values.username}
-            />
-            <ErrorMessage name="username" />
-            <br />
-
-            <label>Email</label>
-            <input
+              autoComplete="username"
+            />{' '}
+            <Input
+              label="Email"
+              name="email"
               type="email"
-              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={props.handleChange('email')}
-              value={props.values.email}
+              autoComplete="email"
             />
-            <ErrorMessage name="email" />
-            <br />
-
-            <label>Password</label>
-            <input
+            <Input
+              label="Password"
+              name="password"
               type="password"
-              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={props.handleChange('password')}
-              value={props.values.password}
+              autoComplete="new-password"
             />
-            <ErrorMessage name="password" />
-            <br />
-
-            <label>Repeat password</label>
-            <input
+            <Input
+              label="Repeat password"
+              name="repeatPassword"
               type="password"
-              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={props.handleChange('repeatPassword')}
-              value={props.values.repeatPassword}
+              autoComplete="new-password"
             />
-            <ErrorMessage name="repeatPassword" />
-            <br />
-
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
-              onClick={() => props.handleSubmit()}
             >
               submit
             </button>
-          </form>
+          </Form>
         )}
       </Formik>
     </>
