@@ -31,4 +31,13 @@ type UserInfo {
   last_name: String!
   authenticated: String!
   created_at: String!
+  following: [UserInfoMinimal]
+  followers: [UserInfoMinimal]
+}
+
+type UserInfoMinimal {
+  username: String!
+  first_name: String!
+  last_name: String!
+  email: String!
 }
