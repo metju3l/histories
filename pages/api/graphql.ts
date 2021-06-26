@@ -3,6 +3,8 @@ import { mergeTypeDefs } from '@graphql-tools/merge';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { join } from 'path';
 import DbConnector from '../../src/database/driver';
+// eslint-disable-next-line
+const bcrypt = require('bcrypt');
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -42,13 +44,18 @@ const resolvers = {
       else if ((await GetUserInfo(input.email)) !== null)
         return 'email is already used';
       else {
+        const hashedPassword = await bcrypt.hash(
+          input.password,
+          parseInt(process.env.HASH_SALT)
+        );
+
         const query = `Create (n:User {username : "${
           input.username
         }", first_name:"${input.first_name}",last_name:"${
           input.last_name
-        }", email:"${input.email}", password:"${
-          input.password
-        }", authenticated:"false", created_at:"${new Date().getTime()}"} )`;
+        }", email:"${
+          input.email
+        }", password:"${hashedPassword}", authenticated:"false", created_at:"${new Date().getTime()}"} )`;
 
         const driver = DbConnector();
         const session = driver.session();
@@ -56,7 +63,8 @@ const resolvers = {
         await session.run(query);
         driver.close();
 
-        return 'done';
+        if ((await GetUserInfo(input.username)) !== null) return 'user created';
+        return 'failed';
       }
     },
     // @ts-ignore
@@ -74,7 +82,8 @@ const resolvers = {
       const result = await session.run(query);
       driver.close();
 
-      return 'user deleted';
+      if ((await GetUserInfo(input.user)) === null) return 'user deleted';
+      else return 'action failed';
     },
   },
 };
