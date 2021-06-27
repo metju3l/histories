@@ -4,7 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-const Log_in = () => {
+const LogIn = () => {
   const { t } = useTranslation();
   const [credentials, setCredentials] = useState({
     email: '',
@@ -42,4 +42,4 @@ const Log_in = () => {
   );
 };
 
-export default Log_in;
+export default LogIn;

@@ -1,8 +1,17 @@
 import Head from 'next/head';
 import { NextPageContext } from 'next';
 import React from 'react';
+import { useGetUserInfoQuery } from '../../src/graphql/user.graphql';
 
 const user = ({ username }: { username: string }) => {
+  const { data, loading, error } = useGetUserInfoQuery({
+    variables: { user: username },
+  });
+
+  if (error) return <div>error</div>;
+  if (loading) return <div>loading</div>;
+  if (data?.getUserInfo === null) return <div>user does not exist</div>;
+
   return (
     <div className="">
       <Head>
@@ -11,7 +20,10 @@ const user = ({ username }: { username: string }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>{username}</main>
+      <div>
+        {data?.getUserInfo?.first_name} {data?.getUserInfo?.last_name}
+      </div>
+      <div>{data?.getUserInfo?.username}</div>
     </div>
   );
 };

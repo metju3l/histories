@@ -39,7 +39,7 @@ const Input = ({
   );
 };
 
-const Sign_up = (props: { setForm: (string: any) => void }) => {
+const SignUp = (props: { setForm: (string: any) => void }) => {
   const [createUser] = useCreateUserMutation();
   const { t } = useTranslation();
 
@@ -153,4 +153,4 @@ const Sign_up = (props: { setForm: (string: any) => void }) => {
   );
 };
 
-export default Sign_up;
+export default SignUp;

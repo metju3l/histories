@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import Log_in from '../src/components/login/login';
-import Sign_up from '../src/components/login/signup';
+import { LogIn, SignUp } from '../src/components/login';
 import React from 'react';
 
 const Login = () => {
@@ -8,7 +7,7 @@ const Login = () => {
   return (
     <div>
       <br />
-      {form == 'signup' ? <Sign_up setForm={setForm} /> : <Log_in />}
+      {form == 'signup' ? <SignUp setForm={setForm} /> : <LogIn />}
 
       <a
         className="underline"
