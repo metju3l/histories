@@ -20,6 +20,14 @@ mutation deleteUser($user: String!, $password: String!) {
   deleteUser(input: { user: $user, password: $password })
 }
 
+mutation follow($from: String!, $to: String!) {
+  follow(input: { from: $from, to: $to })
+}
+
+mutation unfollow($from: String!, $to: String!) {
+  follow(input: { from: $from, to: $to })
+}
+
 query getUserInfo($user: String!) {
   getUserInfo(input: { user: $user }) {
     username

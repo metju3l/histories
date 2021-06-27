@@ -4,16 +4,6 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-const checkCredentials = async ({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) => {
-  return;
-};
-
 const Log_in = () => {
   const { t } = useTranslation();
   const [credentials, setCredentials] = useState({
