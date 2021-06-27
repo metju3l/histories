@@ -1,0 +1,22 @@
+query getUserInfo($user: String!) {
+  getUserInfo(input: { user: $user }) {
+    username
+    email
+    first_name
+    last_name
+    authenticated
+    created_at
+    following {
+      email
+      username
+      first_name
+      last_name
+    }
+    followers {
+      email
+      username
+      first_name
+      last_name
+    }
+  }
+}
