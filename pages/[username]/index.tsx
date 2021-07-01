@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { NextPageContext } from 'next';
 import React from 'react';
-import { useGetUserInfoQuery } from '../../src/graphql/user.graphql';
+import { useGetUserInfoQuery } from '../../src/graphql/getUserInfo.graphql';
 
 const user = ({ username }: { username: string }) => {
   const { data, loading, error } = useGetUserInfoQuery({

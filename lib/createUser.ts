@@ -1,5 +1,6 @@
 import DbConnector from '../src/database/driver';
 import UserExists from './userExists';
+import { Neo4jGraphQL } from '@neo4j/graphql';
 // eslint-disable-next-line
 const bcrypt = require('bcrypt');
 

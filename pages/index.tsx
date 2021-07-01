@@ -21,8 +21,8 @@ const Home = () => {
       </div>
 
       <div className="absolute flex left-0 top-0 z-10 h-screen w-2/5 py-4 pl-4 ">
-        <div className="bg-white w-full h-full rounded-widget p-2 ">
-          <div className="overflow-y-scroll scrollbar-hide overflow-x-hidden h-content">
+        <div className="bg-white bg-opacity-80 w-full h-full rounded-widget p-2 ">
+          <div className=" overflow-y-scroll scrollbar-hide overflow-x-hidden h-content">
             <Post
               username="czM1K3"
               url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"

@@ -15,6 +15,7 @@ const Map = () => {
       zoom={15}
       minZoom={3}
       style={{ height: '100%', width: '100%' }}
+      zoomControl={false}
     >
       <Marker position={[51.505, -0.09]}>
         <Popup>

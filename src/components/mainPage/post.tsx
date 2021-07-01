@@ -7,7 +7,7 @@ import { HiOutlineHeart, HiOutlineLocationMarker } from 'react-icons/hi';
 
 const Post = ({ url, username }: { url: string; username: string }) => {
   return (
-    <div className="w-full p-4 mb-12 border-t-2 border-gray-50">
+    <div className="w-full p-4 mb-12">
       <div className="w-full">
         <div className="float-left flex">
           <div className="h-10 w-10 bg-gray-600 rounded-full mb-4"></div>
