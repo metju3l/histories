@@ -746,14 +746,14 @@
     "@graphql-tools/utils" "^7.9.1"
     tslib "~2.2.0"
 
-"@graphql-codegen/import-types-preset@^1.18.4":
-  version "1.18.4"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/import-types-preset/-/import-types-preset-1.18.4.tgz#ecbd94f642d0c6b48c2fbe0ed6b0e62fb2c77c6f"
-  integrity sha512-zpQxRA1EdIsYJPhfYsxF/4c6XzCPWBzLp8ERizmbRpg21BTpDzsmkLyNV2ljvTvQzIiymGCebKO1xFTD5m1jaQ==
+"@graphql-codegen/import-types-preset@^1.18.5":
+  version "1.18.5"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/import-types-preset/-/import-types-preset-1.18.5.tgz#001d920e34143ae6baacb594c1043873afd12d66"
+  integrity sha512-FWuFAHtFPawzsQxbD0p2YWaqQFfILUOKBu6jw7tA/ah3D7YUmse5ooqT16vmWIIWrlKU6IlF0WZ3kD/Sb6eqwA==
   dependencies:
     "@graphql-codegen/add" "^2.0.2"
     "@graphql-codegen/plugin-helpers" "^1.18.7"
-    "@graphql-codegen/visitor-plugin-common" "1.21.2"
+    "@graphql-codegen/visitor-plugin-common" "1.21.3"
     tslib "~2.3.0"
 
 "@graphql-codegen/plugin-helpers@^1.18.2", "@graphql-codegen/plugin-helpers@^1.18.7":
@@ -778,13 +778,13 @@
     auto-bind "~4.0.0"
     tslib "~2.3.0"
 
-"@graphql-codegen/typescript-react-apollo@^2.2.7":
-  version "2.2.7"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-react-apollo/-/typescript-react-apollo-2.2.7.tgz#3847e61774efe157bc45349138b2f2fd23c01f60"
-  integrity sha512-s7j+ZCzNdkt/d6NxbSYKXAonFHWwcrYkFrGQ6N+FoCtsP/WaGf57glMyzpewuKGJiNugNsMjv/cpDKoc0j/QPw==
+"@graphql-codegen/typescript-react-apollo@^2.2.8":
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-react-apollo/-/typescript-react-apollo-2.2.8.tgz#6b6c7b8390f0c01fab4dcbabfbea0403ceb083f0"
+  integrity sha512-/cIhdlyoNLxgt6XqcnkdILCzetdwoHRP8rgFVbQwyKak7HzQIcXMpV2iqkk+FGves079zhTZEAqVgTrOyvb1Xw==
   dependencies:
     "@graphql-codegen/plugin-helpers" "^1.18.7"
-    "@graphql-codegen/visitor-plugin-common" "1.21.2"
+    "@graphql-codegen/visitor-plugin-common" "1.21.3"
     auto-bind "~4.0.0"
     change-case-all "1.0.14"
     tslib "~2.3.0"
@@ -8148,10 +8148,10 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@4.3.2:
-  version "4.3.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.2.tgz#399ab18aac45802d6f2498de5054fcbbe716a805"
-  integrity sha512-zZ4hShnmnoVnAHpVHWpTcxdv7dWP60S2FsydQLV8V5PbS3FifjWFFRiHSWpDJahly88PRyV5teTSLoq4eG7mKw==
+typescript@4.3.5:
+  version "4.3.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.5.tgz#4d1c37cc16e893973c45a06886b7113234f119f4"
+  integrity sha512-DqQgihaQ9cUrskJo9kIyW/+g0Vxsk8cDtZ52a3NGh0YNTfpUSArXSohyUGnvbPazEPLu398C0UxmKSOrPumUzA==
 
 ua-parser-js@^0.7.18:
   version "0.7.28"
