@@ -46,9 +46,7 @@ const Search = () => {
           onChange={handleInput}
           disabled={!ready}
         />
-        <ComboboxPopover 
-      className="w-full flex bg-white mt-2 px-2"
-        >
+        <ComboboxPopover className="w-full flex bg-white mt-2 px-2">
           <ComboboxList>{status === 'OK' && renderSuggestions()}</ComboboxList>
         </ComboboxPopover>
         <button type="submit" className="focus:outline-none inline-block ">
