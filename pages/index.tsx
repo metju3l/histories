@@ -2,9 +2,8 @@ import 'tailwindcss/tailwind.css';
 import Head from 'next/head';
 import React from 'react';
 
-import { Post, Map } from '../src/components/mainPage';
+import { Post, Map, Search } from '../src/components/mainPage';
 
-import { BiSearchAlt2 } from 'react-icons/bi';
 import { IoIosArrowBack, IoMdAdd } from 'react-icons/io';
 import { AiOutlineUser } from 'react-icons/ai';
 
@@ -42,10 +41,6 @@ const Home = () => {
           </div>
         </div>
         <div className="">
-          <BiSearchAlt2
-            className="ml-2 mb-2 bg-white text-black rounded-full"
-            size={36}
-          />
           <AiOutlineUser
             className="ml-2 mb-2 bg-white text-black rounded-full"
             size={36}
@@ -59,6 +54,9 @@ const Home = () => {
             size={36}
           />
         </div>
+      </div>
+      <div className="absolute left-1/2 w-1/3 top-4 z-10  ">
+        <Search />
       </div>
     </>
   );
