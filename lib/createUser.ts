@@ -1,10 +1,14 @@
-import DbConnector from '../src/database/driver';
-import UserExists from './userExists';
+import DbConnector from './database/driver';
+import UserExists from './validator/userExists';
 import { Neo4jGraphQL } from '@neo4j/graphql';
+import { CheckCredentials } from './validator';
 // eslint-disable-next-line
 const bcrypt = require('bcrypt');
 
 const CreateUser = async (input: any) => {
+  const credentialsCheck = CheckCredentials(input);
+  if (credentialsCheck !== '') return credentialsCheck;
+
   if (await UserExists(input.username)) return 'username is already used';
   else if (await UserExists(input.email)) return 'email is already used';
   else {

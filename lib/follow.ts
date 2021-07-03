@@ -1,5 +1,5 @@
-import DbConnector from '../src/database/driver';
-import UserExists from './userExists';
+import DbConnector from './database/driver';
+import UserExists from './validator/userExists';
 
 const Follow = async (input: any) => {
   if (input.from === input.to) return 'user cannot follow himself';

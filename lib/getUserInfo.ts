@@ -1,4 +1,4 @@
-import DbConnector from '../src/database/driver';
+import DbConnector from './database/driver';
 
 const GetUserInfo = async (user: string, queries: any) => {
   const userInfoQuery = `MATCH (n:User) WHERE n.${

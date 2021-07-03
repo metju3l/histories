@@ -1,5 +1,5 @@
-import DbConnector from '../src/database/driver';
-import UserExists from './userExists';
+import DbConnector from './database/driver';
+import UserExists from './validator/userExists';
 
 const deleteUser = async (input: any) => {
   if (await UserExists(input.user)) return 'user does not exist';
