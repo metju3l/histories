@@ -35,18 +35,18 @@ const Search = () => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <Combobox
         onSelect={handleSelect}
-        className="w-full flex bg-white p-2 rounded-3xl"
+        className="w-full flex bg-white p-2 rounded-lg bg-opacity-80"
       >
         <ComboboxInput
-          className="w-11/12 rounded-md outline-none border-none inline-block  text-light-text"
+          className="w-11/12 rounded-md outline-none border-none inline-block bg-opacity-0 text-light-text"
           value={value}
           onChange={handleInput}
           disabled={!ready}
         />
-        <ComboboxPopover className="w-full flex bg-white mt-2 px-2">
+        <ComboboxPopover className="w-full flex bg-white bg-opacity-80 mt-2 px-2">
           <ComboboxList>{status === 'OK' && renderSuggestions()}</ComboboxList>
         </ComboboxPopover>
         <button type="submit" className="focus:outline-none inline-block ">

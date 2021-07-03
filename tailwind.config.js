@@ -12,6 +12,12 @@ module.exports = {
       height: {
         content: '95%',
       },
+      minWidth: {
+        sidebar: '550px',
+      },
+      maxWidth: {
+        sidebar: '840px',
+      },
     },
   },
   variants: {
