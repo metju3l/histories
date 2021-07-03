@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  neo4j:
+    image: neo4j:4.3.2
+    restart: unless-stopped
+    ports:
+      - 7474:7474
+      - 7687:7687
+    volumes:
+      - DBdata:/data
+    environment:
+      # Raise memory limits
+      - NEO4J_dbms_memory_pagecache_size=1G
+      - NEO4J_dbms.memory.heap.initial_size=1G
+      - NEO4J_dbms_memory_heap_max__size=1G
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    volumes:
+      - MinioData:/data
+    command: server /data
+    ports:
+      - 9001:9000
+
+volumes:
+  DBdata:
+    driver: local
+  MinioData:
+    driver: local
