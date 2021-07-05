@@ -27,6 +27,9 @@ const Map = () => {
     });
   }, []);
 
+  // deafult leaflet url - https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+  const url = `https://api.mapbox.com/styles/v1/${process.env.NEXT_PUBLIC_MAPBOX_USER}/${process.env.NEXT_PUBLIC_MAPBOX_STYLE}/tiles/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`;
+
   return (
     <>
       <MapContainer
@@ -41,13 +44,10 @@ const Map = () => {
         <TileLayer
           // @ts-ignore
           attribution="<a href='https://github.com/krystofex/hiStories'>hiStories</a>"
-          url={`https://api.mapbox.com/styles/v1/${process.env.NEXT_PUBLIC_MAPBOX_USER}/${process.env.NEXT_PUBLIC_MAPBOX_STYLE}/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
+          url={url}
         />
         <ZoomControl position="bottomright" />
       </MapContainer>
-      <button className="absolute z-50 top-10 right-10">
-        <BsGeoAlt />
-      </button>
     </>
   );
 };

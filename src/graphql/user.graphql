@@ -1,5 +1,5 @@
-mutation deleteUser($user: String!, $password: String!) {
-  deleteUser(input: { user: $user, password: $password })
+mutation deleteUser($username: String!, $password: String!) {
+  deleteUser(input: { username: $username, password: $password })
 }
 
 mutation follow($from: String!, $to: String!) {

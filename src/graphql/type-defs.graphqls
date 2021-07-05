@@ -15,7 +15,7 @@ input FollowInput {
 }
 
 input DeleteUserInput {
-  user: String!
+  username: String!
   password: String!
 }
 
@@ -28,7 +28,7 @@ input CreateUserInput {
 }
 
 input GetUserInfoInput {
-  user: String!
+  username: String!
 }
 
 type UserInfo {

@@ -7,7 +7,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 
 const user = ({ username }: { username: string }) => {
   const { data, loading, error } = useGetUserInfoQuery({
-    variables: { user: username },
+    variables: { username: username },
   });
 
   if (error) return <div>error</div>;
@@ -34,20 +34,20 @@ const user = ({ username }: { username: string }) => {
                 <div className="flex">
                   <div className="bg-black h-20 w-20 rounded-full"></div>
                   <div className="ml-10 mt-4">
-                    {data?.getUserInfo.followers.length} <br />
+                    {data?.getUserInfo?.followers?.length} <br />
                     followers
                   </div>
                   <div className="ml-10 mt-4">
-                    {data?.getUserInfo.following.length} <br />
+                    {data?.getUserInfo?.following?.length} <br />
                     following
                   </div>
                 </div>
                 <div className="text-2xl">
-                  {`${data?.getUserInfo.first_name} 
-                  ${data?.getUserInfo.last_name}`}
+                  {`${data?.getUserInfo?.first_name} 
+                  ${data?.getUserInfo?.last_name}`}
                 </div>
                 <div className="text-gray-500">
-                  @{data?.getUserInfo.username}
+                  @{data?.getUserInfo?.username}
                 </div>
               </div>
               <Post

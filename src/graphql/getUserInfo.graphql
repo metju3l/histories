@@ -1,5 +1,5 @@
-query getUserInfo($user: String!) {
-  getUserInfo(input: { user: $user }) {
+query getUserInfo($username: String!) {
+  getUserInfo(input: { username: $username }) {
     username
     email
     first_name

@@ -1,26 +1,26 @@
-import { CheckEmail, CheckPassword, CheckUsername } from '../lib/validator';
+import { CheckCredentials } from '../lib/validator';
 
 test('email', () => {
-  expect(CheckEmail('email@example.com')).toBe(true);
-  expect(CheckEmail('email@example.co.uk')).toBe(true);
-  expect(CheckEmail('email@example.co.')).toBe(false);
-  expect(CheckEmail('email@example.')).toBe(false);
-  expect(CheckEmail('email@example')).toBe(false);
-  expect(CheckEmail('@example.com')).toBe(false);
+  expect(CheckCredentials({ email: 'email@example.com' })).toBe('');
+  expect(CheckCredentials({ email: 'email@example.co.uk' })).toBe('');
+  expect(CheckCredentials({ email: 'email@example.co.' })).not.toBe('');
+  expect(CheckCredentials({ email: 'email@example.' })).not.toBe('');
+  expect(CheckCredentials({ email: 'email@example' })).not.toBe('');
+  expect(CheckCredentials({ email: '@example.com' })).not.toBe('');
 });
 
 test('password', () => {
-  expect(CheckPassword('#df237See')).toBe(true);
-  expect(CheckPassword('Password')).toBe(true);
-  expect(CheckPassword('short')).toBe(false);
-  expect(CheckPassword('#df237S')).toBe(false);
+  expect(CheckCredentials({ password: '#df237See' })).toBe('');
+  expect(CheckCredentials({ password: 'Password' })).toBe('');
+  expect(CheckCredentials({ password: 'short' })).not.toBe('');
+  expect(CheckCredentials({ password: '#df237S' })).not.toBe('');
 });
 
 test('username', () => {
-  expect(CheckUsername('username')).toBe(true);
-  expect(CheckUsername('username_123')).toBe(true);
-  expect(CheckUsername('user.name')).toBe(true);
-  expect(CheckUsername('user')).toBe(true);
-  expect(CheckUsername('user.')).toBe(false);
-  expect(CheckUsername('username&')).toBe(false);
+  expect(CheckCredentials({ username: 'username' })).toBe('');
+  expect(CheckCredentials({ username: 'username_123' })).toBe('');
+  expect(CheckCredentials({ username: 'user.name' })).toBe('');
+  expect(CheckCredentials({ username: 'user' })).toBe('');
+  expect(CheckCredentials({ username: 'user.' })).not.toBe('');
+  expect(CheckCredentials({ username: 'username&' })).not.toBe('');
 });
