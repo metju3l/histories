@@ -88,8 +88,8 @@ const SignUp = (props: { setForm: (string: any) => void }) => {
             const result = await createUser({
               variables: {
                 username: values.username,
-                first_name: values.firstName,
-                last_name: values.lastName,
+                firstName: values.firstName,
+                lastName: values.lastName,
                 email: values.email,
                 password: values.password,
               },

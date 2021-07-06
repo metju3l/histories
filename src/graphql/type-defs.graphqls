@@ -22,8 +22,8 @@ input DeleteUserInput {
 input CreateUserInput {
   username: String!
   email: String!
-  first_name: String!
-  last_name: String!
+  firstName: String!
+  lastName: String!
   password: String!
 }
 
@@ -34,8 +34,8 @@ input GetUserInfoInput {
 type UserInfo {
   username: String!
   email: String!
-  first_name: String!
-  last_name: String!
+  firstName: String!
+  lastName: String!
   authenticated: String!
   created_at: String!
   following: [UserInfoMinimal]
@@ -44,7 +44,7 @@ type UserInfo {
 
 type UserInfoMinimal {
   username: String!
-  first_name: String!
-  last_name: String!
+  firstName: String!
+  lastName: String!
   email: String!
 }

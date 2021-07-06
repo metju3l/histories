@@ -7,12 +7,12 @@ const bcrypt = require('bcrypt');
 
 const CreateUser = async (input: {
   username: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 }) => {
-  const { username, first_name, last_name, email, password } = input;
+  const { username, firstName, lastName, email, password } = input;
 
   if (CheckCredentials(input) !== '') return CheckCredentials(input);
 
@@ -24,7 +24,7 @@ const CreateUser = async (input: {
       parseInt(process.env.HASH_SALT || '10')
     );
 
-    const query = `Create (n:User {username : "${username}", first_name:"${first_name}",last_name:"${last_name}", email:"${email}", password:"${hashedPassword}", authenticated:"false", created_at:"${new Date().getTime()}"} )`;
+    const query = `Create (n:User {username : "${username}", first_name:"${firstName}",last_name:"${lastName}", email:"${email}", password:"${hashedPassword}", authenticated:"false", created_at:"${new Date().getTime()}"} )`;
 
     const driver = DbConnector();
     const session = driver.session();

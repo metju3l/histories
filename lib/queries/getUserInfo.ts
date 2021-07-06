@@ -1,11 +1,9 @@
 import DbConnector from '../database/driver';
 
-const GetUserInfo = async (user: string, queries: any) => {
-  const userInfoQuery = `MATCH (n:User) WHERE n.${
-    user.includes('@') ? 'email' : 'username'
-  }= "${user}" RETURN n`;
-  const followersQuery = `MATCH (a:User {username: "${user}"})<-[:FOLLOW]-(user) RETURN user`;
-  const followingQuery = `MATCH (a:User {username: "${user}"})-[:FOLLOW]->(user) RETURN user`;
+const GetUserInfo = async (username: string, queries: any) => {
+  const userInfoQuery = `MATCH (n:User {username: "${username}"}) RETURN n`;
+  const followersQuery = `MATCH (a:User {username: "${username}"})<-[:FOLLOW]-(user) RETURN user`;
+  const followingQuery = `MATCH (a:User {username: "${username}"})-[:FOLLOW]->(user) RETURN user`;
 
   const driver = DbConnector();
   const session = driver.session();

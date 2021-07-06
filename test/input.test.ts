@@ -24,3 +24,9 @@ test('username', () => {
   expect(CheckCredentials({ username: 'user.' })).not.toBe('');
   expect(CheckCredentials({ username: 'username&' })).not.toBe('');
 });
+
+test('name', () => {
+  expect(CheckCredentials({ firstName: 'Frantisek' })).toBe('');
+  expect(CheckCredentials({ firstName: 'Elizabeth' })).toBe('');
+  expect(CheckCredentials({ firstName: 'Eliza&#&#xv' })).not.toBe('');
+});

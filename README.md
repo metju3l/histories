@@ -22,5 +22,5 @@
 
 ## Before pushing:
 
-- check eslint `yarn lint`
+- check eslint `yarn test-all`
 - format `yarn format`

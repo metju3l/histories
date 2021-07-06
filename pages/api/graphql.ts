@@ -20,12 +20,12 @@ const resolvers = {
     },
     getUserInfo: async (
       _parent: any,
-      { input }: any,
+      { input }: { input: { username: string } },
       _context: any,
       { operation }: any
     ) => {
       return GetUserInfo(
-        input.user,
+        input.username,
         operation.selectionSet.selections[0].selectionSet.selections
       );
     },
@@ -35,15 +35,27 @@ const resolvers = {
       return CreateUser(input);
     },
 
-    deleteUser: async (_parent: any, { input }: any, _context: any) => {
+    deleteUser: async (
+      _parent: any,
+      { input }: { input: { username: string; password: string } },
+      _context: any
+    ) => {
       return DeleteUser(input);
     },
 
-    follow: async (_parent: any, { input }: any, _context: any) => {
+    follow: async (
+      _parent: any,
+      { input }: { input: { from: string; to: string } },
+      _context: any
+    ) => {
       return Follow(input);
     },
 
-    unfollow: async (_parent: any, { input }: any, _context: any) => {
+    unfollow: async (
+      _parent: any,
+      { input }: { input: { from: string; to: string } },
+      _context: any
+    ) => {
       return Unfollow(input);
     },
   },

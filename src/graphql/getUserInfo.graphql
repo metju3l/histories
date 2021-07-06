@@ -2,21 +2,21 @@ query getUserInfo($username: String!) {
   getUserInfo(input: { username: $username }) {
     username
     email
-    first_name
-    last_name
+    firstName
+    lastName
     authenticated
     created_at
     following {
       email
       username
-      first_name
-      last_name
+      firstName
+      lastName
     }
     followers {
       email
       username
-      first_name
-      last_name
+      firstName
+      lastName
     }
   }
 }

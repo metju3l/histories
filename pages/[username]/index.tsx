@@ -43,8 +43,8 @@ const user = ({ username }: { username: string }) => {
                   </div>
                 </div>
                 <div className="text-2xl">
-                  {`${data?.getUserInfo?.first_name} 
-                  ${data?.getUserInfo?.last_name}`}
+                  {`${data?.getUserInfo?.firstName} 
+                  ${data?.getUserInfo?.lastName}`}
                 </div>
                 <div className="text-gray-500">
                   @{data?.getUserInfo?.username}
