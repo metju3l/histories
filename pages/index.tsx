@@ -1,10 +1,10 @@
-import 'tailwindcss/tailwind.css';
 import Head from 'next/head';
 import React from 'react';
+import { IoIosArrowBack, IoIosSettings } from 'react-icons/io';
+import { FiPlusCircle } from 'react-icons/fi';
+import { CgProfile } from 'react-icons/cg';
 
 import { Post, Map, Search } from '../src/components/mainPage';
-
-import { IoIosArrowBack } from 'react-icons/io';
 
 const Home = () => {
   return (
@@ -42,8 +42,20 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div className="flex z-10 h-10 mt-4">
+        <div className="z-10 h-10 mt-4">
           <IoIosArrowBack
+            className="bg-opacity-80 bg-white rounded-lg text-black h-10 w-10 p-2 mb-2"
+            size={8}
+          />
+          <CgProfile
+            className="bg-opacity-80 bg-white rounded-lg text-black h-10 w-10 p-2 mb-2"
+            size={8}
+          />
+          <IoIosSettings
+            className="bg-opacity-80 bg-white rounded-lg text-black h-10 w-10 p-2 mb-2"
+            size={8}
+          />
+          <FiPlusCircle
             className="bg-opacity-80 bg-white rounded-lg text-black h-10 w-10 p-2"
             size={8}
           />

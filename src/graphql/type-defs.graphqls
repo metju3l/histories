@@ -1,12 +1,12 @@
 type Query {
   hello: String!
-  getUserInfo(input: GetUserInfoInput!): UserInfo
 }
+
 type Mutation {
-  createUser(input: CreateUserInput!): String!
   deleteUser(input: DeleteUserInput!): String!
   follow(input: FollowInput!): String!
   unfollow(input: FollowInput!): String!
+  createCollection(input: CreateCollectionInput!): String!
 }
 
 input FollowInput {
@@ -19,32 +19,11 @@ input DeleteUserInput {
   password: String!
 }
 
-input CreateUserInput {
+input CreateCollectionInput {
   username: String!
-  email: String!
-  firstName: String!
-  lastName: String!
-  password: String!
+  collectionName: String!
 }
 
 input GetUserInfoInput {
   username: String!
-}
-
-type UserInfo {
-  username: String!
-  email: String!
-  firstName: String!
-  lastName: String!
-  authenticated: String!
-  created_at: String!
-  following: [UserInfoMinimal]
-  followers: [UserInfoMinimal]
-}
-
-type UserInfoMinimal {
-  username: String!
-  firstName: String!
-  lastName: String!
-  email: String!
 }

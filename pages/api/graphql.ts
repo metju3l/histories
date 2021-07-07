@@ -8,6 +8,7 @@ import {
   DeleteUser,
   Follow,
   Unfollow,
+  CreateCollection,
 } from '../../lib';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
@@ -33,6 +34,10 @@ const resolvers = {
   Mutation: {
     createUser: async (_parent: any, { input }: any, _context: any) => {
       return CreateUser(input);
+    },
+
+    createCollection: async (_parent: any, { input }: any, _context: any) => {
+      return CreateCollection(input);
     },
 
     deleteUser: async (

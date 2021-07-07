@@ -7,5 +7,11 @@ mutation follow($from: String!, $to: String!) {
 }
 
 mutation unfollow($from: String!, $to: String!) {
-  follow(input: { from: $from, to: $to })
+  unfollow(input: { from: $from, to: $to })
+}
+
+mutation createCollection($username: String!, $collectionName: String!) {
+  createCollection(
+    input: { username: $username, collectionName: $collectionName }
+  )
 }

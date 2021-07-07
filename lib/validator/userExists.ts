@@ -1,9 +1,9 @@
 import DbConnector from '../database/driver';
 
 const UserExists = async (user: string) => {
-  const userInfoQuery = `MATCH (n:User) WHERE n.${
+  const userInfoQuery = `MATCH (n:User {${
     user.includes('@') ? 'email' : 'username'
-  }= "${user}" RETURN n`;
+  }: "${user}"}) RETURN n`;
 
   const driver = DbConnector();
   const session = driver.session();

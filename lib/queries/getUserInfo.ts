@@ -1,7 +1,11 @@
 import DbConnector from '../database/driver';
+import { CheckCredentials } from '../validator/';
 
 const GetUserInfo = async (username: string, queries: any) => {
-  const userInfoQuery = `MATCH (n:User {username: "${username}"}) RETURN n`;
+  if (CheckCredentials({ username: username }) !== '')
+    return CheckCredentials({ username: username });
+
+  const userInfoQuery = `MATCH (n:User) WHERE n.username =~ "(?i)${username}" RETURN n`;
   const followersQuery = `MATCH (a:User {username: "${username}"})<-[:FOLLOW]-(user) RETURN user`;
   const followingQuery = `MATCH (a:User {username: "${username}"})-[:FOLLOW]->(user) RETURN user`;
 

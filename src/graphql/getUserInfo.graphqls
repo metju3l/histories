@@ -1,0 +1,21 @@
+type Query {
+  getUserInfo(input: GetUserInfoInput!): UserInfo
+}
+
+type UserInfo {
+  username: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  authenticated: String!
+  created_at: String!
+  following: [UserInfoMinimal]
+  followers: [UserInfoMinimal]
+}
+
+type UserInfoMinimal {
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+}

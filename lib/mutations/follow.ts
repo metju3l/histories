@@ -17,10 +17,9 @@ const Follow = async ({ from, to }: { from: string; to: string }) => {
   if (await !UserExists(to)) return 'user to does not exist';
 
   const query = `MATCH
-  (a:User),
-  (b:User)
-WHERE a.username = '${from}' AND b.username = '${to}'
-CREATE (a)-[r:FOLLOW]->(b)`;
+  (a:User {username: "${from}"}),
+  (b:User {username: "${to}"})
+  CREATE (a)-[r:FOLLOW {createdAt: ${new Date().getTime()}}]->(b)`;
 
   const driver = DbConnector();
   const session = driver.session();

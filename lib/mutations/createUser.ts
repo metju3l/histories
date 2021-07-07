@@ -1,6 +1,5 @@
 import DbConnector from '../database/driver';
 import UserExists from '../validator/userExists';
-import { Neo4jGraphQL } from '@neo4j/graphql';
 import { CheckCredentials } from '../validator';
 // eslint-disable-next-line
 const bcrypt = require('bcrypt');
@@ -24,7 +23,16 @@ const CreateUser = async (input: {
       parseInt(process.env.HASH_SALT || '10')
     );
 
-    const query = `Create (n:User {username : "${username}", first_name:"${firstName}",last_name:"${lastName}", email:"${email}", password:"${hashedPassword}", authenticated:"false", created_at:"${new Date().getTime()}"} )`;
+    const query = `CREATE
+    (n:User {
+      username : "${username}",
+      firstName: "${firstName}",
+      lastName: "${lastName}",
+      email: "${email}",
+      password: "${hashedPassword}",
+      authenticated: "false",
+      created_at: ${new Date().getTime()}
+    })`;
 
     const driver = DbConnector();
     const session = driver.session();
@@ -32,8 +40,7 @@ const CreateUser = async (input: {
     await session.run(query);
     driver.close();
 
-    if (await UserExists(username)) return 'user created';
-    return 'failed';
+    return (await UserExists(username)) ? 'user created' : 'failed';
   }
 };
 
