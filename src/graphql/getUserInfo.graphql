@@ -7,6 +7,7 @@ query getUserInfo($username: String!) {
     bio
     authenticated
     createdAt
+    id
     following {
       email
       username
@@ -27,6 +28,6 @@ query getUserInfo($username: String!) {
   }
 }
 
-query checkPassword($username: String!, $password: String!) {
-  checkPassword(input: { username: $username, password: $password })
+mutation login($username: String!, $password: String!) {
+  login(input: { username: $username, password: $password })
 }

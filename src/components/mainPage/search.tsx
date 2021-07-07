@@ -27,9 +27,15 @@ const Search = () => {
   };
 
   const renderSuggestions = (): JSX.Element => {
-    const suggestions = data.map(({ place_id, description }: any) => (
-      <ComboboxOption key={place_id} value={description} />
-    ));
+    const suggestions = data.map(
+      ({
+        place_id,
+        description,
+      }: {
+        place_id: string;
+        description: string;
+      }) => <ComboboxOption key={place_id} value={description} />
+    );
 
     return <>{suggestions}</>;
   };

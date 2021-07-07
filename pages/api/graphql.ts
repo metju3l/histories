@@ -17,23 +17,14 @@ const typeDefs = mergeTypeDefs(loadedFiles);
 
 const resolvers = {
   Query: {
-    hello: (_parent: any, _args: any, _context: any) => {
+    hello: () => {
       return 'Hello';
     },
 
-    checkPassword: async (
-      _parent: any,
-      { input }: { input: { username: string; password: string } },
-      _context: any,
-      { operation }: any
-    ) => {
-      return CheckPassword(input);
-    },
-
     getUserInfo: async (
-      _parent: any,
+      _parent: undefined,
       { input }: { input: { username: string } },
-      _context: any,
+      _context: undefined,
       { operation }: any
     ) => {
       return GetUserInfo(
@@ -43,34 +34,62 @@ const resolvers = {
     },
   },
   Mutation: {
-    createUser: async (_parent: any, { input }: any, _context: any) => {
+    login: async (
+      _parent: any,
+      { input }: { input: { username: string; password: string } }
+    ) => {
+      return CheckPassword(input);
+    },
+
+    createUser: async (
+      _parent: undefined,
+      {
+        input,
+      }: {
+        input: {
+          username: string;
+          firstName: string;
+          lastName: string;
+          email: string;
+          password: string;
+        };
+      }
+    ) => {
       return CreateUser(input);
     },
 
-    createCollection: async (_parent: any, { input }: any, _context: any) => {
+    createCollection: async (
+      _parent: undefined,
+      {
+        input,
+      }: {
+        input: {
+          username: string;
+          collectionName: string;
+          description: string;
+        };
+      }
+    ) => {
       return CreateCollection(input);
     },
 
     deleteUser: async (
-      _parent: any,
-      { input }: { input: { username: string; password: string } },
-      _context: any
+      _parent: undefined,
+      { input }: { input: { username: string; password: string } }
     ) => {
       return DeleteUser(input);
     },
 
     follow: async (
-      _parent: any,
-      { input }: { input: { from: string; to: string } },
-      _context: any
+      _parent: undefined,
+      { input }: { input: { from: string; to: string } }
     ) => {
       return Follow(input);
     },
 
     unfollow: async (
-      _parent: any,
-      { input }: { input: { from: string; to: string } },
-      _context: any
+      _parent: undefined,
+      { input }: { input: { from: string; to: string } }
     ) => {
       return Unfollow(input);
     },

@@ -5,7 +5,7 @@ const GetUserInfo = async (username: string, queries: any) => {
   if (CheckCredentials({ username: username }) !== '')
     return CheckCredentials({ username: username });
 
-  const userInfoQuery = `MATCH (n:User) WHERE n.username =~ "(?i)${username}" RETURN n`;
+  const userInfoQuery = `MATCH (n:User) WHERE n.username =~ "(?i)${username}" RETURN n, ID(n)`;
   const followersQuery = `MATCH (a:User {username: "${username}"})<-[:FOLLOW]-(user) RETURN user`;
   const followingQuery = `MATCH (a:User {username: "${username}"})-[:FOLLOW]->(user) RETURN user`;
   const collectionsQuery = `MATCH (a:User {username: "${username}"})-[:CREATED]->(collection:Collection) RETURN collection`;
@@ -35,6 +35,7 @@ const GetUserInfo = async (username: string, queries: any) => {
     ? null
     : {
       ...userInfo.records[0].get('n').properties,
+      id: userInfo.records[0].get('ID(n)').toNumber(),
       following,
       followers,
       collections,

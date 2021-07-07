@@ -2,15 +2,7 @@ import { useCreateUserMutation } from '../../graphql/createUser.graphql';
 import { useTranslation } from 'react-i18next';
 import Head from 'next/head';
 import React from 'react';
-import {
-  Formik,
-  FormikHelpers,
-  FormikProps,
-  Form,
-  Field,
-  FieldProps,
-  ErrorMessage,
-} from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 const Input = ({
@@ -39,7 +31,7 @@ const Input = ({
   );
 };
 
-const SignUp = (props: { setForm: (string: any) => void }) => {
+const SignUp = (props: { setForm: (string: string) => void }) => {
   const [createUser] = useCreateUserMutation();
   const { t } = useTranslation();
 
@@ -86,13 +78,7 @@ const SignUp = (props: { setForm: (string: any) => void }) => {
         onSubmit={async (values) => {
           try {
             const result = await createUser({
-              variables: {
-                username: values.username,
-                firstName: values.firstName,
-                lastName: values.lastName,
-                email: values.email,
-                password: values.password,
-              },
+              variables: values,
             });
             // @ts-ignore
             if (result.data.createUser === 'user created')
@@ -102,7 +88,7 @@ const SignUp = (props: { setForm: (string: any) => void }) => {
           }
         }}
       >
-        {(props) => (
+        {() => (
           <Form>
             <Input
               label="First name"

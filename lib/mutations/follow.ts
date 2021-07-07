@@ -13,8 +13,8 @@ const Follow = async ({ from, to }: { from: string; to: string }) => {
   if (checkTo !== '') return checkTo;
 
   if (from === to) return 'user cannot follow himself';
-  if (await !UserExists(from)) return 'user from does not exist';
-  if (await !UserExists(to)) return 'user to does not exist';
+  if (!UserExists(from)) return 'user from does not exist';
+  if (!UserExists(to)) return 'user to does not exist';
 
   const query = `MATCH
   (a:User {username: "${from}"}),

@@ -1,6 +1,6 @@
 import DbConnector from '../database/driver';
 
-const UserExists = async (user: string) => {
+const UserExists = async (user: string): Promise<boolean> => {
   const userInfoQuery = `MATCH (n:User {${
     user.includes('@') ? 'email' : 'username'
   }: "${user}"}) RETURN n`;

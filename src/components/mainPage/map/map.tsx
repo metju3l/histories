@@ -1,20 +1,6 @@
-import React, {
-  useEffect,
-  Component,
-  useRef,
-  useMemo,
-  useCallback,
-} from 'react';
-import { BsGeoAlt } from 'react-icons/bs';
+import React, { useEffect } from 'react';
 
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  ZoomControl,
-  useMap,
-} from 'react-leaflet';
+import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 

@@ -1,8 +1,7 @@
 import DbConnector from '../database/driver';
 import UserExists from '../validator/userExists';
 import { CheckCredentials } from '../validator';
-// eslint-disable-next-line
-const bcrypt = require('bcrypt');
+import { hash } from 'bcryptjs';
 
 const CreateUser = async (input: {
   username: string;
@@ -18,7 +17,7 @@ const CreateUser = async (input: {
   if (await UserExists(username)) return 'username is already used';
   else if (await UserExists(email)) return 'email is already used';
   else {
-    const hashedPassword = await bcrypt.hash(
+    const hashedPassword = await hash(
       password,
       parseInt(process.env.HASH_SALT || '10')
     );

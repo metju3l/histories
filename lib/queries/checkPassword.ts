@@ -1,7 +1,6 @@
 import DbConnector from '../database/driver';
 import { CheckCredentials } from '../validator/';
-// eslint-disable-next-line
-const bcrypt = require('bcrypt');
+import { compareSync } from 'bcryptjs';
 
 const CheckPassword = async (input: { username: string; password: string }) => {
   if (CheckCredentials(input) !== '') return CheckCredentials(input);
@@ -15,7 +14,7 @@ const CheckPassword = async (input: { username: string; password: string }) => {
 
   driver.close();
 
-  return bcrypt.compareSync(
+  return compareSync(
     input.password,
     userInfo.records[0].get('n').properties.password
   );

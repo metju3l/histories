@@ -1,6 +1,9 @@
 type Query {
   getUserInfo(input: GetUserInfoInput!): UserInfo
-  checkPassword(input: CheckPasswordInput!): Boolean
+}
+
+type Mutation {
+  login(input: LoginInput!): String!
 }
 
 type UserInfo {
@@ -11,6 +14,7 @@ type UserInfo {
   bio: String!
   authenticated: String!
   createdAt: String!
+  id: Int!
   following: [UserInfoMinimal]
   followers: [UserInfoMinimal]
   collections: [Collection]
@@ -33,7 +37,7 @@ input GetUserInfoInput {
   username: String!
 }
 
-input CheckPasswordInput {
+input LoginInput {
   username: String!
   password: String!
 }
