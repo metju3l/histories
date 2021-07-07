@@ -7,10 +7,12 @@ type UserInfo {
   email: String!
   firstName: String!
   lastName: String!
+  bio: String!
   authenticated: String!
   created_at: String!
   following: [UserInfoMinimal]
   followers: [UserInfoMinimal]
+  collections: [Collection]
 }
 
 type UserInfoMinimal {
@@ -18,4 +20,9 @@ type UserInfoMinimal {
   firstName: String!
   lastName: String!
   email: String!
+}
+
+type Collection {
+  collectionName: String!
+  createdAt: String!
 }

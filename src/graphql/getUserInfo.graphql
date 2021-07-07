@@ -4,6 +4,7 @@ query getUserInfo($username: String!) {
     email
     firstName
     lastName
+    bio
     authenticated
     created_at
     following {
@@ -17,6 +18,10 @@ query getUserInfo($username: String!) {
       username
       firstName
       lastName
+    }
+    collections {
+      collectionName
+      createdAt
     }
   }
 }

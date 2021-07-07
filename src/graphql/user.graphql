@@ -10,8 +10,16 @@ mutation unfollow($from: String!, $to: String!) {
   unfollow(input: { from: $from, to: $to })
 }
 
-mutation createCollection($username: String!, $collectionName: String!) {
+mutation createCollection(
+  $username: String!
+  $collectionName: String!
+  $description: String!
+) {
   createCollection(
-    input: { username: $username, collectionName: $collectionName }
+    input: {
+      username: $username
+      collectionName: $collectionName
+      description: $description
+    }
   )
 }

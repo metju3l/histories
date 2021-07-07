@@ -22,6 +22,7 @@ input DeleteUserInput {
 input CreateCollectionInput {
   username: String!
   collectionName: String!
+  description: String!
 }
 
 input GetUserInfoInput {

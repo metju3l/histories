@@ -4,9 +4,11 @@ import { CheckCredentials, UserExists } from '../validator/';
 const CreateCollection = async ({
   username,
   collectionName,
+  description,
 }: {
   username: string;
   collectionName: string;
+  description: string;
 }) => {
   if (CheckCredentials({ username: username }) !== '')
     return CheckCredentials({ username: username });
@@ -18,6 +20,7 @@ const CreateCollection = async ({
     WHERE author.username =~ "(?i)${username}"
     CREATE (collection:Collection {
     collectionName: "${collectionName}",
+    description: "${description}",
     createdAt: ${new Date().getTime()}
     })
     CREATE (author)-[r:CREATED]->(collection)
