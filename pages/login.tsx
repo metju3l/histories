@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { LogIn, SignUp } from '../src/components/login';
 import React from 'react';
+const jwt = require('jsonwebtoken');
 
 const Login = () => {
   const [form, setForm] = useState<string>('login');

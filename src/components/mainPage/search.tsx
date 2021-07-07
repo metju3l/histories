@@ -41,7 +41,7 @@ const Search = () => {
         className="w-full flex bg-white p-2 rounded-lg bg-opacity-80"
       >
         <ComboboxInput
-          className="w-11/12 rounded-md outline-none border-none inline-block bg-opacity-0 text-light-text"
+          className="w-11/12 rounded-sm bg-white bg-opacity-0 outline-none border-none inline-block text-light-text"
           value={value}
           onChange={handleInput}
           disabled={!ready}

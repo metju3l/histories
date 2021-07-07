@@ -30,8 +30,10 @@ const CreateUser = async (input: {
       lastName: "${lastName}",
       email: "${email}",
       password: "${hashedPassword}",
+      bio: "",
+      language: "",
       authenticated: "false",
-      created_at: ${new Date().getTime()}
+      createdAt: "${new Date().getTime()}"
     })`;
 
     const driver = DbConnector();

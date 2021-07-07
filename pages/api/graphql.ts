@@ -9,6 +9,7 @@ import {
   Follow,
   Unfollow,
   CreateCollection,
+  CheckPassword,
 } from '../../lib';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
@@ -19,6 +20,16 @@ const resolvers = {
     hello: (_parent: any, _args: any, _context: any) => {
       return 'Hello';
     },
+
+    checkPassword: async (
+      _parent: any,
+      { input }: { input: { username: string; password: string } },
+      _context: any,
+      { operation }: any
+    ) => {
+      return CheckPassword(input);
+    },
+
     getUserInfo: async (
       _parent: any,
       { input }: { input: { username: string } },

@@ -24,7 +24,3 @@ input CreateCollectionInput {
   collectionName: String!
   description: String!
 }
-
-input GetUserInfoInput {
-  username: String!
-}

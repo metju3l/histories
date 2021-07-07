@@ -1,5 +1,6 @@
 type Query {
   getUserInfo(input: GetUserInfoInput!): UserInfo
+  checkPassword(input: CheckPasswordInput!): Boolean
 }
 
 type UserInfo {
@@ -9,7 +10,7 @@ type UserInfo {
   lastName: String!
   bio: String!
   authenticated: String!
-  created_at: String!
+  createdAt: String!
   following: [UserInfoMinimal]
   followers: [UserInfoMinimal]
   collections: [Collection]
@@ -25,4 +26,14 @@ type UserInfoMinimal {
 type Collection {
   collectionName: String!
   createdAt: String!
+  description: String!
+}
+
+input GetUserInfoInput {
+  username: String!
+}
+
+input CheckPasswordInput {
+  username: String!
+  password: String!
 }

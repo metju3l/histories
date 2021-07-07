@@ -34,11 +34,11 @@ const GetUserInfo = async (username: string, queries: any) => {
   return userInfo.records[0] === undefined
     ? null
     : {
-        ...userInfo.records[0].get('n').properties,
-        following,
-        followers,
-        collections,
-      };
+      ...userInfo.records[0].get('n').properties,
+      following,
+      followers,
+      collections,
+    };
 };
 
 export default GetUserInfo;

@@ -21,7 +21,7 @@ const CreateCollection = async ({
     CREATE (collection:Collection {
     collectionName: "${collectionName}",
     description: "${description}",
-    createdAt: ${new Date().getTime()}
+    createdAt: "${new Date().getTime()}"
     })
     CREATE (author)-[r:CREATED]->(collection)
   `;

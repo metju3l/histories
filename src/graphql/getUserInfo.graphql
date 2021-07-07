@@ -6,7 +6,7 @@ query getUserInfo($username: String!) {
     lastName
     bio
     authenticated
-    created_at
+    createdAt
     following {
       email
       username
@@ -22,6 +22,11 @@ query getUserInfo($username: String!) {
     collections {
       collectionName
       createdAt
+      description
     }
   }
+}
+
+query checkPassword($username: String!, $password: String!) {
+  checkPassword(input: { username: $username, password: $password })
 }
