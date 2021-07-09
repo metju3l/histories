@@ -64,17 +64,9 @@ const LogIn = () => {
             const result = await login({
               variables: values,
             });
-            if (result.data?.login) {
+            if (result.data?.login !== 'error') {
               // login successful
-              console.log(
-                sign(
-                  { username: values.username },
-                  process.env.NEXT_PUBLIC_JWT_SECRET as string,
-                  {
-                    expiresIn: '15m',
-                  }
-                )
-              );
+              localStorage.setItem('jwt', result.data?.login as string);
             }
           } catch (error) {
             console.log('error');

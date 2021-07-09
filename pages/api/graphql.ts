@@ -9,8 +9,9 @@ import {
   Follow,
   Unfollow,
   CreateCollection,
-  CheckPassword,
+  Login,
 } from '../../lib';
+import { GraphQLResolveInfo } from 'graphql';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -38,7 +39,7 @@ const resolvers = {
       _parent: any,
       { input }: { input: { username: string; password: string } }
     ) => {
-      return CheckPassword(input);
+      return Login(input);
     },
 
     createUser: async (

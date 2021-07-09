@@ -24,7 +24,7 @@ const Post = ({ url, username }: { url: string; username: string }) => {
           </Link>
         </div>
       </div>
-      <img className="w-full rounded-lg" src={url} />
+      <img className="w-full rounded-lg" src={url} alt="post from userxxx" />
 
       <div className="w-full h-12 pt-2">
         <div className="flex float-left">

@@ -11,7 +11,7 @@ type UserInfo {
   email: String!
   firstName: String!
   lastName: String!
-  bio: String!
+  bio: String
   authenticated: String!
   createdAt: String!
   id: Int!

@@ -26,6 +26,7 @@
     "@graphql-tools/merge": "^6.2.14",
     "@neo4j/graphql": "^1.0.3",
     "@reach/combobox": "^0.15.2",
+    "@tensorflow/tfjs": "^3.7.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/jest": "^26.0.23",
     "@types/jest-expect-message": "^1.0.3",

@@ -29,8 +29,6 @@ const CreateUser = async (input: {
       lastName: "${lastName}",
       email: "${email}",
       password: "${hashedPassword}",
-      bio: "",
-      language: "",
       authenticated: "false",
       createdAt: "${new Date().getTime()}"
     })`;
