@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { NextPageContext } from 'next';
 import React from 'react';
 import { useGetUserInfoQuery } from '../../src/graphql/getUserInfo.graphql';
-import { Post, Map, Search } from '../../src/components/mainPage';
+import { Post, Map, Search } from '@components/mainPage';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useRouter } from 'next/router';
 

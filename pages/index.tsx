@@ -4,7 +4,7 @@ import { IoIosArrowBack, IoIosSettings } from 'react-icons/io';
 import { FiPlusCircle } from 'react-icons/fi';
 import { CgProfile } from 'react-icons/cg';
 
-import { Post, Map, Search, CreatePost } from '../src/components/mainPage';
+import { Post, Map, Search, CreatePost } from '@components/mainPage';
 
 const Home = () => {
   const [page, setPage] = useState('feed');
