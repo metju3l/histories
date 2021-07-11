@@ -4,6 +4,7 @@ type Query {
 
 type Mutation {
   login(input: LoginInput!): String!
+  searchUser(input: SearchUserInput!): String!
 }
 
 type UserInfo {
@@ -34,6 +35,10 @@ type Collection {
 }
 
 input GetUserInfoInput {
+  username: String!
+}
+
+input SearchUserInput {
   username: String!
 }
 

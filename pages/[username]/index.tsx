@@ -4,15 +4,18 @@ import React from 'react';
 import { useGetUserInfoQuery } from '../../src/graphql/getUserInfo.graphql';
 import { Post, Map, Search } from '../../src/components/mainPage';
 import { IoIosArrowBack } from 'react-icons/io';
+import { useRouter } from 'next/router';
 
 const user = ({ username }: { username: string }) => {
   const { data, loading, error } = useGetUserInfoQuery({
     variables: { username: username },
   });
-
+  const router = useRouter();
   if (error) return <div>error</div>;
   if (loading) return <div>loading</div>;
   if (data?.getUserInfo === null) return <div>user does not exist</div>;
+  if (username !== data?.getUserInfo?.username)
+    router.push(`/${data?.getUserInfo?.username}`);
 
   return (
     <>

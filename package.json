@@ -14,7 +14,7 @@
     "dev-ssl": "node server.js",
     "build": "next build",
     "start": "next start",
-    "lint": " eslint --ext .tsx --ext .ts ./",
+    "lint": "next lint",
     "format": "prettier --write .",
     "type-check": "tsc --pretty --noEmit",
     "test": "jest",

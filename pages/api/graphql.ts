@@ -35,6 +35,13 @@ const resolvers = {
     },
   },
   Mutation: {
+    searchUser: async (
+      _parent: any,
+      { input }: { input: { username: string } }
+    ) => {
+      // search for username like this
+    },
+
     login: async (
       _parent: any,
       { input }: { input: { username: string; password: string } }
