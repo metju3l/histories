@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { NextPageContext } from 'next';
 import React from 'react';
 
-const user = ({ collection }: { collection: string }) => {
+const user = ({ collection }: { collection: string }): JSX.Element => {
   return (
     <div className="">
       <Head>
@@ -16,7 +16,13 @@ const user = ({ collection }: { collection: string }) => {
   );
 };
 
-export const getServerSideProps = async (context: NextPageContext) => {
+export const getServerSideProps = async (
+  context: NextPageContext
+): Promise<{
+  props: {
+    collection: string;
+  };
+}> => {
   return {
     props: {
       // @ts-ignore

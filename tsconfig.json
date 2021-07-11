@@ -2,22 +2,12 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@lib/*": [
-        "lib/*"
-      ],
-      "@public/*": [
-        "public/*"
-      ],
+      "@components/*": ["src/components/*"],
+      "@lib/*": ["lib/*"],
+      "@public/*": ["public/*"]
     },
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -28,7 +18,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "preserve"
   },
   "include": [
     "next-env.d.ts",
@@ -37,8 +27,5 @@
     "lib/database/driver.ts",
     "lib/validator/checkEmail.js"
   ],
-  "exclude": [
-    "node_modules",
-    ".cache"
-  ]
+  "exclude": ["node_modules", ".cache"]
 }

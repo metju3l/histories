@@ -9,7 +9,7 @@ const CreateCollection = async ({
   username: string;
   collectionName: string;
   description: string;
-}) => {
+}): Promise<string> => {
   if (CheckCredentials({ username: username }) !== '')
     return CheckCredentials({ username: username });
   if (CheckCredentials({ username: collectionName }) !== '')

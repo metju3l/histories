@@ -7,7 +7,7 @@ const deleteUser = async ({
 }: {
   username: string;
   password: string;
-}) => {
+}): Promise<string> => {
   const checkInput = CheckCredentials({
     username: username,
     password: password,
@@ -21,7 +21,7 @@ const deleteUser = async ({
   const driver = DbConnector();
   const session = driver.session();
 
-  const result = await session.run(query);
+  await session.run(query);
   driver.close();
 
   return (await UserExists(username)) ? 'user deleted' : 'action failed';

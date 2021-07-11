@@ -1,11 +1,9 @@
 import Head from 'next/head';
 import React from 'react';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useLoginMutation } from '../../graphql/getUserInfo.graphql';
-import { sign } from 'jsonwebtoken';
 
 const Input = ({
   type,
@@ -17,7 +15,7 @@ const Input = ({
   name: string;
   autoComplete: string;
   label: string;
-}) => {
+}): JSX.Element => {
   return (
     <div>
       <label htmlFor={name}>{label}</label>
@@ -33,7 +31,7 @@ const Input = ({
   );
 };
 
-const LogIn = () => {
+const LogIn = (): JSX.Element => {
   const [login] = useLoginMutation();
   const { t } = useTranslation();
 

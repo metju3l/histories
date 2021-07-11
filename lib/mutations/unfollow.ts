@@ -1,7 +1,13 @@
 import DbConnector from '../database/driver';
 import { CheckCredentials, UserExists } from '../validator';
 
-const Unfollow = async ({ from, to }: { from: string; to: string }) => {
+const Unfollow = async ({
+  from,
+  to,
+}: {
+  from: string;
+  to: string;
+}): Promise<string> => {
   const checkFrom = CheckCredentials({
     username: from,
   });

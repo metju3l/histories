@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { LogIn, SignUp } from '@components/login';
 import React from 'react';
 
-const Login = () => {
+const Login = (): JSX.Element => {
   const [form, setForm] = useState<string>('login');
   return (
     <div>

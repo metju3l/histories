@@ -1,7 +1,7 @@
 import DbConnector from '../database/driver';
 import { CheckCredentials } from '../validator/';
 
-const GetUserInfo = async (username: string, queries: any) => {
+const GetUserInfo = async (username: string, queries: any): Promise<any> => {
   if (CheckCredentials({ username: username }) !== '')
     return CheckCredentials({ username: username });
 
@@ -15,12 +15,16 @@ const GetUserInfo = async (username: string, queries: any) => {
 
   const userInfo = await session.run(userInfoQuery);
   const following =
-    queries.find((x: any) => x.name.value === 'following') !== undefined &&
+    queries.find(
+      (x: { name: { value: string } }) => x.name.value === 'following'
+    ) !== undefined &&
     (await session.run(followingQuery)).records.map((x) => {
       return x.get('user').properties;
     });
   const followers =
-    queries.find((x: any) => x.name.value === 'followers') !== undefined &&
+    queries.find(
+      (x: { name: { value: string } }) => x.name.value === 'followers'
+    ) !== undefined &&
     (await session.run(followersQuery)).records.map((x) => {
       return x.get('user').properties;
     });

@@ -11,7 +11,6 @@ import {
   CreateCollection,
   Login,
 } from '../../lib';
-import { GraphQLResolveInfo } from 'graphql';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -35,15 +34,12 @@ const resolvers = {
     },
   },
   Mutation: {
-    searchUser: async (
-      _parent: any,
-      { input }: { input: { username: string } }
-    ) => {
+    searchUser: async () => {
       // search for username like this
     },
 
     login: async (
-      _parent: any,
+      _parent: undefined,
       { input }: { input: { username: string; password: string } }
     ) => {
       return Login(input);

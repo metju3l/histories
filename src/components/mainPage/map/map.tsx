@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 
-const Map = () => {
+const Map = (): JSX.Element => {
   const [coordinates, setCoordinates] = useState([50, 15]);
 
   useEffect(() => {

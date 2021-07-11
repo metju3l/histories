@@ -5,7 +5,13 @@ import { BiShare, BiCollection } from 'react-icons/bi';
 import { FaRegComment } from 'react-icons/fa';
 import { HiOutlineHeart, HiOutlineLocationMarker } from 'react-icons/hi';
 
-const Post = ({ url, username }: { url: string; username: string }) => {
+const Post = ({
+  url,
+  username,
+}: {
+  url: string;
+  username: string;
+}): JSX.Element => {
   return (
     <div className="w-full p-4 mb-12">
       <div className="w-full">

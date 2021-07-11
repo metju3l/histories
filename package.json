@@ -15,6 +15,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "eslint": " eslint --ext .tsx --ext .ts ./",
     "format": "prettier --write .",
     "type-check": "tsc --pretty --noEmit",
     "test": "jest",

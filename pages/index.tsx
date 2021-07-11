@@ -6,7 +6,7 @@ import { CgProfile } from 'react-icons/cg';
 
 import { Post, Map, Search, CreatePost } from '@components/mainPage';
 
-const Home = () => {
+const Home = (): JSX.Element => {
   const [page, setPage] = useState('feed');
 
   return (

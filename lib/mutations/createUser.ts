@@ -9,7 +9,7 @@ const CreateUser = async (input: {
   lastName: string;
   email: string;
   password: string;
-}) => {
+}): Promise<string> => {
   const { username, firstName, lastName, email, password } = input;
 
   if (CheckCredentials(input) !== '') return CheckCredentials(input);

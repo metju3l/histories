@@ -6,7 +6,7 @@ import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../lib/apollo';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const apolloClient = useApollo(null);
 
   return (

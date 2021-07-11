@@ -15,7 +15,7 @@ const Input = ({
   name: string;
   autoComplete: string;
   label: string;
-}) => {
+}): JSX.Element => {
   return (
     <div>
       <label htmlFor={name}>{label}</label>
@@ -31,7 +31,7 @@ const Input = ({
   );
 };
 
-const SignUp = (props: { setForm: (string: string) => void }) => {
+const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
   const [createUser] = useCreateUserMutation();
   const { t } = useTranslation();
 

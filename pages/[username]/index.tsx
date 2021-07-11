@@ -6,7 +6,7 @@ import { Post, Map, Search } from '@components/mainPage';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useRouter } from 'next/router';
 
-const user = ({ username }: { username: string }) => {
+const user = ({ username }: { username: string }): JSX.Element => {
   const { data, loading, error } = useGetUserInfoQuery({
     variables: { username: username },
   });
@@ -86,7 +86,13 @@ const user = ({ username }: { username: string }) => {
   );
 };
 
-export const getServerSideProps = async (context: NextPageContext) => {
+export const getServerSideProps = async (
+  context: NextPageContext
+): Promise<{
+  props: {
+    username: string;
+  };
+}> => {
   return {
     props: {
       // @ts-ignore

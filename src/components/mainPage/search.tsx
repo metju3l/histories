@@ -10,7 +10,7 @@ import {
 } from '@reach/combobox';
 import { BiSearchAlt2 } from 'react-icons/bi';
 
-const Search = () => {
+const Search = (): JSX.Element => {
   const {
     ready,
     value,

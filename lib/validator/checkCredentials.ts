@@ -12,7 +12,7 @@ const CheckCredentials = ({
   email?: string | undefined;
   firstName?: string | undefined;
   lastName?: string | undefined;
-}) => {
+}): string => {
   if (!CheckEmail(email)) return 'invalid email';
   else if (!CheckUsername(username)) return 'invalid username';
   else if (!CheckPassword(password)) return 'invalid password';
