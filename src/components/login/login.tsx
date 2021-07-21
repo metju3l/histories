@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useLoginMutation } from '../../graphql/getUserInfo.graphql';
+import Cookie from 'js-cookie';
 
 const Input = ({
   type,
@@ -64,7 +65,7 @@ const LogIn = (): JSX.Element => {
             });
             if (result.data?.login !== 'error') {
               // login successful
-              localStorage.setItem('jwt', result.data?.login as string);
+              Cookie.set('jwt', result.data?.login as string);
             }
           } catch (error) {
             console.log('error');

@@ -25,7 +25,7 @@ const Login = async (input: {
     )
   )
     return sign({ username: input.username }, process.env.JWT_SECRET!, {
-      expiresIn: '15m',
+      expiresIn: '15min',
     });
   else return 'error';
 };
