@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { LogIn, SignUp } from '@components/login';
 import React from 'react';
+import { useIsLoggedQuery } from '../src/graphql/user.graphql';
 
 const Login = (): JSX.Element => {
+  const { data, loading, error } = useIsLoggedQuery();
   const [form, setForm] = useState<string>('login');
   return (
     <div>

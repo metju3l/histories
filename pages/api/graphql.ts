@@ -11,6 +11,7 @@ import {
   CreateCollection,
   Login,
 } from '../../lib';
+import { verify } from 'jsonwebtoken';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -21,12 +22,17 @@ const resolvers = {
       return 'Hello';
     },
 
+    isLogged: async () => {
+      return false;
+    },
+
     getUserInfo: async (
       _parent: undefined,
       { input }: { input: { username: string } },
-      _context: undefined,
+      context: any,
       { operation }: any
     ) => {
+      console.log(context.decoded);
       return GetUserInfo(
         input.username,
         operation.selectionSet.selections[0].selectionSet.selections
@@ -107,6 +113,16 @@ export const schema = makeExecutableSchema({
 
 const apolloServer = new ApolloServer({
   schema,
+  context: (context) => {
+    try {
+      const jwt = context.req.headers.authorization.substring(7);
+      const host = context.req.headers.host;
+      const decoded = verify(jwt, process.env.JWT_SECRET!);
+      return { decoded: decoded };
+    } catch (err) {
+      return { decoded: null };
+    }
+  },
 });
 
 const handler = apolloServer.createHandler({ path: '/api/graphql' });

@@ -65,7 +65,9 @@ const LogIn = (): JSX.Element => {
             });
             if (result.data?.login !== 'error') {
               // login successful
-              Cookie.set('jwt', result.data?.login as string);
+              Cookie.set('jwt', result.data?.login as string, {
+                sameSite: 'strict',
+              });
             }
           } catch (error) {
             console.log('error');

@@ -1,5 +1,6 @@
 type Query {
   hello: String!
+  isLogged: Boolean!
 }
 
 type Mutation {

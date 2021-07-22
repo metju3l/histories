@@ -9,6 +9,8 @@ const GetUserInfo = async (username: string, queries: any): Promise<any> => {
   const followersQuery = `MATCH (a:User {username: "${username}"})<-[:FOLLOW]-(user) RETURN user`;
   const followingQuery = `MATCH (a:User {username: "${username}"})-[:FOLLOW]->(user) RETURN user`;
   const collectionsQuery = `MATCH (a:User {username: "${username}"})-[:CREATED]->(collection:Collection) RETURN collection`;
+  const postsQuery = `MATCH (a:User {username: "${username}"})-[:CREATED]->(post:Post) RETURN post`;
+  const followQuery = `RETURN {follows:EXISTS((:User {username: ${username}})<-[:FOLLOW]-(:User {username:${logged}})),isFollowed:EXISTS((:User {username:${logged}})<-[:FOLLOW]-(:User {username:${username}}))}`;
 
   const driver = DbConnector();
   const session = driver.session();
@@ -38,12 +40,12 @@ const GetUserInfo = async (username: string, queries: any): Promise<any> => {
   return userInfo.records[0] === undefined
     ? null
     : {
-      ...userInfo.records[0].get('n').properties,
-      id: userInfo.records[0].get('ID(n)').toNumber(),
-      following,
-      followers,
-      collections,
-    };
+        ...userInfo.records[0].get('n').properties,
+        id: userInfo.records[0].get('ID(n)').toNumber(),
+        following,
+        followers,
+        collections,
+      };
 };
 
 export default GetUserInfo;

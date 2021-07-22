@@ -5,6 +5,7 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client';
+import Cookie from 'js-cookie';
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
@@ -26,6 +27,8 @@ function createIsomorphLink(context: ResolverContext = {}) {
     return new HttpLink({
       uri: '/api/graphql',
       credentials: 'same-origin',
+
+      headers: { authorization: `Bearer ${Cookie.get('jwt')}` },
     });
   }
 }

@@ -10,6 +10,10 @@ mutation unfollow($from: String!, $to: String!) {
   unfollow(input: { from: $from, to: $to })
 }
 
+query isLogged {
+  isLogged
+}
+
 mutation createCollection(
   $username: String!
   $collectionName: String!
