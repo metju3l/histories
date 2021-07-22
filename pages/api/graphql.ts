@@ -22,8 +22,8 @@ const resolvers = {
       return 'Hello';
     },
 
-    isLogged: async () => {
-      return false;
+    isLogged: async (_parent: undefined, _input: undefined, context: any) => {
+      return context.validToken;
     },
 
     getUserInfo: async (
@@ -32,7 +32,6 @@ const resolvers = {
       context: any,
       { operation }: any
     ) => {
-      console.log(context.decoded);
       return GetUserInfo(
         input.username,
         operation.selectionSet.selections[0].selectionSet.selections
@@ -106,21 +105,17 @@ const resolvers = {
   },
 };
 
-export const schema = makeExecutableSchema({
+const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-});
-
-const apolloServer = new ApolloServer({
-  schema,
   context: (context) => {
     try {
       const jwt = context.req.headers.authorization.substring(7);
       const host = context.req.headers.host;
       const decoded = verify(jwt, process.env.JWT_SECRET!);
-      return { decoded: decoded };
+      return { validToken: true, decoded: decoded };
     } catch (err) {
-      return { decoded: null };
+      return { validToken: false, decoded: null };
     }
   },
 });
