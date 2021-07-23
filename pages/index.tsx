@@ -3,11 +3,17 @@ import React, { useState } from 'react';
 import { IoIosArrowBack, IoIosSettings } from 'react-icons/io';
 import { FiPlusCircle } from 'react-icons/fi';
 import { CgProfile } from 'react-icons/cg';
+import { useIsLoggedQuery } from '../src/graphql/user.graphql';
 
 import { Post, Map, Search, CreatePost } from '@components/mainPage';
 
 const Home = (): JSX.Element => {
+  const { data, loading, error } = useIsLoggedQuery();
   const [page, setPage] = useState('feed');
+
+  if (loading) return <div>loading</div>;
+  if (error) return <div>error</div>;
+  const isLogged = data?.isLogged;
 
   return (
     <>
@@ -57,19 +63,27 @@ const Home = (): JSX.Element => {
             className="bg-opacity-75 backdrop-filter backdrop-blur-md bg-white rounded-lg text-black h-10 w-10 p-2 mb-2"
             size={8}
           />
-          <CgProfile
-            className="bg-opacity-75 backdrop-filter backdrop-blur-md bg-white rounded-lg text-black h-10 w-10 p-2 mb-2"
-            size={8}
-          />
-          <IoIosSettings
-            className="bg-opacity-75 backdrop-filter backdrop-blur-md bg-white rounded-lg text-black h-10 w-10 p-2 mb-2"
-            size={8}
-          />
-          <FiPlusCircle
-            className="bg-opacity-75 backdrop-filter backdrop-blur-md bg-white rounded-lg text-black h-10 w-10 p-2"
-            size={8}
-            onClick={() => setPage('create')}
-          />
+          {isLogged ? (
+            <>
+              <CgProfile
+                className="bg-opacity-75 backdrop-filter backdrop-blur-md bg-white rounded-lg text-black h-10 w-10 p-2 mb-2"
+                size={8}
+              />
+              <IoIosSettings
+                className="bg-opacity-75 backdrop-filter backdrop-blur-md bg-white rounded-lg text-black h-10 w-10 p-2 mb-2"
+                size={8}
+              />
+              <FiPlusCircle
+                className="bg-opacity-75 backdrop-filter backdrop-blur-md bg-white rounded-lg text-black h-10 w-10 p-2"
+                size={8}
+                onClick={() => setPage('create')}
+              />
+            </>
+          ) : (
+            <div className="bg-opacity-75 backdrop-filter backdrop-blur-md bg-white rounded-lg text-black h-10 p-2">
+              login
+            </div>
+          )}
         </div>
         <div className="flex z-10 h-10 ml-4 mt-4">
           <Search />

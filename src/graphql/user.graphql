@@ -2,12 +2,12 @@ mutation deleteUser($username: String!, $password: String!) {
   deleteUser(input: { username: $username, password: $password })
 }
 
-mutation follow($from: String!, $to: String!) {
-  follow(input: { from: $from, to: $to })
+mutation follow($username: String!) {
+  follow(username: $username)
 }
 
-mutation unfollow($from: String!, $to: String!) {
-  unfollow(input: { from: $from, to: $to })
+mutation unfollow($username: String!) {
+  unfollow(username: $username)
 }
 
 query isLogged {

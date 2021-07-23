@@ -4,11 +4,13 @@ import React from 'react';
 import { useGetUserInfoQuery } from '../../src/graphql/getUserInfo.graphql';
 import { Post, Map, Search } from '@components/mainPage';
 import { IoIosArrowBack } from 'react-icons/io';
+import { useFollowMutation } from '../../src/graphql/user.graphql';
 
 const user = ({ username }: { username: string }): JSX.Element => {
   const { data, loading, error } = useGetUserInfoQuery({
     variables: { username: username },
   });
+  const [follow] = useFollowMutation();
 
   if (error) return <div>error</div>;
   if (loading) return <div>loading</div>;
@@ -49,6 +51,16 @@ const user = ({ username }: { username: string }): JSX.Element => {
                 <div className="text-gray-500">
                   @{data?.getUserInfo?.username}
                 </div>
+                <button
+                  onClick={async () => {
+                    const result = await follow({
+                      username: data?.getUserInfo?.username,
+                    });
+                    console.log(result);
+                  }}
+                >
+                  follow
+                </button>
               </div>
               <Post
                 username="czM1K3"

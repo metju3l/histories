@@ -1,4 +1,4 @@
-import { ApolloServer, makeExecutableSchema } from 'apollo-server-micro';
+import { ApolloServer } from 'apollo-server-micro';
 import { mergeTypeDefs } from '@graphql-tools/merge';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { join } from 'path';
@@ -91,16 +91,18 @@ const resolvers = {
 
     follow: async (
       _parent: undefined,
-      { input }: { input: { from: string; to: string } }
+      { username }: { username: string },
+      context: any
     ) => {
-      return Follow(input);
+      console.log(context);
+      return Follow(context.decoded, username);
     },
 
     unfollow: async (
       _parent: undefined,
-      { input }: { input: { from: string; to: string } }
+      { username }: { username: string }
     ) => {
-      return Unfollow(input);
+      return Unfollow(username);
     },
   },
 };
@@ -111,7 +113,7 @@ const apolloServer = new ApolloServer({
   context: (context) => {
     try {
       const jwt = context.req.headers.authorization.substring(7);
-      const host = context.req.headers.host;
+      // const host = context.req.headers.host;
       const decoded = verify(jwt, process.env.JWT_SECRET!);
       return { validToken: true, decoded: decoded };
     } catch (err) {
