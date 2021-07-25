@@ -20,9 +20,10 @@ services:
     restart: unless-stopped
     volumes:
       - MinioData:/data
-    command: server /data
+    command: server /data --console-address ":9001"
     ports:
       - 9001:9000
+      - 9002:9001
 
 volumes:
   DBdata:
