@@ -51,16 +51,7 @@ const user = ({ username }: { username: string }): JSX.Element => {
                 <div className="text-gray-500">
                   @{data?.getUserInfo?.username}
                 </div>
-                <button
-                  onClick={async () => {
-                    const result = await follow({
-                      username: data?.getUserInfo?.username,
-                    });
-                    console.log(result);
-                  }}
-                >
-                  follow
-                </button>
+                <button>follow</button>
               </div>
               <Post
                 username="czM1K3"
