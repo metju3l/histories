@@ -28,8 +28,8 @@ const Home = (): JSX.Element => {
       </div>
 
       <div className="flex w-screen">
-        <div className="p-4 left-0 top-0 w-1/2 max-w-sidebar"></div>
-        <div className="absolute p-4 left-0 top-0 w-1/2 max-w-sidebar h-screen">
+        <div className="p-4 left-10 top-0 w-1/2 max-w-sidebar"></div>
+        <div className="absolute p-4 left-10 top-0 w-1/2 max-w-sidebar h-screen">
           <div className="bg-white bg-opacity-75 w-full h-full rounded-lg p-2 backdrop-filter backdrop-blur-md">
             {page === 'feed' ? (
               <div className=" overflow-y-scroll scrollbar-hide overflow-x-hidden h-content">

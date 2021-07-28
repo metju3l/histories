@@ -29,7 +29,7 @@ const Home = (): JSX.Element => {
         ></link>
       </Head>
       <body className="font-inter min-h-screen overflow-x-hidden">
-        <ul className="bg-opacity-50 backdrop-filter text-white backdrop-blur-md bg-black w-full fixed top-0">
+        <ul className="bg-opacity-50 backdrop-filter text-white backdrop-blur-md bg-black w-full fixed top-0 z-20">
           <li className="active py-4 px-4 pl-20 float-left">
             <a className="text-center display-block">About</a>
           </li>
@@ -70,13 +70,13 @@ const Home = (): JSX.Element => {
               Browse photos
             </button>
           </p>
-          <div className="text-white bg-gray-800 text-center w-3/4 m-auto rounded-2xl text-xl py-48 mt-12 relative top-32">
+          <div className="text-white bg-gray-800 text-center z-10 w-3/4 m-auto rounded-2xl text-xl py-48 mt-12 relative top-32">
             view map
           </div>
         </section>
         <section className="h-screen bg-black text-white pt-64">
           <h1 className="text-center font-bold text-9xl m-auto w-2/3">
-            I already don't know what to write hear
+            I already do not know what to write here
           </h1>
         </section>
       </body>
