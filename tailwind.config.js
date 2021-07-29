@@ -21,6 +21,9 @@ module.exports = {
       maxWidth: {
         sidebar: '840px',
       },
+      boxShadow: {
+        custom: '0px 3px 8px rgba(0, 0, 0, 0.24)',
+      },
     },
   },
   variants: {

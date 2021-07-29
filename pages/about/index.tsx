@@ -6,6 +6,7 @@ import { FaLanguage } from 'react-icons/fa';
 import { IoLogoWordpress } from 'react-icons/io';
 import { AiFillGithub } from 'react-icons/ai';
 import Link from 'next/link';
+import { Menu } from '@headlessui/react';
 
 const Home = (): JSX.Element => {
   return (
@@ -53,7 +54,25 @@ const Home = (): JSX.Element => {
           </Link>
           <li className="active py-1 mr-8 float-right">
             <a className="text-center">
-              <FaLanguage size={42} />
+              <Menu>
+                <Menu.Button>
+                  <FaLanguage size={42} />
+                </Menu.Button>
+                <Menu.Items className="shadow-custom absolute bg-white text-blue-500 rounded-xl px-4 py-2 right-8 top-18 mt-2 display-flex flex-col">
+                  <div className="py-1.5 hover:text-green-400 cursor-pointer">
+                    Česky
+                  </div>
+                  <div className="py-1.5 hover:text-green-400 cursor-pointer">
+                    Slovensky
+                  </div>
+                  <div className="py-1.5 hover:text-green-400 cursor-pointer">
+                    English
+                  </div>
+                  <div className="py-1.5 hover:text-green-400 cursor-pointer">
+                    Español
+                  </div>
+                </Menu.Items>
+              </Menu>
             </a>
           </li>
         </ul>
