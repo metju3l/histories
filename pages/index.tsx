@@ -85,7 +85,7 @@ const Home: FC = () => {
             </div>
           )}
         </div>
-        <div className="flex z-10 h-10 ml-4 mt-4">
+        <div className="absolute top-4 right-4">
           <Search />
         </div>
       </div>

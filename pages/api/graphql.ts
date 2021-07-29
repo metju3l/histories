@@ -10,6 +10,7 @@ import {
   Unfollow,
   CreateCollection,
   Login,
+  GetPaths,
 } from '../../lib';
 import { verify } from 'jsonwebtoken';
 
@@ -20,6 +21,10 @@ const resolvers = {
   Query: {
     hello: () => {
       return 'Hello';
+    },
+
+    paths: () => {
+      return GetPaths();
     },
 
     isLogged: async (_parent: undefined, _input: undefined, context: any) => {

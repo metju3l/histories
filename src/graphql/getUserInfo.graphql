@@ -28,6 +28,13 @@ query getUserInfo($username: String!) {
   }
 }
 
+query Paths {
+  paths {
+    name
+    coordinates
+  }
+}
+
 mutation login($username: String!, $password: String!) {
   login(input: { username: $username, password: $password })
 }
