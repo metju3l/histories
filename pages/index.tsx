@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { IoIosArrowBack, IoIosSettings } from 'react-icons/io';
 import { FiPlusCircle } from 'react-icons/fi';
 import { CgProfile } from 'react-icons/cg';
@@ -7,7 +7,7 @@ import { useIsLoggedQuery } from '../src/graphql/user.graphql';
 
 import { Post, Map, Search, CreatePost } from '@components/mainPage';
 
-const Home = (): JSX.Element => {
+const Home: FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
   const [page, setPage] = useState('feed');
 

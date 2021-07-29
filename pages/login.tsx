@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { LogIn, SignUp } from '@components/login';
 import React from 'react';
 import { useIsLoggedQuery } from '../src/graphql/user.graphql';
 import { useRouter } from 'next/router';
 
-const Login = (): JSX.Element => {
+const Login: FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
   const [form, setForm] = useState<string>('login');
   const router = useRouter();

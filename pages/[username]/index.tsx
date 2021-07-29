@@ -1,12 +1,12 @@
 import Head from 'next/head';
 import { NextPageContext } from 'next';
-import React from 'react';
+import React, { FC } from 'react';
 import { useGetUserInfoQuery } from '../../src/graphql/getUserInfo.graphql';
 import { Post, Map, Search } from '@components/mainPage';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useFollowMutation } from '../../src/graphql/user.graphql';
 
-const user = ({ username }: { username: string }): JSX.Element => {
+const user: FC<{ username: string }> = ({ username }) => {
   const { data, loading, error } = useGetUserInfoQuery({
     variables: { username: username },
   });
