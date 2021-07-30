@@ -13,7 +13,10 @@ const Post = ({
   username: string;
 }): JSX.Element => {
   return (
-    <div className="w-full p-4 mb-12">
+    <div
+      className="w-full p-4 mb-12 rounded-2xl text-white"
+      style={{ backgroundColor: '#242526' }}
+    >
       <div className="w-full">
         <div className="float-left flex">
           <div className="h-10 w-10 bg-gray-600 rounded-full mb-4"></div>
@@ -21,6 +24,7 @@ const Post = ({
             <a className="pl-2 pt-1.5 text-blue-500 ">{username}</a>
           </Link>
         </div>
+
         <div className="float-right pt-1.5">
           <Link href="/">
             <a className="text-blue-500 flex">
@@ -29,6 +33,11 @@ const Post = ({
             </a>
           </Link>
         </div>
+      </div>
+      <div className="w-full mt-14 mb-4 text-white">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque
+        debitis accusamus quaerat laudantium ducimus delectus quibusdam
+        praesentium laborum quasi eos?
       </div>
       <img className="w-full rounded-lg" src={url} alt="post from userxxx" />
 
@@ -41,11 +50,6 @@ const Post = ({
         <div className="float-right">
           <BiCollection size={36} className="mx-2" />
         </div>
-      </div>
-      <div className="w-full">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque
-        debitis accusamus quaerat laudantium ducimus delectus quibusdam
-        praesentium laborum quasi eos?
       </div>
     </div>
   );

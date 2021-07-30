@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import MapGL, {
   Marker,
   NavigationControl,
@@ -9,8 +9,11 @@ import MapGL, {
 } from 'react-map-gl';
 import { useState } from 'react';
 import { usePathsQuery } from '../../../graphql/getUserInfo.graphql';
+import MapLoading from './MapLoading';
+import LayerIcon from '@public/mapLayerIcon.png';
+import Image from 'next/image';
 
-const Map = (): JSX.Element => {
+const Map: FC = () => {
   const paths = usePathsQuery();
   const [coordinates, setCoordinates] = useState([21, 20]);
 
@@ -28,7 +31,8 @@ const Map = (): JSX.Element => {
     pitch: 0,
   });
 
-  if (paths.loading) return <div>loading...</div>;
+  if (paths.loading)
+    return <MapLoading viewport={viewport} setViewport={setViewport} />;
   if (paths.error) return <div>error...</div>;
 
   const pathColors = [
@@ -41,36 +45,39 @@ const Map = (): JSX.Element => {
     '#a572d5',
   ];
 
-  const Paths = paths.data!.paths!.map((path, key) => {
-    return (
-      <Source
-        key={key}
-        id={key.toString()}
-        type="geojson"
-        data={{
-          type: 'Feature',
-          geometry: {
-            type: 'LineString',
-            coordinates: JSON.parse(path!.coordinates),
-          },
-          properties: {
-            id: key.toString(),
-            name: path?.name,
-          },
-        }}
-      >
-        <Layer
-          {...{
-            id: key.toString(),
-            type: 'line',
-            paint: {
-              'line-color': pathColors[key % pathColors.length],
+  const Paths = paths.data!.paths!.map(
+    (path: { name: string; coordinates: string }, index: number) => {
+      console.log(JSON.parse(path!.coordinates));
+      return (
+        <Source
+          key={index}
+          id={index.toString()}
+          type="geojson"
+          data={{
+            type: 'Feature',
+            geometry: {
+              type: 'LineString',
+              coordinates: JSON.parse(path!.coordinates),
+            },
+            properties: {
+              id: index,
+              name: path?.name,
             },
           }}
-        />
-      </Source>
-    );
-  });
+        >
+          <Layer
+            {...{
+              id: index.toString(),
+              type: 'line',
+              paint: {
+                'line-color': pathColors[index % pathColors.length],
+              },
+            }}
+          />
+        </Source>
+      );
+    }
+  );
 
   return (
     <>
@@ -85,7 +92,7 @@ const Map = (): JSX.Element => {
       >
         <GeolocateControl
           style={{
-            bottom: 128,
+            bottom: 186,
             right: 0,
             padding: '10px',
           }}
@@ -93,7 +100,7 @@ const Map = (): JSX.Element => {
         />
         <NavigationControl
           style={{
-            bottom: 32,
+            bottom: 240,
             right: 0,
             padding: '10px',
           }}
@@ -103,6 +110,9 @@ const Map = (): JSX.Element => {
         <Marker key={1} latitude={50.089748} longitude={14.3984}>
           🏰
         </Marker>
+        <div className="absolute bottom-28 right-2 bg-white rounded-md">
+          <Image src={LayerIcon} width={32} height={32} />
+        </div>
       </MapGL>
     </>
   );
