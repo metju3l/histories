@@ -31,7 +31,7 @@ const Home: FC = () => {
       </Head>
       <body style={{ backgroundColor: '#18191A' }}>
         <nav>
-          <ul className="bg-opacity-75 backdrop-filter text-white backdrop-blur-md bg-black w-full fixed top-0 z-20">
+          <ul className="bg-opacity-50 backdrop-filter backdrop-blur-md text-white bg-black w-full fixed top-0 z-20">
             <Link href="/">
               <li className="active py-1.5 px-4 ml-8 float-left">
                 <a className="text-center display-block">
