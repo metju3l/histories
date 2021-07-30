@@ -9,7 +9,10 @@ const GetPaths = async (): Promise<any> => {
   const paths = await session.run(query);
 
   driver.close();
-  return paths.records[0].get('n').properties;
+
+  return paths.records.map((path) => {
+    return path.get('n').properties;
+  });
 };
 
 export default GetPaths;

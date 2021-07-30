@@ -1,6 +1,6 @@
 type Query {
   getUserInfo(input: GetUserInfoInput!): UserInfo
-  paths: Paths
+  paths: [Path]
 }
 
 type Mutation {
@@ -8,7 +8,7 @@ type Mutation {
   searchUser(input: SearchUserInput!): String!
 }
 
-type Paths {
+type Path {
   name: String!
   coordinates: String!
 }

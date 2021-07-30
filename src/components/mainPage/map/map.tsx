@@ -30,6 +30,48 @@ const Map = (): JSX.Element => {
 
   if (paths.loading) return <div>loading...</div>;
   if (paths.error) return <div>error...</div>;
+
+  const pathColors = [
+    '#00ff95',
+    '#ed315d',
+    '#43bccd',
+    '#ffb647',
+    '#555eb4',
+    '#ff5964',
+    '#a572d5',
+  ];
+
+  const Paths = paths.data!.paths!.map((path, key) => {
+    return (
+      <Source
+        key={key}
+        id={key.toString()}
+        type="geojson"
+        data={{
+          type: 'Feature',
+          geometry: {
+            type: 'LineString',
+            coordinates: JSON.parse(path!.coordinates),
+          },
+          properties: {
+            id: key.toString(),
+            name: path?.name,
+          },
+        }}
+      >
+        <Layer
+          {...{
+            id: key.toString(),
+            type: 'line',
+            paint: {
+              'line-color': pathColors[key % pathColors.length],
+            },
+          }}
+        />
+      </Source>
+    );
+  });
+
   return (
     <>
       <MapGL
@@ -41,32 +83,6 @@ const Map = (): JSX.Element => {
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
         dragRotate={false}
       >
-        <Source
-          id="my-data"
-          type="geojson"
-          data={{
-            type: 'Feature',
-            geometry: {
-              type: 'LineString',
-              coordinates: JSON.parse(paths.data!.paths!.coordinates),
-            },
-            properties: {
-              id: '057594A7321C25382DD0',
-              name: 'tripToSchool',
-            },
-          }}
-        >
-          <Layer
-            {...{
-              id: 'point',
-              type: 'line',
-              paint: {
-                'line-color': '#ff9900',
-              },
-            }}
-          />
-        </Source>
-
         <GeolocateControl
           style={{
             bottom: 128,
@@ -75,19 +91,18 @@ const Map = (): JSX.Element => {
           }}
           positionOptions={{ enableHighAccuracy: true }}
         />
-
-        <Marker key={1} latitude={50.089748} longitude={14.3984}>
-          🏰
-        </Marker>
-
         <NavigationControl
           style={{
-            bottom: 36,
+            bottom: 32,
             right: 0,
             padding: '10px',
           }}
+          showCompass={false}
         />
-        <ScaleControl style={{ bottom: 18, right: 0 }} />
+        {Paths}
+        <Marker key={1} latitude={50.089748} longitude={14.3984}>
+          🏰
+        </Marker>
       </MapGL>
     </>
   );
