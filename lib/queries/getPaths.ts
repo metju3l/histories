@@ -1,6 +1,6 @@
 import DbConnector from '../database/driver';
 
-const GetPaths = async (): Promise<any> => {
+const GetPaths = async (): Promise<[name: string, coordinates: string]> => {
   const query = 'MATCH (n:Path) RETURN n, ID(n)';
 
   const driver = DbConnector();
@@ -10,6 +10,7 @@ const GetPaths = async (): Promise<any> => {
 
   driver.close();
 
+  // @ts-ignore
   return paths.records.map((path) => {
     return path.get('n').properties;
   });

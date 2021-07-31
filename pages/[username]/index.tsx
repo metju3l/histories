@@ -1,27 +1,29 @@
 import Head from 'next/head';
 import { NextPageContext } from 'next';
-import React, { FC } from 'react';
+import React from 'react';
 import { useGetUserInfoQuery } from '../../src/graphql/getUserInfo.graphql';
-import { Post, Search } from '@components/mainPage';
+import { Post } from '@components/mainPage';
 import { IoLogoWordpress } from 'react-icons/io';
-import { MdCollections } from 'react-icons/md';
 import { FaConnectdevelop } from 'react-icons/fa';
 import Link from 'next/link';
 import { useFollowMutation } from '../../src/graphql/user.graphql';
+import { useIsLoggedQuery } from '../../src/graphql/user.graphql';
 import { useRouter } from 'next/router';
 
-const User: FC<{ username: string }> = ({ username }) => {
+const User = ({ username }: { username: string }): JSX.Element => {
   const { data, loading, error } = useGetUserInfoQuery({
     variables: { username: username },
   });
-  const [follow] = useFollowMutation();
+  const isLoggedQuery = useIsLoggedQuery();
 
   if (error) return <div>error</div>;
   if (loading) return <div>loading</div>;
   if (data?.getUserInfo === null) return <div>user does not exist</div>;
+  if (isLoggedQuery.loading) return <div>loading</div>;
+  if (isLoggedQuery.error) return <div>error</div>;
 
   const time = new Date(
-    parseInt(data?.getUserInfo.createdAt)
+    parseInt(data!.getUserInfo!.createdAt)
   ).toLocaleDateString('cs-cz');
   const { asPath } = useRouter();
 
@@ -58,7 +60,7 @@ const User: FC<{ username: string }> = ({ username }) => {
               className="text-white text-center text-2xl py-4"
               style={{ borderBottom: '1px solid rgb(62,63,65)' }}
             >
-              {`${data?.getUserInfo?.firstName} ${data?.getUserInfo?.lastName}`}
+              {`${data!.getUserInfo!.firstName} ${data!.getUserInfo!.lastName}`}
             </h2>
 
             <div className="text-white h-16 px-80 pt-3">
@@ -67,16 +69,20 @@ const User: FC<{ username: string }> = ({ username }) => {
                 <Link href={`${asPath}/collections/`}>Collections</Link>
               </a>
               <a className="float-left mr-4 pt-2">
-                Followers {data?.getUserInfo.followers.length}
+                Followers {data!.getUserInfo!.followers!.length}
               </a>
               <a className="float-left mr-4 pt-2">
-                Following {data?.getUserInfo.following.length}
+                Following {data!.getUserInfo!.following!.length}
               </a>
 
-              <a className="float-right ml-4 rounded-lg bg-gray-500 p-2">
-                Following
-              </a>
-              <a className="float-right ml-4 pt-2">Message</a>
+              {(isLoggedQuery.data?.isLogged || isLoggedQuery.loading) && (
+                <>
+                  <a className="float-right ml-4 rounded-lg bg-gray-500 p-2">
+                    Following
+                  </a>
+                  <a className="float-right ml-4 pt-2">Message</a>
+                </>
+              )}
             </div>
           </div>
           <div className="w-full pt-20" style={{ backgroundColor: '#18191A' }}>
@@ -86,8 +92,7 @@ const User: FC<{ username: string }> = ({ username }) => {
                   className="w-full rounded-2xl text-white text-center ml-2 p-4"
                   style={{ backgroundColor: '#242526' }}
                 >
-                  {data?.getUserInfo.firstName}
-                  {`'s`} collections
+                  {`${data!.getUserInfo!.firstName}'s collections`}
                   <div className="w-full grid gap-x-4 gap-y-4 grid-cols-3 pt-4">
                     <div className="bg-red-500 rounded-md h-24"></div>
                     <div className="bg-red-500 rounded-md h-24"></div>
@@ -130,7 +135,7 @@ const User: FC<{ username: string }> = ({ username }) => {
                   style={{ backgroundColor: '#242526' }}
                 >
                   <FaConnectdevelop size={64} className="m-auto" />
-                  {data?.getUserInfo.firstName} joined hiStories
+                  {data!.getUserInfo!.firstName} joined hiStories
                   <br />
                   on {time}
                 </div>

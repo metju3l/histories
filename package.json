@@ -12,7 +12,7 @@
     "codegen": "graphql-let",
     "dev": "next dev",
     "dev-ssl": "node server.js",
-    "build": "next build",
+    "build": "yarn codegen && next build",
     "start": "next start",
     "lint": "next lint",
     "eslint": " eslint --ext .tsx --ext .ts ./",

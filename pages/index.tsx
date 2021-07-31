@@ -1,17 +1,12 @@
 import Head from 'next/head';
 import React, { FC, useState } from 'react';
-import { IoIosArrowBack, IoIosSettings } from 'react-icons/io';
-import { FiPlusCircle } from 'react-icons/fi';
-import { CgProfile } from 'react-icons/cg';
 import { useIsLoggedQuery } from '../src/graphql/user.graphql';
-import Image from 'next/image';
-import worldMap from '@public/worldMap.png';
-import { FaLanguage } from 'react-icons/fa';
 import { IoLogoWordpress } from 'react-icons/io';
-import { AiFillGithub } from 'react-icons/ai';
+import { MdAddBox, MdMap } from 'react-icons/md';
+import { BiSearchAlt2 } from 'react-icons/bi';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
 import Link from 'next/link';
-import { Menu } from '@headlessui/react';
-import { Post, Map, Search, CreatePost } from '@components/mainPage';
+import { Post } from '@components/mainPage';
 
 const Home: FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
@@ -42,7 +37,18 @@ const Home: FC = () => {
             </Link>
             <Link href="/">
               <li className="active py-4 px-4 float-left">
-                <a className="text-center display-block">lorem ipsum</a>
+                <div className="w-full flex bg-white text-black p-2 rounded-full ">
+                  <button
+                    type="submit"
+                    className="focus:outline-none inline-block "
+                  >
+                    <BiSearchAlt2 size={24} />
+                  </button>
+                  <input
+                    className="w-11/12 rounded-sm outline-none border-none inline-block text-light-text"
+                    placeholder="Search..."
+                  />
+                </div>
               </li>
             </Link>
           </ul>
@@ -52,32 +58,77 @@ const Home: FC = () => {
             className="w-2/5 pt-20 m-auto"
             style={{ backgroundColor: '#18191A' }}
           >
-            <Post
-              username="kewin"
-              url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-            />{' '}
-            <Post
-              username="kewin"
-              url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-            />{' '}
-            <Post
-              username="kewin"
-              url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-            />{' '}
-            <Post
-              username="kewin"
-              url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-            />{' '}
-            <Post
-              username="kewin"
-              url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-            />
+            {page === 'feed' ? (
+              <>
+                <Post
+                  username="kewin"
+                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
+                />{' '}
+                <Post
+                  username="kewin"
+                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
+                />{' '}
+                <Post
+                  username="kewin"
+                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
+                />{' '}
+                <Post
+                  username="kewin"
+                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
+                />{' '}
+                <Post
+                  username="kewin"
+                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
+                />
+              </>
+            ) : (
+              page === 'createPost' && (
+                <div className="h-screen text-white">
+                  <div
+                    className="w-full p-4 rounded-2xl text-black"
+                    style={{ backgroundColor: '#242526' }}
+                  >
+                    <label className="text-white ">Description</label>
+                    <input
+                      className="w-11/12 rounded-lg outline-none border-none inline-block text-light-text"
+                      placeholder="Search..."
+                    />
+                    <label className="text-white ">Location</label>
+                    <input
+                      className="w-11/12 rounded-lg outline-none border-none inline-block text-light-text"
+                      placeholder="Search..."
+                    />
+                  </div>
+                </div>
+              )
+            )}
           </div>
           <div
             className="h-full w-1/4 pt-20 text-white fixed right-0 top-0"
             style={{ backgroundColor: '#18191A' }}
           >
-            panel
+            <div
+              className="w-full p-4 rounded-2xl text-white flex"
+              style={{ backgroundColor: '#242526' }}
+            >
+              {isLogged &&
+                (page === 'createPost' ? (
+                  <AiOutlineCloseCircle
+                    size={32}
+                    className="mr-2"
+                    onClick={() => setPage('feed')}
+                  />
+                ) : (
+                  <MdAddBox
+                    size={32}
+                    className="mr-2"
+                    onClick={() => setPage('createPost')}
+                  />
+                ))}
+              <Link href="/map">
+                <MdMap size={32} />
+              </Link>
+            </div>
           </div>
         </main>
       </body>

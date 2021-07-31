@@ -45,39 +45,37 @@ const Map: FC = () => {
     '#a572d5',
   ];
 
-  const Paths = paths.data!.paths!.map(
-    (path: { name: string; coordinates: string }, index: number) => {
-      console.log(JSON.parse(path!.coordinates));
-      return (
-        <Source
-          key={index}
-          id={index.toString()}
-          type="geojson"
-          data={{
-            type: 'Feature',
-            geometry: {
-              type: 'LineString',
-              coordinates: JSON.parse(path!.coordinates),
-            },
-            properties: {
-              id: index,
-              name: path?.name,
+  const Paths = paths.data!.paths!.map((path: any, index: number) => {
+    console.log(JSON.parse(path!.coordinates));
+    return (
+      <Source
+        key={index}
+        id={index.toString()}
+        type="geojson"
+        data={{
+          type: 'Feature',
+          geometry: {
+            type: 'LineString',
+            coordinates: JSON.parse(path!.coordinates),
+          },
+          properties: {
+            id: index,
+            name: path?.name,
+          },
+        }}
+      >
+        <Layer
+          {...{
+            id: index.toString(),
+            type: 'line',
+            paint: {
+              'line-color': pathColors[index % pathColors.length],
             },
           }}
-        >
-          <Layer
-            {...{
-              id: index.toString(),
-              type: 'line',
-              paint: {
-                'line-color': pathColors[index % pathColors.length],
-              },
-            }}
-          />
-        </Source>
-      );
-    }
-  );
+        />
+      </Source>
+    );
+  });
 
   return (
     <>

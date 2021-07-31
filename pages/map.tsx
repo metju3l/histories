@@ -1,20 +1,9 @@
 import Head from 'next/head';
-import React, { FC, useState } from 'react';
-import { IoIosArrowBack, IoIosSettings } from 'react-icons/io';
-import { FiPlusCircle } from 'react-icons/fi';
-import { CgProfile } from 'react-icons/cg';
-import { useIsLoggedQuery } from '../src/graphql/user.graphql';
+import React, { FC } from 'react';
 
-import { Post, Map, Search, CreatePost } from '@components/mainPage';
+import { Map, Search } from '@components/mainPage';
 
 const MapPage: FC = () => {
-  const { data, loading, error } = useIsLoggedQuery();
-  const [page, setPage] = useState('feed');
-
-  if (loading) return <div>loading</div>;
-  if (error) return <div>error</div>;
-  const isLogged = data?.isLogged;
-
   return (
     <>
       <Head>
