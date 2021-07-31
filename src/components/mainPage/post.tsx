@@ -1,17 +1,14 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { FC } from 'react';
 
 import { BiShare, BiCollection } from 'react-icons/bi';
 import { FaRegComment } from 'react-icons/fa';
 import { HiOutlineHeart, HiOutlineLocationMarker } from 'react-icons/hi';
 
-const Post = ({
-  url,
-  username,
-}: {
+const Post: FC<{
   url: string;
   username: string;
-}): JSX.Element => {
+}> = ({ url, username }) => {
   return (
     <div
       className="w-full p-4 mb-12 rounded-2xl text-white"

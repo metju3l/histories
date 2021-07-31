@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-const CreatePost = (): JSX.Element => {
+const CreatePost: FC = () => {
   return (
     <div>
       <h1> Create post</h1>

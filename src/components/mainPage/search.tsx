@@ -10,7 +10,7 @@ import {
 } from '@reach/combobox';
 import { BiSearchAlt2 } from 'react-icons/bi';
 
-const Search = (): JSX.Element => {
+const Search: FC = () => {
   const {
     ready,
     value,
@@ -26,7 +26,7 @@ const Search = (): JSX.Element => {
     setValue(val, false);
   };
 
-  const renderSuggestions = (): JSX.Element => {
+  const renderSuggestions: FC = () => {
     const suggestions = data.map(
       ({
         place_id,

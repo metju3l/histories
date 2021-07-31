@@ -1,21 +1,16 @@
 import { useCreateUserMutation } from '../../graphql/createUser.graphql';
 import { useTranslation } from 'react-i18next';
 import Head from 'next/head';
-import React from 'react';
+import React, { FC } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-const Input = ({
-  type,
-  name,
-  autoComplete,
-  label,
-}: {
+const Input: FC<{
   type: string;
   name: string;
   autoComplete: string;
   label: string;
-}): JSX.Element => {
+}> = ({ type, name, autoComplete, label }) => {
   return (
     <div>
       <label htmlFor={name}>{label}</label>

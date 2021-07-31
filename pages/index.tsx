@@ -7,13 +7,11 @@ import { BiSearchAlt2 } from 'react-icons/bi';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import Link from 'next/link';
-import { Post } from '@components/mainPage';
+import { Post } from '@components/MainPage';
 import { useGetUserInfoQuery } from '@graphql/getUserInfo.graphql';
 import { Menu } from '@headlessui/react';
 import jwt from 'jsonwebtoken';
 import Cookie from 'js-cookie';
-import ImageUploading from 'react-images-uploading';
-import S3 from 'react-aws-s3';
 
 const Home: FC = () => {
   const username = jwt.decode(Cookie.get('jwt'))?.username;

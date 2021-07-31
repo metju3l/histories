@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import { NextPageContext } from 'next';
-import React from 'react';
+import React, { FC } from 'react';
 import { useGetUserInfoQuery } from '../../src/graphql/getUserInfo.graphql';
-import { Post } from '@components/mainPage';
+import { Post } from '@components/MainPage';
 import { IoLogoWordpress } from 'react-icons/io';
 import { FaConnectdevelop } from 'react-icons/fa';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import { useFollowMutation } from '../../src/graphql/user.graphql';
 import { useIsLoggedQuery } from '../../src/graphql/user.graphql';
 import { useRouter } from 'next/router';
 
-const User = ({ username }: { username: string }): JSX.Element => {
+const User: FC<{ username: string }> = ({ username }) => {
   const { data, loading, error } = useGetUserInfoQuery({
     variables: { username: username },
   });

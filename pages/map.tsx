@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import React, { FC } from 'react';
 
-import { Map, Search } from '@components/mainPage';
+import { Search } from '@components/MainPage';
+import { Map } from '@components/Map';
 
 const MapPage: FC = () => {
   return (

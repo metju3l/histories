@@ -1,22 +1,17 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useLoginMutation } from '../../graphql/getUserInfo.graphql';
 import Cookie from 'js-cookie';
 
-const Input = ({
-  type,
-  name,
-  autoComplete,
-  label,
-}: {
+const Input: FC<{
   type: string;
   name: string;
   autoComplete: string;
   label: string;
-}): JSX.Element => {
+}> = ({ type, name, autoComplete, label }) => {
   return (
     <div>
       <label htmlFor={name}>{label}</label>
@@ -32,7 +27,7 @@ const Input = ({
   );
 };
 
-const LogIn = (): JSX.Element => {
+const LogIn: FC = () => {
   const [login] = useLoginMutation();
   const { t } = useTranslation();
 

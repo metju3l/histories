@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import { NextPageContext } from 'next';
-import React from 'react';
+import React, { FC } from 'react';
 
-const user = ({ post }: { post: string }): JSX.Element => {
+const user: FC<{ post: string }> = ({ post }) => {
   return (
     <div className="">
       <Head>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import MapGL, { GeolocateControl, NavigationControl } from 'react-map-gl';
 
 type Props = {
@@ -20,7 +20,7 @@ type Props = {
   >;
 };
 
-const MapLoading = ({ viewport, setViewport }: Props): JSX.Element => {
+const MapLoading: FC<Props> = ({ viewport, setViewport }) => {
   return (
     <>
       <MapGL

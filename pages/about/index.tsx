@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { FC } from 'react';
 import Image from 'next/image';
 import worldMap from '@public/worldMap.png';
 import { FaLanguage } from 'react-icons/fa';
@@ -8,7 +8,7 @@ import { AiFillGithub } from 'react-icons/ai';
 import Link from 'next/link';
 import { Menu } from '@headlessui/react';
 
-const Home = (): JSX.Element => {
+const Home: FC = () => {
   return (
     <>
       <Head>
