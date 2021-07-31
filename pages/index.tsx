@@ -14,7 +14,7 @@ import jwt from 'jsonwebtoken';
 import Cookie from 'js-cookie';
 
 const Home: FC = () => {
-  const username = jwt.decode(Cookie.get('jwt'))?.username;
+  const username = jwt.decode(Cookie.get('jwt'))!.username;
   let loggedUserInfo;
   if (username !== null) {
     loggedUserInfo = useGetUserInfoQuery({
