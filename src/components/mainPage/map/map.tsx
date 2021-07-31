@@ -12,8 +12,18 @@ import { usePathsQuery } from '../../../graphql/getUserInfo.graphql';
 import MapLoading from './MapLoading';
 import LayerIcon from '@public/mapLayerIcon.png';
 import Image from 'next/image';
+import { TimeLine } from '@components/TimeLine/index';
 
 const Map: FC = () => {
+  const railStyle = {
+    position: 'absolute',
+    width: '100%',
+    height: 10,
+    marginTop: 35,
+    borderRadius: 5,
+    backgroundColor: '#8B9CB6',
+  };
+
   const paths = usePathsQuery();
   const [coordinates, setCoordinates] = useState([21, 20]);
 
@@ -79,6 +89,9 @@ const Map: FC = () => {
 
   return (
     <>
+      <div className="absolute top-0 left-10" style={{ zIndex: 100 }}>
+        <TimeLine />
+      </div>
       <MapGL
         {...viewport}
         width="100%"

@@ -4,13 +4,27 @@ import { useIsLoggedQuery } from '../src/graphql/user.graphql';
 import { IoLogoWordpress } from 'react-icons/io';
 import { MdAddBox, MdMap } from 'react-icons/md';
 import { BiSearchAlt2 } from 'react-icons/bi';
+import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import Link from 'next/link';
 import { Post } from '@components/mainPage';
+import { useGetUserInfoQuery } from '@graphql/getUserInfo.graphql';
+import { Menu } from '@headlessui/react';
+import jwt from 'jsonwebtoken';
+import Cookie from 'js-cookie';
+import ImageUploading from 'react-images-uploading';
+import S3 from 'react-aws-s3';
 
 const Home: FC = () => {
-  const { data, loading, error } = useIsLoggedQuery();
+  const username = jwt.decode(Cookie.get('jwt'))?.username;
+  let loggedUserInfo;
+  if (username !== null) {
+    loggedUserInfo = useGetUserInfoQuery({
+      variables: { username: username },
+    });
+  }
   const [page, setPage] = useState('feed');
+  const { data, loading, error } = useIsLoggedQuery();
 
   if (loading) return <div>loading</div>;
   if (error) return <div>error</div>;
@@ -35,22 +49,33 @@ const Home: FC = () => {
                 </a>
               </li>
             </Link>
-            <Link href="/">
-              <li className="active py-4 px-4 float-left">
-                <div className="w-full flex bg-white text-black p-2 rounded-full ">
-                  <button
-                    type="submit"
-                    className="focus:outline-none inline-block "
-                  >
-                    <BiSearchAlt2 size={24} />
-                  </button>
-                  <input
-                    className="w-11/12 rounded-sm outline-none border-none inline-block text-light-text"
-                    placeholder="Search..."
-                  />
+            <li className="active py-4 px-4 float-left">
+              <div className="w-full flex bg-white text-black p-2 rounded-full ">
+                <button
+                  type="submit"
+                  className="focus:outline-none inline-block "
+                >
+                  <BiSearchAlt2 size={24} />
+                </button>
+                <input
+                  className="w-11/12 rounded-sm outline-none border-none inline-block text-light-text"
+                  placeholder="Search..."
+                />
+              </div>
+            </li>
+            {isLogged && (
+              <li className="active py-1.5 px-4 ml-8 float-right text-center pt-4 flex">
+                <div className="flex text-center bg-gray-400 p-1 rounded-3xl">
+                  <div className="rounded-full h-8 w-8 bg-red-500 mr-1"></div>
+                  {loggedUserInfo?.data?.getUserInfo?.firstName}
                 </div>
+                <Menu>
+                  <Menu.Button>
+                    <IoIosArrowDropdownCircle size={32} />
+                  </Menu.Button>
+                </Menu>
               </li>
-            </Link>
+            )}
           </ul>
         </nav>
         <main className="w-full flex">
