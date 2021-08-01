@@ -17,6 +17,7 @@ const GetUserInfo = async (username: string, queries: any): Promise<any> => {
   const session = driver.session();
 
   const result = await session.run(finalQuery);
+  await driver.close();
 
   // if query returns data, user exists
   const userExists = result.records[0] !== undefined;
@@ -29,26 +30,18 @@ const GetUserInfo = async (username: string, queries: any): Promise<any> => {
     };
 
     // get followers
-    const followers = await (
-      await session.run(finalQuery)
-    ).records.map((x) => {
+    const followers = await result.records.map((x) => {
       return x.get('follower').properties;
     });
     // get following
-    const following = await (
-      await session.run(finalQuery)
-    ).records.map((x) => {
+    const following = await result.records.map((x) => {
       return x.get('following').properties;
     });
-    await driver.close();
     // return user data
     return { ...userInfo, followers, following };
   }
   // return null if user does not exist
-  else {
-    await driver.close();
-    return null;
-  }
+  else await driver.close();
 };
 
 export default GetUserInfo;

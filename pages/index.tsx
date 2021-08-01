@@ -14,13 +14,6 @@ import jwt from 'jsonwebtoken';
 import Cookie from 'js-cookie';
 
 const Home: FC = () => {
-  const username = jwt.decode(Cookie.get('jwt'))!.username;
-  let loggedUserInfo;
-  if (username !== null) {
-    loggedUserInfo = useGetUserInfoQuery({
-      variables: { username: username },
-    });
-  }
   const [page, setPage] = useState('feed');
   const { data, loading, error } = useIsLoggedQuery();
 
@@ -65,7 +58,7 @@ const Home: FC = () => {
               <li className="active py-1.5 px-4 ml-8 float-right text-center pt-4 flex">
                 <div className="flex text-center bg-gray-400 p-1 rounded-3xl">
                   <div className="rounded-full h-8 w-8 bg-red-500 mr-1"></div>
-                  {loggedUserInfo?.data?.getUserInfo?.firstName}
+                  logged
                 </div>
                 <Menu>
                   <Menu.Button>

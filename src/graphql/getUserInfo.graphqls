@@ -21,7 +21,7 @@ type UserInfo {
   bio: String
   authenticated: String!
   createdAt: String!
-  id: Int!
+  userID: Int!
   following: [UserInfoMinimal]
   followers: [UserInfoMinimal]
   collections: [Collection]

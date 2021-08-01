@@ -7,7 +7,7 @@ query getUserInfo($username: String!) {
     bio
     authenticated
     createdAt
-    id
+    userID
     following {
       email
       username

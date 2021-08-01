@@ -99,7 +99,7 @@ const resolvers = {
       { username }: { username: string },
       context: any
     ) => {
-      console.log(context);
+      console.log(context.decoded);
       return Follow(context.decoded, username);
     },
 

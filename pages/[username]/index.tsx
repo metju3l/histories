@@ -11,6 +11,8 @@ import { useIsLoggedQuery } from '../../src/graphql/user.graphql';
 import { useRouter } from 'next/router';
 
 const User: FC<{ username: string }> = ({ username }) => {
+  const { asPath } = useRouter();
+  const [follow] = useFollowMutation();
   const { data, loading, error } = useGetUserInfoQuery({
     variables: { username: username },
   });
@@ -25,7 +27,6 @@ const User: FC<{ username: string }> = ({ username }) => {
   const time = new Date(
     parseInt(data!.getUserInfo!.createdAt)
   ).toLocaleDateString('cs-cz');
-  const { asPath } = useRouter();
 
   return (
     <>
@@ -77,8 +78,20 @@ const User: FC<{ username: string }> = ({ username }) => {
 
               {(isLoggedQuery.data?.isLogged || isLoggedQuery.loading) && (
                 <>
-                  <a className="float-right ml-4 rounded-lg bg-gray-500 p-2">
-                    Following
+                  <a
+                    className="float-right ml-4 rounded-lg bg-gray-500 p-2"
+                    onClick={async () => {
+                      try {
+                        await follow({
+                          // @ts-ignore
+                          username: data!.getUserInfo!.username,
+                        });
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    }}
+                  >
+                    Follow
                   </a>
                   <a className="float-right ml-4 pt-2">Message</a>
                 </>

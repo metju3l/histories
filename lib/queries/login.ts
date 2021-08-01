@@ -24,7 +24,7 @@ const Login = async (input: {
       userInfo.records[0].get('n').properties.password
     )
   )
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    // eslint-disable-next-line
     return sign({ username: input.username }, process.env.JWT_SECRET!, {
       expiresIn: '120min',
     });

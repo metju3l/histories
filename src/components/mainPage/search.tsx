@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { ChangeEvent } from 'react';
 import usePlacesAutocomplete from 'use-places-autocomplete';
 import {
@@ -57,6 +57,7 @@ const Search: FC = () => {
           placeholder="Search..."
         />
         <ComboboxPopover className="w-full flex bg-white bg-opacity-80 mt-2 px-2">
+          {/* @ts-ignore */}
           <ComboboxList>{status === 'OK' && renderSuggestions()}</ComboboxList>
         </ComboboxPopover>
       </Combobox>
