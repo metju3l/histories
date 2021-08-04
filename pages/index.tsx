@@ -12,11 +12,13 @@ import { useGetUserInfoQuery } from '@graphql/getUserInfo.graphql';
 import { Menu } from '@headlessui/react';
 import jwt from 'jsonwebtoken';
 import Cookie from 'js-cookie';
+import useDarkMode from '@hooks/useDarkmode';
 
 const Home: FC = () => {
+  const [theme, setTheme] = useDarkMode();
   const [page, setPage] = useState('feed');
   const { data, loading, error } = useIsLoggedQuery();
-
+  const [accountDropdown, setAccountDropdown] = useState('main');
   if (loading) return <div>loading</div>;
   if (error) return <div>error</div>;
   const isLogged = data?.isLogged;
@@ -31,7 +33,7 @@ const Home: FC = () => {
       </Head>
       <body style={{ backgroundColor: '#18191A' }}>
         <nav>
-          <ul className="bg-opacity-50 backdrop-filter backdrop-blur-md text-white bg-black w-full fixed top-0 z-20">
+          <ul className="bg-opacity-50 backdrop-filter backdrop-blur-md dark:text-white dark:bg-black bg-white text-black w-full fixed top-0 z-20">
             <Link href="/">
               <li className="active py-1.5 px-4 ml-8 float-left">
                 <a className="text-center display-block">
@@ -64,6 +66,53 @@ const Home: FC = () => {
                   <Menu.Button>
                     <IoIosArrowDropdownCircle size={32} />
                   </Menu.Button>
+                  <Menu.Items className="shadow-custom absolute bg-white text-blue-500 rounded-xl text-left w-60 px-4 py-2 right-4 top-16 mt-2 display-flex flex-col">
+                    {accountDropdown === 'main' ? (
+                      <>
+                        <div className="py-1.5 hover:text-green-400 cursor-pointer ">
+                          Profile
+                        </div>
+                        <div className="py-1.5 hover:text-green-400 cursor-pointer">
+                          Settings
+                        </div>
+                        <div
+                          className="py-1.5 hover:text-green-400 cursor-pointer"
+                          onClick={() => setAccountDropdown('display')}
+                        >
+                          Display {'>'}
+                        </div>
+                        <div className="py-1.5 hover:text-green-400 cursor-pointer">
+                          Log out
+                        </div>
+                      </>
+                    ) : (
+                      accountDropdown === 'display' && (
+                        <>
+                          <div
+                            className="py-1.5 hover:text-green-400 cursor-pointer text-lg"
+                            onClick={() => setAccountDropdown('main')}
+                          >
+                            {'<'} Display
+                          </div>
+                          <div className="py-1.5 hover:text-green-400 cursor-pointer">
+                            Dark Mode
+                          </div>
+                          <div
+                            className="py-1.5 hover:text-green-400 cursor-pointer"
+                            onClick={() => setTheme('dark')}
+                          >
+                            On
+                          </div>
+                          <div
+                            className="py-1.5 hover:text-green-400 cursor-pointer"
+                            onClick={() => setTheme('light')}
+                          >
+                            Off
+                          </div>
+                        </>
+                      )
+                    )}
+                  </Menu.Items>
                 </Menu>
               </li>
             )}

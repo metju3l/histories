@@ -1,5 +1,5 @@
 type Query {
-  getUserInfo(input: GetUserInfoInput!): UserInfo
+  getUserInfo(input: GetUserInfoInput!): UserInfo!
   paths: [Path]
 }
 

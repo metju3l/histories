@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { NextPageContext } from 'next';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useGetUserInfoQuery } from '../../src/graphql/getUserInfo.graphql';
 import { Post } from '@components/MainPage';
 import { IoLogoWordpress } from 'react-icons/io';
@@ -18,6 +18,7 @@ const User: FC<{ username: string }> = ({ username }) => {
   const { asPath } = useRouter();
   const [follow] = useFollowMutation();
   const [unfollow] = useUnfollowMutation();
+  const [following, setFollowing] = useState(false);
   const { data, loading, error } = useGetUserInfoQuery({
     variables: { username: username },
   });
@@ -27,12 +28,12 @@ const User: FC<{ username: string }> = ({ username }) => {
   if (loading) return <div>loading</div>;
   if (isLoggedQuery.loading) return <div>loading</div>;
   if (isLoggedQuery.error) return <div>error</div>;
-  if (data?.getUserInfo === null) return <div>user does not exist</div>;
+  if (data?.getUserInfo === null || data === undefined)
+    return <div>user does not exist</div>;
 
   const time = new Date(
-    parseInt(data!.getUserInfo!.createdAt)
+    parseInt(data.getUserInfo.createdAt)
   ).toLocaleDateString('cs-cz');
-
   return (
     <>
       <Head>
@@ -69,7 +70,7 @@ const User: FC<{ username: string }> = ({ username }) => {
               className="text-white text-center text-md py-4"
               style={{ borderBottom: '1px solid rgb(62,63,65)' }}
             >
-              {data?.getUserInfo?.bio}
+              {data.getUserInfo.bio}
             </p>
             <div className="text-white h-16 px-80 pt-3">
               <a className="float-left mr-4 pt-2">Posts</a>
@@ -77,7 +78,7 @@ const User: FC<{ username: string }> = ({ username }) => {
                 <Link href={`${asPath}/collections/`}>Collections</Link>
               </a>
               <a className="float-left mr-4 pt-2">
-                Followers {data!.getUserInfo!.followers!.length}
+                Followers {data.getUserInfo!.followers!.length}
               </a>
               <a className="float-left mr-4 pt-2">
                 Following {data!.getUserInfo!.following!.length}
@@ -89,19 +90,19 @@ const User: FC<{ username: string }> = ({ username }) => {
                     className="float-right ml-4 rounded-lg bg-gray-500 p-2"
                     onClick={async () => {
                       try {
-                        data?.getUserInfo?.isFollowing
+                        data.getUserInfo.isFollowing
                           ? await unfollow({
-                              variables: { userID: data!.getUserInfo!.userID },
+                              variables: { userID: data.getUserInfo.userID },
                             })
                           : await follow({
-                              variables: { userID: data!.getUserInfo!.userID },
+                              variables: { userID: data.getUserInfo.userID },
                             });
                       } catch (error) {
                         console.log(error.message);
                       }
                     }}
                   >
-                    {data?.getUserInfo?.isFollowing ? 'Unfollow' : 'Follow'}
+                    {data.getUserInfo.isFollowing ? 'Unfollow' : 'Follow'}
                   </button>
                   <a className="float-right ml-4 pt-2">Message</a>
                 </>
