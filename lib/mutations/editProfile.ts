@@ -18,17 +18,16 @@ const EditProfile = async ({
   email: string | undefined;
   password: string | undefined;
 }): Promise<string> => {
-  const query = `
-  MATCH (n:User)
-  WHERE n.username = "${logged}"
-  ${username !== undefined ? `SET n.username = "${username}"` : ''}
-  ${bio !== undefined ? `SET n.bio = "${bio}"` : ''}
-  ${firstName !== undefined ? `SET n.firstName = "${firstName}"` : ''}
-  ${lastName !== undefined ? `SET n.lastName = "${lastName}"` : ''}
-  ${email !== undefined ? `SET n.email = "${email}"` : ''}
-  ${password !== undefined ? `SET n.password = "${password}"` : ''}
-  `;
-  console.log(query);
+  const query = `MATCH (n:User)
+WHERE n.username = "${logged}"
+${username !== undefined ? `SET n.username = "${username}"\n` : ''}${
+    bio !== undefined ? `SET n.bio = "${bio}"\n` : ''
+  }${firstName !== undefined ? `SET n.firstName = "${firstName}"\n` : ''}${
+    lastName !== undefined ? `SET n.lastName = "${lastName}"\n` : ''
+  }${email !== undefined ? `SET n.email = "${email}"\n` : ''}${
+    password !== undefined ? `SET n.password = "${password}"\n` : ''
+  }`;
+
   const driver = DbConnector();
   const session = driver.session();
 
