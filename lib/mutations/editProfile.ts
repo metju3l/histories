@@ -1,0 +1,41 @@
+import DbConnector from '../database/driver';
+import { CheckCredentials, UserExists } from '../validator';
+
+const EditProfile = async ({
+  logged,
+  username,
+  bio,
+  firstName,
+  lastName,
+  email,
+  password,
+}: {
+  logged: string;
+  username: string | undefined;
+  bio: string | undefined;
+  firstName: string | undefined;
+  lastName: string | undefined;
+  email: string | undefined;
+  password: string | undefined;
+}): Promise<string> => {
+  const query = `
+  MATCH (n:User)
+  WHERE n.username = "${logged}"
+  ${username !== undefined ? `SET n.username = "${username}"` : ''}
+  ${bio !== undefined ? `SET n.bio = "${bio}"` : ''}
+  ${firstName !== undefined ? `SET n.firstName = "${firstName}"` : ''}
+  ${lastName !== undefined ? `SET n.lastName = "${lastName}"` : ''}
+  ${email !== undefined ? `SET n.email = "${email}"` : ''}
+  ${password !== undefined ? `SET n.password = "${password}"` : ''}
+  `;
+  console.log(query);
+  const driver = DbConnector();
+  const session = driver.session();
+
+  await session.run(query);
+  driver.close();
+
+  return 'profile updated';
+};
+
+export default EditProfile;

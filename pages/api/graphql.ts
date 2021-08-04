@@ -11,6 +11,7 @@ import {
   CreateCollection,
   Login,
   GetPaths,
+  EditProfile,
 } from '../../lib';
 import { verify } from 'jsonwebtoken';
 
@@ -48,6 +49,26 @@ const resolvers = {
     },
   },
   Mutation: {
+    updateProfile: async (
+      _parent: undefined,
+      {
+        input,
+      }: {
+        input: {
+          username: string | undefined;
+          bio: string | undefined;
+          firstName: string | undefined;
+          lastName: string | undefined;
+          email: string | undefined;
+          password: string | undefined;
+        };
+      },
+      context: any
+    ) => {
+      EditProfile({ ...input, logged: context.decoded.username });
+      return 'idk';
+    },
+
     searchUser: async () => {
       // search for username like this
     },

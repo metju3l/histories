@@ -98,6 +98,7 @@ const User: FC<{ username: string }> = ({ username }) => {
               <a className="float-left mr-4 pt-2">
                 <Link href={`${asPath}/collections/`}>Collections</Link>
               </a>
+
               <a className="float-left mr-4 pt-2">
                 Followers {data.getUserInfo!.followers!.length}
               </a>
@@ -106,29 +107,31 @@ const User: FC<{ username: string }> = ({ username }) => {
               </a>
 
               {(isLoggedQuery.data?.isLogged.isLogged ||
-                isLoggedQuery.loading) && (
-                <>
-                  <button
-                    className="float-right ml-4 rounded-lg bg-gray-500 p-2"
-                    onClick={async () => {
-                      try {
-                        data.getUserInfo.isFollowing
-                          ? await unfollow({
-                              variables: { userID: data.getUserInfo.userID },
-                            })
-                          : await follow({
-                              variables: { userID: data.getUserInfo.userID },
-                            });
-                      } catch (error) {
-                        console.log(error.message);
-                      }
-                    }}
-                  >
-                    {data.getUserInfo.isFollowing ? 'Unfollow' : 'Follow'}
-                  </button>
-                  <a className="float-right ml-4 pt-2">Message</a>
-                </>
-              )}
+                isLoggedQuery.loading) &&
+                isLoggedQuery.data?.isLogged?.userID !==
+                  data.getUserInfo.username && (
+                  <>
+                    <button
+                      className="float-right ml-4 rounded-lg bg-gray-500 p-2"
+                      onClick={async () => {
+                        try {
+                          data.getUserInfo.isFollowing
+                            ? await unfollow({
+                                variables: { userID: data.getUserInfo.userID },
+                              })
+                            : await follow({
+                                variables: { userID: data.getUserInfo.userID },
+                              });
+                        } catch (error) {
+                          console.log(error.message);
+                        }
+                      }}
+                    >
+                      {data.getUserInfo.isFollowing ? 'Unfollow' : 'Follow'}
+                    </button>
+                    <a className="float-right ml-4 pt-2">Message</a>
+                  </>
+                )}
             </div>
           </div>
           <div className="w-full pt-20" style={{ backgroundColor: '#18191A' }}>

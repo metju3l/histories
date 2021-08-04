@@ -57,7 +57,7 @@ const Map: FC = () => {
           type: 'Feature',
           geometry: {
             type: 'LineString',
-            coordinates: JSON.parse(path!.coordinates),
+            coordinates: JSON.parse(path!.coordinates.replace(/\n/g, '')),
           },
           properties: {
             id: index,
