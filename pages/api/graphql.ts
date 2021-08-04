@@ -38,6 +38,7 @@ const resolvers = {
       { operation }: any
     ) => {
       return GetUserInfo(
+        context.validToken ? context.decoded.username : null,
         input.username,
         operation.selectionSet.selections[0].selectionSet.selections
       );
@@ -96,18 +97,22 @@ const resolvers = {
 
     follow: async (
       _parent: undefined,
-      { username }: { username: string },
+      { userID }: { userID: number },
       context: any
     ) => {
-      console.log(context.decoded);
-      return Follow(context.decoded, username);
+      console.log('follow');
+
+      return Follow(context.decoded.username, userID);
     },
 
     unfollow: async (
       _parent: undefined,
-      { username }: { username: string }
+      { userID }: { userID: number },
+      context: any
     ) => {
-      return Unfollow(username);
+      console.log('unfollow');
+
+      return Unfollow(context.decoded.username, userID);
     },
   },
 };

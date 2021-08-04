@@ -8,6 +8,7 @@ query getUserInfo($username: String!) {
     authenticated
     createdAt
     userID
+    isFollowing
     following {
       email
       username

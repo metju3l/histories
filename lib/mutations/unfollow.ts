@@ -1,17 +1,14 @@
+import GetUserInfo from '@lib/queries/getUserInfo';
 import DbConnector from '../database/driver';
 import { CheckCredentials, UserExists } from '../validator';
 
-const Unfollow = async (username: string): Promise<string> => {
-  const checkTo = CheckCredentials({
-    username: username,
-  });
-
-  if (checkTo !== '') return checkTo;
-
-  if (username === username) return 'user cannot follow himself';
-  if (await !UserExists(username)) return 'user to does not exist';
-
-  const query = `MATCH (a:User {username: '${username}'})-[r:FOLLOW]->(b:User {username: '${username}'}) DELETE r`;
+const Unfollow = async (logged: string, userID: number): Promise<string> => {
+  console.log('unfollow');
+  if (logged === null) return 'user not logged in';
+  const loggedID = (await GetUserInfo(null, logged, null)).userID;
+  const query = `MATCH (a)-[r:FOLLOW]->(b)
+  WHERE ID(a) = ${loggedID} AND ID(b) = ${userID}
+  DELETE r`;
 
   const driver = DbConnector();
   const session = driver.session();
@@ -19,7 +16,7 @@ const Unfollow = async (username: string): Promise<string> => {
   await session.run(query);
   driver.close();
 
-  return 'relation deleted';
+  return 'relation created';
 };
 
 export default Unfollow;

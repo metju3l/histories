@@ -5,8 +5,8 @@ type Query {
 
 type Mutation {
   deleteUser(input: DeleteUserInput!): String!
-  follow(username: String!): String!
-  unfollow(username: String!): String!
+  follow(userID: Int!): String!
+  unfollow(userID: Int!): String!
   createCollection(input: CreateCollectionInput!): String!
 }
 
