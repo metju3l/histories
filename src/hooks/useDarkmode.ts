@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 // @ts-ignore
 import Cookie from 'js-cookie';
 
-const useDarkMode = (): { theme: string; setTheme: () => void } => {
+const useDarkMode = (): {
+  theme: string;
+  setTheme: Dispatch<SetStateAction<string>>;
+} => {
   const [theme, setTheme] = useState('dark');
 
   useEffect(() => {

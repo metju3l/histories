@@ -13,6 +13,7 @@ import {
 import { useIsLoggedQuery } from '../../src/graphql/user.graphql';
 import { useRouter } from 'next/router';
 import { number } from 'yup/lib/locale';
+import { Navbar } from '@components/Navbar';
 
 const User: FC<{ username: string }> = ({ username }) => {
   const { asPath } = useRouter();
@@ -43,23 +44,8 @@ const User: FC<{ username: string }> = ({ username }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <body style={{ backgroundColor: '#18191A' }}>
-        <nav>
-          <ul className="bg-opacity-50 backdrop-filter backdrop-blur-md text-white bg-black w-full fixed top-0 z-20">
-            <Link href="/">
-              <li className="active py-1.5 px-4 ml-8 float-left">
-                <a className="text-center display-block">
-                  <IoLogoWordpress size={42} />{' '}
-                  {/* hope that oonce here will be some normal logo xdd :(*/}
-                </a>
-              </li>
-            </Link>
-            <Link href="/">
-              <li className="active py-4 px-4 float-left">
-                <a className="text-center display-block">lorem ipsum</a>
-              </li>
-            </Link>
-          </ul>
-        </nav>
+        <Navbar />
+
         <main className="w-full pt-20" style={{ backgroundColor: '#242526' }}>
           <div className="full">
             <div className="rounded-full bg-red-500 w-36 h-36 m-auto"></div>
