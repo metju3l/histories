@@ -1,6 +1,5 @@
 type Query {
   hello: String!
-  isLogged: Boolean!
 }
 
 type Mutation {
@@ -8,6 +7,16 @@ type Mutation {
   follow(userID: Int!): String!
   unfollow(userID: Int!): String!
   createCollection(input: CreateCollectionInput!): String!
+  updateProfile(input: UpdateProfileInput!): String!
+}
+
+input UpdateProfileInput {
+  username: String
+  email: String
+  firstName: String
+  lastName: String
+  bio: String
+  password: String
 }
 
 input DeleteUserInput {

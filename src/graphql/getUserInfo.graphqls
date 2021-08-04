@@ -1,6 +1,12 @@
 type Query {
   getUserInfo(input: GetUserInfoInput!): UserInfo!
   paths: [Path]
+  isLogged: IsLoggedInfo!
+}
+
+type IsLoggedInfo {
+  isLogged: Boolean!
+  userID: String
 }
 
 type Mutation {

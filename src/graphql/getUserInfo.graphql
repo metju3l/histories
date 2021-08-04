@@ -28,7 +28,12 @@ query getUserInfo($username: String!) {
     }
   }
 }
-
+query IsLogged {
+  isLogged {
+    isLogged
+    userID
+  }
+}
 query Paths {
   paths {
     name

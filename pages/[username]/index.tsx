@@ -3,19 +3,19 @@ import { NextPageContext } from 'next';
 import React, { FC, useState } from 'react';
 import { useGetUserInfoQuery } from '../../src/graphql/getUserInfo.graphql';
 import { Post } from '@components/MainPage';
-import { IoLogoWordpress } from 'react-icons/io';
 import { FaConnectdevelop } from 'react-icons/fa';
 import Link from 'next/link';
 import {
   useFollowMutation,
   useUnfollowMutation,
 } from '../../src/graphql/user.graphql';
-import { useIsLoggedQuery } from '../../src/graphql/user.graphql';
+import { useIsLoggedQuery } from '@graphql/getUserInfo.graphql';
 import { useRouter } from 'next/router';
 import { number } from 'yup/lib/locale';
 import { Navbar } from '@components/Navbar';
 
 const User: FC<{ username: string }> = ({ username }) => {
+  const [editMode, setEditMode] = useState(false);
   const { asPath } = useRouter();
   const [follow] = useFollowMutation();
   const [unfollow] = useUnfollowMutation();
@@ -24,6 +24,7 @@ const User: FC<{ username: string }> = ({ username }) => {
     variables: { username: username },
   });
   const isLoggedQuery = useIsLoggedQuery();
+  const [bio, setBio] = useState<string>('');
 
   if (error) return <div>error</div>;
   if (loading) return <div>loading</div>;
@@ -31,7 +32,6 @@ const User: FC<{ username: string }> = ({ username }) => {
   if (isLoggedQuery.error) return <div>error</div>;
   if (data?.getUserInfo === null || data === undefined)
     return <div>user does not exist</div>;
-
   const time = new Date(
     parseInt(data.getUserInfo.createdAt)
   ).toLocaleDateString('cs-cz');
@@ -50,13 +50,48 @@ const User: FC<{ username: string }> = ({ username }) => {
           <div className="full">
             <div className="rounded-full bg-red-500 w-36 h-36 m-auto"></div>
             <h2 className="text-white text-center text-2xl py-4">
-              {`${data!.getUserInfo!.firstName} ${data!.getUserInfo!.lastName}`}
+              {`${data.getUserInfo.firstName} ${data.getUserInfo.lastName}`}
             </h2>
             <p
               className="text-white text-center text-md py-4"
               style={{ borderBottom: '1px solid rgb(62,63,65)' }}
             >
-              {data.getUserInfo.bio}
+              {isLoggedQuery.data?.isLogged?.userID ===
+              data.getUserInfo.username ? (
+                <>
+                  {!editMode ? (
+                    <>
+                      {data.getUserInfo.bio}
+                      <br />
+                      <button
+                        className="underline"
+                        onClick={() => setEditMode(true)}
+                      >
+                        edit
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      {/* @ts-ignore */}
+                      <input
+                        className="text-black"
+                        type="text"
+                        onChange={(e) => setBio(e.target.value)}
+                      />
+                      <button
+                        className="underline"
+                        onClick={() => {
+                          setEditMode(false);
+                        }}
+                      >
+                        leave edit
+                      </button>
+                    </>
+                  )}
+                </>
+              ) : (
+                data.getUserInfo.bio
+              )}
             </p>
             <div className="text-white h-16 px-80 pt-3">
               <a className="float-left mr-4 pt-2">Posts</a>
@@ -70,7 +105,8 @@ const User: FC<{ username: string }> = ({ username }) => {
                 Following {data!.getUserInfo!.following!.length}
               </a>
 
-              {(isLoggedQuery.data?.isLogged || isLoggedQuery.loading) && (
+              {(isLoggedQuery.data?.isLogged.isLogged ||
+                isLoggedQuery.loading) && (
                 <>
                   <button
                     className="float-right ml-4 rounded-lg bg-gray-500 p-2"
@@ -102,7 +138,7 @@ const User: FC<{ username: string }> = ({ username }) => {
                   className="w-full rounded-2xl text-white text-center ml-2 p-4"
                   style={{ backgroundColor: '#242526' }}
                 >
-                  {`${data!.getUserInfo!.firstName}'s collections`}
+                  {`${data.getUserInfo.firstName}'s collections`}
                   <div className="w-full grid gap-x-4 gap-y-4 grid-cols-3 pt-4">
                     <div className="bg-red-500 rounded-md h-24"></div>
                     <div className="bg-red-500 rounded-md h-24"></div>

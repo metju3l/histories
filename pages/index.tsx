@@ -1,17 +1,12 @@
 import Head from 'next/head';
 import React, { FC, useState } from 'react';
-import { useIsLoggedQuery } from '../src/graphql/user.graphql';
-import { IoLogoWordpress } from 'react-icons/io';
 import { MdAddBox, MdMap } from 'react-icons/md';
-import { BiSearchAlt2 } from 'react-icons/bi';
-import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import Link from 'next/link';
 import { Post } from '@components/MainPage';
-import { useGetUserInfoQuery } from '@graphql/getUserInfo.graphql';
-import { Menu } from '@headlessui/react';
 import useDarkMode from '@hooks/useDarkmode';
 import { Navbar } from '@components/Navbar';
+import { useIsLoggedQuery } from '@graphql/getUserInfo.graphql';
 
 const Home: FC = () => {
   // @ts-ignore
@@ -21,7 +16,7 @@ const Home: FC = () => {
   const [accountDropdown, setAccountDropdown] = useState('main');
   if (loading) return <div>loading</div>;
   if (error) return <div>error</div>;
-  const isLogged = data?.isLogged;
+  const isLogged = data!.isLogged.isLogged;
 
   return (
     <>

@@ -28,7 +28,10 @@ const resolvers = {
     },
 
     isLogged: async (_parent: undefined, _input: undefined, context: any) => {
-      return context.validToken;
+      return {
+        isLogged: context.validToken,
+        userID: context.validToken ? context.decoded.username : '',
+      };
     },
 
     getUserInfo: async (

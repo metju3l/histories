@@ -1,18 +1,18 @@
 import { FC, useState } from 'react';
 import { LogIn, SignUp } from '@components/Login';
 import React from 'react';
-import { useIsLoggedQuery } from '../src/graphql/user.graphql';
+import { useIsLoggedQuery } from '@graphql/getUserInfo.graphql';
 import { useRouter } from 'next/router';
 
 const Login: FC = () => {
-  const { data, loading, error } = useIsLoggedQuery();
   const [form, setForm] = useState<string>('login');
   const router = useRouter();
-
+  const { data, loading, error } = useIsLoggedQuery();
   if (loading) return <div></div>;
   if (error) return <div></div>;
-
-  if (data!.isLogged) router.replace('/');
+  if (data!.isLogged.isLogged) {
+    router.replace('/');
+  }
 
   return (
     <div>

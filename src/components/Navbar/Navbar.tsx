@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useIsLoggedQuery } from '@graphql/user.graphql';
+import { useIsLoggedQuery } from '@graphql/getUserInfo.graphql';
 import { IoLogoWordpress } from 'react-icons/io';
 import { BiSearchAlt2 } from 'react-icons/bi';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
@@ -15,7 +15,7 @@ const Navbar: FC = () => {
   const [accountDropdown, setAccountDropdown] = useState('main');
   if (loading) return <div>loading</div>;
   if (error) return <div>error</div>;
-  const isLogged = data?.isLogged;
+  const isLogged = data?.isLogged.isLogged;
 
   return (
     <nav>

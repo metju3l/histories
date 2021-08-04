@@ -10,8 +10,24 @@ mutation unfollow($userID: Int!) {
   unfollow(userID: $userID)
 }
 
-query isLogged {
-  isLogged
+mutation updateProfile(
+  $username: String
+  $bio: String
+  $email: String
+  $firstName: String
+  $lastName: String
+  $password: String
+) {
+  updateProfile(
+    input: {
+      username: $username
+      bio: $bio
+      email: $email
+      firstName: $firstName
+      lastName: $lastName
+      password: $password
+    }
+  )
 }
 
 mutation createCollection(
