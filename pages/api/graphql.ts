@@ -144,8 +144,6 @@ const resolvers = {
       { userID }: { userID: number },
       context: any
     ) => {
-      console.log('follow');
-
       return Follow(context.decoded.username, userID);
     },
 
@@ -154,8 +152,6 @@ const resolvers = {
       { userID }: { userID: number },
       context: any
     ) => {
-      console.log('unfollow');
-
       return Unfollow(context.decoded.username, userID);
     },
   },

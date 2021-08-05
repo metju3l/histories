@@ -11,12 +11,12 @@ mutation unfollow($userID: Int!) {
 }
 
 mutation updateProfile(
-  $username: String!
+  $username: String
   $bio: String
-  $email: String!
-  $firstName: String!
-  $lastName: String!
-  $password: String!
+  $email: String
+  $firstName: String
+  $lastName: String
+  $password: String
 ) {
   updateProfile(
     input: {

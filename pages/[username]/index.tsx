@@ -1,43 +1,41 @@
-import Head from 'next/head';
+import React, { FC, useEffect, useState } from 'react';
 import { NextPageContext } from 'next';
-import React, { FC, useState } from 'react';
-import { useGetUserInfoQuery } from '../../src/graphql/getUserInfo.graphql';
-import { Post } from '@components/MainPage';
-import { FaConnectdevelop } from 'react-icons/fa';
-import Link from 'next/link';
-import {
-  useFollowMutation,
-  useUnfollowMutation,
-} from '../../src/graphql/user.graphql';
-import { useIsLoggedQuery } from '@graphql/getUserInfo.graphql';
 import { useRouter } from 'next/router';
-import { number } from 'yup/lib/locale';
-import { Navbar } from '@components/Navbar';
+import Link from 'next/link';
+import Head from 'next/head';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { useUpdateProfileMutation } from '../../src/graphql/user.graphql';
+import { number } from 'yup/lib/locale';
+
+import { useFollowMutation, useUnfollowMutation } from '@graphql/user.graphql';
+import { useUpdateProfileMutation } from '@graphql/user.graphql';
+import { useGetUserInfoQuery } from '@graphql/getUserInfo.graphql';
+import { useIsLoggedQuery } from '@graphql/getUserInfo.graphql';
+
+import { AccountCreatedPost } from '@components/ProfilePage';
+import { Navbar } from '@components/Navbar';
+import { Post } from '@components/MainPage';
+import getUserInfo from '@lib/queries/getUserInfo';
 
 const User: FC<{ username: string }> = ({ username }) => {
-  const [editMode, setEditMode] = useState(false);
   const { asPath } = useRouter();
-  const [follow] = useFollowMutation();
-  const [unfollow] = useUnfollowMutation();
-  const [following, setFollowing] = useState(false);
-  const [updateProfile] = useUpdateProfileMutation();
-  const { data, loading, error } = useGetUserInfoQuery({
+  const { data, loading, error, refetch } = useGetUserInfoQuery({
     variables: { username: username },
   });
   const isLoggedQuery = useIsLoggedQuery();
-  const [bio, setBio] = useState<string>('');
+
+  const [editMode, setEditMode] = useState(false);
+  const [editProfileMutation] = useUpdateProfileMutation();
+
+  const [followMutation] = useFollowMutation();
+  const [unfollowMutation] = useUnfollowMutation();
 
   if (error) return <div>error</div>;
   if (loading) return <div>loading</div>;
   if (isLoggedQuery.loading) return <div>loading</div>;
   if (isLoggedQuery.error) return <div>error</div>;
-  if (data?.getUserInfo === null || data === undefined)
+  if (data === null || data === undefined)
     return <div>user does not exist</div>;
-  const time = new Date(
-    parseInt(data.getUserInfo.createdAt)
-  ).toLocaleDateString('cs-cz');
+
   return (
     <>
       <Head>
@@ -85,8 +83,11 @@ const User: FC<{ username: string }> = ({ username }) => {
                         }}
                         onSubmit={async (values) => {
                           try {
-                            await updateProfile({
+                            await editProfileMutation({
                               variables: values,
+                            });
+                            refetch({
+                              username: username,
                             });
                             setEditMode(false);
                           } catch (error) {
@@ -135,14 +136,7 @@ const User: FC<{ username: string }> = ({ username }) => {
                           </Form>
                         )}
                       </Formik>
-                      <button
-                        className="underline"
-                        onClick={() => {
-                          setEditMode(false);
-                        }}
-                      >
-                        leave edit
-                      </button>
+                      <button className="underline">leave edit</button>
                     </>
                   )}
                 </>
@@ -172,13 +166,21 @@ const User: FC<{ username: string }> = ({ username }) => {
                       className="float-right ml-4 rounded-lg bg-gray-500 p-2"
                       onClick={async () => {
                         try {
-                          data.getUserInfo.isFollowing
-                            ? await unfollow({
-                                variables: { userID: data.getUserInfo.userID },
-                              })
-                            : await follow({
-                                variables: { userID: data.getUserInfo.userID },
-                              });
+                          if (data.getUserInfo.isFollowing) {
+                            await unfollowMutation({
+                              variables: { userID: data.getUserInfo.userID },
+                            });
+                            refetch({
+                              username: username,
+                            });
+                          } else {
+                            await followMutation({
+                              variables: { userID: data.getUserInfo.userID },
+                            });
+                            refetch({
+                              username: username,
+                            });
+                          }
                         } catch (error) {
                           console.log(error.message);
                         }
@@ -236,15 +238,10 @@ const User: FC<{ username: string }> = ({ username }) => {
                   username="kewin"
                   url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
                 />
-                <div
-                  className="w-full p-4 rounded-2xl text-white text-center"
-                  style={{ backgroundColor: '#242526' }}
-                >
-                  <FaConnectdevelop size={64} className="m-auto" />
-                  {data!.getUserInfo!.firstName} joined hiStories
-                  <br />
-                  on {time}
-                </div>
+                <AccountCreatedPost
+                  date={data.getUserInfo.createdAt}
+                  firstName={data.getUserInfo.firstName}
+                />
                 <div className="pb-20"></div>
               </div>
             </div>

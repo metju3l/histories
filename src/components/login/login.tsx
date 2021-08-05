@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useLoginMutation } from '../../graphql/getUserInfo.graphql';
 import Cookie from 'js-cookie';
+import { useRouter } from 'next/router';
 
 const Input: FC<{
   type: string;
@@ -30,6 +31,7 @@ const Input: FC<{
 const LogIn: FC = () => {
   const [login] = useLoginMutation();
   const { t } = useTranslation();
+  const router = useRouter();
 
   const ValidateSchema = Yup.object().shape({
     username: Yup.string()
@@ -63,6 +65,7 @@ const LogIn: FC = () => {
               Cookie.set('jwt', result.data?.login as string, {
                 sameSite: 'strict',
               });
+              router.push('/');
             }
           } catch (error) {
             console.log('error');
