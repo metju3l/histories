@@ -12,6 +12,7 @@ import {
   Login,
   GetPaths,
   EditProfile,
+  CreatePost,
 } from '../../lib';
 import { verify } from 'jsonwebtoken';
 
@@ -110,6 +111,25 @@ const resolvers = {
       }
     ) => {
       return CreateCollection(input);
+    },
+
+    createPost: async (
+      _parent: undefined,
+      {
+        input,
+      }: {
+        input: {
+          description: string;
+          hashtags: string;
+          longitude: string;
+          latitude: string;
+        };
+      },
+      context: any
+    ) => {
+      return context.validToken
+        ? CreatePost({ ...input, userID: context.decoded.username })
+        : null;
     },
 
     deleteUser: async (

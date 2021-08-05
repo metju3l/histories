@@ -8,6 +8,14 @@ type Mutation {
   unfollow(userID: Int!): String!
   createCollection(input: CreateCollectionInput!): String!
   updateProfile(input: UpdateProfileInput!): String!
+  createPost(input: CreatePostInput!): String!
+}
+
+input CreatePostInput {
+  description: String
+  hashtags: String
+  latitude: String
+  longitude: String
 }
 
 input UpdateProfileInput {

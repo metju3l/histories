@@ -41,6 +41,6 @@ And it also is my high school final project.
 ## Technologies
 
 - Next.js
-- TypeScript¨
+- TypeScript
 - GraphQL
 - Neo4j

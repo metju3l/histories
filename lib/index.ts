@@ -5,5 +5,6 @@ export { default as DeleteUser } from './mutations/deleteUser';
 export { default as Follow } from './mutations/follow';
 export { default as Unfollow } from './mutations/unfollow';
 export { default as CreateCollection } from './mutations/createCollection';
+export { default as CreatePost } from './mutations/createPost';
 export { default as EditProfile } from './mutations/editProfile';
 export { default as GetPaths } from './queries/getPaths';

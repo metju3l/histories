@@ -11,12 +11,12 @@ mutation unfollow($userID: Int!) {
 }
 
 mutation updateProfile(
-  $username: String
+  $username: String!
   $bio: String
-  $email: String
-  $firstName: String
-  $lastName: String
-  $password: String
+  $email: String!
+  $firstName: String!
+  $lastName: String!
+  $password: String!
 ) {
   updateProfile(
     input: {
@@ -40,6 +40,22 @@ mutation createCollection(
       username: $username
       collectionName: $collectionName
       description: $description
+    }
+  )
+}
+
+mutation createPost(
+  $description: String
+  $hashtags: String
+  $latitude: String!
+  $longitude: String!
+) {
+  createPost(
+    input: {
+      description: $description
+      hashtags: $hashtags
+      latitude: $latitude
+      longitude: $longitude
     }
   )
 }
