@@ -6,11 +6,14 @@ import { FaRegComment } from 'react-icons/fa';
 import { HiOutlineHeart, HiOutlineLocationMarker } from 'react-icons/hi';
 
 const Post: FC<{
+  key: number;
   url: string;
   username: string;
-}> = ({ url, username }) => {
+  description: string;
+}> = ({ url, username, key, description }) => {
   return (
     <div
+      key={key}
       className="w-full p-4 mb-12 rounded-2xl text-white"
       style={{ backgroundColor: '#242526' }}
     >
@@ -31,11 +34,7 @@ const Post: FC<{
           </Link>
         </div>
       </div>
-      <div className="w-full mt-14 mb-4 text-white">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque
-        debitis accusamus quaerat laudantium ducimus delectus quibusdam
-        praesentium laborum quasi eos?
-      </div>
+      <div className="w-full mt-14 mb-4 text-white">{description}</div>
       <img className="w-full rounded-lg" src={url} alt="post from userxxx" />
 
       <div className="w-full h-12 pt-2">

@@ -7,13 +7,14 @@ import { Post } from '@components/MainPage';
 import useDarkMode from '@hooks/useDarkmode';
 import { Navbar } from '@components/Navbar';
 import { useIsLoggedQuery } from '@graphql/getUserInfo.graphql';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { useCreatePostMutation } from '@graphql/user.graphql';
 
 const Home: FC = () => {
-  // @ts-ignore
-  const [theme, setTheme] = useDarkMode();
   const [page, setPage] = useState('feed');
   const { data, loading, error } = useIsLoggedQuery();
-  const [accountDropdown, setAccountDropdown] = useState('main');
+  const [createPostMutation] = useCreatePostMutation();
+
   if (loading) return <div>loading</div>;
   if (error) return <div>error</div>;
   const isLogged = data!.isLogged.isLogged;
@@ -34,46 +35,46 @@ const Home: FC = () => {
             style={{ backgroundColor: '#18191A' }}
           >
             {page === 'feed' ? (
-              <>
-                <Post
-                  username="kewin"
-                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-                />{' '}
-                <Post
-                  username="kewin"
-                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-                />{' '}
-                <Post
-                  username="kewin"
-                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-                />{' '}
-                <Post
-                  username="kewin"
-                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-                />{' '}
-                <Post
-                  username="kewin"
-                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-                />
-              </>
+              <div className="text-white h-screen">no posts yet</div>
             ) : (
               page === 'createPost' && (
                 <div className="h-screen text-white">
-                  <div
-                    className="w-full p-4 rounded-2xl text-black"
-                    style={{ backgroundColor: '#242526' }}
+                  <Formik
+                    initialValues={{
+                      latitude: '',
+                      longitude: '',
+                      description: '',
+                      hashtags: '',
+                    }}
+                    onSubmit={async (values) => {
+                      try {
+                        await createPostMutation({
+                          variables: values,
+                        });
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    }}
                   >
-                    <label className="text-white ">Description</label>
-                    <input
-                      className="w-11/12 rounded-lg outline-none border-none inline-block text-light-text"
-                      placeholder="Search..."
-                    />
-                    <label className="text-white ">Location</label>
-                    <input
-                      className="w-11/12 rounded-lg outline-none border-none inline-block text-light-text"
-                      placeholder="Search..."
-                    />
-                  </div>
+                    {() => (
+                      <Form>
+                        <Input
+                          label="Description"
+                          name="description"
+                          type="text"
+                        />
+                        <Input label="Hashtags" name="hashtags" type="text" />
+                        <Input label="latitude" name="latitude" type="text" />
+                        <Input label="longitude" name="longitude" type="text" />
+                        <button
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                          type="submit"
+                        >
+                          submit
+                        </button>
+                      </Form>
+                    )}
+                  </Formik>
                 </div>
               )
             )}
@@ -110,5 +111,22 @@ const Home: FC = () => {
     </>
   );
 };
-
+const Input: FC<{
+  type: string;
+  name: string;
+  label: string;
+}> = ({ type, name, label }) => {
+  return (
+    <div>
+      <label htmlFor={name}>{label}</label>
+      <Field
+        type={type}
+        className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+        name={name}
+      />
+      <ErrorMessage name={name} />
+      <br />
+    </div>
+  );
+};
 export default Home;

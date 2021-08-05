@@ -86,13 +86,13 @@ const User: FC<{ username: string }> = ({ username }) => {
                             await editProfileMutation({
                               variables: values,
                             });
-                            refetch({
-                              username: username,
-                            });
                             setEditMode(false);
                           } catch (error) {
                             console.log(error);
                           }
+                          refetch({
+                            username: username,
+                          });
                         }}
                       >
                         {() => (
@@ -136,7 +136,12 @@ const User: FC<{ username: string }> = ({ username }) => {
                           </Form>
                         )}
                       </Formik>
-                      <button className="underline">leave edit</button>
+                      <button
+                        className="underline"
+                        onClick={() => setEditMode(false)}
+                      >
+                        leave edit
+                      </button>
                     </>
                   )}
                 </>
@@ -218,26 +223,24 @@ const User: FC<{ username: string }> = ({ username }) => {
                 className="w-full col-auto"
                 style={{ backgroundColor: '#18191A' }}
               >
-                <Post
-                  username="kewin"
-                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-                />{' '}
-                <Post
-                  username="kewin"
-                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-                />{' '}
-                <Post
-                  username="kewin"
-                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-                />{' '}
-                <Post
-                  username="kewin"
-                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-                />{' '}
-                <Post
-                  username="kewin"
-                  url="https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-                />
+                {data.getUserInfo.posts !== undefined &&
+                data.getUserInfo.posts !== null
+                  ? data.getUserInfo.posts.map((post) => {
+                      return (
+                        <Post
+                          key={post!.postID}
+                          username={data.getUserInfo.username}
+                          description={
+                            post!.description !== undefined &&
+                            post!.description !== null
+                              ? post!.description
+                              : ''
+                          }
+                          url={post!.url}
+                        />
+                      );
+                    })
+                  : ''}
                 <AccountCreatedPost
                   date={data.getUserInfo.createdAt}
                   firstName={data.getUserInfo.firstName}

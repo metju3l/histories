@@ -32,6 +32,7 @@ type UserInfo {
   following: [UserInfoMinimal]
   followers: [UserInfoMinimal]
   collections: [Collection]
+  posts: [Post]
 }
 
 type UserInfoMinimal {
@@ -41,10 +42,20 @@ type UserInfoMinimal {
   email: String!
 }
 
+type Post {
+  createdAt: String!
+  description: String
+  hashtags: String
+  latitude: String!
+  longitude: String!
+  url: String!
+  postID: Int!
+}
+
 type Collection {
-  collectionName: String!
   createdAt: String!
   description: String!
+  collectionName: String!
 }
 
 input GetUserInfoInput {

@@ -26,6 +26,14 @@ query getUserInfo($username: String!) {
       createdAt
       description
     }
+    posts {
+      postID
+      description
+      hashtags
+      latitude
+      longitude
+      url
+    }
   }
 }
 query IsLogged {

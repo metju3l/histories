@@ -13,7 +13,7 @@ const GetUserInfo = async (
   const followersQuery = `MATCH (a:User {username: "${username}"})<-[:FOLLOW]-(user) RETURN user`;
   const followingQuery = `MATCH (a:User {username: "${username}"})-[:FOLLOW]->(user) RETURN user`;
   const collectionsQuery = `MATCH (a:User {username: "${username}"})-[:CREATED]->(collection:Collection) RETURN collection`;
-  const postsQuery = `MATCH (a:User {username: "${username}"})-[:CREATED]->(post:Post) RETURN post`;
+  const postsQuery = `MATCH (user:User {username: "${username}"})-[:CREATED]->(post:Post) RETURN post`;
   const isFollowingQuery = logged
     ? `MATCH (:User {username: "${logged}"})-[r:FOLLOW]->(:User {username: "${username}"}) RETURN r`
     : '';
@@ -22,6 +22,7 @@ const GetUserInfo = async (
   const driver = DbConnector();
   const session = driver.session();
 
+  const posts = await session.run(postsQuery);
   const isFollowing = logged ? await session.run(isFollowingQuery) : false;
   const userInfo = await session.run(userInfoQuery);
   const following = (await session.run(followingQuery)).records.map((x) => {
@@ -45,6 +46,15 @@ const GetUserInfo = async (
         following,
         followers,
         collections,
+        posts:
+          posts !== null
+            ? posts.records.map((x) => {
+                return {
+                  ...x.get('post').properties,
+                  postID: x.get('post').identity.toNumber(),
+                };
+              })
+            : null,
       };
 };
 
