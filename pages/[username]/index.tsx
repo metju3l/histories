@@ -12,8 +12,8 @@ import { useGetUserInfoQuery } from '@graphql/getUserInfo.graphql';
 import { useIsLoggedQuery } from '@graphql/getUserInfo.graphql';
 
 import { AccountCreatedPost } from '@components/ProfilePage';
+import { Post } from '@components/ProfilePage';
 import { Navbar } from '@components/Navbar';
-import { Post } from '@components/MainPage';
 import getUserInfo from '@lib/queries/getUserInfo';
 
 const User: FC<{ username: string }> = ({ username }) => {
@@ -25,9 +25,6 @@ const User: FC<{ username: string }> = ({ username }) => {
 
   const [editMode, setEditMode] = useState(false);
   const [editProfileMutation] = useUpdateProfileMutation();
-
-  const [followMutation] = useFollowMutation();
-  const [unfollowMutation] = useUnfollowMutation();
 
   if (error) return <div>error</div>;
   if (loading) return <div>loading</div>;
@@ -162,40 +159,12 @@ const User: FC<{ username: string }> = ({ username }) => {
                 Following {data!.getUserInfo!.following!.length}
               </a>
 
-              {(isLoggedQuery.data?.isLogged.isLogged ||
-                isLoggedQuery.loading) &&
-                isLoggedQuery.data?.isLogged?.userID !==
-                  data.getUserInfo.username && (
-                  <>
-                    <button
-                      className="float-right ml-4 rounded-lg bg-gray-500 p-2"
-                      onClick={async () => {
-                        try {
-                          if (data.getUserInfo.isFollowing) {
-                            await unfollowMutation({
-                              variables: { userID: data.getUserInfo.userID },
-                            });
-                            refetch({
-                              username: username,
-                            });
-                          } else {
-                            await followMutation({
-                              variables: { userID: data.getUserInfo.userID },
-                            });
-                            refetch({
-                              username: username,
-                            });
-                          }
-                        } catch (error) {
-                          console.log(error.message);
-                        }
-                      }}
-                    >
-                      {data.getUserInfo.isFollowing ? 'Unfollow' : 'Follow'}
-                    </button>
-                    <a className="float-right ml-4 pt-2">Message</a>
-                  </>
-                )}
+              <FollowButton
+                isLoggedQuery={isLoggedQuery}
+                data={data}
+                refetch={refetch}
+              />
+              <a className="float-right ml-4 pt-2">Message</a>
             </div>
           </div>
           <div className="w-full pt-20" style={{ backgroundColor: '#18191A' }}>
@@ -207,15 +176,15 @@ const User: FC<{ username: string }> = ({ username }) => {
                 >
                   {`${data.getUserInfo.firstName}'s collections`}
                   <div className="w-full grid gap-x-4 gap-y-4 grid-cols-3 pt-4">
-                    <div className="bg-red-500 rounded-md h-24"></div>
-                    <div className="bg-red-500 rounded-md h-24"></div>
-                    <div className="bg-red-500 rounded-md h-24"></div>
-                    <div className="bg-red-500 rounded-md h-24"></div>
-                    <div className="bg-red-500 rounded-md h-24"></div>
-                    <div className="bg-red-500 rounded-md h-24"></div>
-                    <div className="bg-red-500 rounded-md h-24"></div>
-                    <div className="bg-red-500 rounded-md h-24"></div>
-                    <div className="bg-red-500 rounded-md h-24"></div>
+                    <CollectionIcon />
+                    <CollectionIcon />
+                    <CollectionIcon />
+                    <CollectionIcon />
+                    <CollectionIcon />
+                    <CollectionIcon />
+                    <CollectionIcon />
+                    <CollectionIcon />
+                    <CollectionIcon />
                   </div>
                 </div>
               </div>
@@ -225,22 +194,23 @@ const User: FC<{ username: string }> = ({ username }) => {
               >
                 {data.getUserInfo.posts !== undefined &&
                 data.getUserInfo.posts !== null
-                  ? data.getUserInfo.posts.map((post) => {
-                      return (
-                        <Post
-                          key={post!.postID}
-                          username={data.getUserInfo.username}
-                          description={
-                            post!.description !== undefined &&
-                            post!.description !== null
-                              ? post!.description
-                              : ''
-                          }
-                          url={post!.url}
-                        />
-                      );
+                  ? data.getUserInfo.posts.map((post: any) => {
+                      if (post === null) return '';
+                      else
+                        return (
+                          <Post
+                            isLoggedQuery={isLoggedQuery}
+                            data={data}
+                            key={post.postID}
+                            username={data.getUserInfo.username}
+                            description={post.description}
+                            createdAt={post.createdAt}
+                            url={post.url}
+                          />
+                        );
                     })
                   : ''}
+
                 <AccountCreatedPost
                   date={data.getUserInfo.createdAt}
                   firstName={data.getUserInfo.firstName}
@@ -288,6 +258,52 @@ const Input: FC<{
       <br />
     </div>
   );
+};
+
+const FollowButton = ({ data, isLoggedQuery, refetch }: any) => {
+  const [followMutation] = useFollowMutation();
+  const [unfollowMutation] = useUnfollowMutation();
+
+  return (
+    <>
+      {' '}
+      {(isLoggedQuery.data?.isLogged.isLogged || isLoggedQuery.loading) &&
+        isLoggedQuery.data?.isLogged?.userID !== data.getUserInfo.username && (
+          <>
+            <button
+              className="float-right ml-4 rounded-lg bg-gray-500 p-2"
+              onClick={async () => {
+                try {
+                  if (data.getUserInfo.isFollowing) {
+                    await unfollowMutation({
+                      variables: { userID: data.getUserInfo.userID },
+                    });
+                    refetch({
+                      username: data.getUserInfo.username,
+                    });
+                  } else {
+                    await followMutation({
+                      variables: { userID: data.getUserInfo.userID },
+                    });
+                    refetch({
+                      username: data.getUserInfo.username,
+                    });
+                  }
+                } catch (error) {
+                  console.log(error.message);
+                }
+              }}
+            >
+              {data.getUserInfo.isFollowing ? 'Unfollow' : 'Follow'}
+            </button>
+          </>
+        )}
+    </>
+  );
+};
+
+const CollectionIcon = () => {
+  return <div className="bg-red-500 rounded-md h-24"></div>;
 };
 
 export default User;

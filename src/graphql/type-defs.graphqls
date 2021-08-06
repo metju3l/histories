@@ -1,5 +1,8 @@
 type Query {
   hello: String!
+  getUserInfo(input: GetUserInfoInput!): UserInfo!
+  paths: [Path]
+  isLogged: IsLoggedInfo!
 }
 
 type Mutation {
@@ -9,6 +12,9 @@ type Mutation {
   createCollection(input: CreateCollectionInput!): String!
   updateProfile(input: UpdateProfileInput!): String!
   createPost(input: CreatePostInput!): String!
+  login(input: LoginInput!): String!
+  searchUser(input: SearchUserInput!): String!
+  createUser(input: CreateUserInput!): String!
 }
 
 input CreatePostInput {
@@ -36,4 +42,74 @@ input CreateCollectionInput {
   username: String!
   collectionName: String!
   description: String!
+}
+
+type IsLoggedInfo {
+  isLogged: Boolean!
+  userID: String
+}
+
+type Path {
+  name: String!
+  coordinates: String!
+}
+
+type UserInfo {
+  username: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  bio: String
+  authenticated: String!
+  createdAt: String!
+  isFollowing: Boolean!
+  userID: Int!
+  following: [UserInfoMinimal]
+  followers: [UserInfoMinimal]
+  collections: [Collection]
+  posts: [Post]
+}
+
+type UserInfoMinimal {
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+}
+
+type Post {
+  createdAt: String!
+  description: String
+  hashtags: String
+  latitude: String!
+  longitude: String!
+  url: String!
+  postID: Int!
+}
+
+type Collection {
+  createdAt: String!
+  description: String!
+  collectionName: String!
+}
+
+input GetUserInfoInput {
+  username: String!
+}
+
+input SearchUserInput {
+  username: String!
+}
+
+input LoginInput {
+  username: String!
+  password: String!
+}
+
+input CreateUserInput {
+  username: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
 }

@@ -32,6 +32,7 @@ query getUserInfo($username: String!) {
       hashtags
       latitude
       longitude
+      createdAt
       url
     }
   }

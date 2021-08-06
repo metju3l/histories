@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react';
 import { MdAddBox, MdMap } from 'react-icons/md';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import Link from 'next/link';
-import { Post } from '@components/MainPage';
+import { Post } from '@components/ProfilePage';
 import useDarkMode from '@hooks/useDarkmode';
 import { Navbar } from '@components/Navbar';
 import { useIsLoggedQuery } from '@graphql/getUserInfo.graphql';

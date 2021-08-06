@@ -13,7 +13,7 @@ const GetUserInfo = async (
   const followersQuery = `MATCH (a:User {username: "${username}"})<-[:FOLLOW]-(user) RETURN user`;
   const followingQuery = `MATCH (a:User {username: "${username}"})-[:FOLLOW]->(user) RETURN user`;
   const collectionsQuery = `MATCH (a:User {username: "${username}"})-[:CREATED]->(collection:Collection) RETURN collection`;
-  const postsQuery = `MATCH (user:User {username: "${username}"})-[:CREATED]->(post:Post) RETURN post`;
+  const postsQuery = `MATCH (user:User {username: "${username}"})-[:CREATED]->(post:Post) RETURN post ORDER BY post.createdAt DESC`;
   const isFollowingQuery = logged
     ? `MATCH (:User {username: "${logged}"})-[r:FOLLOW]->(:User {username: "${username}"}) RETURN r`
     : '';

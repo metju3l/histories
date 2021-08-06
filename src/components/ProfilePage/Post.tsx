@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 
 import { BiShare, BiCollection } from 'react-icons/bi';
 import { FaRegComment } from 'react-icons/fa';
@@ -9,14 +9,33 @@ const Post: FC<{
   key: number;
   url: string;
   username: string;
-  description: string;
-}> = ({ url, username, key, description }) => {
+  description: string | null | undefined;
+  createdAt: string;
+  isLoggedQuery: any;
+  data: any;
+}> = ({ url, username, key, description, createdAt, isLoggedQuery, data }) => {
+  const time = new Date(parseInt(createdAt)).toLocaleDateString('cs-cz', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+  const [editMode, setEditMode] = useState(false);
   return (
     <div
       key={key}
       className="w-full p-4 mb-12 rounded-2xl text-white"
       style={{ backgroundColor: '#242526' }}
     >
+      {isLoggedQuery.data?.isLogged?.userID === data.getUserInfo.username ? (
+        editMode ? (
+          <button onClick={() => setEditMode(false)}>leave edit</button>
+        ) : (
+          <button onClick={() => setEditMode(true)}>edit</button>
+        )
+      ) : (
+        ''
+      )}
+
       <div className="w-full">
         <div className="float-left flex">
           <div className="h-10 w-10 bg-gray-600 rounded-full mb-4"></div>
@@ -34,9 +53,11 @@ const Post: FC<{
           </Link>
         </div>
       </div>
-      <div className="w-full mt-14 mb-4 text-white">{description}</div>
+      <div className="w-full mt-14 mb-4 text-white">
+        {!editMode ? description : <input className="text-black" type="text" />}
+      </div>
+      {time}
       <img className="w-full rounded-lg" src={url} alt="post from userxxx" />
-
       <div className="w-full h-12 pt-2">
         <div className="flex float-left">
           <HiOutlineHeart size={36} className="mr-2" />
