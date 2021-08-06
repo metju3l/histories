@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React, { FC, useState } from 'react';
+import { useDeletePostMutation } from '@graphql/post.graphql';
 
 import { BiShare, BiCollection } from 'react-icons/bi';
 import { FaRegComment } from 'react-icons/fa';
@@ -13,12 +14,23 @@ const Post: FC<{
   createdAt: string;
   isLoggedQuery: any;
   data: any;
-}> = ({ url, username, key, description, createdAt, isLoggedQuery, data }) => {
+  post: any;
+}> = ({
+  url,
+  username,
+  key,
+  description,
+  createdAt,
+  isLoggedQuery,
+  data,
+  post,
+}) => {
   const time = new Date(parseInt(createdAt)).toLocaleDateString('cs-cz', {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
   });
+  const [deletePostMutation] = useDeletePostMutation();
   const [editMode, setEditMode] = useState(false);
   return (
     <div
@@ -27,11 +39,27 @@ const Post: FC<{
       style={{ backgroundColor: '#242526' }}
     >
       {isLoggedQuery.data?.isLogged?.userID === data.getUserInfo.username ? (
-        editMode ? (
-          <button onClick={() => setEditMode(false)}>leave edit</button>
-        ) : (
-          <button onClick={() => setEditMode(true)}>edit</button>
-        )
+        <>
+          {editMode ? (
+            <button onClick={() => setEditMode(false)}>leave edit</button>
+          ) : (
+            <button onClick={() => setEditMode(true)}>edit</button>
+          )}
+          <br />
+          <button
+            onClick={async () => {
+              try {
+                await deletePostMutation({
+                  variables: { postID: post.postID },
+                });
+              } catch (error) {
+                console.log(error.message);
+              }
+            }}
+          >
+            delete post
+          </button>
+        </>
       ) : (
         ''
       )}

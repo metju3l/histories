@@ -206,6 +206,7 @@ const User: FC<{ username: string }> = ({ username }) => {
                             description={post.description}
                             createdAt={post.createdAt}
                             url={post.url}
+                            post={post}
                           />
                         );
                     })
