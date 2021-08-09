@@ -14,6 +14,7 @@ import {
   EditProfile,
   CreatePost,
   DeletePost,
+  Like,
 } from '../../lib';
 import { verify } from 'jsonwebtoken';
 
@@ -51,6 +52,14 @@ const resolvers = {
     },
   },
   Mutation: {
+    like: async (
+      _parent: undefined,
+      { input }: { input: { id: number; type: string } },
+      context: any
+    ) => {
+      return Like({ ...input, logged: context.decoded.username });
+    },
+
     updateProfile: async (
       _parent: undefined,
       {

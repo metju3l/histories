@@ -38,7 +38,7 @@ const Post: FC<{
       className="w-full p-4 mb-12 rounded-2xl text-white"
       style={{ backgroundColor: '#242526' }}
     >
-      {isLoggedQuery.data?.isLogged?.userID === data.getUserInfo.username ? (
+      {isLoggedQuery.data.isLogged.userID === data.getUserInfo.username ? (
         <>
           {editMode ? (
             <button onClick={() => setEditMode(false)}>leave edit</button>
@@ -88,7 +88,7 @@ const Post: FC<{
       <img className="w-full rounded-lg" src={url} alt="post from userxxx" />
       <div className="w-full h-12 pt-2">
         <div className="flex float-left">
-          <HiOutlineHeart size={36} className="mr-2" />
+          {isLoggedQuery.data.isLogged.isLogged !== false && <div>like</div>}
           <FaRegComment size={32} className="mx-2" />
           <BiShare size={36} className="mx-2" />
         </div>
