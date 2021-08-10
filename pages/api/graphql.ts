@@ -54,7 +54,7 @@ const resolvers = {
   Mutation: {
     like: async (
       _parent: undefined,
-      { input }: { input: { id: number; type: string } },
+      { input }: { input: { id: number; type: string; to: string } },
       context: any
     ) => {
       return Like({ ...input, logged: context.decoded.username });

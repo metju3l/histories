@@ -2,7 +2,7 @@ mutation deleteUser($username: String!, $password: String!) {
   deleteUser(input: { username: $username, password: $password })
 }
 
-mutation like($id: Int!, $type: Int!, $to: String!) {
+mutation like($id: Int!, $type: String!, $to: String!) {
   like(input: { id: $id, type: $type, to: $to })
 }
 

@@ -21,7 +21,7 @@ const Like = async ({
   const loggedID = (await GetUserInfo(null, logged, null)).userID;
   const query = `MATCH (user:User), (object:${formatedTo})
   WHERE ID(user) = ${loggedID} AND ID(object) = ${id}
-  CREATE (user)-[:LIKE {type:${type}}]->(object)`;
+  CREATE (user)-[:LIKE {type:"${type}"}]->(object)`;
 
   const driver = DbConnector();
   const session = driver.session();

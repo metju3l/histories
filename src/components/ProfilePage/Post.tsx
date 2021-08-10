@@ -94,7 +94,7 @@ const Post: FC<{
               onClick={async () => {
                 try {
                   await likeMutation({
-                    variables: { id: post.postID, type: 1, to: 'post' },
+                    variables: { id: post.postID, type: 'like', to: 'post' },
                   });
                 } catch (error) {
                   console.log(error.message);
