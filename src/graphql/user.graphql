@@ -2,8 +2,8 @@ mutation deleteUser($username: String!, $password: String!) {
   deleteUser(input: { username: $username, password: $password })
 }
 
-mutation like($id: Int!, $type: String!) {
-  like(input: { id: $id, type: $type })
+mutation like($id: Int!, $type: Int!, $to: String!) {
+  like(input: { id: $id, type: $type, to: $to })
 }
 
 mutation follow($userID: Int!) {
@@ -51,13 +51,15 @@ mutation createCollection(
 mutation createPost(
   $description: String
   $hashtags: String
-  $latitude: String!
-  $longitude: String!
+  $photoDate: String!
+  $latitude: Float!
+  $longitude: Float!
 ) {
   createPost(
     input: {
       description: $description
       hashtags: $hashtags
+      photoDate: $photoDate
       latitude: $latitude
       longitude: $longitude
     }

@@ -21,14 +21,16 @@ type Mutation {
 
 input LikeInput {
   id: Int!
-  type: String!
+  type: Int!
+  to: String!
 }
 
 input CreatePostInput {
   description: String
   hashtags: String
-  latitude: String
-  longitude: String
+  photoDate: String
+  latitude: Float!
+  longitude: Float!
 }
 
 input UpdateProfileInput {

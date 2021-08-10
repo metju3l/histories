@@ -47,7 +47,6 @@ const Map: FC = () => {
   ];
 
   const Paths = paths.data!.paths!.map((path: any, index: number) => {
-    console.log(JSON.parse(path!.coordinates));
     return (
       <Source
         key={index}

@@ -131,6 +131,7 @@ const resolvers = {
         input: {
           description: string;
           hashtags: string;
+          photoDate: string;
           longitude: string;
           latitude: string;
         };

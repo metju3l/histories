@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React, { FC, useState } from 'react';
 import { useDeletePostMutation } from '@graphql/post.graphql';
-
+import { useLikeMutation } from '@graphql/user.graphql';
 import { BiShare, BiCollection } from 'react-icons/bi';
 import { FaRegComment } from 'react-icons/fa';
 import { HiOutlineHeart, HiOutlineLocationMarker } from 'react-icons/hi';
@@ -31,6 +31,7 @@ const Post: FC<{
     second: '2-digit',
   });
   const [deletePostMutation] = useDeletePostMutation();
+  const [likeMutation] = useLikeMutation();
   const [editMode, setEditMode] = useState(false);
   return (
     <div
@@ -88,7 +89,21 @@ const Post: FC<{
       <img className="w-full rounded-lg" src={url} alt="post from userxxx" />
       <div className="w-full h-12 pt-2">
         <div className="flex float-left">
-          {isLoggedQuery.data.isLogged.isLogged !== false && <div>like</div>}
+          {isLoggedQuery.data.isLogged.isLogged !== false && (
+            <button
+              onClick={async () => {
+                try {
+                  await likeMutation({
+                    variables: { id: post.postID, type: 1, to: 'post' },
+                  });
+                } catch (error) {
+                  console.log(error.message);
+                }
+              }}
+            >
+              like
+            </button>
+          )}
           <FaRegComment size={32} className="mx-2" />
           <BiShare size={36} className="mx-2" />
         </div>
