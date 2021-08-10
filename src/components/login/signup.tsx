@@ -1,4 +1,4 @@
-import { useCreateUserMutation } from '../../graphql/createUser.graphql';
+import { useCreateUserMutation } from '@graphql/user.graphql';
 import { useTranslation } from 'react-i18next';
 import Head from 'next/head';
 import React, { FC } from 'react';

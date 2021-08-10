@@ -1,3 +1,21 @@
 mutation deletePost($postID: Int!) {
   deletePost(postID: $postID)
 }
+
+mutation createPost(
+  $description: String
+  $hashtags: String
+  $photoDate: String!
+  $latitude: Float!
+  $longitude: Float!
+) {
+  createPost(
+    input: {
+      description: $description
+      hashtags: $hashtags
+      photoDate: $photoDate
+      latitude: $latitude
+      longitude: $longitude
+    }
+  )
+}

@@ -3,12 +3,10 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { MdAddBox, MdMap } from 'react-icons/md';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import Link from 'next/link';
-import { Post } from '@components/ProfilePage';
-import useDarkMode from '@hooks/useDarkmode';
 import { Navbar } from '@components/Navbar';
-import { useIsLoggedQuery } from '@graphql/getUserInfo.graphql';
+import { useIsLoggedQuery } from '@graphql/user.graphql';
+import { useCreatePostMutation } from '@graphql/post.graphql';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { useCreatePostMutation } from '@graphql/user.graphql';
 import MapGL, {
   Marker,
   NavigationControl,

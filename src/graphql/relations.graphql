@@ -1,0 +1,11 @@
+mutation follow($userID: Int!) {
+  follow(userID: $userID)
+}
+
+mutation unfollow($userID: Int!) {
+  unfollow(userID: $userID)
+}
+
+mutation like($id: Int!, $type: String!, $to: String!) {
+  like(input: { id: $id, type: $type, to: $to })
+}

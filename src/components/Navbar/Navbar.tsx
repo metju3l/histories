@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useIsLoggedQuery } from '@graphql/getUserInfo.graphql';
+import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { IoLogoWordpress } from 'react-icons/io';
 import { BiSearchAlt2 } from 'react-icons/bi';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React, { FC, useState } from 'react';
 import { useDeletePostMutation } from '@graphql/post.graphql';
-import { useLikeMutation } from '@graphql/user.graphql';
+import { useLikeMutation } from '@graphql/relations.graphql';
 import { BiShare, BiCollection } from 'react-icons/bi';
 import { FaRegComment } from 'react-icons/fa';
 import { HiOutlineHeart, HiOutlineLocationMarker } from 'react-icons/hi';

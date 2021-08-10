@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useLoginMutation } from '../../graphql/getUserInfo.graphql';
+import { useLoginMutation } from '@graphql/user.graphql';
 import Cookie from 'js-cookie';
 import { useRouter } from 'next/router';
 

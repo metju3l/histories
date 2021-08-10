@@ -1,17 +1,45 @@
+query getUserInfo($username: String!) {
+  getUserInfo(input: { username: $username }) {
+    username
+    email
+    firstName
+    lastName
+    bio
+    authenticated
+    createdAt
+    userID
+    isFollowing
+    following {
+      email
+      username
+      firstName
+      lastName
+    }
+    followers {
+      email
+      username
+      firstName
+      lastName
+    }
+    collections {
+      collectionName
+      createdAt
+      description
+    }
+    posts {
+      postID
+      description
+      hashtags
+      latitude
+      longitude
+      createdAt
+      url
+    }
+  }
+}
+
 mutation deleteUser($username: String!, $password: String!) {
   deleteUser(input: { username: $username, password: $password })
-}
-
-mutation like($id: Int!, $type: String!, $to: String!) {
-  like(input: { id: $id, type: $type, to: $to })
-}
-
-mutation follow($userID: Int!) {
-  follow(userID: $userID)
-}
-
-mutation unfollow($userID: Int!) {
-  unfollow(userID: $userID)
 }
 
 mutation updateProfile(
@@ -48,20 +76,34 @@ mutation createCollection(
   )
 }
 
-mutation createPost(
-  $description: String
-  $hashtags: String
-  $photoDate: String!
-  $latitude: Float!
-  $longitude: Float!
+query IsLogged {
+  isLogged {
+    isLogged
+    userID
+  }
+}
+
+mutation login($username: String!, $password: String!) {
+  login(input: { username: $username, password: $password })
+}
+
+mutation searchUser($username: String!) {
+  searchUser(input: { username: $username })
+}
+mutation createUser(
+  $username: String!
+  $email: String!
+  $firstName: String!
+  $lastName: String!
+  $password: String!
 ) {
-  createPost(
+  createUser(
     input: {
-      description: $description
-      hashtags: $hashtags
-      photoDate: $photoDate
-      latitude: $latitude
-      longitude: $longitude
+      username: $username
+      email: $email
+      firstName: $firstName
+      lastName: $lastName
+      password: $password
     }
   )
 }

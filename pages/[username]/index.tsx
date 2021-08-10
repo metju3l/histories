@@ -6,10 +6,12 @@ import Head from 'next/head';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { number } from 'yup/lib/locale';
 
-import { useFollowMutation, useUnfollowMutation } from '@graphql/user.graphql';
+import {
+  useFollowMutation,
+  useUnfollowMutation,
+} from '@graphql/relations.graphql';
 import { useUpdateProfileMutation } from '@graphql/user.graphql';
-import { useGetUserInfoQuery } from '@graphql/getUserInfo.graphql';
-import { useIsLoggedQuery } from '@graphql/getUserInfo.graphql';
+import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 
 import { AccountCreatedPost } from '@components/ProfilePage';
 import { Post } from '@components/ProfilePage';

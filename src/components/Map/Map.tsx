@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import MapGL, {
   Marker,
   NavigationControl,
@@ -7,8 +7,7 @@ import MapGL, {
   Source,
   Layer,
 } from 'react-map-gl';
-import { useState } from 'react';
-import { usePathsQuery } from '../../graphql/getUserInfo.graphql';
+import { usePathsQuery } from '@graphql/geo.graphql';
 import MapLoading from './MapLoading';
 import LayerIcon from '@public/mapLayerIcon.png';
 import Image from 'next/image';

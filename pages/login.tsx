@@ -1,7 +1,6 @@
-import { FC, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { LogIn, SignUp } from '@components/Login';
-import React from 'react';
-import { useIsLoggedQuery } from '@graphql/getUserInfo.graphql';
+import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { useRouter } from 'next/router';
 
 const Login: FC = () => {
