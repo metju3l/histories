@@ -62,17 +62,9 @@ mutation updateProfile(
   )
 }
 
-mutation createCollection(
-  $username: String!
-  $collectionName: String!
-  $description: String!
-) {
+mutation createCollection($collectionName: String!, $description: String) {
   createCollection(
-    input: {
-      username: $username
-      collectionName: $collectionName
-      description: $description
-    }
+    input: { collectionName: $collectionName, description: $description }
   )
 }
 

@@ -33,16 +33,6 @@ const LogIn: FC = () => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const ValidateSchema = Yup.object().shape({
-    username: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
-    password: Yup.string()
-      .min(8, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
-  });
   return (
     <>
       <Head>
@@ -54,7 +44,6 @@ const LogIn: FC = () => {
           username: '',
           password: '',
         }}
-        validationSchema={ValidateSchema}
         onSubmit={async (values) => {
           try {
             const result = await login({
@@ -65,7 +54,7 @@ const LogIn: FC = () => {
               Cookie.set('jwt', result.data?.login as string, {
                 sameSite: 'strict',
               });
-              router.push('/');
+              router.reload();
             }
           } catch (error) {
             console.log('error');

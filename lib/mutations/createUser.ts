@@ -12,8 +12,6 @@ const CreateUser = async (input: {
 }): Promise<string> => {
   const { username, firstName, lastName, email, password } = input;
 
-  if (CheckCredentials(input) !== '') return CheckCredentials(input);
-
   if (await UserExists(username)) return 'username is already used';
   else if (await UserExists(email)) return 'email is already used';
   else {
