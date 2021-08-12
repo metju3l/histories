@@ -39,7 +39,7 @@ const Post: FC<{
       className="w-full p-4 mb-12 rounded-2xl text-white"
       style={{ backgroundColor: '#242526' }}
     >
-      {isLoggedQuery.data.isLogged.userID === data.getUserInfo.username ? (
+      {isLoggedQuery.data.isLogged.userID === data.user.username ? (
         <>
           {editMode ? (
             <button onClick={() => setEditMode(false)}>leave edit</button>

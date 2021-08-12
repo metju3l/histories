@@ -46,7 +46,7 @@ const resolvers = {
       });
     },
 
-    getUserInfo: async (
+    user: async (
       _parent: undefined,
       { input }: { input: { username: string } },
       context: any,

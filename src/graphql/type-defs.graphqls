@@ -1,6 +1,6 @@
 type Query {
   hello: String!
-  getUserInfo(input: GetUserInfoInput!): UserInfo!
+  user(input: GetUserInfoInput!): UserInfo!
   post(id: Int!): Post
   paths: [Path]
   isLogged: IsLoggedInfo!

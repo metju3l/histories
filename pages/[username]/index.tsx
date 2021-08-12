@@ -50,18 +50,17 @@ const User: FC<{ username: string }> = ({ username }) => {
           <div className="full">
             <div className="rounded-full bg-red-500 w-36 h-36 m-auto"></div>
             <h2 className="text-white text-center text-2xl py-4">
-              {`${data.getUserInfo.firstName} ${data.getUserInfo.lastName}`}
+              {`${data.user.firstName} ${data.user.lastName}`}
             </h2>
             <p
               className="text-white text-center text-md py-4"
               style={{ borderBottom: '1px solid rgb(62,63,65)' }}
             >
-              {isLoggedQuery.data?.isLogged?.userID ===
-              data.getUserInfo.username ? (
+              {isLoggedQuery.data?.isLogged?.userID === data.user.username ? (
                 <>
                   {!editMode ? (
                     <>
-                      {data.getUserInfo.bio}
+                      {data.user.bio}
                       <br />
                       <button
                         className="underline"
@@ -74,11 +73,11 @@ const User: FC<{ username: string }> = ({ username }) => {
                     <>
                       <Formik
                         initialValues={{
-                          firstName: data.getUserInfo.firstName,
-                          lastName: data.getUserInfo.lastName,
-                          bio: data.getUserInfo.bio,
-                          username: data.getUserInfo.username,
-                          email: data.getUserInfo.email,
+                          firstName: data.user.firstName,
+                          lastName: data.user.lastName,
+                          bio: data.user.bio,
+                          username: data.user.username,
+                          email: data.user.email,
                         }}
                         onSubmit={async (values) => {
                           try {
@@ -145,7 +144,7 @@ const User: FC<{ username: string }> = ({ username }) => {
                   )}
                 </>
               ) : (
-                data.getUserInfo.bio
+                data.user.bio
               )}
             </p>
             <div className="text-white h-16 px-80 pt-3">
@@ -155,10 +154,10 @@ const User: FC<{ username: string }> = ({ username }) => {
               </a>
 
               <a className="float-left mr-4 pt-2">
-                Followers {data.getUserInfo!.followers!.length}
+                Followers {data.user!.followers!.length}
               </a>
               <a className="float-left mr-4 pt-2">
-                Following {data!.getUserInfo!.following!.length}
+                Following {data!.user!.following!.length}
               </a>
 
               <FollowButton
@@ -176,7 +175,7 @@ const User: FC<{ username: string }> = ({ username }) => {
                   className="w-full rounded-2xl text-white text-center ml-2 p-4"
                   style={{ backgroundColor: '#242526' }}
                 >
-                  {`${data.getUserInfo.firstName}'s collections`}
+                  {`${data.user.firstName}'s collections`}
                   <div className="w-full grid gap-x-4 gap-y-4 grid-cols-3 pt-4">
                     <CollectionIcon />
                     <CollectionIcon />
@@ -194,9 +193,8 @@ const User: FC<{ username: string }> = ({ username }) => {
                 className="w-full col-auto"
                 style={{ backgroundColor: '#18191A' }}
               >
-                {data.getUserInfo.posts !== undefined &&
-                data.getUserInfo.posts !== null
-                  ? data.getUserInfo.posts.map((post: any) => {
+                {data.user.posts !== undefined && data.user.posts !== null
+                  ? data.user.posts.map((post: any) => {
                       if (post === null) return '';
                       else
                         return (
@@ -204,7 +202,7 @@ const User: FC<{ username: string }> = ({ username }) => {
                             isLoggedQuery={isLoggedQuery}
                             data={data}
                             key={post.postID}
-                            username={data.getUserInfo.username}
+                            username={data.user.username}
                             description={post.description}
                             createdAt={post.createdAt}
                             url={post.url}
@@ -215,8 +213,8 @@ const User: FC<{ username: string }> = ({ username }) => {
                   : ''}
 
                 <AccountCreatedPost
-                  date={data.getUserInfo.createdAt}
-                  firstName={data.getUserInfo.firstName}
+                  date={data.user.createdAt}
+                  firstName={data.user.firstName}
                 />
                 <div className="pb-20"></div>
               </div>
@@ -271,25 +269,25 @@ const FollowButton = ({ data, isLoggedQuery, refetch }: any) => {
     <>
       {' '}
       {(isLoggedQuery.data?.isLogged.isLogged || isLoggedQuery.loading) &&
-        isLoggedQuery.data?.isLogged?.userID !== data.getUserInfo.username && (
+        isLoggedQuery.data?.isLogged?.userID !== data.user.username && (
           <>
             <button
               className="float-right ml-4 rounded-lg bg-gray-500 p-2"
               onClick={async () => {
                 try {
-                  if (data.getUserInfo.isFollowing) {
+                  if (data.user.isFollowing) {
                     await unfollowMutation({
-                      variables: { userID: data.getUserInfo.userID },
+                      variables: { userID: data.user.userID },
                     });
                     refetch({
-                      username: data.getUserInfo.username,
+                      username: data.user.username,
                     });
                   } else {
                     await followMutation({
-                      variables: { userID: data.getUserInfo.userID },
+                      variables: { userID: data.user.userID },
                     });
                     refetch({
-                      username: data.getUserInfo.username,
+                      username: data.user.username,
                     });
                   }
                 } catch (error) {
@@ -297,7 +295,7 @@ const FollowButton = ({ data, isLoggedQuery, refetch }: any) => {
                 }
               }}
             >
-              {data.getUserInfo.isFollowing ? 'Unfollow' : 'Follow'}
+              {data.user.isFollowing ? 'Unfollow' : 'Follow'}
             </button>
           </>
         )}
