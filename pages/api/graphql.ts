@@ -17,6 +17,7 @@ import {
   Like,
 } from '../../lib';
 import { verify } from 'jsonwebtoken';
+import GetPostInfo from '@lib/queries/getPostInfo';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -36,6 +37,13 @@ const resolvers = {
         isLogged: context.validToken,
         userID: context.validToken ? context.decoded.username : '',
       };
+    },
+
+    post: async (_parent: undefined, { id }: { id: number }, context: any) => {
+      return GetPostInfo({
+        id,
+        logged: context.decoded === null ? null : context.decoded.username,
+      });
     },
 
     getUserInfo: async (

@@ -19,3 +19,15 @@ mutation createPost(
     }
   )
 }
+
+query post($id: Int!) {
+  post(id: $id) {
+    postID
+    description
+    hashtags
+    latitude
+    longitude
+    createdAt
+    url
+  }
+}
