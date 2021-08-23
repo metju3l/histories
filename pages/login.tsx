@@ -1,44 +1,21 @@
-import Head from 'next/head';
 import React, { FC } from 'react';
+import { useIsLoggedQuery, useLoginMutation } from '@graphql/user.graphql';
+import Link from 'next/link';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import router from 'next/router';
 import { useTranslation } from 'react-i18next';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { useLoginMutation } from '@graphql/user.graphql';
 import Cookie from 'js-cookie';
-import { useRouter } from 'next/router';
 
-const Input: FC<{
-  type: string;
-  name: string;
-  autoComplete: string;
-  label: string;
-}> = ({ type, name, autoComplete, label }) => {
-  return (
-    <div>
-      <label htmlFor={name}>{label}</label>
-      <Field
-        type={type}
-        className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-        name={name}
-        autoComplete={autoComplete}
-      />
-      <ErrorMessage name={name} />
-      <br />
-    </div>
-  );
-};
-
-const LogIn: FC = () => {
+const Login: FC = () => {
+  const { data, loading, error } = useIsLoggedQuery();
   const [login] = useLoginMutation();
   const { t } = useTranslation();
-  const router = useRouter();
+  if (loading) return <div></div>;
+  if (error) return <div></div>;
+  if (data!.isLogged.isLogged) router.replace('/');
 
   return (
-    <>
-      <Head>
-        <title>{t('log in')}</title>
-        <meta name="description" content="login to histories" />
-      </Head>
+    <div>
       <Formik
         initialValues={{
           username: '',
@@ -84,8 +61,32 @@ const LogIn: FC = () => {
           </Form>
         )}
       </Formik>
-    </>
+      <Link href="/register">
+        <a className="underline">create a new account</a>
+      </Link>
+    </div>
   );
 };
 
-export default LogIn;
+const Input: FC<{
+  type: string;
+  name: string;
+  autoComplete: string;
+  label: string;
+}> = ({ type, name, autoComplete, label }) => {
+  return (
+    <div>
+      <label htmlFor={name}>{label}</label>
+      <Field
+        type={type}
+        className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+        name={name}
+        autoComplete={autoComplete}
+      />
+      <ErrorMessage name={name} />
+      <br />
+    </div>
+  );
+};
+
+export default Login;
