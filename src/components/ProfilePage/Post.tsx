@@ -36,8 +36,7 @@ const Post: FC<{
   return (
     <div
       key={key}
-      className="w-full p-4 mb-12 rounded-2xl text-white"
-      style={{ backgroundColor: '#242526' }}
+      className="w-full p-4 rounded-2xl text-black text-center shadow-sm border border-indigo-600 my-8"
     >
       {isLoggedQuery.data.isLogged.userID === data.user.username ? (
         <>

@@ -38,24 +38,22 @@ const User: FC<{ username: string }> = ({ username }) => {
   return (
     <>
       <Head>
-        <title>hiStories</title>
+        <title>{`${data.user.firstName} ${data.user.lastName} | hiStories`}</title>
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="hiStories" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <body style={{ backgroundColor: '#18191A' }}>
-        <Navbar />
+      <body>
+        {/* @ts-ignore */}
+        <Navbar data={isLoggedQuery.data} />
 
-        <main className="w-full pt-20" style={{ backgroundColor: '#242526' }}>
+        <main className="w-full pt-20 bg-[#F6F8FA] text-black">
           <div className="full">
             <div className="rounded-full bg-red-500 w-36 h-36 m-auto"></div>
-            <h2 className="text-white text-center text-2xl py-4">
+            <h2 className="text-center text-2xl py-4">
               {`${data.user.firstName} ${data.user.lastName}`}
             </h2>
-            <p
-              className="text-white text-center text-md py-4"
-              style={{ borderBottom: '1px solid rgb(62,63,65)' }}
-            >
+            <div className="text-center text-md py-4 w-[60%] m-auto">
               {isLoggedQuery.data?.isLogged?.userID === data.user.username ? (
                 <>
                   {!editMode ? (
@@ -146,8 +144,8 @@ const User: FC<{ username: string }> = ({ username }) => {
               ) : (
                 data.user.bio
               )}
-            </p>
-            <div className="text-white h-16 px-80 pt-3">
+            </div>
+            <div className="h-16 px-80 pt-3 bg-[#E8ECEF] shadow-md mb-4">
               <a className="float-left mr-4 pt-2">Posts</a>
               <a className="float-left mr-4 pt-2">
                 <Link href={`${asPath}/collections/`}>Collections</Link>
@@ -168,56 +166,33 @@ const User: FC<{ username: string }> = ({ username }) => {
               <a className="float-right ml-4 pt-2">Message</a>
             </div>
           </div>
-          <div className="w-full pt-20" style={{ backgroundColor: '#18191A' }}>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="col-auto" style={{ position: 'sticky' }}>
-                <div
-                  className="w-full rounded-2xl text-white text-center ml-2 p-4"
-                  style={{ backgroundColor: '#242526' }}
-                >
-                  {`${data.user.firstName}'s collections`}
-                  <div className="w-full grid gap-x-4 gap-y-4 grid-cols-3 pt-4">
-                    <CollectionIcon />
-                    <CollectionIcon />
-                    <CollectionIcon />
-                    <CollectionIcon />
-                    <CollectionIcon />
-                    <CollectionIcon />
-                    <CollectionIcon />
-                    <CollectionIcon />
-                    <CollectionIcon />
-                  </div>
-                </div>
-              </div>
-              <div
-                className="w-full col-auto"
-                style={{ backgroundColor: '#18191A' }}
-              >
-                {data.user.posts !== undefined && data.user.posts !== null
-                  ? data.user.posts.map((post: any) => {
-                      if (post === null) return '';
-                      else
-                        return (
-                          <Post
-                            isLoggedQuery={isLoggedQuery}
-                            data={data}
-                            key={post.postID}
-                            username={data.user.username}
-                            description={post.description}
-                            createdAt={post.createdAt}
-                            url={post.url}
-                            post={post}
-                          />
-                        );
-                    })
-                  : ''}
 
-                <AccountCreatedPost
-                  date={data.user.createdAt}
-                  firstName={data.user.firstName}
-                />
-                <div className="pb-20"></div>
-              </div>
+          <div className="flex bg-[#F6F8FA] w-[60%] m-auto pt-2 pb-10 text-black">
+            <div className="h-screen w-[40%] ">col 1</div>
+            <div className="w-[60%] ">
+              {data.user.posts !== undefined && data.user.posts !== null
+                ? data.user.posts.map((post: any) => {
+                    if (post === null) return '';
+                    else
+                      return (
+                        <Post
+                          isLoggedQuery={isLoggedQuery}
+                          data={data}
+                          key={post.postID}
+                          username={data.user.username}
+                          description={post.description}
+                          createdAt={post.createdAt}
+                          url={post.url}
+                          post={post}
+                        />
+                      );
+                  })
+                : ''}
+
+              <AccountCreatedPost
+                date={data.user.createdAt}
+                firstName={data.user.firstName}
+              />
             </div>
           </div>
         </main>
@@ -272,7 +247,9 @@ const FollowButton = ({ data, isLoggedQuery, refetch }: any) => {
         isLoggedQuery.data?.isLogged?.userID !== data.user.username && (
           <>
             <button
-              className="float-right ml-4 rounded-lg bg-gray-500 p-2"
+              className={`float-right ml-4 rounded-lg text-white ${
+                data.user.isFollowing ? 'bg-indigo-600' : 'bg-indigo-600'
+              } p-2`}
               onClick={async () => {
                 try {
                   if (data.user.isFollowing) {

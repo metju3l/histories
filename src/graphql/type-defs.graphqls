@@ -1,7 +1,8 @@
 type Query {
   hello: String!
-  user(input: GetUserInfoInput!): UserInfo!
+  user(input: UserInput!): UserInfo!
   post(id: Int!): Post
+  posts(input: PostsInput!): [Post]
   paths: [Path]
   isLogged: IsLoggedInfo!
 }
@@ -19,6 +20,12 @@ type Mutation {
   login(input: LoginInput!): String!
   searchUser(input: SearchUserInput!): String!
   createUser(input: CreateUserInput!): String!
+}
+
+input PostsInput {
+  radius: Float!
+  fromDate: String
+  toDate: String
 }
 
 input LikeInput {
@@ -103,7 +110,7 @@ type Collection {
   collectionName: String!
 }
 
-input GetUserInfoInput {
+input UserInput {
   username: String!
 }
 
