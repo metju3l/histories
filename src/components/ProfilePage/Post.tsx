@@ -5,6 +5,7 @@ import { useLikeMutation } from '@graphql/relations.graphql';
 import { BiShare, BiCollection } from 'react-icons/bi';
 import { FaRegComment } from 'react-icons/fa';
 import { HiOutlineHeart, HiOutlineLocationMarker } from 'react-icons/hi';
+import Image from 'next/image';
 
 const Post: FC<{
   key: number;
@@ -81,11 +82,20 @@ const Post: FC<{
           </Link>
         </div>
       </div>
-      <div className="w-full mt-14 mb-4 text-white">
+      <div className="w-full mt-14 mb-4 text-white ">
         {!editMode ? description : <input className="text-black" type="text" />}
       </div>
       {time}
-      <img className="w-full rounded-lg" src={url} alt="post from userxxx" />
+
+      <div className="w-full rounded-lg relative items-center h-[300px]">
+        <Image
+          src={url}
+          alt="post from user"
+          layout="fill"
+          objectFit="contain"
+          objectPosition="center"
+        />
+      </div>
       <div className="w-full h-12 pt-2">
         <div className="flex float-left">
           {isLoggedQuery.data.isLogged.isLogged !== false && (

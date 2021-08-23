@@ -15,7 +15,7 @@ const Navbar: FC<{
   return (
     <>
       {' '}
-      <div className="hidden sm:block w-full text-xm bg-[#212529] text-white cursor-pointer h-14">
+      <div className="hidden sm:block w-full text-xm bg-[#212529] text-white cursor-pointer h-14 sticky top-0 z-20">
         <Link href="/" passHref>
           <a className="float-left p-4 hover:bg-[#181818]">Search</a>
         </Link>

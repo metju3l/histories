@@ -111,7 +111,7 @@ const Map: FC = () => {
           🏰
         </Marker>
         <div className="absolute bottom-28 right-2 bg-white rounded-md">
-          <Image src={LayerIcon} width={32} height={32} />
+          <Image src={LayerIcon} width={32} height={32} alt="alt" />
         </div>
       </MapGL>
     </>

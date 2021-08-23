@@ -1,6 +1,6 @@
 import neo4j, { Driver } from 'neo4j-driver';
 
-export default (): Driver => {
+const DBConnector = (): Driver => {
   const driver = neo4j.driver(
     process.env.NEO4J_HOST || 'bolt://localhost:7687',
     neo4j.auth.basic(
@@ -10,3 +10,5 @@ export default (): Driver => {
   );
   return driver;
 };
+
+export default DBConnector;

@@ -17,14 +17,10 @@ const Home: FC = () => {
         <meta name="description" content="hiStories" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap"
-          rel="stylesheet"
-        />
       </Head>
       <body className="font-inter ">
         <ul className="bg-opacity-50 backdrop-filter text-white backdrop-blur-md bg-black w-full fixed top-0 z-20">
-          <Link href="/">
+          <Link href="/" passHref>
             <li className="active py-1.5 px-4 ml-8 float-left">
               <a className="text-center display-block">
                 <IoLogoWordpress size={42} />{' '}
@@ -32,22 +28,22 @@ const Home: FC = () => {
               </a>
             </li>
           </Link>
-          <Link href="/">
+          <Link href="/" passHref>
             <li className="active py-4 px-4 float-left">
               <a className="text-center display-block">About</a>
             </li>
           </Link>
-          <Link href="/">
+          <Link href="/" passHref>
             <li className="active py-4 px-4 float-left">
               <a className="text-center display-block">Idea behind this</a>
             </li>
           </Link>
-          <Link href="/">
+          <Link href="/" passHref>
             <li className="active py-4 px-4 float-left">
               <a className="text-center">Explore map</a>
             </li>
           </Link>{' '}
-          <Link href="/">
+          <Link href="/" passHref>
             <li className="active py-4 px-4 float-left">
               <a className="text-center">Development</a>
             </li>
@@ -105,7 +101,7 @@ const Home: FC = () => {
               </button>
             </p>
             <div className="text-white text-center z-10 w-3/4 m-auto rounded-2xl text-xl py-48 mt-12 relative top-32">
-              <Link href="/">
+              <Link href="/" passHref>
                 <Image
                   src={worldMap}
                   alt="world map picture"
@@ -147,7 +143,7 @@ const Home: FC = () => {
               <Link href="https://www.github.com/krystofex">
                 <a className="ml-1">Kryštof Krátký</a>
               </Link>
-              <Link href="https://www.github.com/krystofex">
+              <Link href="https://www.github.com/krystofex" passHref>
                 <AiFillGithub size={20} className="ml-2" />
               </Link>
             </div>
