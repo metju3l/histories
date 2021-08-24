@@ -5,6 +5,7 @@ import MapGL, {
   ScaleControl,
   GeolocateControl,
   Source,
+  FlyToInterpolator,
   Layer,
 } from 'react-map-gl';
 import { usePathsQuery } from '@graphql/geo.graphql';
@@ -13,9 +14,10 @@ import LayerIcon from '@public/mapLayerIcon.png';
 import Image from 'next/image';
 import { TimeLine } from '@components/TimeLine/index';
 
-const Map: FC = () => {
-  const paths = usePathsQuery();
+const Map = ({ searchCoordinates }: any): JSX.Element => {
   const [coordinates, setCoordinates] = useState([21, 20]);
+
+  const paths = usePathsQuery();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(function (position) {
@@ -31,10 +33,6 @@ const Map: FC = () => {
     pitch: 0,
   });
 
-  if (paths.loading)
-    return <MapLoading viewport={viewport} setViewport={setViewport} />;
-  if (paths.error) return <div>error...</div>;
-
   const pathColors = [
     '#00ff95',
     '#ed315d',
@@ -44,6 +42,22 @@ const Map: FC = () => {
     '#ff5964',
     '#a572d5',
   ];
+  useEffect(() => {
+    console.log('hi');
+    setViewport({
+      ...viewport,
+      longitude: searchCoordinates.lng,
+      latitude: searchCoordinates.lat,
+      zoom: 14,
+      // @ts-ignore
+      transitionDuration: 5000,
+      transitionInterpolator: new FlyToInterpolator(),
+    });
+  }, [searchCoordinates]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (paths.loading)
+    return <MapLoading viewport={viewport} setViewport={setViewport} />;
+  if (paths.error) return <div>error...</div>;
 
   const Paths = paths.data!.paths!.map((path: any, index: number) => {
     return (

@@ -12,9 +12,11 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 
   return (
     <ApolloProvider client={apolloClient}>
-      <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}&libraries=places`}
+      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+      <script
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
       />
+
       <Component {...pageProps} />
     </ApolloProvider>
   );

@@ -1,16 +1,19 @@
-import React, { FC } from 'react';
-import { ChangeEvent } from 'react';
-import usePlacesAutocomplete from 'use-places-autocomplete';
+import React, { useEffect } from 'react';
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from 'use-places-autocomplete';
 import {
   Combobox,
   ComboboxInput,
   ComboboxPopover,
   ComboboxList,
   ComboboxOption,
+  ComboboxOptionText,
 } from '@reach/combobox';
 import { BiSearchAlt2 } from 'react-icons/bi';
 
-const Search: FC = () => {
+const PlacesAutocomplete = ({ setSearchCoordinates }: any) => {
   const {
     ready,
     value,
@@ -18,51 +21,62 @@ const Search: FC = () => {
     setValue,
   } = usePlacesAutocomplete();
 
-  const handleInput = (e: ChangeEvent<HTMLInputElement>): void => {
+  const handleInput = (e: any) => {
     setValue(e.target.value);
   };
 
-  const handleSelect = (val: string): void => {
+  const handleSelect = (val: string) => {
     setValue(val, false);
-  };
 
-  const renderSuggestions: FC = () => {
-    const suggestions = data.map(
-      ({
-        place_id,
-        description,
-      }: {
-        place_id: string;
-        description: string;
-      }) => <ComboboxOption key={place_id} value={description} />
-    );
-
-    return <>{suggestions}</>;
+    getGeocode({ address: val })
+      .then((results) => getLatLng(results[0]))
+      .then(({ lat, lng }) => {
+        setSearchCoordinates({ lat, lng });
+        console.log('📍 Coordinates: ', { lat, lng });
+      })
+      .catch((error) => {
+        console.log('😱 Error: ', error);
+      });
   };
 
   return (
-    <div className="w-full">
-      <Combobox
-        onSelect={handleSelect}
-        className="w-full flex bg-white p-2 rounded-full "
-      >
-        <button type="submit" className="focus:outline-none inline-block ">
-          <BiSearchAlt2 size={24} />
-        </button>
+    <Combobox
+      onSelect={handleSelect}
+      aria-labelledby="demo"
+      openOnFocus={true}
+      className="w-[300px] bg-white py-2 px-4 rounded-3xl h-auto"
+    >
+      <div className="flex w-full">
+        <BiSearchAlt2 size={24} />
         <ComboboxInput
-          className="w-11/12 rounded-sm outline-none border-none inline-block text-light-text"
           value={value}
           onChange={handleInput}
           disabled={!ready}
-          placeholder="Search..."
+          className="w-full rounded-sm outline-none border-none inline-block text-light-text"
         />
-        <ComboboxPopover className="w-full flex bg-white bg-opacity-80 mt-2 px-2">
-          {/* @ts-ignore */}
-          <ComboboxList>{status === 'OK' && renderSuggestions()}</ComboboxList>
-        </ComboboxPopover>
-      </Combobox>
-    </div>
+        <button
+          onClick={() => {
+            setValue('');
+          }}
+        >
+          {' '}
+          x
+        </button>
+      </div>
+      <ComboboxPopover portal={false}>
+        <ComboboxList className="w-full">
+          {status === 'OK' &&
+            data.map(({ place_id, description }) => (
+              <ComboboxOption
+                key={place_id}
+                value={description}
+                draggable={false}
+              />
+            ))}
+        </ComboboxList>
+      </ComboboxPopover>
+    </Combobox>
   );
 };
 
-export default Search;
+export default PlacesAutocomplete;
