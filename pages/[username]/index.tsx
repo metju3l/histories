@@ -13,9 +13,9 @@ import {
 import { useUpdateProfileMutation } from '@graphql/user.graphql';
 import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 
-import { AccountCreatedPost } from '@components/ProfilePage';
-import { Post } from '@components/ProfilePage';
-import { Navbar } from '@components/Navbar';
+import { AccountCreatedPost } from 'components/ProfilePage';
+import { Post } from 'components/ProfilePage';
+import { Navbar } from 'components/Navbar';
 import getUserInfo from '@lib/queries/getUserInfo';
 
 const User: FC<{ username: string }> = ({ username }) => {

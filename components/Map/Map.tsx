@@ -12,7 +12,7 @@ import { usePathsQuery } from '@graphql/geo.graphql';
 import MapLoading from './MapLoading';
 import LayerIcon from '@public/mapLayerIcon.png';
 import Image from 'next/image';
-import { TimeLine } from '@components/TimeLine/index';
+import { TimeLine } from 'components/TimeLine/index';
 
 const Map = ({ searchCoordinates }: any): JSX.Element => {
   const [coordinates, setCoordinates] = useState([21, 20]);

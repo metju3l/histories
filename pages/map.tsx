@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import React, { FC, useState } from 'react';
 
-import { Search } from '@components/MainPage';
-import { Map } from '@components/Map';
+import { Search } from 'components/MainPage';
+import { Map } from 'components/Map';
 
 const MapPage: FC = () => {
   const [searchCoordinates, setSearchCoordinates] = useState({

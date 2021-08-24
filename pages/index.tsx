@@ -10,7 +10,7 @@ import { AiOutlineMenu } from 'react-icons/ai';
 import { FaLanguage, FaRegComment } from 'react-icons/fa';
 import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import useDarkMode from '@hooks/useDarkmode';
-import { Navbar } from '@components/Navbar';
+import { Navbar } from 'components/Navbar';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import { BiCollection, BiShare } from 'react-icons/bi';
 import { useLikeMutation } from '@graphql/relations.graphql';
