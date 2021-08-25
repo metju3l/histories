@@ -14,9 +14,11 @@ import MapGL, {
   GeolocateControl,
   Source,
   Layer,
+  FlyToInterpolator,
 } from 'react-map-gl';
 import router from 'next/router';
 import _toast, { toast, Toaster } from 'react-hot-toast';
+import { Search } from '@components/MainPage';
 
 const Login: FC = () => {
   const [page, setPage] = useState('feed');
@@ -28,6 +30,11 @@ const Login: FC = () => {
     longitude: -100,
   });
   const [events, logEvents] = useState({});
+
+  const [searchCoordinates, setSearchCoordinates] = useState({
+    lat: 50,
+    lng: 15,
+  });
 
   const onMarkerDragStart = useCallback((event) => {
     logEvents((_events) => ({ ..._events, onDragStart: event.lngLat }));
@@ -44,6 +51,7 @@ const Login: FC = () => {
       latitude: event.lngLat[1],
     });
   }, []);
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(function (position) {
       setCoordinates([position.coords.latitude, position.coords.longitude]);
@@ -51,70 +59,91 @@ const Login: FC = () => {
   }, []);
 
   const [viewport, setViewport] = useState({
-    latitude: 40,
-    longitude: -100,
+    latitude: searchCoordinates.lat,
+    longitude: searchCoordinates.lng,
     zoom: 3.5,
     bearing: 0,
     pitch: 0,
   });
+
+  useEffect(() => {
+    setViewport({
+      ...viewport,
+      longitude: searchCoordinates.lng,
+      latitude: searchCoordinates.lat,
+      zoom: 14,
+      // @ts-ignore
+      transitionDuration: 2000,
+      transitionInterpolator: new FlyToInterpolator(),
+    });
+    setMarker({
+      longitude: searchCoordinates.lng,
+      latitude: searchCoordinates.lat,
+    });
+  }, [searchCoordinates]); // eslint-disable-line react-hooks/exhaustive-deps
+
   if (loading) return <div>loading</div>;
   if (error) return <div>error</div>;
   if (!data!.isLogged.isLogged) router.replace('/');
 
   return (
     <div className="h-screen text-black bg-[#F6F8FA]">
-      <MapGL
-        {...viewport}
-        width="100%"
-        height="50%"
-        mapStyle={`mapbox://styles/${process.env.NEXT_PUBLIC_MAPBOX_USER}/${process.env.NEXT_PUBLIC_MAPBOX_STYLE}`}
-        onViewportChange={setViewport}
-        mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-        dragRotate={false}
-      >
-        <GeolocateControl
-          style={{
-            bottom: 186,
-            right: 0,
-            padding: '10px',
-          }}
-          positionOptions={{ enableHighAccuracy: true }}
-        />
-        <Marker
-          longitude={marker.longitude}
-          latitude={marker.latitude}
-          offsetTop={-20}
-          offsetLeft={-10}
-          draggable
-          onDragStart={onMarkerDragStart}
-          onDrag={onMarkerDrag}
-          onDragEnd={onMarkerDragEnd}
+      <div className="h-[30vh] flex">
+        <div className=" p-[10px]">
+          <Search setSearchCoordinates={setSearchCoordinates} />
+        </div>
+        <MapGL
+          {...viewport}
+          width="100%"
+          height="100%"
+          mapStyle={`mapbox://styles/${process.env.NEXT_PUBLIC_MAPBOX_USER}/${process.env.NEXT_PUBLIC_MAPBOX_STYLE}`}
+          onViewportChange={setViewport}
+          mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+          dragRotate={false}
         >
-          <svg
-            height={20}
-            viewBox="0 0 24 24"
+          <GeolocateControl
             style={{
-              fill: '#d00',
-              stroke: 'none',
+              bottom: 186,
+              right: 0,
+              padding: '10px',
             }}
+            positionOptions={{ enableHighAccuracy: true }}
+          />
+          <Marker
+            longitude={marker.longitude}
+            latitude={marker.latitude}
+            offsetTop={-20}
+            offsetLeft={-10}
+            draggable
+            onDragStart={onMarkerDragStart}
+            onDrag={onMarkerDrag}
+            onDragEnd={onMarkerDragEnd}
           >
-            <path
-              d="M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
+            <svg
+              height={20}
+              viewBox="0 0 24 24"
+              style={{
+                fill: '#d00',
+                stroke: 'none',
+              }}
+            >
+              <path
+                d="M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
 c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
 C20.1,15.8,20.2,15.8,20.2,15.7z"
-            />
-          </svg>
-        </Marker>
-        <NavigationControl
-          style={{
-            bottom: 240,
-            right: 0,
-            padding: '10px',
-          }}
-          showCompass={false}
-        />
-      </MapGL>
-
+              />
+            </svg>
+          </Marker>
+          <NavigationControl
+            style={{
+              bottom: 240,
+              right: 0,
+              padding: '10px',
+            }}
+            showCompass={false}
+          />
+        </MapGL>
+      </div>
       <Formik
         initialValues={{
           photoDate: '',
@@ -131,6 +160,7 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
                 longitude: marker.longitude,
               },
             });
+            router.push('/');
           } catch (error) {
             toast.error(error.message);
           }
