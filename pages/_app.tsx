@@ -6,6 +6,7 @@ import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../lib/apollo';
 import Script from 'next/script';
+import _toast, { toast, Toaster } from 'react-hot-toast';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const apolloClient = useApollo(null);
@@ -16,6 +17,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       <script
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
       />
+      <Toaster position="top-center" reverseOrder={true} />
 
       <Component {...pageProps} />
     </ApolloProvider>

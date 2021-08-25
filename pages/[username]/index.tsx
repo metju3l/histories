@@ -30,6 +30,7 @@ const User: FC<{ username: string }> = ({ username }) => {
 
   useEffect(() => {
     refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editMode]);
 
   if (error) return <div>error</div>;

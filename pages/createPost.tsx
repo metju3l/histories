@@ -16,6 +16,7 @@ import MapGL, {
   Layer,
 } from 'react-map-gl';
 import router from 'next/router';
+import _toast, { toast, Toaster } from 'react-hot-toast';
 
 const Login: FC = () => {
   const [page, setPage] = useState('feed');
@@ -131,7 +132,7 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
               },
             });
           } catch (error) {
-            console.log(error);
+            toast.error(error.message);
           }
         }}
       >

@@ -1,5 +1,4 @@
 import DbConnector from '../database/driver';
-import { CheckCredentials } from '../validator/';
 
 const LastPost = async ({ userID }: { userID: any }): Promise<any> => {
   const driver = DbConnector();
@@ -13,7 +12,7 @@ const LastPost = async ({ userID }: { userID: any }): Promise<any> => {
 
   driver.close();
 
-  return output.records[0].get('object.createdAt');
+  return output.records[0] ? output.records[0].get('object.createdAt') : null;
 };
 
 export default LastPost;

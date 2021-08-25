@@ -24,7 +24,7 @@ const CreatePost = async ({
     new Date().getTime() - parseInt(await LastPost({ userID: actualID })) <
     10000
   )
-    return 'you can only create post every 10sec';
+    throw new Error('you can create post every 10sec');
 
   const query = `
   MATCH (n:User {username: "${userID}"})
