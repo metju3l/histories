@@ -1,5 +1,5 @@
-query getUserInfo($username: String!) {
-  user(input: { username: $username }) {
+query getUserInfo($username: String, $id: Int) {
+  user(input: { username: $username, id: $id }) {
     username
     email
     firstName
@@ -7,7 +7,7 @@ query getUserInfo($username: String!) {
     bio
     authenticated
     createdAt
-    userID
+    id
     isFollowing
     following {
       email

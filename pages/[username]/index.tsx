@@ -28,6 +28,10 @@ const User: FC<{ username: string }> = ({ username }) => {
   const [editMode, setEditMode] = useState(false);
   const [editProfileMutation] = useUpdateProfileMutation();
 
+  useEffect(() => {
+    refetch();
+  }, [editMode]);
+
   if (error) return <div>error</div>;
   if (loading) return <div>loading</div>;
   if (isLoggedQuery.loading) return <div>loading</div>;
@@ -86,9 +90,6 @@ const User: FC<{ username: string }> = ({ username }) => {
                           } catch (error) {
                             console.log(error);
                           }
-                          refetch({
-                            username: username,
-                          });
                         }}
                       >
                         {() => (

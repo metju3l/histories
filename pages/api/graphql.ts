@@ -48,13 +48,14 @@ const resolvers = {
 
     user: async (
       _parent: undefined,
-      { input }: { input: { username: string } },
+      { input }: { input: { username: string; id: number } },
       context: any,
       { operation }: any
     ) => {
       return GetUserInfo(
         context.validToken ? context.decoded.username : null,
         input.username,
+        input.id,
         operation.selectionSet.selections[0].selectionSet.selections
       );
     },

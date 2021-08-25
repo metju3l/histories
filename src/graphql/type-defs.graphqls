@@ -80,7 +80,7 @@ type UserInfo {
   authenticated: String!
   createdAt: String!
   isFollowing: Boolean!
-  userID: Int!
+  id: Int!
   following: [UserInfoMinimal]
   followers: [UserInfoMinimal]
   collections: [Collection]
@@ -111,7 +111,8 @@ type Collection {
 }
 
 input UserInput {
-  username: String!
+  username: String
+  id: Int
 }
 
 input SearchUserInput {

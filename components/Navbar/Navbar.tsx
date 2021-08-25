@@ -22,7 +22,11 @@ const Navbar: FC<{
         <Link href="/map" passHref>
           <a className="float-left p-4 hover:bg-[#181818]">Map</a>
         </Link>
-
+        {data.isLogged && (
+          <Link href="/createPost" passHref>
+            <a className="float-left p-4 hover:bg-[#181818]">Create post</a>
+          </Link>
+        )}
         <Menu>
           <Menu.Button
             className="float-right py-2 px-4 hover:bg-[#181818]"
@@ -49,11 +53,11 @@ const Navbar: FC<{
                 </div>
                 {data.isLogged ? (
                   <div className="py-1.5 hover:text-green-400 cursor-pointer">
-                    <Link href="/authorization/logout"> Log out</Link>
+                    <Link href="/logout"> Log out</Link>
                   </div>
                 ) : (
                   <div className="py-1.5 hover:text-green-400 cursor-pointer">
-                    <Link href="/authorization/login"> Log in</Link>
+                    <Link href="/login"> Log in</Link>
                   </div>
                 )}
               </>

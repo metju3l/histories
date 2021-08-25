@@ -3,19 +3,26 @@ import { CheckCredentials } from '../validator/';
 
 const GetUserInfo = async (
   logged: string | null,
-  username: string,
+  username: string | undefined,
+  userID: number | undefined,
   queries: any
 ): Promise<any> => {
-  if (CheckCredentials({ username: username }) !== '')
-    return CheckCredentials({ username: username });
+  if (username === undefined && userID === undefined) {
+    return 'username cannot be undefined';
+  }
 
-  const userInfoQuery = `MATCH (n:User) WHERE n.username =~ "(?i)${username}" RETURN n, ID(n)`;
-  const followersQuery = `MATCH (a:User {username: "${username}"})<-[:FOLLOW]-(user) RETURN user`;
-  const followingQuery = `MATCH (a:User {username: "${username}"})-[:FOLLOW]->(user) RETURN user`;
-  const collectionsQuery = `MATCH (a:User {username: "${username}"})-[:CREATED]->(collection:Collection) RETURN collection`;
-  const postsQuery = `MATCH (user:User {username: "${username}"})-[:CREATED]->(post:Post) RETURN post ORDER BY post.createdAt DESC`;
+  const matchString =
+    userID !== undefined
+      ? ` WHERE ID(n) = ${userID} `
+      : ` WHERE n.username =~ "(?i)${username}" `;
+
+  const userInfoQuery = `MATCH (n:User) ${matchString} RETURN n, ID(n)`;
+  const followersQuery = `MATCH (n:User)<-[:FOLLOW]-(user) ${matchString} RETURN user`;
+  const followingQuery = `MATCH (n:User)-[:FOLLOW]->(user) ${matchString} RETURN user`;
+  const collectionsQuery = `MATCH (n:User)-[:CREATED]->(collection:Collection) ${matchString} RETURN collection`;
+  const postsQuery = `MATCH (n:User)-[:CREATED]->(post:Post) ${matchString} RETURN post ORDER BY post.createdAt DESC`;
   const isFollowingQuery = logged
-    ? `MATCH (:User {username: "${logged}"})-[r:FOLLOW]->(:User {username: "${username}"}) RETURN r`
+    ? `MATCH (:User {username: "${logged}"})-[r:FOLLOW]->(n:User) ${matchString} RETURN r`
     : '';
   // const followQuery = `RETURN {follows:EXISTS((:User {username: ${username}})<-[:FOLLOW]-(:User {username:${logged}})),isFollowed:EXISTS((:User {username:${logged}})<-[:FOLLOW]-(:User {username:${username}}))}`;
 
@@ -40,7 +47,7 @@ const GetUserInfo = async (
     ? null
     : {
         ...userInfo.records[0].get('n').properties,
-        userID: userInfo.records[0].get('ID(n)').toNumber(),
+        id: userInfo.records[0].get('ID(n)').toNumber(),
         // @ts-ignore
         isFollowing: logged ? isFollowing.records[0] !== undefined : false,
         following,
