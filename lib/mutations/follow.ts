@@ -4,7 +4,7 @@ import { CheckCredentials, UserExists } from '../validator';
 
 const Follow = async (logged: string, userID: number): Promise<string> => {
   if (logged === null) return 'user not logged in';
-  const loggedID = (await GetUserInfo(null, logged, null)).userID;
+  const loggedID = (await GetUserInfo(null, logged, undefined, null)).id;
   const query = `MATCH (a:User), (b:User)
   WHERE ID(a) = ${loggedID} AND ID(b) = ${userID}
   CREATE (a)-[r:FOLLOW {createdAt: ${new Date().getTime()}}]->(b)`;

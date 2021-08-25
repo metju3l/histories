@@ -1,6 +1,5 @@
 import GetUserInfo from '@lib/queries/getUserInfo';
 import DbConnector from '../database/driver';
-import { CheckCredentials, UserExists } from '../validator/';
 import LastPost from './lastPost';
 
 const CreatePost = async ({
@@ -18,7 +17,7 @@ const CreatePost = async ({
   longitude: string;
   latitude: string;
 }): Promise<string> => {
-  const actualID = (await GetUserInfo(null, userID, null)).userID;
+  const actualID = (await GetUserInfo(null, userID, undefined, null)).id;
 
   // if last post / collection was created less than 10 seconds ago
   if (
