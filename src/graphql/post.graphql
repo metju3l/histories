@@ -20,6 +20,15 @@ mutation createPost(
   )
 }
 
+query tag($label: String!) {
+  tag(label: $label) {
+    label
+    posts {
+      description
+    }
+  }
+}
+
 query post($id: Int!) {
   post(id: $id) {
     postID

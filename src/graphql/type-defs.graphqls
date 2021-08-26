@@ -2,6 +2,7 @@ type Query {
   hello: String!
   user(input: UserInput!): UserInfo!
   post(id: Int!): Post
+  tag(label: String!): TagInfo
   posts(input: PostsInput!): [Post]
   paths: [Path]
   isLogged: IsLoggedInfo!
@@ -108,6 +109,16 @@ type Collection {
   createdAt: String!
   description: String
   collectionName: String!
+}
+
+type TagInfo {
+  label: String!
+  numberOfPosts: Int!
+  numberOfUniqueUsers: Int!
+  oldestPostDate: String!
+  newestPostDate: String!
+  topPosts: [Post]
+  posts: [Post]
 }
 
 input UserInput {

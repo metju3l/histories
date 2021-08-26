@@ -15,6 +15,7 @@ import {
   CreatePost,
   DeletePost,
   Like,
+  GetTagInfo,
 } from '../../lib';
 import { verify } from 'jsonwebtoken';
 import GetPostInfo from '@lib/queries/getPostInfo';
@@ -44,6 +45,14 @@ const resolvers = {
         id,
         logged: context.decoded === null ? null : context.decoded.username,
       });
+    },
+
+    tag: async (
+      _parent: undefined,
+      { label }: { label: string },
+      context: any
+    ) => {
+      return GetTagInfo({ label });
     },
 
     user: async (
