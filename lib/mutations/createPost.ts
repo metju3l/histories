@@ -31,7 +31,7 @@ const CreatePost = async ({
   CREATE (n)-[:CREATED]->(:Post
   {
     description:"${description}",
-    hashtags:"${hashtags}",
+    hashtags: '${hashtags}',
     createdAt: "${new Date().getTime()}",
     photoDate: "${photoDate}",
     longitude: "${longitude}",

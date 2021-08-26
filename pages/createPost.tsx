@@ -30,7 +30,8 @@ const Login: FC = () => {
     longitude: -100,
   });
   const [events, logEvents] = useState({});
-
+  const [tags, setTags] = useState<Array<string>>([]);
+  const [newTag, setNewTag] = useState<string>('');
   const [searchCoordinates, setSearchCoordinates] = useState({
     lat: 50,
     lng: 15,
@@ -81,6 +82,19 @@ const Login: FC = () => {
       latitude: searchCoordinates.lat,
     });
   }, [searchCoordinates]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (newTag.slice(-1) === ' ') {
+      if (newTag !== '') {
+        const newTags = tags;
+        if (!tags.includes(newTag.substring(0, newTag.length - 1))) {
+          newTags.push(newTag.substring(0, newTag.length - 1));
+          setTags(newTags);
+        }
+      }
+      setNewTag('');
+    }
+  }, [newTag]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading) return <div>loading</div>;
   if (error) return <div>error</div>;
@@ -144,11 +158,31 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
           />
         </MapGL>
       </div>
+      <div className="flex w-full gap-2">
+        {tags.map((tag, index) => {
+          return (
+            <div
+              className="bg-indigo-500 text-white p-2 rounded-xl"
+              key={index}
+            >
+              #{tag}
+              <button
+                className="text-red-300 ml-4"
+                onClick={() => {
+                  const newTags = tags.filter((x) => x !== tag);
+                  setTags(newTags);
+                }}
+              >
+                x
+              </button>
+            </div>
+          );
+        })}
+      </div>
       <Formik
         initialValues={{
           photoDate: '',
           description: '',
-          hashtags: '',
         }}
         onSubmit={async (values) => {
           try {
@@ -156,6 +190,7 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
               variables: {
                 ...values,
                 photoDate: Date.parse(values.photoDate).toString(),
+                hashtags: JSON.stringify(tags),
                 latitude: marker.latitude,
                 longitude: marker.longitude,
               },
@@ -170,7 +205,14 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
           <Form>
             <Input label="photoDate" type="date" name="photoDate" />
             <Input label="Description" name="description" type="text" />
-            <Input label="hashtags" name="hashtags" type="text" />
+            <label>hashtags</label>
+            <input
+              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              name="hashtags"
+              type="text"
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+            />
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
