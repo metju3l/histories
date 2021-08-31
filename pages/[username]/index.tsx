@@ -3,6 +3,7 @@ import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Head from 'next/head';
+import Image from 'next/image';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { number } from 'yup/lib/locale';
 
@@ -54,7 +55,16 @@ const User: FC<{ username: string }> = ({ username }) => {
 
         <main className="w-full pt-20 bg-[#F6F8FA] text-black">
           <div className="full">
-            <div className="rounded-full bg-red-500 w-36 h-36 m-auto"></div>
+            <div className="relative rounded-full w-36 h-36 m-auto">
+              <Image
+                src={`https://avatars.dicebear.com/api/initials/${data.user.firstName}%20${data.user.lastName}.svg`}
+                alt="user profile photo"
+                layout="fill"
+                objectFit="contain"
+                objectPosition="center"
+                className="rounded-full"
+              />
+            </div>
             <h2 className="text-center text-2xl py-4">
               {`${data.user.firstName} ${data.user.lastName}`}
             </h2>
