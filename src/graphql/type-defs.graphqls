@@ -3,9 +3,10 @@ type Query {
   user(input: UserInput!): UserInfo!
   post(id: Int!): Post
   tag(label: String!): TagInfo
-  posts(input: PostsInput!): [Post]
+  mapPoints(input: MapPointsInput!): [Post]
   paths: [Path]
   isLogged: IsLoggedInfo!
+  userPosts(input: UserPostsInput!): [Post]
 }
 
 type Mutation {
@@ -23,8 +24,11 @@ type Mutation {
   createUser(input: CreateUserInput!): String!
 }
 
-input PostsInput {
-  radius: Float!
+input MapPointsInput {
+  fromLat: Float
+  toLat: Float
+  fromLng: Float
+  toLng: Float
   fromDate: String
   toDate: String
 }
@@ -50,6 +54,11 @@ input UpdateProfileInput {
   lastName: String
   bio: String
   password: String
+}
+
+input UserPostsInput {
+  id: Int!
+  offset: Int
 }
 
 input DeleteUserInput {

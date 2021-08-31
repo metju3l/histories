@@ -40,3 +40,9 @@ query post($id: Int!) {
     url
   }
 }
+
+query userPosts($id: Int!, $offset: Int) {
+  userPosts(input: { id: $id, offset: $offset }) {
+    postID
+  }
+}
