@@ -24,6 +24,6 @@ module.exports = {
     return config;
   },
   images: {
-    domains: ['images.unsplash.com', 'avatars.dicebear.com'],
+    domains: ['images.unsplash.com'],
   },
 };
