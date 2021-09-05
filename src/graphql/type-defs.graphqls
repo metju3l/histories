@@ -7,6 +7,7 @@ type Query {
   paths: [Path]
   isLogged: IsLoggedInfo!
   userPosts(input: UserPostsInput!): [Post]
+  interClipCode(id: Int!): String!
 }
 
 type Mutation {

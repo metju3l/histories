@@ -33,6 +33,26 @@ const resolvers = {
       return GetPaths();
     },
 
+    interClipCode: async (
+      _parent: undefined,
+      { id }: { id: number },
+      context: any
+    ) => {
+      const username = (await GetUserInfo(null, undefined, id, undefined))
+        .username;
+
+      return await fetch(
+        `https://interclip.app/api/set?url=http://localhost:3000/${username}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          return data.result;
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    },
+
     isLogged: async (_parent: undefined, _input: undefined, context: any) => {
       return {
         isLogged: context.validToken,
