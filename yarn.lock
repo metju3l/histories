@@ -1129,10 +1129,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@deck.gl/core@^8.5.5":
-  version "8.5.5"
-  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-8.5.5.tgz#39492b1ff1c817cc974914e5210e48dfd1e663aa"
-  integrity sha512-JDbfyGL1cFkdq85VlP180VvmGw/21JDzQ2ak4ber/x7iLLLrku6NcCFXZuyXBaiHnajQJ0FckX/Q0w6TxXTLKQ==
+"@deck.gl/core@^8.5.7":
+  version "8.5.7"
+  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-8.5.7.tgz#8b33d316ea274b2283af6e562c3d333091d59ed0"
+  integrity sha512-h+N0zJ+LO9zqN4nrEkyd9RzOU2wdN2ya4i7ICGgE0ILXnY5T4UB2iw4vY7/hHf7bfjcLfMTklcqBRWHXDz/OVA==
   dependencies:
     "@loaders.gl/core" "^3.0.8"
     "@loaders.gl/images" "^3.0.8"
@@ -2123,15 +2123,7 @@
     "@babel/runtime" "^7.12.0"
     gl-matrix "^3.0.0"
 
-"@math.gl/web-mercator@^3.4.3":
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/@math.gl/web-mercator/-/web-mercator-3.5.3.tgz#4cc7ba98a48580a18ad683206a6f6002fa9d2d7e"
-  integrity sha512-WZE9ALeTS4n3HDgkqTxcNLBU7DL0mjmPXSrcqSZIUeDY00+LCtNvMQWUAwqolpB7nD71vD6HLW8delzVuy4teA==
-  dependencies:
-    "@babel/runtime" "^7.12.0"
-    gl-matrix "^3.0.0"
-
-"@math.gl/web-mercator@^3.5.4":
+"@math.gl/web-mercator@^3.4.3", "@math.gl/web-mercator@^3.5.4":
   version "3.5.4"
   resolved "https://registry.yarnpkg.com/@math.gl/web-mercator/-/web-mercator-3.5.4.tgz#2eca3136d33a66be665c08de01671c2ebd46867b"
   integrity sha512-oSicpji8Rdyil2xWC5G3UrVVONl3vEvH8F0f6HgZHyQDw1LDiauthnTNIUbdWIvm6TF+WGd+GZ/mMLCmlKs+6w==
