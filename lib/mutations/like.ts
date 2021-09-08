@@ -1,4 +1,4 @@
-import GetUserInfo from '@lib/queries/getUserInfo';
+import UserQuery from '@lib/queries/UserQuery';
 import DbConnector from '../database/driver';
 
 const Like = async ({
@@ -17,7 +17,7 @@ const Like = async ({
 
   if (!enabledObjects.includes(formatedTo)) return 'wrong object';
   if (logged === null) return 'user not logged in';
-  const loggedID = (await GetUserInfo(null, logged, undefined, null)).id;
+  const loggedID = (await UserQuery(null, logged, undefined, null)).id;
   const query = `MATCH (user:User), (object:${formatedTo})
   WHERE ID(user) = ${loggedID} AND ID(object) = ${id}
   CREATE (user)-[:LIKE {type:"${type}"}]->(object)`;

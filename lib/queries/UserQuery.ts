@@ -1,6 +1,6 @@
 import DbConnector from '../database/driver';
 
-const GetUserInfo = async (
+const UserQuery = async (
   logged: string | null,
   username: string | undefined,
   userID: number | undefined,
@@ -60,4 +60,4 @@ const GetUserInfo = async (
       };
 };
 
-export default GetUserInfo;
+export default UserQuery;

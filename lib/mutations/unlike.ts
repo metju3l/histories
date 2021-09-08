@@ -1,4 +1,4 @@
-import GetUserInfo from '@lib/queries/getUserInfo';
+import UserQuery from '@lib/queries/UserQuery';
 import DbConnector from '../database/driver';
 
 const Like = async ({
@@ -9,7 +9,7 @@ const Like = async ({
   id: number;
 }): Promise<string> => {
   if (logged === null) return 'user not logged in';
-  const loggedID = (await GetUserInfo(null, logged, undefined, null)).id;
+  const loggedID = (await UserQuery(null, logged, undefined, null)).id;
   const query = `MATCH (n:User)-[like:LIKE]->(m)
                 WHERE ID(n) = ${loggedID} AND ID(m) = ${id}
                 DELETE like`;

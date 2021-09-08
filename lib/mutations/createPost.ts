@@ -1,4 +1,4 @@
-import GetUserInfo from '@lib/queries/getUserInfo';
+import UserQuery from '@lib/queries/UserQuery';
 import DbConnector from '../database/driver';
 import LastPost from './lastPost';
 
@@ -17,7 +17,7 @@ const CreatePost = async ({
   longitude: string;
   latitude: string;
 }): Promise<string> => {
-  const actualID = (await GetUserInfo(null, userID, undefined, null)).id;
+  const actualID = (await UserQuery(null, userID, undefined, null)).id;
 
   // if last post / collection was created less than 10 seconds ago
   if (

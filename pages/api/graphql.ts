@@ -3,7 +3,7 @@ import { mergeTypeDefs } from '@graphql-tools/merge';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { join } from 'path';
 import {
-  GetUserInfo,
+  UserQuery,
   CreateUser,
   DeleteUser,
   Follow,
@@ -19,9 +19,7 @@ import {
 } from '../../lib';
 import { verify } from 'jsonwebtoken';
 import GetPostInfo from '@lib/queries/getPostInfo';
-import IsUsedEmail from '@lib/validation/IsUsedEmail';
-import IsUsedUsername from '@lib/validation/IsUsedUsername';
-import ExistsUser from '@lib/validation/ExistsUser';
+import { IsUsedUsername, ExistsUser } from '@lib/validation';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -41,12 +39,16 @@ const resolvers = {
       { id }: { id: number },
       context: any
     ) => {
-      const username = (await GetUserInfo(null, undefined, id, undefined))
+      // check if user exists
+      const userExists = ExistsUser(id);
+      if (!userExists) throw new Error("User doesn't exist");
+      // get username
+      const username = (await UserQuery(null, undefined, id, undefined))
         .username;
-
-      return await fetch(
-        `https://interclip.app/api/set?url=http://localhost:3000/${username}`
-      )
+      // create url
+      const url = `http://localhost:3000/${username}`;
+      // api call
+      return await fetch(`https://interclip.app/api/set?url=${url}`)
         .then((response) => response.json())
         .then((data) => {
           return data.result;
@@ -104,7 +106,7 @@ const resolvers = {
       }
 
       // return user data
-      return GetUserInfo(
+      return UserQuery(
         context.validToken ? context.decoded.username : null,
         username,
         id,
