@@ -1,32 +1,22 @@
-import { CheckCredentials } from '../lib/validation';
-
-test('email', () => {
-  expect(CheckCredentials({ email: 'email@example.com' })).toBe('');
-  expect(CheckCredentials({ email: 'email@example.co.uk' })).toBe('');
-  expect(CheckCredentials({ email: 'email@example.co.' })).not.toBe('');
-  expect(CheckCredentials({ email: 'email@example.' })).not.toBe('');
-  expect(CheckCredentials({ email: 'email@example' })).not.toBe('');
-  expect(CheckCredentials({ email: '@example.com' })).not.toBe('');
-});
-
-test('password', () => {
-  expect(CheckCredentials({ password: '#df237See' })).toBe('');
-  expect(CheckCredentials({ password: 'Password' })).toBe('');
-  expect(CheckCredentials({ password: 'short' })).not.toBe('');
-  expect(CheckCredentials({ password: '#df237S' })).not.toBe('');
-});
+import { ValidateUsername } from '../lib/validation';
 
 test('username', () => {
-  expect(CheckCredentials({ username: 'username' })).toBe('');
-  expect(CheckCredentials({ username: 'username_123' })).toBe('');
-  expect(CheckCredentials({ username: 'user.name' })).toBe('');
-  expect(CheckCredentials({ username: 'user' })).toBe('');
-  expect(CheckCredentials({ username: 'user.' })).not.toBe('');
-  expect(CheckCredentials({ username: 'username&' })).not.toBe('');
-});
+  // correct
+  expect(ValidateUsername('kahy9')).toEqual({ error: null });
+  expect(ValidateUsername('_krystofex_')).toEqual({ error: null });
+  expect(ValidateUsername('czM1K3')).toEqual({ error: null });
+  expect(ValidateUsername('pephis')).toEqual({ error: null });
 
-test('name', () => {
-  expect(CheckCredentials({ firstName: 'Frantisek' })).toBe('');
-  expect(CheckCredentials({ firstName: 'Elizabeth' })).toBe('');
-  expect(CheckCredentials({ firstName: 'Eliza&#&#xv' })).not.toBe('');
+  // wrong
+  expect(ValidateUsername('idk')).toEqual({
+    error: 'Username has to be longer than 3 characters',
+  });
+  expect(ValidateUsername('')).not.toEqual({ error: null });
+  expect(ValidateUsername('krystofex/xx')).toEqual({
+    error:
+      'Username can only contain letters, numbers, underscores and periods',
+  });
+  expect(ValidateUsername('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')).toEqual({
+    error: 'Username has to be shorter than 32 characters',
+  });
 });

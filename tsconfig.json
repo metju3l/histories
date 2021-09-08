@@ -22,12 +22,6 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "lib/database/driver.ts",
-    "lib/validation/checkEmail.js"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "lib/database/driver.ts"],
   "exclude": ["node_modules", ".cache"]
 }
