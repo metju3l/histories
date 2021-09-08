@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     "lib/database/driver.ts",
-    "lib/validator/checkEmail.js"
+    "lib/validation/checkEmail.js"
   ],
   "exclude": ["node_modules", ".cache"]
 }

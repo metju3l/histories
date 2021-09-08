@@ -193,9 +193,6 @@ const User: FC<{ username: string }> = ({ username }) => {
                           data={data}
                           key={post.postID}
                           username={data.user.username}
-                          description={post.description}
-                          createdAt={post.createdAt}
-                          url={post.url}
                           post={post}
                         />
                       );
@@ -261,7 +258,7 @@ const FollowButton = ({ data, isLoggedQuery, refetch }: any) => {
           <>
             <button
               className={`float-right ml-4 rounded-lg text-white ${
-                data.user.isFollowing ? 'bg-indigo-600' : 'bg-indigo-600'
+                data.user.isFollowing ? 'bg-indigo-400' : 'bg-indigo-600'
               } p-2`}
               onClick={async () => {
                 try {
@@ -281,7 +278,7 @@ const FollowButton = ({ data, isLoggedQuery, refetch }: any) => {
                     });
                   }
                 } catch (error) {
-                  console.log(error.message);
+                  console.log(error);
                 }
               }}
             >
@@ -291,10 +288,6 @@ const FollowButton = ({ data, isLoggedQuery, refetch }: any) => {
         )}
     </>
   );
-};
-
-const CollectionIcon = () => {
-  return <div className="bg-red-500 rounded-md h-24"></div>;
 };
 
 export default User;

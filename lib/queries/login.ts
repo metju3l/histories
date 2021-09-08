@@ -1,5 +1,5 @@
 import DbConnector from '../database/driver';
-import { CheckCredentials } from '../validator';
+import { CheckCredentials } from '../validation';
 import { compareSync } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 

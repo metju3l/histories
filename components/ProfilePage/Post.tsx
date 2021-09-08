@@ -8,25 +8,12 @@ import { HiOutlineHeart, HiOutlineLocationMarker } from 'react-icons/hi';
 import Image from 'next/image';
 
 const Post: FC<{
-  key: number;
-  url: string;
   username: string;
-  description: string | null | undefined;
-  createdAt: string;
   isLoggedQuery: any;
   data: any;
   post: any;
-}> = ({
-  url,
-  username,
-  key,
-  description,
-  createdAt,
-  isLoggedQuery,
-  data,
-  post,
-}) => {
-  const time = new Date(parseInt(createdAt)).toLocaleDateString('cs-cz', {
+}> = ({ username, isLoggedQuery, data, post }) => {
+  const time = new Date(parseInt(post.createdAt)).toLocaleDateString('cs-cz', {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
@@ -35,10 +22,7 @@ const Post: FC<{
   const [likeMutation] = useLikeMutation();
   const [editMode, setEditMode] = useState(false);
   return (
-    <div
-      key={key}
-      className="w-full p-4 rounded-2xl text-black text-center shadow-sm border border-indigo-600 my-8"
-    >
+    <div className="w-full p-4 rounded-2xl text-black text-center shadow-sm border border-indigo-600 my-8">
       {isLoggedQuery.data.isLogged.userID === data.user.username ? (
         <>
           {editMode ? (
@@ -54,7 +38,7 @@ const Post: FC<{
                   variables: { id: post.postID },
                 });
               } catch (error) {
-                console.log(error.message);
+                console.log(error);
               }
             }}
           >
@@ -83,13 +67,17 @@ const Post: FC<{
         </div>
       </div>
       <div className="w-full mt-14 mb-4 text-white ">
-        {!editMode ? description : <input className="text-black" type="text" />}
+        {!editMode ? (
+          post.description
+        ) : (
+          <input className="text-black" type="text" />
+        )}
       </div>
       {time}
 
       <div className="w-full rounded-lg relative items-center h-[300px]">
         <Image
-          src={url}
+          src={post.url}
           alt="post from user"
           layout="fill"
           objectFit="contain"
@@ -106,7 +94,7 @@ const Post: FC<{
                     variables: { id: post.postID, type: 'like', to: 'post' },
                   });
                 } catch (error) {
-                  console.log(error.message);
+                  console.log(error);
                 }
               }}
             >

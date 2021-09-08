@@ -1,4 +1,4 @@
-import { CheckCredentials } from '../lib/validator';
+import { CheckCredentials } from '../lib/validation';
 
 test('email', () => {
   expect(CheckCredentials({ email: 'email@example.com' })).toBe('');
