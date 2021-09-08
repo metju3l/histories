@@ -1,6 +1,10 @@
-import { ValidateUsername, ValidateEmail } from '../lib/validation';
+import {
+  ValidateUsername,
+  ValidateEmail,
+  ValidatePassword,
+} from '../lib/validation';
 
-test('username', () => {
+test('Username', () => {
   // correct
   expect(ValidateUsername('kahy9')).toEqual({ error: null });
   expect(ValidateUsername('_krystofex_')).toEqual({ error: null });
@@ -21,9 +25,10 @@ test('username', () => {
   });
 });
 
-test('email', () => {
+test('Email', () => {
   // correct
   expect(ValidateEmail('email@example.com')).toEqual({ error: null });
+  expect(ValidateEmail('EMAIL@example.com')).toEqual({ error: null });
   expect(ValidateEmail('email@example.co.uk')).toEqual({ error: null });
   expect(ValidateEmail('e-mail@example.co.uk')).toEqual({ error: null });
   expect(ValidateEmail('test.email@example.co.uk')).toEqual({ error: null });
@@ -31,10 +36,37 @@ test('email', () => {
 
   // wrong
   expect(ValidateEmail('@example.com')).not.toEqual({ error: null });
+  expect(
+    ValidateEmail(
+      'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@example.com'
+    )
+  ).not.toEqual({ error: null });
   expect(ValidateEmail('email@example')).not.toEqual({ error: null });
   expect(ValidateEmail('example@.com')).not.toEqual({ error: null });
   expect(ValidateEmail('example.com')).not.toEqual({ error: null });
   expect(ValidateEmail('ema/il@example')).not.toEqual({ error: null });
   expect(ValidateEmail('.com')).not.toEqual({ error: null });
   expect(ValidateEmail('')).not.toEqual({ error: null });
+});
+
+test('Password', () => {
+  // correct
+  expect(ValidatePassword('somerandompassword')).toEqual({ error: null });
+  expect(ValidatePassword('*2cB7C~U')).toEqual({ error: null });
+  expect(ValidatePassword('Hq=:bb.cTY:A7?GC')).toEqual({ error: null });
+
+  // wrong
+  expect(ValidatePassword('2short')).toEqual({
+    error: 'Password has to be longer than 8 characters',
+  });
+  expect(ValidatePassword('')).toEqual({
+    error: 'Password has to be longer than 8 characters',
+  });
+  expect(
+    ValidatePassword(
+      '+"QDT#~9`kYpv^!y\bP@6Ch@GZv*Y$~q^FF]g$3.&cWH/G&(^`7aKa{{7_SM-9yKerwxcxtFTCtHqx"uV5)eNA5Pa)J^__"h{kBNG-4v%AJKp}y@Q;f(WU3*".^BeTxCqf'
+    )
+  ).toEqual({
+    error: 'Password has to be shorter than 128 characters',
+  });
 });
