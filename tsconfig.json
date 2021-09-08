@@ -6,6 +6,7 @@
       "@graphql/*": ["src/graphql/*"],
       "@hooks/*": ["src/hooks/*"],
       "@lib/*": ["lib/*"],
+      "@validation/*": ["lib/validation/*"],
       "@public/*": ["public/*"]
     },
     "target": "es5",

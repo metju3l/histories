@@ -1,6 +1,5 @@
 import GetUserInfo from '@lib/queries/getUserInfo';
 import DbConnector from '../database/driver';
-import { CheckCredentials, UserExists } from '../validation';
 
 const Follow = async (logged: string, userID: number): Promise<string> => {
   if (logged === null) return 'user not logged in';

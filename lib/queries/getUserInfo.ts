@@ -1,5 +1,4 @@
 import DbConnector from '../database/driver';
-import { CheckCredentials } from '../validation';
 
 const GetUserInfo = async (
   logged: string | null,

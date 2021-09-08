@@ -1,5 +1,4 @@
 import DbConnector from '../database/driver';
-import { CheckCredentials, UserExists } from '../validation';
 
 const DeletePost = async ({
   logged,

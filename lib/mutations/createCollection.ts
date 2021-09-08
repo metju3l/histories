@@ -1,5 +1,5 @@
 import DbConnector from '../database/driver';
-import { CheckCredentials, UserExists } from '../validation';
+import { UserExists } from '../validation';
 
 const CreateCollection = async ({
   username,
@@ -10,11 +10,6 @@ const CreateCollection = async ({
   collectionName: string;
   description: string;
 }): Promise<string> => {
-  if (CheckCredentials({ username: username }) !== '')
-    return CheckCredentials({ username: username });
-  if (CheckCredentials({ username: collectionName }) !== '')
-    return CheckCredentials({ username: collectionName });
-
   const query = `MATCH 
   (author:User)
     WHERE author.username =~ "(?i)${username}"

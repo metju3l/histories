@@ -1,6 +1,5 @@
 import DbConnector from '../database/driver';
-import UserExists from '../validation/userExists';
-import { CheckCredentials } from '../validation';
+import { UserExists } from '../validation';
 import { hash } from 'bcryptjs';
 
 const CreateUser = async (input: {

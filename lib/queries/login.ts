@@ -1,5 +1,4 @@
 import DbConnector from '../database/driver';
-import { CheckCredentials } from '../validation';
 import { compareSync } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
@@ -7,8 +6,6 @@ const Login = async (input: {
   username: string;
   password: string;
 }): Promise<string> => {
-  if (CheckCredentials(input) !== '') return CheckCredentials(input);
-
   const userInfoQuery = `MATCH (n:User {username: "${input.username}"}) RETURN n`;
 
   const driver = DbConnector();

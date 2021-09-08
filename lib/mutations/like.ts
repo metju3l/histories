@@ -1,6 +1,5 @@
 import GetUserInfo from '@lib/queries/getUserInfo';
 import DbConnector from '../database/driver';
-import { CheckCredentials, UserExists } from '../validation';
 
 const Like = async ({
   logged,
