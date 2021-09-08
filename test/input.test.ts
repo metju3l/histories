@@ -1,4 +1,4 @@
-import { ValidateUsername } from '../lib/validation';
+import { ValidateUsername, ValidateEmail } from '../lib/validation';
 
 test('username', () => {
   // correct
@@ -19,4 +19,22 @@ test('username', () => {
   expect(ValidateUsername('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')).toEqual({
     error: 'Username has to be shorter than 32 characters',
   });
+});
+
+test('email', () => {
+  // correct
+  expect(ValidateEmail('email@example.com')).toEqual({ error: null });
+  expect(ValidateEmail('email@example.co.uk')).toEqual({ error: null });
+  expect(ValidateEmail('e-mail@example.co.uk')).toEqual({ error: null });
+  expect(ValidateEmail('test.email@example.co.uk')).toEqual({ error: null });
+  expect(ValidateEmail('example@example-domain.org')).toEqual({ error: null });
+
+  // wrong
+  expect(ValidateEmail('@example.com')).not.toEqual({ error: null });
+  expect(ValidateEmail('email@example')).not.toEqual({ error: null });
+  expect(ValidateEmail('example@.com')).not.toEqual({ error: null });
+  expect(ValidateEmail('example.com')).not.toEqual({ error: null });
+  expect(ValidateEmail('ema/il@example')).not.toEqual({ error: null });
+  expect(ValidateEmail('.com')).not.toEqual({ error: null });
+  expect(ValidateEmail('')).not.toEqual({ error: null });
 });

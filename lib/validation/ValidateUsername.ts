@@ -3,7 +3,7 @@ const ValidateUsername = (username: string) => {
   if (!username)
     return { error: 'Username has to be longer than 3 characters' };
 
-  const regex = new RegExp('^[a-zA-Z0-9_.]{4,32}$');
+  const regex = /^[a-zA-Z0-9_.]{4,32}$/i;
   if (regex.test(username)) return { error: null };
   else {
     if (username.length < 4)
