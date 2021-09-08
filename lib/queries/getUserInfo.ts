@@ -6,10 +6,6 @@ const GetUserInfo = async (
   userID: number | undefined,
   queries: any
 ): Promise<any> => {
-  if (username === undefined && userID === undefined) {
-    return 'username cannot be undefined';
-  }
-
   const matchString =
     userID !== undefined
       ? ` WHERE ID(n) = ${userID} `

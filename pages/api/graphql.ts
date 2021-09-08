@@ -19,6 +19,9 @@ import {
 } from '../../lib';
 import { verify } from 'jsonwebtoken';
 import GetPostInfo from '@lib/queries/getPostInfo';
+import IsUsedEmail from '@lib/validation/IsUsedEmail';
+import IsUsedUsername from '@lib/validation/IsUsedUsername';
+import ExistsUser from '@lib/validation/ExistsUser';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -77,14 +80,34 @@ const resolvers = {
 
     user: async (
       _parent: undefined,
-      { input }: { input: { username: string; id: number } },
+      { input: { username, id } }: { input: { username: string; id: number } },
       context: any,
       { operation }: any
     ) => {
+      // if username and id are undefined
+      if (username === undefined && id === undefined)
+        throw new Error('Username or id required');
+
+      // if ID is filled in
+      if (id) {
+        // check if user exists
+        const userExists = ExistsUser(id);
+        if (!userExists) throw new Error("User doesn't exist");
+      }
+      // if USERNAME is filled in
+      else if (username) {
+        // checks if username exists and if username is valid
+        const isUsedUsername = await IsUsedUsername(username);
+        if (typeof isUsedUsername === 'string') throw new Error(isUsedUsername);
+        // if user doesn't exist
+        else if (!isUsedUsername) throw new Error("User doesn't exist");
+      }
+
+      // return user data
       return GetUserInfo(
         context.validToken ? context.decoded.username : null,
-        input.username,
-        input.id,
+        username,
+        id,
         operation.selectionSet.selections[0].selectionSet.selections
       );
     },
