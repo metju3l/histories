@@ -14,15 +14,25 @@ test('Username', () => {
   // wrong
   expect(ValidateUsername('idk')).toEqual({
     error: 'Username has to be longer than 3 characters',
-  });
-  expect(ValidateUsername('')).not.toEqual({ error: null });
+  }); // too short
+  expect(ValidateUsername('')).not.toEqual({ error: null }); // 0 characters
   expect(ValidateUsername('krystofex/xx')).toEqual({
     error:
       'Username can only contain letters, numbers, underscores and periods',
-  });
+  }); // forbidden characters
   expect(ValidateUsername('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')).toEqual({
     error: 'Username has to be shorter than 32 characters',
-  });
+  }); // too long
+
+  expect(ValidateUsername('Login')).toEqual({
+    error: 'This username cannot be used',
+  }); // same username as page title
+  expect(ValidateUsername('register')).toEqual({
+    error: 'This username cannot be used',
+  }); // same username as page title
+  expect(ValidateUsername('MAP')).toEqual({
+    error: 'This username cannot be used',
+  }); // same username as page title
 });
 
 test('Email', () => {
@@ -40,33 +50,33 @@ test('Email', () => {
     ValidateEmail(
       'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@example.com'
     )
-  ).not.toEqual({ error: null });
+  ).not.toEqual({ error: null }); // too long
   expect(ValidateEmail('email@example')).not.toEqual({ error: null });
   expect(ValidateEmail('example@.com')).not.toEqual({ error: null });
   expect(ValidateEmail('example.com')).not.toEqual({ error: null });
   expect(ValidateEmail('ema/il@example')).not.toEqual({ error: null });
   expect(ValidateEmail('.com')).not.toEqual({ error: null });
-  expect(ValidateEmail('')).not.toEqual({ error: null });
+  expect(ValidateEmail('')).not.toEqual({ error: null }); // 0 characters
 });
 
 test('Password', () => {
   // correct
-  expect(ValidatePassword('somerandompassword')).toEqual({ error: null });
-  expect(ValidatePassword('*2cB7C~U')).toEqual({ error: null });
-  expect(ValidatePassword('Hq=:bb.cTY:A7?GC')).toEqual({ error: null });
+  expect(ValidatePassword('somerandompassword')).toEqual({ error: null }); // normal password
+  expect(ValidatePassword('*2cB7C~U')).toEqual({ error: null }); // 8 characters long
+  expect(ValidatePassword('Hq=:bb.cTY:A7?GC')).toEqual({ error: null }); // 16 characters long
 
   // wrong
   expect(ValidatePassword('2short')).toEqual({
     error: 'Password has to be longer than 8 characters',
-  });
+  }); // too short
   expect(ValidatePassword('')).toEqual({
     error: 'Password has to be longer than 8 characters',
-  });
+  }); // 0 characters
   expect(
     ValidatePassword(
       '+"QDT#~9`kYpv^!y\bP@6Ch@GZv*Y$~q^FF]g$3.&cWH/G&(^`7aKa{{7_SM-9yKerwxcxtFTCtHqx"uV5)eNA5Pa)J^__"h{kBNG-4v%AJKp}y@Q;f(WU3*".^BeTxCqf'
     )
   ).toEqual({
     error: 'Password has to be shorter than 128 characters',
-  });
+  }); // too long
 });
