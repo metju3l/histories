@@ -183,11 +183,11 @@ const resolvers = {
 
     deletePost: async (
       _parent: undefined,
-      { postID }: { postID: number },
+      { id }: { id: number },
       context: any
     ) => {
       return context.validToken
-        ? DeletePost({ logged: context.decoded.username, postID: postID })
+        ? DeletePost({ logged: context.decoded.username, id })
         : null;
     },
 

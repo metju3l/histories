@@ -51,7 +51,7 @@ const Post: FC<{
             onClick={async () => {
               try {
                 await deletePostMutation({
-                  variables: { postID: post.postID },
+                  variables: { id: post.postID },
                 });
               } catch (error) {
                 console.log(error.message);

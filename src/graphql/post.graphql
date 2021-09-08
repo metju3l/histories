@@ -1,5 +1,5 @@
-mutation deletePost($postID: Int!) {
-  deletePost(postID: $postID)
+mutation deletePost($id: Int!) {
+  deletePost(id: $id)
 }
 
 mutation createPost(

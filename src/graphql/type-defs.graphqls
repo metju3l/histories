@@ -12,7 +12,7 @@ type Query {
 
 type Mutation {
   deleteUser(input: DeleteUserInput!): String!
-  deletePost(postID: Int!): String!
+  deletePost(id: Int!): String!
   like(input: LikeInput!): String!
   unlike(id: Int!): String!
   follow(userID: Int!): String!

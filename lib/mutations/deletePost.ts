@@ -3,13 +3,13 @@ import { CheckCredentials, UserExists } from '../validator';
 
 const DeletePost = async ({
   logged,
-  postID,
+  id,
 }: {
   logged: string;
-  postID: number;
+  id: number;
 }): Promise<string> => {
   const query = `MATCH (user:User)-[:CREATED]->(post:Post)
-  WHERE user.username = "${logged}" AND ID(post) = ${postID}
+  WHERE user.username = "${logged}" AND ID(post) = ${id}
   DETACH DELETE post`;
 
   const driver = DbConnector();
