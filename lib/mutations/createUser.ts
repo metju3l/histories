@@ -1,6 +1,8 @@
 import DbConnector from '../database/driver';
 import { UserExists } from '../validation';
 import { hash } from 'bcryptjs';
+import IsUsedEmail from '@lib/validation/IsUsedEmail';
+import IsString from '@lib/functions/IsString';
 
 const CreateUser = async (input: {
   username: string;
@@ -11,15 +13,12 @@ const CreateUser = async (input: {
 }): Promise<string> => {
   const { username, firstName, lastName, email, password } = input;
 
-  if (await UserExists(username)) return 'username is already used';
-  else if (await UserExists(email)) return 'email is already used';
-  else {
-    const hashedPassword = await hash(
-      password,
-      parseInt(process.env.HASH_SALT || '10')
-    );
+  const hashedPassword = await hash(
+    password,
+    parseInt(process.env.HASH_SALT || '10')
+  );
 
-    const query = `CREATE
+  const query = `CREATE
     (n:User {
       username : "${username}",
       firstName: "${firstName}",
@@ -30,14 +29,13 @@ const CreateUser = async (input: {
       createdAt: "${new Date().getTime()}"
     })`;
 
-    const driver = DbConnector();
-    const session = driver.session();
+  const driver = DbConnector();
+  const session = driver.session();
 
-    await session.run(query);
-    driver.close();
+  await session.run(query);
+  driver.close();
 
-    return (await UserExists(username)) ? 'user created' : 'failed';
-  }
+  return (await UserExists(username)) ? 'user created' : 'failed';
 };
 
 export default CreateUser;

@@ -6,6 +6,7 @@ import { useCreateUserMutation } from '@graphql/user.graphql';
 import { useTranslation } from 'react-i18next';
 import Head from 'next/head';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { toast } from 'react-hot-toast';
 
 const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
   const [createUser] = useCreateUserMutation();
@@ -41,7 +42,7 @@ const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
               router.push('/login');
             }
           } catch (error) {
-            console.log(error);
+            toast.error(error.message);
           }
         }}
       >

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Head from 'next/head';
 import React, { FC } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import { toast } from 'react-hot-toast';
 
 const Input: FC<{
   type: string;
@@ -55,7 +55,7 @@ const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
             if (result.data.createUser === 'user created')
               props.setForm('login');
           } catch (error) {
-            console.log(error);
+            toast.error('error.message');
           }
         }}
       >

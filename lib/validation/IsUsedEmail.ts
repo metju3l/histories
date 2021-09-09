@@ -1,9 +1,6 @@
-import { ValidateEmail } from '@lib/validation';
 import DbConnector from '../database/driver';
 
-const IsUsedEmail = async (email: string): Promise<boolean | string> => {
-  if (ValidateEmail(email).error) return ValidateEmail(email).error!;
-
+const IsUsedEmail = async (email: string): Promise<boolean> => {
   const query = `MATCH (user:User)
   WHERE user.email =~ "(?i)${email}"
   RETURN COUNT(user) > 0 AS isUsed`;

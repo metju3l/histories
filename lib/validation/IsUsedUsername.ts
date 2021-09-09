@@ -1,11 +1,6 @@
-import { ValidateUsername } from './';
 import DbConnector from '../database/driver';
 
-const UserExists = async (username: string): Promise<boolean | string> => {
-  // if username is not valid return error as string
-  if (ValidateUsername(username).error)
-    return ValidateUsername(username).error!;
-
+const UserExists = async (username: string): Promise<boolean> => {
   // cypher query
   const query = `MATCH (user:User)
   WHERE user.username =~ "(?i)${username}"

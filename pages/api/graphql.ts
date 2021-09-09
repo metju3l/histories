@@ -19,7 +19,16 @@ import {
 } from '../../lib';
 import { verify } from 'jsonwebtoken';
 import GetPostInfo from '@lib/queries/getPostInfo';
-import { IsUsedUsername, ExistsUser } from '@lib/validation';
+import {
+  IsUsedUsername,
+  ExistsUser,
+  ValidateEmail,
+  ValidateUsername,
+  ValidateName,
+  ValidatePassword,
+} from '@lib/validation';
+import IsUsedEmail from '@lib/validation/IsUsedEmail';
+import IsString from '@lib/functions/IsString';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -86,6 +95,8 @@ const resolvers = {
       context: any,
       { operation }: any
     ) => {
+      console.log(context.decoded);
+
       // if username and id are undefined
       if (username === undefined && id === undefined)
         throw new Error('Username or id required');
@@ -151,7 +162,10 @@ const resolvers = {
       _parent: undefined,
       { input }: { input: { username: string; password: string } }
     ) => {
-      return Login(input);
+      // if credentials are wrong return null
+      const login = await Login(input);
+      if (login !== null) return login;
+      else throw new Error('Wrong credentials');
     },
 
     createUser: async (
@@ -168,6 +182,32 @@ const resolvers = {
         };
       }
     ) => {
+      // check email
+      if (ValidateEmail(input.email).error)
+        throw new Error(ValidateEmail(input.email).error!);
+
+      if (await IsUsedEmail(input.email))
+        throw new Error('Email is already used');
+
+      // check username
+      if (ValidateUsername(input.username).error)
+        throw new Error(ValidateUsername(input.username).error!);
+
+      if (await IsUsedUsername(input.username))
+        throw new Error('Username is already used');
+
+      // check first name
+      if (ValidateName(input.firstName).error)
+        throw new Error('First name ' + ValidateName(input.firstName).error!);
+
+      // check first name
+      if (ValidateName(input.lastName).error)
+        throw new Error('Last name ' + ValidateName(input.lastName).error!);
+
+      // check password
+      if (ValidatePassword(input.password).error)
+        throw new Error(ValidatePassword(input.password).error!);
+
       return CreateUser(input);
     },
 
@@ -246,10 +286,12 @@ const apolloServer = new ApolloServer({
   resolvers,
   context: (context) => {
     try {
+      // get JWT
       const jwt = context.req.headers.authorization.substring(7);
-      // const host = context.req.headers.host;
+      // verify JWT
       const decoded = verify(jwt, process.env.JWT_SECRET!);
       return { validToken: true, decoded: decoded };
+      // if JWT is nto valid
     } catch (err) {
       return { validToken: false, decoded: null };
     }
