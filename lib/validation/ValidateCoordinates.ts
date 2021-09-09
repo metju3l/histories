@@ -1,8 +1,6 @@
 const ValidateCoordinates = ([latitude, longitude]: [number, number]): {
   error: string | null;
 } => {
-  console.log([latitude, longitude]);
-
   // checking coordinates by ISO 6709 - decimal degrees
   if (latitude < -90 || latitude > 90) return { error: 'Invalid latitude' };
   else if (longitude < -180 || longitude > 180)
