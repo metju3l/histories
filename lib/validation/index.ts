@@ -1,4 +1,6 @@
 export { default as UserExists } from './IsUsedUsername';
+export { default as FollowsUser } from './FollowsUser';
+
 export { default as ExistsUser } from './ExistsUser';
 export { default as IsUsedUsername } from './IsUsedUsername';
 export { default as ValidateUsername } from './ValidateUsername';

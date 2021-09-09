@@ -26,6 +26,7 @@ import {
   ValidateUsername,
   ValidateName,
   ValidatePassword,
+  FollowsUser,
 } from '@lib/validation';
 import IsUsedEmail from '@lib/validation/IsUsedEmail';
 import IsString from '@lib/functions/IsString';
@@ -289,6 +290,10 @@ const resolvers = {
 
       // if user to follow does not exist
       if (!(await ExistsUser(userID))) throw new Error('User does not exist');
+
+      // check if there already is relation
+      if (await FollowsUser(context.decoded.id, userID))
+        throw new Error('User is already followed');
 
       return await Follow(context.decoded.id, userID);
     },
