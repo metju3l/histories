@@ -33,7 +33,7 @@ const CreateUser = async (input: {
   await session.run(query);
   driver.close();
 
-  return (await UserExists(username)) ? 'user created' : 'failed';
+  return 'success';
 };
 
 export default CreateUser;

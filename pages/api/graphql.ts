@@ -167,7 +167,7 @@ const resolvers = {
       if (ValidateUsername(input.username).error)
         throw new Error('Wrong credentials');
 
-      if (await !IsUsedUsername(input.username))
+      if (!(await IsUsedUsername(input.username)))
         throw new Error('Wrong credentials');
 
       // check password

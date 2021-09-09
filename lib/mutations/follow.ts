@@ -11,7 +11,7 @@ const Follow = async (logged: number, userID: number): Promise<string> => {
   await session.run(query);
   driver.close();
 
-  return 'relation created';
+  return 'success';
 };
 
 export default Follow;
