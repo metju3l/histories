@@ -1,4 +1,4 @@
-import DbConnector from '../database/driver';
+import DbConnector from '../../database/driver';
 
 const UserExists = async (username: string): Promise<boolean> => {
   // cypher query

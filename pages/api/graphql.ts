@@ -28,7 +28,7 @@ import {
   ValidatePassword,
   FollowsUser,
 } from '@lib/validation';
-import IsUsedEmail from '@lib/validation/IsUsedEmail';
+import IsUsedEmail from '@lib/validation/dbValidation/IsUsedEmail';
 import IsString from '@lib/functions/IsString';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
