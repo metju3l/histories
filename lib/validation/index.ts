@@ -7,3 +7,4 @@ export { default as ValidatePassword } from './ValidatePassword';
 export { default as ValidateName } from './ValidateName';
 export { default as ValidateCoordinates } from './ValidateCoordinates';
 export { default as ValidateDate } from './ValidateDate';
+export { default as ValidateDescription } from './ValidateDescription';
