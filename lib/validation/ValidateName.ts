@@ -1,4 +1,8 @@
-const ValidateName = (name: string) => {
+const ValidateName = (
+  name: string
+): {
+  error: string | null;
+} => {
   const regex = /^[\w'\-,.][^0-9_!¡?÷?¿\/\\+=@#$%ˆ&*(){}|~<>;:'¨[\]"`]{1,}$/i;
 
   // too short

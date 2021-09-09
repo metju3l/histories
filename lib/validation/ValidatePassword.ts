@@ -1,4 +1,8 @@
-const ValidatePassword = (password: string) => {
+const ValidatePassword = (
+  password: string
+): {
+  error: string | null;
+} => {
   // too short
   if (password.length < 8)
     return { error: 'Password has to be longer than 8 characters' };

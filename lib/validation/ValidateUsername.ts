@@ -1,4 +1,8 @@
-const ValidateUsername = (username: string) => {
+const ValidateUsername = (
+  username: string
+): {
+  error: string | null;
+} => {
   // titles of pages
   const forbiddenUsernames = [
     'register',
