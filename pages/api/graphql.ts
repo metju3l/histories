@@ -162,7 +162,18 @@ const resolvers = {
       _parent: undefined,
       { input }: { input: { username: string; password: string } }
     ) => {
-      // if credentials are wrong return null
+      // check username
+      if (ValidateUsername(input.username).error)
+        throw new Error('Wrong credentials');
+
+      if (await !IsUsedUsername(input.username))
+        throw new Error('Wrong credentials');
+
+      // check password
+      if (ValidatePassword(input.password).error)
+        throw new Error('Wrong credentials');
+
+      // if credentials are wrong returns null
       const login = await Login(input);
       if (login !== null) return login;
       else throw new Error('Wrong credentials');
@@ -208,7 +219,7 @@ const resolvers = {
       if (ValidatePassword(input.password).error)
         throw new Error(ValidatePassword(input.password).error!);
 
-      return CreateUser(input);
+      return await CreateUser(input);
     },
 
     createCollection: async (
@@ -268,7 +279,18 @@ const resolvers = {
       { userID }: { userID: number },
       context: any
     ) => {
-      return Follow(context.decoded.username, userID);
+      // if user wants to follow himself
+      if (context.decoded.id == userID)
+        throw new Error('You cannot follow yourself');
+
+      // if logged user does not exist
+      if (!(await ExistsUser(context.decoded.id)))
+        throw new Error('Logged user is not valid');
+
+      // if user to follow does not exist
+      if (!(await ExistsUser(userID))) throw new Error('User does not exist');
+
+      return await Follow(context.decoded.id, userID);
     },
 
     unfollow: async (

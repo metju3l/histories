@@ -5,6 +5,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import router from 'next/router';
 import { useTranslation } from 'react-i18next';
 import Cookie from 'js-cookie';
+import { toast } from 'react-hot-toast';
 
 const Login: FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
@@ -34,7 +35,7 @@ const Login: FC = () => {
               router.reload();
             }
           } catch (error) {
-            console.log('error');
+            toast.error(error.message);
           }
         }}
       >
