@@ -64,7 +64,7 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.6",
+    "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.4",
     "@graphql-codegen/cli": "^2.2.0",
     "@graphql-codegen/import-types-preset": "^1.18.4",
