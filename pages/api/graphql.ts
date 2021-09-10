@@ -27,9 +27,11 @@ import {
   ValidateName,
   ValidatePassword,
   FollowsUser,
+  ValidateCoordinates,
+  ValidateDescription,
+  ValidateDate,
 } from '@lib/validation';
 import IsUsedEmail from '@lib/validation/dbValidation/IsUsedEmail';
-import IsString from '@lib/functions/IsString';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -195,30 +197,30 @@ const resolvers = {
       }
     ) => {
       // check email
-      if (ValidateEmail(input.email).error)
-        throw new Error(ValidateEmail(input.email).error!);
+      const validateEmail = ValidateEmail(input.email).error;
+      if (validateEmail) throw new Error(validateEmail);
 
       if (await IsUsedEmail(input.email))
         throw new Error('Email is already used');
 
       // check username
-      if (ValidateUsername(input.username).error)
-        throw new Error(ValidateUsername(input.username).error!);
+      const validateUsername = ValidateUsername(input.username).error;
+      if (validateUsername) throw new Error(validateUsername);
 
       if (await IsUsedUsername(input.username))
         throw new Error('Username is already used');
 
       // check first name
-      if (ValidateName(input.firstName).error)
-        throw new Error('First name ' + ValidateName(input.firstName).error!);
+      const validateFirstName = ValidateName(input.firstName).error;
+      if (validateFirstName) throw new Error('First name ' + validateFirstName);
 
-      // check first name
-      if (ValidateName(input.lastName).error)
-        throw new Error('Last name ' + ValidateName(input.lastName).error!);
+      // check last name
+      const validateLastName = ValidateName(input.lastName).error;
+      if (validateLastName) throw new Error('Last name ' + validateLastName);
 
       // check password
-      if (ValidatePassword(input.password).error)
-        throw new Error(ValidatePassword(input.password).error!);
+      const validatePassword = ValidatePassword(input.password).error;
+      if (validatePassword) throw new Error(validatePassword);
 
       return await CreateUser(input);
     },
@@ -247,15 +249,30 @@ const resolvers = {
           description: string;
           hashtags: string;
           photoDate: string;
-          longitude: string;
-          latitude: string;
+          longitude: number;
+          latitude: number;
         };
       },
       context: any
     ) => {
-      return context.validToken
-        ? CreatePost({ ...input, userID: context.decoded.username })
-        : null;
+      // check coordinates
+      const validateCoordinates = ValidateCoordinates([
+        input.latitude,
+        input.longitude,
+      ]).error;
+      if (validateCoordinates) throw new Error(validateCoordinates);
+
+      // check description
+      const validateDescription = ValidateDescription(input.description).error;
+      if (validateDescription) throw new Error(validateDescription);
+
+      // check date
+      const validateDate = ValidateDate(Number(input.photoDate)).error;
+      if (validateDate) throw new Error(validateDate);
+
+      if (context.validToken)
+        return CreatePost({ ...input, userID: context.decoded.username });
+      else throw new Error('User is not logged');
     },
 
     deletePost: async (

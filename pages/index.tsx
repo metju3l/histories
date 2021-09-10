@@ -1,4 +1,3 @@
-import { useCreatePostMutation } from '@graphql/post.graphql';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import React, { useEffect, useState } from 'react';
 import { Navbar } from 'components/Navbar';
@@ -11,18 +10,6 @@ import Link from 'next/link';
 
 const Index = () => {
   const { data, loading, error } = useIsLoggedQuery();
-  const [createPostMutation] = useCreatePostMutation();
-  const [coordinates, setCoordinates] = useState([21, 20]);
-  const [marker, setMarker] = useState({
-    latitude: 40,
-    longitude: -100,
-  });
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      setCoordinates([position.coords.latitude, position.coords.longitude]);
-    });
-  }, []);
 
   if (loading) return <div>loading</div>;
   if (error) return <div>error</div>;

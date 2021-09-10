@@ -32,6 +32,9 @@ test('Date', () => {
   expect(ValidateDate(22843729)).toEqual({
     error: null,
   });
+  expect(ValidateDate(new Date().getTime() - 10)).toEqual({
+    error: null,
+  });
 
   // wrong
   expect(ValidateDate(new Date().getTime() + 1000)).toEqual({
