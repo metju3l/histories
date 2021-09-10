@@ -29,10 +29,10 @@ const Index = () => {
 
   return (
     <>
-      <body>
+      <body className="bg-[#DADADB]">
         {/* @ts-ignore */}
         <Navbar data={data!.isLogged} />
-        <div className="flex text-black max-w-screen-xl m-auto bg-[#DADADB]">
+        <div className="flex text-black max-w-screen-xl m-auto">
           <div className="w-[30%] p-[1em]">
             <div className="sticky top-20">
               <LeftColumn />
