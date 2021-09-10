@@ -13,7 +13,8 @@ const Login: FC = () => {
   const { t } = useTranslation();
   if (loading) return <div></div>;
   if (error) return <div></div>;
-  if (data!.isLogged.isLogged) router.replace('/');
+
+  if (data!.isLogged) router.replace('/');
 
   return (
     <div>

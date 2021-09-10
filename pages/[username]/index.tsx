@@ -70,7 +70,7 @@ const User: FC<{ username: string }> = ({ username }) => {
               {`${data.user.firstName} ${data.user.lastName}`}
             </h2>
             <div className="text-center text-md py-4 w-[60%] m-auto">
-              {isLoggedQuery.data?.isLogged?.userID === data.user.username ? (
+              {isLoggedQuery.data?.isLogged?.username === data.user.username ? (
                 <>
                   {!editMode ? (
                     <>

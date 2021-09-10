@@ -1,11 +1,13 @@
 import { useIsLoggedQuery } from '@graphql/user.graphql';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Navbar } from 'components/Navbar';
 import Image from 'next/image';
 
-import LeftColumn from '@components/MainPage/LeftColumn';
-
+import { IoMdSettings } from 'react-icons/io';
+import { MdNotificationsActive, MdPeople } from 'react-icons/md';
 import { FaMapMarkedAlt } from 'react-icons/fa';
+import { AiFillPlusCircle } from 'react-icons/ai';
+
 import Link from 'next/link';
 
 const Index = () => {
@@ -17,12 +19,69 @@ const Index = () => {
   return (
     <>
       <body className="bg-[#DADADB]">
-        {/* @ts-ignore */}
-        <Navbar data={data!.isLogged} />
+        <Navbar data={data} />
         <div className="flex text-black max-w-screen-xl m-auto">
           <div className="w-[30%] p-[1em]">
             <div className="sticky top-20">
-              <LeftColumn />
+              <>
+                <div className="w-full h-auto p-[1em] bg-[#343233] rounded-xl">
+                  {data!.isLogged && (
+                    <div className="flex items-center text-white">
+                      <div className="relative rounded-full w-12 h-12 mr-4">
+                        <Image
+                          src={`https://avatars.dicebear.com/api/initials/${
+                            data!.isLogged.firstName
+                          }%20${data!.isLogged.lastName}.svg`}
+                          layout="fill"
+                          objectFit="contain"
+                          objectPosition="center"
+                          className="rounded-full"
+                          alt="Profile picture"
+                        />
+                      </div>
+                      <div className="font-semibold text-lg">
+                        {' '}
+                        {`${data!.isLogged.firstName} ${
+                          data!.isLogged.lastName
+                        }`}
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex flex-col text-white ml-3">
+                    {(data!.isLogged !== null ||
+                      data!.isLogged !== undefined) && (
+                      <Link href="/createPost">
+                        <a className="flex mt-6">
+                          <AiFillPlusCircle className="mr-4" size={24} />
+                          Create post
+                        </a>
+                      </Link>
+                    )}
+                    <a className="flex mt-6">
+                      <MdNotificationsActive className="mr-4" size={24} />
+                      Notifications
+                    </a>
+                    <Link href="/">
+                      <a className="flex mt-6">
+                        <MdPeople className="mr-4" size={24} />
+                        Friends
+                      </a>
+                    </Link>
+                    <Link href="/map">
+                      <a className="flex mt-6">
+                        <FaMapMarkedAlt className="mr-4" size={24} />
+                        Map
+                      </a>
+                    </Link>
+                    <Link href="/settings">
+                      <a className="flex mt-6">
+                        <IoMdSettings className="mr-4" size={24} />
+                        Settings
+                      </a>
+                    </Link>
+                  </div>
+                </div>
+              </>
             </div>
           </div>
           <div className="w-[40%] p-[1em] mt-2">

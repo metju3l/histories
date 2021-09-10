@@ -71,10 +71,15 @@ const resolvers = {
     },
 
     isLogged: async (_parent: undefined, _input: undefined, context: any) => {
-      return {
-        isLogged: context.validToken,
-        userID: context.validToken ? context.decoded.username : '',
-      };
+      // return user data
+      if (context.validToken)
+        return await UserQuery(
+          context.decoded.username,
+          undefined,
+          context.decoded.id,
+          undefined
+        );
+      else return null;
     },
 
     post: async (_parent: undefined, { id }: { id: number }, context: any) => {

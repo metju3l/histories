@@ -70,8 +70,10 @@ mutation createCollection($collectionName: String!, $description: String) {
 
 query IsLogged {
   isLogged {
-    isLogged
-    userID
+    firstName
+    lastName
+    username
+    email
   }
 }
 

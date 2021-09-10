@@ -5,7 +5,7 @@ type Query {
   tag(label: String!): TagInfo
   mapPoints(input: MapPointsInput!): [Post]
   paths: [Path]
-  isLogged: IsLoggedInfo!
+  isLogged: UserInfoMinimal
   userPosts(input: UserPostsInput!): [Post]
   interClipCode(id: Int!): String!
 }

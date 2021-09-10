@@ -14,7 +14,7 @@ const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
   const { data, loading, error } = useIsLoggedQuery();
   if (loading) return <div></div>;
   if (error) return <div></div>;
-  if (data!.isLogged.isLogged) router.replace('/');
+  if (data!.isLogged) router.replace('/');
 
   return (
     <>

@@ -21,7 +21,6 @@ import _toast, { toast, Toaster } from 'react-hot-toast';
 import { Search } from '@components/MainPage';
 
 const Login: FC = () => {
-  const [page, setPage] = useState('feed');
   const { data, loading, error } = useIsLoggedQuery();
   const [createPostMutation] = useCreatePostMutation();
   const [coordinates, setCoordinates] = useState([21, 20]);
@@ -98,8 +97,8 @@ const Login: FC = () => {
 
   if (loading) return <div>loading</div>;
   if (error) return <div>error</div>;
-  if (!data!.isLogged.isLogged) router.replace('/');
 
+  //  if (data.isLogged) router.replace('/');
   return (
     <div className="h-screen text-black bg-[#F6F8FA]">
       <div className="h-[30vh] flex">

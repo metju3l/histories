@@ -8,12 +8,11 @@ import { MdNotificationsActive } from 'react-icons/md';
 import { FaMapMarkedAlt } from 'react-icons/fa';
 import { BiSearchAlt2 } from 'react-icons/bi';
 
-const Navbar: FC<{
-  data: { isLogged: boolean; userID: string };
-}> = ({ data }) => {
+const Navbar: FC<{ data: any }> = ({ data }) => {
   // @ts-ignore
   const [theme, setTheme] = useDarkMode();
   const [accountDropdown, setAccountDropdown] = useState('main');
+
   return (
     <>
       <div className="hidden sm:block w-full text-xm bg-[#212529] text-white cursor-pointer h-14 sticky top-0 z-20">
@@ -42,7 +41,7 @@ const Navbar: FC<{
               <>
                 {data.isLogged && (
                   <div className="py-1.5 hover:text-green-400 cursor-pointer ">
-                    <Link href={`/${data.userID}`}> Profile</Link>
+                    <Link href={`/${data.isLogged.username}`}> Profile</Link>
                   </div>
                 )}
                 <div className="py-1.5 hover:text-green-400 cursor-pointer">
@@ -101,19 +100,24 @@ const Navbar: FC<{
         <a className="mt-3 mr-3 float-right">
           <MdNotificationsActive className="" size={24} />
         </a>
-        <div className="flex items-center  text-white float-right p-2 mr-2">
-          <div className="relative rounded-full w-8 h-8 mr-1">
-            <Image
-              src={`https://avatars.dicebear.com/api/initials/${'John'}%20${'Doe'}.svg`}
-              layout="fill"
-              objectFit="contain"
-              objectPosition="center"
-              className="rounded-full"
-              alt="Profile picture"
-            />
-          </div>
-          <div>John</div>
-        </div>
+        {data.isLogged && (
+          <a
+            href={`/${data.isLogged.username}`}
+            className="flex items-center  text-white float-right p-2 mr-2"
+          >
+            <div className="relative rounded-full w-8 h-8 mr-1">
+              <Image
+                src={`https://avatars.dicebear.com/api/initials/${data.isLogged.firstName}%20${data.isLogged.lastName}.svg`}
+                layout="fill"
+                objectFit="contain"
+                objectPosition="center"
+                className="rounded-full"
+                alt="Profile picture"
+              />
+            </div>
+            <div>{data.isLogged.firstName}</div>
+          </a>
+        )}
       </div>
       {/* Phone navbar */}
     </>
