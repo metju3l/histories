@@ -21,12 +21,12 @@ const Layout: FC = () => {
     <body className="bg-[#DADADB] dark:bg-[#06080E]">
       <Navbar data={data} />
       <div className="flex text-black max-w-screen-xl m-auto">
-        <div className="w-[30%] p-[1em]">
+        <div className="w-[30%] p-[1em] hidden sm:block">
           <div className="sticky top-20">
             <Menu data={data} />
           </div>
         </div>
-        <div className="w-[40%] p-[1em] mt-2">
+        <div className="sm:w-[40%] w-full p-[1em] mt-2">
           <Post />
           <Post />
           <Post />
@@ -35,7 +35,7 @@ const Layout: FC = () => {
           <Post />
         </div>
         {/* RIGHT COLUMN */}
-        <div className="w-[30%] p-[1em]">
+        <div className="w-[30%] p-[1em] hidden sm:block">
           <div className="sticky top-20">
             <div className="w-full p-[1em] bg-[#343233] rounded-xl text-white mb-8 ">
               <Suggestions data={data} suggestedUsers={suggestedUsers} />
