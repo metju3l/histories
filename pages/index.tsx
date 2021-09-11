@@ -46,11 +46,13 @@ const Index = () => {
                             alt="Profile picture"
                           />
                         </div>
-                        <div className="font-semibold text-lg">
-                          {' '}
-                          {`${data!.isLogged.firstName} ${
-                            data!.isLogged.lastName
-                          }`}
+                        <div>
+                          <a className="font-semibold text-lg">
+                            {`${data!.isLogged.firstName} ${
+                              data!.isLogged.lastName
+                            }`}
+                          </a>
+                          <br />@{data!.isLogged.username}
                         </div>
                       </a>
                     </Link>
@@ -126,32 +128,35 @@ const Index = () => {
                           (user, index) => {
                             return (
                               <div
-                                className="flex items-center mb-6"
+                                className="flex items-center mb-6 justify-between w-full"
                                 key={index}
                               >
-                                <Link href={`/${user!.username}`}>
-                                  <a className="relative rounded-full w-12 h-12 mr-4">
-                                    <Image
-                                      src={`https://avatars.dicebear.com/api/initials/${
-                                        user!.firstName
-                                      }%20${user!.lastName}.svg`}
-                                      layout="fill"
-                                      objectFit="contain"
-                                      objectPosition="center"
-                                      className="rounded-full"
-                                      alt="Profile picture"
-                                    />
-                                  </a>
-                                </Link>
-                                <div>
+                                <div className="flex">
                                   <Link href={`/${user!.username}`}>
-                                    {`${user!.firstName} ${user!.lastName}`}
+                                    <a className="relative rounded-full w-12 h-12 mr-4">
+                                      <Image
+                                        src={`https://avatars.dicebear.com/api/initials/${
+                                          user!.firstName
+                                        }%20${user!.lastName}.svg`}
+                                        layout="fill"
+                                        objectFit="contain"
+                                        objectPosition="center"
+                                        className="rounded-full"
+                                        alt="Profile picture"
+                                      />
+                                    </a>
                                   </Link>
-                                  <br />
-                                  <button className="bg-[#2D89FE] px-4 py-1 mt-1 rounded-xl">
-                                    Follow
-                                  </button>
+                                  <div>
+                                    <Link href={`/${user!.username}`}>
+                                      {`${user!.firstName} ${user!.lastName}`}
+                                    </Link>
+                                    <br />
+                                    <a>@{user!.username}</a>
+                                  </div>
                                 </div>
+                                <button className="bg-[#2D89FE] px-4 py-1 mt-1 rounded-xl">
+                                  Follow
+                                </button>
                               </div>
                             );
                           }
