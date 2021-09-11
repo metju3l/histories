@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Head from 'next/head';
 import Image from 'next/image';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { number } from 'yup/lib/locale';
 
 import {
   useFollowMutation,
@@ -183,7 +182,7 @@ const User: FC<{ username: string }> = ({ username }) => {
           <div className="flex bg-[#F6F8FA] w-[60%] m-auto pt-2 pb-10 text-black">
             <div className="h-screen w-[40%] ">col 1</div>
             <div className="w-[60%] ">
-              {data.user.posts !== undefined && data.user.posts !== null
+              {/*data.user.posts !== undefined && data.user.posts !== null
                 ? data.user.posts.map((post: any) => {
                     if (post === null) return '';
                     else
@@ -197,7 +196,7 @@ const User: FC<{ username: string }> = ({ username }) => {
                         />
                       );
                   })
-                : ''}
+                : ''*/}
 
               <AccountCreatedPost
                 date={data.user.createdAt}

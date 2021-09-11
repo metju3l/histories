@@ -97,9 +97,11 @@ const Navbar: FC<{ data: any }> = ({ data }) => {
             <FaMapMarkedAlt className="" size={24} />
           </a>
         </Link>
-        <a className="mt-3 mr-3 float-right">
-          <MdNotificationsActive className="" size={24} />
-        </a>
+        {data!.isLogged && (
+          <a className="mt-3 mr-3 float-right">
+            <MdNotificationsActive className="" size={24} />
+          </a>
+        )}
         {data.isLogged && (
           <a
             href={`/${data.isLogged.username}`}

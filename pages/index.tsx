@@ -26,55 +26,60 @@ const Index = () => {
               <>
                 <div className="w-full h-auto p-[1em] bg-[#343233] rounded-xl">
                   {data!.isLogged && (
-                    <div className="flex items-center text-white">
-                      <div className="relative rounded-full w-12 h-12 mr-4">
-                        <Image
-                          src={`https://avatars.dicebear.com/api/initials/${
-                            data!.isLogged.firstName
-                          }%20${data!.isLogged.lastName}.svg`}
-                          layout="fill"
-                          objectFit="contain"
-                          objectPosition="center"
-                          className="rounded-full"
-                          alt="Profile picture"
-                        />
-                      </div>
-                      <div className="font-semibold text-lg">
-                        {' '}
-                        {`${data!.isLogged.firstName} ${
-                          data!.isLogged.lastName
-                        }`}
-                      </div>
-                    </div>
+                    <Link href={`/${data!.isLogged.username}`}>
+                      <a className="flex items-center text-white">
+                        <div className="relative rounded-full w-12 h-12 mr-4">
+                          <Image
+                            src={`https://avatars.dicebear.com/api/initials/${
+                              data!.isLogged.firstName
+                            }%20${data!.isLogged.lastName}.svg`}
+                            layout="fill"
+                            objectFit="contain"
+                            objectPosition="center"
+                            className="rounded-full"
+                            alt="Profile picture"
+                          />
+                        </div>
+                        <div className="font-semibold text-lg">
+                          {' '}
+                          {`${data!.isLogged.firstName} ${
+                            data!.isLogged.lastName
+                          }`}
+                        </div>
+                      </a>
+                    </Link>
                   )}
                   <div className="flex flex-col text-white ml-3">
-                    {(data!.isLogged !== null ||
-                      data!.isLogged !== undefined) && (
+                    {data!.isLogged && (
                       <Link href="/createPost">
-                        <a className="flex mt-6">
+                        <a className="flex my-3">
                           <AiFillPlusCircle className="mr-4" size={24} />
                           Create post
                         </a>
                       </Link>
                     )}
-                    <a className="flex mt-6">
-                      <MdNotificationsActive className="mr-4" size={24} />
-                      Notifications
-                    </a>
-                    <Link href="/">
-                      <a className="flex mt-6">
-                        <MdPeople className="mr-4" size={24} />
-                        Friends
+                    {data!.isLogged && (
+                      <a className="flex my-3">
+                        <MdNotificationsActive className="mr-4" size={24} />
+                        Notifications
                       </a>
-                    </Link>
+                    )}
+                    {data!.isLogged && (
+                      <Link href="/">
+                        <a className="flex my-3">
+                          <MdPeople className="mr-4" size={24} />
+                          Friends
+                        </a>
+                      </Link>
+                    )}
                     <Link href="/map">
-                      <a className="flex mt-6">
+                      <a className="flex my-3">
                         <FaMapMarkedAlt className="mr-4" size={24} />
                         Map
                       </a>
                     </Link>
                     <Link href="/settings">
-                      <a className="flex mt-6">
+                      <a className="flex my-3">
                         <IoMdSettings className="mr-4" size={24} />
                         Settings
                       </a>
@@ -96,7 +101,7 @@ const Index = () => {
           <div className="w-[30%] p-[1em]">
             <div className="sticky top-20">
               <div className="w-full p-[1em] bg-[#343233] rounded-xl text-white mb-8 ">
-                <FriendSuggestions />
+                {data!.isLogged ? <FriendSuggestions /> : <PopularPeople />}
               </div>
             </div>
           </div>
@@ -149,6 +154,36 @@ const FriendSuggestions = () => {
       <h2 className="text-center font-semibold text-lg">
         People you might know
       </h2>
+      <div className="flex flex-col text-white ml-2 mt-6">
+        {Array.from(new Array(4), (_, i) => (
+          <div className="flex items-center mb-6">
+            <div className="relative rounded-full w-12 h-12 mr-4">
+              <Image
+                src={`https://avatars.dicebear.com/api/initials/${'John'}%20${'Doe'}.svg`}
+                layout="fill"
+                objectFit="contain"
+                objectPosition="center"
+                className="rounded-full"
+                alt="Profile picture"
+              />
+            </div>
+            <div>
+              John Doe
+              <br />
+              <button className="bg-[#2D89FE] px-4 py-1 mt-1 rounded-xl">
+                Follow
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+};
+const PopularPeople = () => {
+  return (
+    <>
+      <h2 className="text-center font-semibold text-lg">Popular people</h2>
       <div className="flex flex-col text-white ml-2 mt-6">
         {Array.from(new Array(4), (_, i) => (
           <div className="flex items-center mb-6">

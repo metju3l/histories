@@ -10,10 +10,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import MapGL, {
   Marker,
   NavigationControl,
-  ScaleControl,
   GeolocateControl,
-  Source,
-  Layer,
   FlyToInterpolator,
 } from 'react-map-gl';
 import router from 'next/router';
@@ -21,6 +18,7 @@ import _toast, { toast, Toaster } from 'react-hot-toast';
 import { Search } from '@components/MainPage';
 
 const Login: FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { data, loading, error } = useIsLoggedQuery();
   const [createPostMutation] = useCreatePostMutation();
   const [coordinates, setCoordinates] = useState([21, 20]);
@@ -96,132 +94,139 @@ const Login: FC = () => {
   }, [newTag]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading) return <div>loading</div>;
+  if (isLoading) return <div>loading</div>;
   if (error) return <div>error</div>;
 
   //  if (data.isLogged) router.replace('/');
   return (
-    <div className="h-screen text-black bg-[#F6F8FA]">
-      <div className="h-[30vh] flex">
-        <div className=" p-[10px]">
-          <Search setSearchCoordinates={setSearchCoordinates} />
-        </div>
-        <MapGL
-          {...viewport}
-          width="100%"
-          height="100%"
-          mapStyle={`mapbox://styles/${process.env.NEXT_PUBLIC_MAPBOX_USER}/${process.env.NEXT_PUBLIC_MAPBOX_STYLE}`}
-          onViewportChange={setViewport}
-          mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-          dragRotate={false}
-        >
-          <GeolocateControl
-            style={{
-              bottom: 186,
-              right: 0,
-              padding: '10px',
-            }}
-            positionOptions={{ enableHighAccuracy: true }}
-          />
-          <Marker
-            longitude={marker.longitude}
-            latitude={marker.latitude}
-            offsetTop={-20}
-            offsetLeft={-10}
-            draggable
-            onDragStart={onMarkerDragStart}
-            onDrag={onMarkerDrag}
-            onDragEnd={onMarkerDragEnd}
+    <body>
+      <Navbar data={data} />
+
+      <div className="h-screen text-black bg-[#F6F8FA]">
+        <div className="h-[30vh] flex">
+          <div className=" p-[10px]">
+            <Search setSearchCoordinates={setSearchCoordinates} />
+          </div>
+          <MapGL
+            {...viewport}
+            width="100%"
+            height="100%"
+            mapStyle={`mapbox://styles/${process.env.NEXT_PUBLIC_MAPBOX_USER}/${process.env.NEXT_PUBLIC_MAPBOX_STYLE}`}
+            onViewportChange={setViewport}
+            mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+            dragRotate={false}
           >
-            <svg
-              height={20}
-              viewBox="0 0 24 24"
+            <GeolocateControl
               style={{
-                fill: '#d00',
-                stroke: 'none',
+                bottom: 186,
+                right: 0,
+                padding: '10px',
               }}
+              positionOptions={{ enableHighAccuracy: true }}
+            />
+            <Marker
+              longitude={marker.longitude}
+              latitude={marker.latitude}
+              offsetTop={-20}
+              offsetLeft={-10}
+              draggable
+              onDragStart={onMarkerDragStart}
+              onDrag={onMarkerDrag}
+              onDragEnd={onMarkerDragEnd}
             >
-              <path
-                d="M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
-c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
-C20.1,15.8,20.2,15.8,20.2,15.7z"
-              />
-            </svg>
-          </Marker>
-          <NavigationControl
-            style={{
-              bottom: 240,
-              right: 0,
-              padding: '10px',
-            }}
-            showCompass={false}
-          />
-        </MapGL>
-      </div>
-      <div className="flex w-full gap-2">
-        {tags.map((tag, index) => {
-          return (
-            <div
-              className="bg-indigo-500 text-white p-2 rounded-xl"
-              key={index}
-            >
-              #{tag}
-              <button
-                className="text-red-300 ml-4"
-                onClick={() => {
-                  const newTags = tags.filter((x) => x !== tag);
-                  setTags(newTags);
+              <svg
+                height={20}
+                viewBox="0 0 24 24"
+                style={{
+                  fill: '#d00',
+                  stroke: 'none',
                 }}
               >
-                x
-              </button>
-            </div>
-          );
-        })}
-      </div>
-      <Formik
-        initialValues={{
-          photoDate: '',
-          description: '',
-        }}
-        onSubmit={async (values) => {
-          try {
-            await createPostMutation({
-              variables: {
-                ...values,
-                photoDate: Date.parse(values.photoDate).toString(),
-                hashtags: JSON.stringify(tags),
-                latitude: marker.latitude,
-                longitude: marker.longitude,
-              },
-            });
-            router.push('/');
-          } catch (error) {
-            toast.error(error.message);
-          }
-        }}
-      >
-        {() => (
-          <Form>
-            <Input label="photoDate" type="date" name="photoDate" />
-            <Input label="Description" name="description" type="text" />
-            <label>hashtags</label>
-            <input
-              className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              name="hashtags"
-              type="text"
-              value={newTag}
-              onChange={(e) => setNewTag(e.target.value)}
+                <path
+                  d="M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
+c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
+C20.1,15.8,20.2,15.8,20.2,15.7z"
+                />
+              </svg>
+            </Marker>
+            <NavigationControl
+              style={{
+                bottom: 240,
+                right: 0,
+                padding: '10px',
+              }}
+              showCompass={false}
             />
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >
-              submit
-            </button>
-          </Form>
-        )}
-      </Formik>
-    </div>
+          </MapGL>
+        </div>
+        <div className="flex w-full gap-2">
+          {tags.map((tag, index) => {
+            return (
+              <div
+                className="bg-indigo-500 text-white p-2 rounded-xl"
+                key={index}
+              >
+                #{tag}
+                <button
+                  className="text-red-300 ml-4"
+                  onClick={() => {
+                    const newTags = tags.filter((x) => x !== tag);
+                    setTags(newTags);
+                  }}
+                >
+                  x
+                </button>
+              </div>
+            );
+          })}
+        </div>
+        <Formik
+          initialValues={{
+            photoDate: '',
+            description: '',
+          }}
+          onSubmit={async (values) => {
+            try {
+              setIsLoading(true);
+              await createPostMutation({
+                variables: {
+                  ...values,
+                  photoDate: Date.parse(values.photoDate).toString(),
+                  hashtags: JSON.stringify(tags),
+                  latitude: marker.latitude,
+                  longitude: marker.longitude,
+                },
+              });
+              router.push('/');
+            } catch (error) {
+              toast.error(error.message);
+            }
+            setIsLoading(false);
+          }}
+        >
+          {() => (
+            <Form>
+              <Input label="photoDate" type="date" name="photoDate" />
+              <Input label="Description" name="description" type="text" />
+              <label>hashtags</label>
+              <input
+                className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                name="hashtags"
+                type="text"
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+              />
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="submit"
+              >
+                submit
+              </button>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </body>
   );
 };
 
