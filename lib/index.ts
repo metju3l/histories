@@ -11,3 +11,4 @@ export { default as CreatePost } from './mutations/createPost';
 export { default as EditProfile } from './mutations/editProfile';
 export { default as GetPaths } from './queries/getPaths';
 export { default as GetTagInfo } from './queries/getTagInfo';
+export { default as SuggestedUsersQuery } from './queries/SuggestedUsersQuery';

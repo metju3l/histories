@@ -1,4 +1,7 @@
-import { useIsLoggedQuery } from '@graphql/user.graphql';
+import {
+  useIsLoggedQuery,
+  useSuggestedUsersQuery,
+} from '@graphql/user.graphql';
 import React from 'react';
 import { Navbar } from 'components/Navbar';
 import Image from 'next/image';
@@ -13,9 +16,11 @@ import Link from 'next/link';
 
 const Index = () => {
   const { data, loading, error } = useIsLoggedQuery();
+  const suggestedUsers = useSuggestedUsersQuery();
 
   if (loading) return <div>loading</div>;
   if (error) return <div>error</div>;
+  if (suggestedUsers.data) console.log(suggestedUsers.data);
 
   return (
     <>
@@ -110,7 +115,55 @@ const Index = () => {
           <div className="w-[30%] p-[1em]">
             <div className="sticky top-20">
               <div className="w-full p-[1em] bg-[#343233] rounded-xl text-white mb-8 ">
-                {data!.isLogged ? <FriendSuggestions /> : <PopularPeople />}
+                {data!.isLogged ? (
+                  suggestedUsers.data?.suggestedUsers ? (
+                    <>
+                      <h2 className="text-center font-semibold text-lg">
+                        People you might know
+                      </h2>
+                      <div className="flex flex-col text-white ml-2 mt-6">
+                        {suggestedUsers!.data!.suggestedUsers.map(
+                          (user, index) => {
+                            return (
+                              <div
+                                className="flex items-center mb-6"
+                                key={index}
+                              >
+                                <Link href={`/${user!.username}`}>
+                                  <a className="relative rounded-full w-12 h-12 mr-4">
+                                    <Image
+                                      src={`https://avatars.dicebear.com/api/initials/${
+                                        user!.firstName
+                                      }%20${user!.lastName}.svg`}
+                                      layout="fill"
+                                      objectFit="contain"
+                                      objectPosition="center"
+                                      className="rounded-full"
+                                      alt="Profile picture"
+                                    />
+                                  </a>
+                                </Link>
+                                <div>
+                                  <Link href={`/${user!.username}`}>
+                                    {`${user!.firstName} ${user!.lastName}`}
+                                  </Link>
+                                  <br />
+                                  <button className="bg-[#2D89FE] px-4 py-1 mt-1 rounded-xl">
+                                    Follow
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <div>loading</div>
+                  )
+                ) : (
+                  <PopularPeople />
+                )}
               </div>
             </div>
           </div>
@@ -157,38 +210,6 @@ const Post = () => {
   );
 };
 
-const FriendSuggestions = () => {
-  return (
-    <>
-      <h2 className="text-center font-semibold text-lg">
-        People you might know
-      </h2>
-      <div className="flex flex-col text-white ml-2 mt-6">
-        {Array.from(new Array(4), (_, i) => (
-          <div className="flex items-center mb-6">
-            <div className="relative rounded-full w-12 h-12 mr-4">
-              <Image
-                src={`https://avatars.dicebear.com/api/initials/${'John'}%20${'Doe'}.svg`}
-                layout="fill"
-                objectFit="contain"
-                objectPosition="center"
-                className="rounded-full"
-                alt="Profile picture"
-              />
-            </div>
-            <div>
-              John Doe
-              <br />
-              <button className="bg-[#2D89FE] px-4 py-1 mt-1 rounded-xl">
-                Follow
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </>
-  );
-};
 const PopularPeople = () => {
   return (
     <>

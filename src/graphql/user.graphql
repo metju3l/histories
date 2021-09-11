@@ -1,4 +1,13 @@
-query GetUserInfo($username: String, $id: Int) {
+query suggestedUsers {
+  suggestedUsers {
+    id
+    firstName
+    lastName
+    username
+  }
+}
+
+query getUserInfo($username: String, $id: Int) {
   user(input: { username: $username, id: $id }) {
     username
     email

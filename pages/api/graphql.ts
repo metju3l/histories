@@ -16,6 +16,7 @@ import {
   DeletePost,
   Like,
   GetTagInfo,
+  SuggestedUsersQuery,
 } from '../../lib';
 import { verify } from 'jsonwebtoken';
 import GetPostInfo from '@lib/queries/getPostInfo';
@@ -42,8 +43,21 @@ const resolvers = {
       return 'Hello';
     },
 
-    paths: () => {
+    paths: async () => {
       return GetPaths();
+    },
+
+    suggestedUsers: async (
+      _parent: undefined,
+      _input: undefined,
+      context: any
+    ) => {
+      // if token is valid
+      if (context.validToken) {
+        return await SuggestedUsersQuery(context.decoded.id);
+      }
+      // else throw error
+      else throw new Error('User is not logged in');
     },
 
     interClipCode: async (

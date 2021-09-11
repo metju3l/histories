@@ -10,7 +10,10 @@ import {
   useFollowMutation,
   useUnfollowMutation,
 } from '@graphql/relations.graphql';
-import { useUpdateProfileMutation } from '@graphql/user.graphql';
+import {
+  useSuggestedUsersQuery,
+  useUpdateProfileMutation,
+} from '@graphql/user.graphql';
 import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 
 import { AccountCreatedPost } from 'components/ProfilePage';

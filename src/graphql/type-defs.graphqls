@@ -8,6 +8,7 @@ type Query {
   isLogged: UserInfoMinimal
   userPosts(input: UserPostsInput!): [Post]
   interClipCode(id: Int!): String!
+  suggestedUsers: [UserInfoMinimal]
 }
 
 type Mutation {
