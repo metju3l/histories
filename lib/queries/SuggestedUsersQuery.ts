@@ -6,9 +6,10 @@ const SuggestedUsersQuery = async (logged: number | null) => {
   MATCH (user:User)
   WHERE NOT (logged)-[:FOLLOW]->(user) AND NOT user = logged
   RETURN collect(user) AS suggestions LIMIT 15`;
-  const query = logged
-    ? loggedQuery
-    : `MATCH (user:User) RETURN collect(user) AS suggestions LIMIT 15`;
+  const query =
+    logged !== null
+      ? loggedQuery
+      : `MATCH (user:User) RETURN collect(user) AS suggestions LIMIT 15`;
 
   const driver = DbConnector();
   const session = driver.session();
