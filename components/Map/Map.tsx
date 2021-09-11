@@ -43,7 +43,6 @@ const Map = ({ searchCoordinates }: any): JSX.Element => {
     '#a572d5',
   ];
   useEffect(() => {
-    console.log('hi');
     setViewport({
       ...viewport,
       longitude: searchCoordinates.lng,

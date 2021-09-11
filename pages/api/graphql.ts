@@ -103,8 +103,6 @@ const resolvers = {
       context: any,
       { operation }: any
     ) => {
-      console.log(context.decoded);
-
       // if username and id are undefined
       if (username === undefined && id === undefined)
         throw new Error('Username or id required');

@@ -14,7 +14,6 @@ const GetPostInfo = async ({
 
   const queryResult = await session.run(query);
   driver.close();
-  console.log(queryResult.records[0].get('post').properties);
   return { ...queryResult.records[0].get('post').properties, postID: id };
 };
 

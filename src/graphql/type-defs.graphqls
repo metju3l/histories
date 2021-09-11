@@ -99,6 +99,7 @@ type UserInfo {
 }
 
 type UserInfoMinimal {
+  id: Int!
   username: String!
   firstName: String!
   lastName: String!

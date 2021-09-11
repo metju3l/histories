@@ -7,6 +7,7 @@ import { IoMdSettings } from 'react-icons/io';
 import { MdNotificationsActive, MdPeople } from 'react-icons/md';
 import { FaMapMarkedAlt } from 'react-icons/fa';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { RiLoginBoxFill } from 'react-icons/ri';
 
 import Link from 'next/link';
 
@@ -69,6 +70,14 @@ const Index = () => {
                         <a className="flex my-3">
                           <MdPeople className="mr-4" size={24} />
                           Friends
+                        </a>
+                      </Link>
+                    )}
+                    {!data!.isLogged && (
+                      <Link href="/login">
+                        <a className="flex my-3">
+                          <RiLoginBoxFill className="mr-4" size={24} />
+                          Log in
                         </a>
                       </Link>
                     )}

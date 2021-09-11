@@ -23,7 +23,7 @@ const User: FC<{ username: string }> = ({ username }) => {
   const { data, loading, error, refetch } = useGetUserInfoQuery({
     variables: { username: username },
   });
-  const isLoggedQuery = useIsLoggedQuery();
+  const logged = useIsLoggedQuery();
 
   const [editMode, setEditMode] = useState(false);
   const [editProfileMutation] = useUpdateProfileMutation();
@@ -35,10 +35,11 @@ const User: FC<{ username: string }> = ({ username }) => {
 
   if (error) return <div>error</div>;
   if (loading) return <div>loading</div>;
-  if (isLoggedQuery.loading) return <div>loading</div>;
-  if (isLoggedQuery.error) return <div>error</div>;
+  if (logged.loading) return <div>loading</div>;
+  if (logged.error) return <div>error</div>;
   if (data === null || data === undefined)
     return <div>user does not exist</div>;
+  const isLogged = logged.data!.isLogged;
 
   return (
     <>
@@ -50,7 +51,7 @@ const User: FC<{ username: string }> = ({ username }) => {
       </Head>
       <body>
         {/* @ts-ignore */}
-        <Navbar data={isLoggedQuery.data} />
+        <Navbar data={logged.data} />
 
         <main className="w-full pt-20 bg-[#F6F8FA] text-black">
           <div className="full">
@@ -69,7 +70,7 @@ const User: FC<{ username: string }> = ({ username }) => {
               {`${data.user.firstName} ${data.user.lastName}`}
             </h2>
             <div className="text-center text-md py-4 w-[60%] m-auto">
-              {isLoggedQuery.data?.isLogged?.username === data.user.username ? (
+              {isLogged && logged.data?.isLogged!.id === data.user.id ? (
                 <>
                   {!editMode ? (
                     <>
@@ -169,13 +170,12 @@ const User: FC<{ username: string }> = ({ username }) => {
               <a className="float-left mr-4 pt-2">
                 Following {data!.user!.following!.length}
               </a>
-
-              <FollowButton
-                isLoggedQuery={isLoggedQuery}
-                data={data}
-                refetch={refetch}
-              />
-              <a className="float-right ml-4 pt-2">Message</a>
+              {isLogged && logged.data!.isLogged!.id !== data.user.id && (
+                <>
+                  <FollowButton logged={logged} data={data} refetch={refetch} />
+                  <a className="float-right ml-4 pt-2">Message</a>
+                </>
+              )}
             </div>
           </div>
 
@@ -245,46 +245,40 @@ const Input: FC<{
   );
 };
 
-const FollowButton = ({ data, isLoggedQuery, refetch }: any) => {
+const FollowButton = ({ data, logged, refetch }: any) => {
   const [followMutation] = useFollowMutation();
   const [unfollowMutation] = useUnfollowMutation();
 
   return (
     <>
-      {' '}
-      {(isLoggedQuery.data?.isLogged.isLogged || isLoggedQuery.loading) &&
-        isLoggedQuery.data?.isLogged?.userID !== data.user.username && (
-          <>
-            <button
-              className={`float-right ml-4 rounded-lg text-white ${
-                data.user.isFollowing ? 'bg-indigo-400' : 'bg-indigo-600'
-              } p-2`}
-              onClick={async () => {
-                try {
-                  if (data.user.isFollowing) {
-                    await unfollowMutation({
-                      variables: { userID: data.user.userID },
-                    });
-                    refetch({
-                      username: data.user.username,
-                    });
-                  } else {
-                    await followMutation({
-                      variables: { userID: data.user.userID },
-                    });
-                    refetch({
-                      username: data.user.username,
-                    });
-                  }
-                } catch (error) {
-                  console.log(error);
-                }
-              }}
-            >
-              {data.user.isFollowing ? 'Unfollow' : 'Follow'}
-            </button>
-          </>
-        )}
+      <button
+        className={`float-right ml-4 rounded-lg text-white ${
+          data.user.isFollowing ? 'bg-indigo-400' : 'bg-indigo-600'
+        } p-2`}
+        onClick={async () => {
+          try {
+            if (data.user.isFollowing) {
+              await unfollowMutation({
+                variables: { userID: data.user.userID },
+              });
+              refetch({
+                username: data.user.username,
+              });
+            } else {
+              await followMutation({
+                variables: { userID: data.user.userID },
+              });
+              refetch({
+                username: data.user.username,
+              });
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }}
+      >
+        {data.user.isFollowing ? 'Unfollow' : 'Follow'}
+      </button>
     </>
   );
 };

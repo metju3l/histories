@@ -32,7 +32,6 @@ const PlacesAutocomplete = ({ setSearchCoordinates }: any) => {
       .then((results) => getLatLng(results[0]))
       .then(({ lat, lng }) => {
         setSearchCoordinates({ lat, lng });
-        console.log('📍 Coordinates: ', { lat, lng });
       })
       .catch((error) => {
         console.log('😱 Error: ', error);

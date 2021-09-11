@@ -1,4 +1,4 @@
-query getUserInfo($username: String, $id: Int) {
+query GetUserInfo($username: String, $id: Int) {
   user(input: { username: $username, id: $id }) {
     username
     email
@@ -30,8 +30,6 @@ query getUserInfo($username: String, $id: Int) {
       postID
       description
       hashtags
-      latitude
-      longitude
       createdAt
       url
     }
@@ -70,6 +68,7 @@ mutation createCollection($collectionName: String!, $description: String) {
 
 query IsLogged {
   isLogged {
+    id
     firstName
     lastName
     username
