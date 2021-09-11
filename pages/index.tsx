@@ -24,7 +24,7 @@ const Index = () => {
 
   return (
     <>
-      <body className="bg-[#DADADB]">
+      <body className="bg-[#DADADB] dark:bg-[#06080E]">
         <Navbar data={data} />
         <div className="flex text-black max-w-screen-xl m-auto">
           <div className="w-[30%] p-[1em]">
@@ -117,57 +117,57 @@ const Index = () => {
           <div className="w-[30%] p-[1em]">
             <div className="sticky top-20">
               <div className="w-full p-[1em] bg-[#343233] rounded-xl text-white mb-8 ">
-                {data!.isLogged ? (
-                  suggestedUsers.data?.suggestedUsers ? (
-                    <>
-                      <h2 className="text-center font-semibold text-lg">
-                        People you might know
-                      </h2>
-                      <div className="flex flex-col text-white ml-2 mt-6">
-                        {suggestedUsers!.data!.suggestedUsers.map(
-                          (user, index) => {
-                            return (
-                              <div
-                                className="flex items-center mb-6 justify-between w-full"
-                                key={index}
-                              >
-                                <div className="flex">
+                {suggestedUsers.data?.suggestedUsers ? (
+                  <>
+                    <h2 className="text-center font-semibold text-lg">
+                      {data!.isLogged
+                        ? 'People you might know'
+                        : 'Popular users'}
+                    </h2>
+                    <div className="flex flex-col text-white ml-2 mt-6">
+                      {suggestedUsers!.data!.suggestedUsers.map(
+                        (user, index) => {
+                          return (
+                            <div
+                              className="flex items-center mb-6 justify-between w-full"
+                              key={index}
+                            >
+                              <div className="flex">
+                                <Link href={`/${user!.username}`}>
+                                  <a className="relative rounded-full w-12 h-12 mr-4">
+                                    <Image
+                                      src={`https://avatars.dicebear.com/api/initials/${
+                                        user!.firstName
+                                      }%20${user!.lastName}.svg`}
+                                      layout="fill"
+                                      objectFit="contain"
+                                      objectPosition="center"
+                                      className="rounded-full"
+                                      alt="Profile picture"
+                                    />
+                                  </a>
+                                </Link>
+                                <div>
                                   <Link href={`/${user!.username}`}>
-                                    <a className="relative rounded-full w-12 h-12 mr-4">
-                                      <Image
-                                        src={`https://avatars.dicebear.com/api/initials/${
-                                          user!.firstName
-                                        }%20${user!.lastName}.svg`}
-                                        layout="fill"
-                                        objectFit="contain"
-                                        objectPosition="center"
-                                        className="rounded-full"
-                                        alt="Profile picture"
-                                      />
-                                    </a>
+                                    {`${user!.firstName} ${user!.lastName}`}
                                   </Link>
-                                  <div>
-                                    <Link href={`/${user!.username}`}>
-                                      {`${user!.firstName} ${user!.lastName}`}
-                                    </Link>
-                                    <br />
-                                    <a>@{user!.username}</a>
-                                  </div>
+                                  <br />
+                                  <a>@{user!.username}</a>
                                 </div>
+                              </div>
+                              {data!.isLogged && (
                                 <button className="bg-[#2D89FE] px-4 py-1 mt-1 rounded-xl">
                                   Follow
                                 </button>
-                              </div>
-                            );
-                          }
-                        )}
-                      </div>
-                    </>
-                  ) : (
-                    <div>loading</div>
-                  )
+                              )}
+                            </div>
+                          );
+                        }
+                      )}
+                    </div>
+                  </>
                 ) : (
-                  <PopularPeople />
+                  <div>loading</div>
                 )}
               </div>
             </div>

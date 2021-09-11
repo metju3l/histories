@@ -16,10 +16,10 @@ const Navbar: FC<{ data: any }> = ({ data }) => {
 
   return (
     <>
-      <div className="hidden sm:block w-full text-xm bg-[#212529] text-white cursor-pointer h-14 sticky top-0 z-20">
+      <div className="hidden sm:block w-full text-xm bg-[#343233] text-white cursor-pointer h-14 sticky top-0 z-20">
         <div className="max-w-screen-xl m-auto">
           <Link href="/" passHref>
-            <a className="float-left p-4 hover:bg-[#181818]">LOGO</a>
+            <a className="float-left p-4 hover:bg-[#181818]">hiStories</a>
           </Link>
 
           <div className="flex float-left bg-white rounded-full text-black p-1 px-2 mt-3">

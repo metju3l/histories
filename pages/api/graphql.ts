@@ -52,12 +52,9 @@ const resolvers = {
       _input: undefined,
       context: any
     ) => {
-      // if token is valid
-      if (context.validToken) {
-        return await SuggestedUsersQuery(context.decoded.id);
-      }
-      // else throw error
-      else throw new Error('User is not logged in');
+      return await SuggestedUsersQuery(
+        context.validToken ? context.decoded.id : null
+      );
     },
 
     interClipCode: async (
