@@ -180,20 +180,19 @@ const resolvers = {
       { input }: { input: { username: string; password: string } }
     ) => {
       // check username
-      if (ValidateUsername(input.username).error)
-        throw new Error('Wrong credentials');
-
-      if (!(await IsUsedUsername(input.username)))
-        throw new Error('Wrong credentials');
+      if (
+        ValidateUsername(input.username).error &&
+        ValidateEmail(input.username).error
+      )
+        throw new Error('Wtf are you trying to do');
 
       // check password
-      if (ValidatePassword(input.password).error)
-        throw new Error('Wrong credentials');
+      if (ValidatePassword(input.password).error) throw new Error('The fuck');
 
       // if credentials are wrong returns null
       const login = await Login(input);
       if (login !== null) return login;
-      else throw new Error('Wrong credentials');
+      else throw new Error('Something went wrong');
     },
 
     createUser: async (
@@ -285,7 +284,7 @@ const resolvers = {
       if (validateDate) throw new Error(validateDate);
 
       if (context.validToken)
-        return CreatePost({ ...input, userID: context.decoded.username });
+        return CreatePost({ ...input, userID: context.decoded.id });
       else throw new Error('User is not logged');
     },
 

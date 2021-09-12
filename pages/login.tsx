@@ -43,7 +43,7 @@ const Login: FC = () => {
         {() => (
           <Form>
             <Input
-              label="Username"
+              label="Username or email"
               name="username"
               type="text"
               autoComplete="username"

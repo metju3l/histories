@@ -40,6 +40,10 @@ test('Date', () => {
   expect(ValidateDate(new Date().getTime() + 1000)).toEqual({
     error: 'Invalid date',
   });
+  // @ts-expect-error
+  expect(ValidateDate()).toEqual({
+    error: 'Invalid date',
+  });
   expect(ValidateDate(new Date().getTime() + 250000)).toEqual({
     error: 'Invalid date',
   });

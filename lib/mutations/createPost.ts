@@ -1,4 +1,3 @@
-import UserQuery from '@lib/queries/UserQuery';
 import DbConnector from '../database/driver';
 import LastPost from './lastPost';
 
@@ -10,25 +9,21 @@ const CreatePost = async ({
   longitude,
   latitude,
 }: {
-  userID: string;
+  userID: number;
   description: string;
   hashtags: string;
   photoDate: string;
   longitude: number;
   latitude: number;
 }): Promise<string> => {
-  const actualID = (await UserQuery(null, userID, undefined, null)).id;
-
   // if last post / collection was created less than 10 seconds ago
-  if (
-    new Date().getTime() - parseInt(await LastPost({ userID: actualID })) <
-    10000
-  )
+  if (new Date().getTime() - parseInt(await LastPost({ userID })) < 10000)
     throw new Error('you can create post every 10sec');
 
   const query = `
-  MATCH (n:User {username: "${userID}"})
-  CREATE (n)-[:CREATED]->(:Post
+  MATCH (user:User)
+  WHERE ID(user) = ${userID} 
+  CREATE (user)-[:CREATED]->(:Post
   {
     description:"${description}",
     hashtags: '${hashtags}',

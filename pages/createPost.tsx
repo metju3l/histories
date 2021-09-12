@@ -1,8 +1,4 @@
-import Head from 'next/head';
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { MdAddBox, MdMap } from 'react-icons/md';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
-import Link from 'next/link';
 import { Navbar } from '@components/Navbar';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { useCreatePostMutation } from '@graphql/post.graphql';
@@ -11,10 +7,9 @@ import MapGL, {
   Marker,
   NavigationControl,
   GeolocateControl,
-  FlyToInterpolator,
 } from 'react-map-gl';
 import router from 'next/router';
-import _toast, { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import { Search } from '@components/MainPage';
 
 const Login: FC = () => {
@@ -75,7 +70,7 @@ const Login: FC = () => {
       longitude: searchCoordinates.lng,
       latitude: searchCoordinates.lat,
     });
-  }, [searchCoordinates]);
+  }, [searchCoordinates]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (newTag.slice(-1) === ' ') {
@@ -88,7 +83,7 @@ const Login: FC = () => {
       }
       setNewTag('');
     }
-  }, [newTag]);
+  }, [newTag]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading) return <div>loading</div>;
   if (isLoading) return <div>loading</div>;
