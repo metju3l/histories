@@ -74,7 +74,7 @@
     "@graphql-codegen/import-types-preset": "^2.1.4",
     "@graphql-codegen/typescript": "^1.22.3",
     "@graphql-codegen/typescript-operations": "^1.18.3",
-    "@graphql-codegen/typescript-react-apollo": "^2.2.8",
+    "@graphql-codegen/typescript-react-apollo": "^3.1.4",
     "@types/googlemaps": "^3.43.3",
     "@types/react": "17.0.20",
     "@types/validator": "^13.6.2",
