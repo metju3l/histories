@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useIsLoggedQuery, useLoginMutation } from '@graphql/user.graphql';
 import Link from 'next/link';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
@@ -6,10 +6,12 @@ import router from 'next/router';
 import { useTranslation } from 'react-i18next';
 import Cookie from 'js-cookie';
 import { toast } from 'react-hot-toast';
+import { Button } from '@nextui-org/react';
 
 const Login: FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
   const [login] = useLoginMutation();
+  const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
   if (loading) return <div></div>;
   if (error) return <div></div>;
@@ -24,6 +26,7 @@ const Login: FC = () => {
           password: '',
         }}
         onSubmit={async (values) => {
+          setIsLoading(true);
           try {
             const result = await login({
               variables: values,
@@ -38,6 +41,7 @@ const Login: FC = () => {
           } catch (error) {
             toast.error(error.message);
           }
+          setIsLoading(false);
         }}
       >
         {() => (
@@ -54,12 +58,11 @@ const Login: FC = () => {
               type="password"
               autoComplete="new-password"
             />
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >
-              submit
-            </button>
+            {isLoading ? (
+              <Button loading loaderType="spinner" />
+            ) : (
+              <Button type="submit">Submit</Button>
+            )}
           </Form>
         )}
       </Formik>

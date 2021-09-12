@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import router from 'next/router';
 import Link from 'next/link';
@@ -7,11 +7,13 @@ import { useTranslation } from 'react-i18next';
 import Head from 'next/head';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-hot-toast';
+import { Button } from '@nextui-org/react';
 
 const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
   const [createUser] = useCreateUserMutation();
   const { t } = useTranslation();
   const { data, loading, error } = useIsLoggedQuery();
+  const [isLoading, setIsLoading] = useState(false);
   if (loading) return <div></div>;
   if (error) return <div></div>;
   if (data!.isLogged) router.replace('/');
@@ -33,17 +35,16 @@ const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
           repeatPassword: '',
         }}
         onSubmit={async (values) => {
+          setIsLoading(true);
           try {
-            const result = await createUser({
+            await createUser({
               variables: values,
             });
-            // @ts-ignore
-            if (result.data.createUser === 'user created') {
-              router.push('/login');
-            }
+            router.push('/login');
           } catch (error) {
             toast.error(error.message);
           }
+          setIsLoading(false);
         }}
       >
         {() => (
@@ -84,12 +85,11 @@ const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
               type="password"
               autoComplete="new-password"
             />
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >
-              submit
-            </button>
+            {isLoading ? (
+              <Button loading loaderType="spinner" />
+            ) : (
+              <Button type="submit">Submit</Button>
+            )}
             <Link href="/login">log in</Link>
           </Form>
         )}

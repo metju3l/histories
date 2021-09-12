@@ -8,6 +8,7 @@ import MapGL, {
   NavigationControl,
   GeolocateControl,
 } from 'react-map-gl';
+import { Button } from '@nextui-org/react';
 import router from 'next/router';
 import { toast } from 'react-hot-toast';
 import { Search } from '@components/MainPage';
@@ -85,8 +86,7 @@ const Login: FC = () => {
     }
   }, [newTag]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (loading) return <div>loading</div>;
-  if (isLoading) return <div>loading</div>;
+  if (loading) return <div>loading xxx</div>;
   if (error) return <div>error</div>;
 
   if (!data!.isLogged) router.replace('/');
@@ -178,8 +178,8 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
             description: '',
           }}
           onSubmit={async (values) => {
+            setIsLoading(true);
             try {
-              setIsLoading(true);
               await createPostMutation({
                 variables: {
                   ...values,
@@ -208,12 +208,11 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
               />
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="submit"
-              >
-                submit
-              </button>
+              {isLoading ? (
+                <Button loading loaderType="spinner" />
+              ) : (
+                <Button type="submit">Submit</Button>
+              )}
             </Form>
           )}
         </Formik>
