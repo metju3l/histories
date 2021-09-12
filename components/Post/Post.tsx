@@ -7,8 +7,8 @@ import { FaMapMarkedAlt } from 'react-icons/fa';
 
 const Post: FC = () => {
   return (
-    <div className="w-full p-[1em] rounded-xl text-white bg-[#343233] mb-8">
-      <div className="flex items-center text-white">
+    <div className="w-full p-[1em] bg-white shadow-lg dark:bg-[#343233] rounded-xl text-text-light dark:text-white mb-8">
+      <div className="flex items-center">
         <div className="relative rounded-full w-12 h-12 mr-4">
           <Image
             src={`https://avatars.dicebear.com/api/initials/${'John'}%20${'Doe'}.svg`}
@@ -30,7 +30,7 @@ const Post: FC = () => {
           className="rounded-xl"
           alt="Profile picture"
         />
-        <div className="text-white absolute right-4 bottom-2 p-2 bg-[#343233] rounded-xl">
+        <div className="absolute right-2 bottom-4 p-2 bg-white shadow-lg dark:bg-[#343233] rounded-xl text-text-light dark:text-white">
           <Link href="/map">
             <a>
               <FaMapMarkedAlt size={24} />

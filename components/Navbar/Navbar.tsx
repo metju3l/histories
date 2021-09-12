@@ -18,39 +18,38 @@ const Navbar: FC<{ data: any }> = ({ data }) => {
   const { theme, setTheme } = useDarkMode();
 
   return (
-    <div className="w-full text-xm bg-[#343233] text-white h-14 sticky top-0 z-20">
+    <div className="w-full text-xm bg-white dark:bg-background-dark text-text-light dark:text-text-dark h-14 sticky top-0 z-20 shadow-sm">
       <div className="max-w-screen-xl m-auto">
         <Link href="/" passHref>
-          <a className="float-left p-4 hover:bg-[#181818]">hiStories</a>
+          <a className="float-left p-2 m-2 text-white bg-[#17A6FA] rounded-lg">
+            hiStories
+          </a>
         </Link>
 
-        <div className="hidden sm:flex float-left bg-white rounded-full text-black p-1 px-2 mt-3">
+        <div className="hidden sm:flex float-left bg-[#F0F2F5] rounded-full text-black p-1 px-2 mt-3">
           <BiSearchAlt2 size={24} />
           <input
             type="text"
-            className="w-full rounded-sm outline-none border-none inline-block text-light-text"
+            className="w-full rounded-sm outline-none border-none inline-block bg-[#F0F2F5] text-light-text"
           />
           <button> x</button>
         </div>
 
         <Menu>
-          <Menu.Button
-            className="float-right py-2 px-4 hover:bg-[#181818]"
-            as="a"
-          >
+          <Menu.Button className="float-right py-2 px-4" as="a">
             <IoIosArrowDropdownCircle size={32} />
           </Menu.Button>
           <Menu.Items className="shadow-custom absolute text-black bg-white dark:bg-[#343233] dark:text-white rounded-xl text-left w-60 px-4 py-2 right-4 top-16 mt-2 display-flex flex-col">
             {data.isLogged && (
               <Link href={`/${data.isLogged.username}`}>
                 <>
-                  <a className="hidden sm:flex my-3 hover:text-green-400">
+                  <a className="hidden sm:flex my-3">
                     <FaUserCircle className="mr-4" size={24} />
                     Profile
                   </a>
                   <a
                     href={`/${data.isLogged.username}`}
-                    className="sm:hidden flex items-center hover:text-green-400 w-full p-2 mr-2"
+                    className="sm:hidden flex items-center w-full p-2 mr-2"
                   >
                     <div className="relative rounded-full w-8 h-8 mr-1">
                       <Image
@@ -70,13 +69,13 @@ const Navbar: FC<{ data: any }> = ({ data }) => {
               </Link>
             )}
             <Link href="/">
-              <a className="sm:hidden flex my-3 hover:text-green-400">
+              <a className="sm:hidden flex my-3">
                 <MdPeople className="mr-4" size={24} />
                 Friends
               </a>
             </Link>
             <Link href="/settings">
-              <a className="flex my-3 hover:text-green-400">
+              <a className="flex my-3">
                 <IoMdSettings className="mr-4" size={24} />
                 Settings
               </a>

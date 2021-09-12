@@ -191,6 +191,7 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
               });
               router.push('/');
             } catch (error) {
+              // @ts-ignore
               toast.error(error.message);
             }
             setIsLoading(false);

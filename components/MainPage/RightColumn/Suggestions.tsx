@@ -12,7 +12,7 @@ const Suggestions: FC<{
       <h2 className="text-center font-semibold text-lg">
         {data!.isLogged ? 'People you might know' : 'Popular users'}
       </h2>
-      <div className="flex flex-col text-white ml-2 mt-6">
+      <div className="flex flex-col ml-2 mt-6">
         {suggestedUsers!.data!.suggestedUsers.map((user: any) => {
           return (
             <div

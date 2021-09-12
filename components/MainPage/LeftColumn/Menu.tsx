@@ -12,7 +12,7 @@ import { FaMapMarkedAlt } from 'react-icons/fa';
 const Menu: FC<{ data: any }> = ({ data }) => {
   return (
     <>
-      <div className="w-full h-auto p-[1em] bg-[#343233] rounded-xl">
+      <div className="w-full h-auto p-[1em] bg-white shadow-lg dark:bg-[#343233] rounded-xl text-text-light dark:text-white">
         {data!.isLogged && (
           <Link href={`/${data!.isLogged.username}`}>
             <a className="flex items-center text-white">
@@ -37,7 +37,7 @@ const Menu: FC<{ data: any }> = ({ data }) => {
             </a>
           </Link>
         )}
-        <div className="flex flex-col text-white ml-3">
+        <div className="flex flex-col ml-3">
           {data!.isLogged && (
             <Link href="/createPost">
               <a className="flex my-3">

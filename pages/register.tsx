@@ -39,6 +39,7 @@ const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
               });
               router.push('/login');
             } catch (error) {
+              // @ts-ignore
               toast.error(error.message);
             }
             setIsLoading(false);

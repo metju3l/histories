@@ -37,7 +37,7 @@ const Layout: FC = () => {
         {/* RIGHT COLUMN */}
         <div className="w-[30%] md:w-[40%] p-[1em] hidden md:block">
           <div className="sticky top-20">
-            <div className="w-full p-[1em] bg-[#343233] rounded-xl text-white mb-8 ">
+            <div className="w-full p-[1em] bg-white shadow-lg dark:bg-[#343233] rounded-xl text-text-light dark:text-white mb-8 ">
               <Suggestions data={data} suggestedUsers={suggestedUsers} />
             </div>
           </div>

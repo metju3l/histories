@@ -42,6 +42,7 @@ const Login: FC = () => {
                 router.reload();
               }
             } catch (error) {
+              // @ts-ignore
               toast.error(error.message);
             }
             setIsLoading(false);
