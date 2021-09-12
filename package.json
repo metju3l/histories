@@ -25,7 +25,7 @@
     "test-all": "yarn test && yarn lint && yarn type-check"
   },
   "dependencies": {
-    "@apollo/client": "^3.3.20",
+    "@apollo/client": "^3.4.11",
     "@deck.gl/core": "^8.5.7",
     "@graphql-tools/load-files": "^6.4.0",
     "@graphql-tools/merge": "^8.1.2",
