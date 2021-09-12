@@ -25,6 +25,18 @@ test('Coordinates', () => {
   expect(ValidateCoordinates([0, -200])).toEqual({
     error: 'Invalid longitude',
   });
+  // @ts-expect-error
+  expect(ValidateCoordinates([0, undefined])).toEqual({
+    error: 'Invalid coordinates',
+  });
+  // @ts-expect-error
+  expect(ValidateCoordinates([undefined, 27])).toEqual({
+    error: 'Invalid coordinates',
+  });
+  // @ts-expect-error
+  expect(ValidateCoordinates([null, null])).toEqual({
+    error: 'Invalid coordinates',
+  });
 });
 
 test('Date', () => {
@@ -42,6 +54,10 @@ test('Date', () => {
   });
   // @ts-expect-error
   expect(ValidateDate()).toEqual({
+    error: 'Invalid date',
+  });
+  // @ts-expect-error
+  expect(ValidateDate(undefined)).toEqual({
     error: 'Invalid date',
   });
   expect(ValidateDate(new Date().getTime() + 250000)).toEqual({

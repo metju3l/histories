@@ -44,7 +44,7 @@ input LikeInput {
 input CreatePostInput {
   description: String
   hashtags: String
-  photoDate: String
+  photoDate: String!
   latitude: Float!
   longitude: Float!
 }
