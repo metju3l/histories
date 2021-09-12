@@ -1,7 +1,7 @@
 import DbConnector from '../database/driver';
 
 const EditProfile = async ({
-  logged,
+  id,
   username,
   bio,
   firstName,
@@ -9,7 +9,7 @@ const EditProfile = async ({
   email,
   password,
 }: {
-  logged: string;
+  id: number;
   username: string | undefined;
   bio: string | undefined;
   firstName: string | undefined;
@@ -18,7 +18,7 @@ const EditProfile = async ({
   password: string | undefined;
 }): Promise<string> => {
   const query = `MATCH (n:User)
-WHERE n.username = "${logged}"
+WHERE ID(n) = ${id}
 ${username !== undefined ? `SET n.username = "${username}"\n` : ''}${
     bio !== undefined ? `SET n.bio = "${bio}"\n` : ''
   }${firstName !== undefined ? `SET n.firstName = "${firstName}"\n` : ''}${

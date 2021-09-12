@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Loading } from '@nextui-org/react';
+import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 
 const Suggestions: FC<{
   suggestedUsers: any;
@@ -23,9 +24,7 @@ const Suggestions: FC<{
                 <Link href={`/${user!.username}`}>
                   <a className="relative rounded-full w-12 h-12 mr-4">
                     <Image
-                      src={`https://avatars.dicebear.com/api/initials/${
-                        user!.firstName
-                      }%20${user!.lastName}.svg`}
+                      src={GeneratedProfileUrl(user!.firstName, user!.lastName)}
                       layout="fill"
                       objectFit="contain"
                       objectPosition="center"

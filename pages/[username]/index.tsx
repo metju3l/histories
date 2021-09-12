@@ -1,7 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { NextPageContext } from 'next';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
+import Router from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
@@ -10,31 +9,23 @@ import {
   useFollowMutation,
   useUnfollowMutation,
 } from '@graphql/relations.graphql';
-import {
-  useSuggestedUsersQuery,
-  useUpdateProfileMutation,
-} from '@graphql/user.graphql';
+import { useUpdateProfileMutation } from '@graphql/user.graphql';
 import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 
 import { AccountCreatedPost } from 'components/ProfilePage';
-import { Post } from 'components/ProfilePage';
 import { Navbar } from 'components/Navbar';
-import getUserInfo from '@lib/queries/UserQuery';
+import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
+import { Button } from '@nextui-org/react';
 
 const User: FC<{ username: string }> = ({ username }) => {
-  const { asPath } = useRouter();
   const { data, loading, error, refetch } = useGetUserInfoQuery({
     variables: { username: username },
   });
   const logged = useIsLoggedQuery();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editProfileMutation] = useUpdateProfileMutation();
-
-  useEffect(() => {
-    refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editMode]);
 
   if (error) return <div>error</div>;
   if (loading) return <div>loading</div>;
@@ -52,15 +43,16 @@ const User: FC<{ username: string }> = ({ username }) => {
         <meta name="description" content="hiStories" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <body>
-        {/* @ts-ignore */}
-        <Navbar data={logged.data} />
-
-        <main className="w-full pt-20 bg-[#F6F8FA] text-black">
-          <div className="full">
+      <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+        <Navbar data={data} />
+        <main className="flex max-w-screen-xl m-auto">
+          <div className="w-full">
             <div className="relative rounded-full w-36 h-36 m-auto">
               <Image
-                src={`https://avatars.dicebear.com/api/initials/${data.user.firstName}%20${data.user.lastName}.svg`}
+                src={GeneratedProfileUrl(
+                  data.user.firstName,
+                  data.user.lastName
+                )}
                 layout="fill"
                 objectFit="contain"
                 objectPosition="center"
@@ -97,14 +89,20 @@ const User: FC<{ username: string }> = ({ username }) => {
                           email: data.user.email,
                         }}
                         onSubmit={async (values) => {
+                          setIsLoading(true);
                           try {
                             await editProfileMutation({
                               variables: values,
                             });
-                            setEditMode(false);
                           } catch (error) {
                             console.log(error);
                           }
+                          // if username has changed redirect to new page
+                          if (values.username !== data.user.username)
+                            Router.push(`/${values.username}`);
+                          else await refetch();
+                          setEditMode(false);
+                          setIsLoading(false);
                         }}
                       >
                         {() => (
@@ -139,12 +137,11 @@ const User: FC<{ username: string }> = ({ username }) => {
                               type="email"
                               autoComplete="email"
                             />
-                            <button
-                              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                              type="submit"
-                            >
-                              submit
-                            </button>
+                            {isLoading ? (
+                              <Button loading loaderType="spinner" />
+                            ) : (
+                              <Button type="submit">Submit</Button>
+                            )}
                           </Form>
                         )}
                       </Formik>
@@ -161,51 +158,10 @@ const User: FC<{ username: string }> = ({ username }) => {
                 data.user.bio
               )}
             </div>
-            <div className="h-16 px-80 pt-3 bg-[#E8ECEF] shadow-md mb-4">
-              <a className="float-left mr-4 pt-2">Posts</a>
-              <a className="float-left mr-4 pt-2">
-                <Link href={`${asPath}/collections/`}>Collections</Link>
-              </a>
-
-              <a className="float-left mr-4 pt-2">
-                Followers {data.user!.followers!.length}
-              </a>
-              <a className="float-left mr-4 pt-2">
-                Following {data!.user!.following!.length}
-              </a>
-              {isLogged && logged.data!.isLogged!.id !== data.user.id && (
-                <>
-                  <FollowButton logged={logged} data={data} refetch={refetch} />
-                  <a className="float-right ml-4 pt-2">Message</a>
-                </>
-              )}
-            </div>
-          </div>
-
-          <div className="flex bg-[#F6F8FA] w-[60%] m-auto pt-2 pb-10 text-black">
-            <div className="h-screen w-[40%] ">col 1</div>
-            <div className="w-[60%] ">
-              {/*data.user.posts !== undefined && data.user.posts !== null
-                ? data.user.posts.map((post: any) => {
-                    if (post === null) return '';
-                    else
-                      return (
-                        <Post
-                          isLoggedQuery={isLoggedQuery}
-                          data={data}
-                          key={post.postID}
-                          username={data.user.username}
-                          post={post}
-                        />
-                      );
-                  })
-                : ''*/}
-
-              <AccountCreatedPost
-                date={data.user.createdAt}
-                firstName={data.user.firstName}
-              />
-            </div>
+            <AccountCreatedPost
+              date={data.user.createdAt}
+              firstName={data.user.firstName}
+            />
           </div>
         </main>
       </body>

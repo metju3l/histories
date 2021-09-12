@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 
 // ICONS
 import { FaMapMarkedAlt } from 'react-icons/fa';
@@ -11,7 +12,7 @@ const Post: FC = () => {
       <div className="flex items-center">
         <div className="relative rounded-full w-12 h-12 mr-4">
           <Image
-            src={`https://avatars.dicebear.com/api/initials/${'John'}%20${'Doe'}.svg`}
+            src={GeneratedProfileUrl('John', 'Doe')}
             layout="fill"
             objectFit="contain"
             objectPosition="center"

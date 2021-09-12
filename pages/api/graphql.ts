@@ -167,7 +167,7 @@ const resolvers = {
       },
       context: any
     ) => {
-      EditProfile({ ...input, logged: context.decoded.username });
+      EditProfile({ ...input, id: context.decoded.id });
       return 'idk';
     },
 

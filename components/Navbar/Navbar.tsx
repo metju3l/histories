@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import Link from 'next/link';
 import { Menu } from '@headlessui/react';
 import useDarkMode from '@hooks/useDarkmode';
@@ -13,12 +13,13 @@ import { FaMapMarkedAlt, FaUserCircle } from 'react-icons/fa';
 import { BiSearchAlt2 } from 'react-icons/bi';
 import { RiLoginBoxFill, RiLogoutBoxFill } from 'react-icons/ri';
 import { HiSun, HiMoon } from 'react-icons/hi';
+import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 
 const Navbar: FC<{ data: any }> = ({ data }) => {
   const { theme, setTheme } = useDarkMode();
 
   return (
-    <div className="w-full text-xm bg-white dark:bg-background-dark text-text-light dark:text-text-dark h-14 sticky top-0 z-20 shadow-sm">
+    <div className="w-full text-xm bg-white dark:bg-[#343233] text-text-light dark:text-text-dark h-14 sticky top-0 z-20 shadow-sm">
       <div className="max-w-screen-xl m-auto">
         <Link href="/" passHref>
           <a className="float-left p-2 m-2 text-white bg-[#17A6FA] rounded-lg">
@@ -53,7 +54,10 @@ const Navbar: FC<{ data: any }> = ({ data }) => {
                   >
                     <div className="relative rounded-full w-8 h-8 mr-1">
                       <Image
-                        src={`https://avatars.dicebear.com/api/initials/${data.isLogged.firstName}%20${data.isLogged.lastName}.svg`}
+                        src={GeneratedProfileUrl(
+                          data.isLogged.firstName,
+                          data.isLogged.lastName
+                        )}
                         layout="fill"
                         objectFit="contain"
                         objectPosition="center"
@@ -130,7 +134,10 @@ const Navbar: FC<{ data: any }> = ({ data }) => {
           >
             <div className="relative rounded-full w-8 h-8 mr-1">
               <Image
-                src={`https://avatars.dicebear.com/api/initials/${data.isLogged.firstName}%20${data.isLogged.lastName}.svg`}
+                src={GeneratedProfileUrl(
+                  data.isLogged.firstName,
+                  data.isLogged.lastName
+                )}
                 layout="fill"
                 objectFit="contain"
                 objectPosition="center"

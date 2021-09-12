@@ -8,6 +8,7 @@ import { MdNotificationsActive, MdPeople } from 'react-icons/md';
 import { RiLoginBoxFill } from 'react-icons/ri';
 import { IoMdSettings } from 'react-icons/io';
 import { FaMapMarkedAlt } from 'react-icons/fa';
+import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 
 const Menu: FC<{ data: any }> = ({ data }) => {
   return (
@@ -15,12 +16,13 @@ const Menu: FC<{ data: any }> = ({ data }) => {
       <div className="w-full h-auto p-[1em] bg-white shadow-lg dark:bg-[#343233] rounded-xl text-text-light dark:text-white">
         {data!.isLogged && (
           <Link href={`/${data!.isLogged.username}`}>
-            <a className="flex items-center text-white">
+            <a className="flex items-center">
               <div className="relative rounded-full w-12 h-12 mr-4">
                 <Image
-                  src={`https://avatars.dicebear.com/api/initials/${
-                    data!.isLogged.firstName
-                  }%20${data!.isLogged.lastName}.svg`}
+                  src={GeneratedProfileUrl(
+                    data!.isLogged.firstName,
+                    data!.isLogged.lastName
+                  )}
                   layout="fill"
                   objectFit="contain"
                   objectPosition="center"

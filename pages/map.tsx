@@ -16,6 +16,7 @@ import { FaMapMarkedAlt, FaUserCircle } from 'react-icons/fa';
 import { BiSearchAlt2 } from 'react-icons/bi';
 import { RiLoginBoxFill, RiLogoutBoxFill } from 'react-icons/ri';
 import LogOut from '@lib/functions/LogOut';
+import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 
 const MapPage: FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
@@ -86,7 +87,10 @@ const Navbar: FC<{ data: any; setSearchCoordinates: any }> = ({
                       >
                         <div className="relative rounded-full w-8 h-8 mr-1">
                           <Image
-                            src={`https://avatars.dicebear.com/api/initials/${data.isLogged.firstName}%20${data.isLogged.lastName}.svg`}
+                            src={GeneratedProfileUrl(
+                              data.isLogged.firstName,
+                              data.isLogged.lastName
+                            )}
                             layout="fill"
                             objectFit="contain"
                             objectPosition="center"
@@ -184,7 +188,10 @@ const Navbar: FC<{ data: any; setSearchCoordinates: any }> = ({
           >
             <div className="relative rounded-full w-8 h-8 mr-1">
               <Image
-                src={`https://avatars.dicebear.com/api/initials/${data.isLogged.firstName}%20${data.isLogged.lastName}.svg`}
+                src={GeneratedProfileUrl(
+                  data.isLogged.firstName,
+                  data.isLogged.lastName
+                )}
                 layout="fill"
                 objectFit="contain"
                 objectPosition="center"
