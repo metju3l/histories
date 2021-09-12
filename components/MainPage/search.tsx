@@ -43,7 +43,7 @@ const PlacesAutocomplete = ({ setSearchCoordinates }: any) => {
       onSelect={handleSelect}
       aria-labelledby="demo"
       openOnFocus={true}
-      className="w-[300px] bg-white py-2 px-4 rounded-3xl h-auto shadow"
+      className="w-[300px] bg-white py-2 px-2 rounded-2xl h-auto shadow"
     >
       <div className="flex w-full">
         <BiSearchAlt2 size={24} />
@@ -51,7 +51,7 @@ const PlacesAutocomplete = ({ setSearchCoordinates }: any) => {
           value={value}
           onChange={handleInput}
           disabled={!ready}
-          className="w-full rounded-sm outline-none border-none inline-block text-light-text"
+          className="w-full px-2 rounded-lg outline-none border-none inline-block text-light-text"
         />
         <button
           onClick={() => {
@@ -67,7 +67,7 @@ const PlacesAutocomplete = ({ setSearchCoordinates }: any) => {
           {status === 'OK' &&
             data.map(({ place_id, description }) => (
               <ComboboxOption
-                className="cursor-pointer"
+                className="cursor-pointer py-1 px-2 hover:bg-red-500 rounded-lg"
                 key={place_id}
                 value={description}
                 draggable={false}
