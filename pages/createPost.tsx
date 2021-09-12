@@ -70,15 +70,12 @@ const Login: FC = () => {
       longitude: searchCoordinates.lng,
       latitude: searchCoordinates.lat,
       zoom: 14,
-      // @ts-ignore
-      transitionDuration: 2000,
-      transitionInterpolator: new FlyToInterpolator(),
     });
     setMarker({
       longitude: searchCoordinates.lng,
       latitude: searchCoordinates.lat,
     });
-  }, [searchCoordinates]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchCoordinates]);
 
   useEffect(() => {
     if (newTag.slice(-1) === ' ') {
@@ -91,13 +88,13 @@ const Login: FC = () => {
       }
       setNewTag('');
     }
-  }, [newTag]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [newTag]);
 
   if (loading) return <div>loading</div>;
   if (isLoading) return <div>loading</div>;
   if (error) return <div>error</div>;
 
-  //  if (data.isLogged) router.replace('/');
+  if (!data!.isLogged) router.replace('/');
   return (
     <body>
       <Navbar data={data} />
