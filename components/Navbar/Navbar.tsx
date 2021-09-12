@@ -130,7 +130,7 @@ const Navbar: FC<{ data: any }> = ({ data }) => {
         {data.isLogged && (
           <a
             href={`/${data.isLogged.username}`}
-            className="flex items-center  text-white float-right p-2 mr-2"
+            className="flex items-center float-right p-2 mr-2"
           >
             <div className="relative rounded-full w-8 h-8 mr-1">
               <Image

@@ -16,6 +16,7 @@ import { AccountCreatedPost } from 'components/ProfilePage';
 import { Navbar } from 'components/Navbar';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import { Button } from '@nextui-org/react';
+import { toast } from 'react-hot-toast';
 
 const User: FC<{ username: string }> = ({ username }) => {
   const { data, loading, error, refetch } = useGetUserInfoQuery({
@@ -94,14 +95,15 @@ const User: FC<{ username: string }> = ({ username }) => {
                             await editProfileMutation({
                               variables: values,
                             });
+                            // if username has changed redirect to new page
+                            if (values.username !== data.user.username)
+                              Router.push(`/${values.username}`);
+                            else await refetch();
+                            setEditMode(false);
                           } catch (error) {
-                            console.log(error);
+                            // @ts-ignore
+                            toast.error(error.message);
                           }
-                          // if username has changed redirect to new page
-                          if (values.username !== data.user.username)
-                            Router.push(`/${values.username}`);
-                          else await refetch();
-                          setEditMode(false);
                           setIsLoading(false);
                         }}
                       >

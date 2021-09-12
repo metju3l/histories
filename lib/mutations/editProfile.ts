@@ -16,7 +16,7 @@ const EditProfile = async ({
   lastName: string | undefined;
   email: string | undefined;
   password: string | undefined;
-}): Promise<string> => {
+}): Promise<void> => {
   const query = `MATCH (n:User)
 WHERE ID(n) = ${id}
 ${username !== undefined ? `SET n.username = "${username}"\n` : ''}${
@@ -32,8 +32,6 @@ ${username !== undefined ? `SET n.username = "${username}"\n` : ''}${
 
   await session.run(query);
   driver.close();
-
-  return 'profile updated';
 };
 
 export default EditProfile;

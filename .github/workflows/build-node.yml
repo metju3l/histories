@@ -5,7 +5,7 @@ name: Build
 
 on:
   push:
-    branches: [main, production, dependabot/**]
+    branches: [main, production]
   pull_request:
     branches: [main, production]
 

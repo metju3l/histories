@@ -6510,7 +6510,7 @@ graphql-extensions@^0.15.0:
     apollo-server-env "^3.1.0"
     apollo-server-types "^0.9.0"
 
-graphql-let@^0.18.5:
+graphql-let@^0.18.4:
   version "0.18.5"
   resolved "https://registry.yarnpkg.com/graphql-let/-/graphql-let-0.18.5.tgz#3b01f0b7ed8388dd3195ad1ae4f306296829c16c"
   integrity sha512-/3tU9JFbO90o5zjQOo3ScqeCy2gHn28hhrLOK628jwO+YvYjveS27H0WQie/0MSPYpgD2ZRrexNnfEvYtLZpFA==

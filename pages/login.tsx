@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { useIsLoggedQuery, useLoginMutation } from '@graphql/user.graphql';
 import Link from 'next/link';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import router from 'next/router';
+import Router from 'next/router';
 import { useTranslation } from 'react-i18next';
 import Cookie from 'js-cookie';
 import { toast } from 'react-hot-toast';
@@ -17,7 +17,7 @@ const Login: FC = () => {
   if (loading) return <div></div>;
   if (error) return <div></div>;
 
-  if (data!.isLogged) router.replace('/');
+  if (data!.isLogged) Router.replace('/');
 
   return (
     <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark min-h-screen">
@@ -39,7 +39,7 @@ const Login: FC = () => {
                 Cookie.set('jwt', result.data?.login as string, {
                   sameSite: 'strict',
                 });
-                router.reload();
+                Router.reload();
               }
             } catch (error) {
               // @ts-ignore

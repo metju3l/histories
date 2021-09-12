@@ -167,6 +167,43 @@ const resolvers = {
       },
       context: any
     ) => {
+      const user = await UserQuery(
+        context.validToken ? context.decoded.username : null,
+        undefined,
+        context.decoded.id,
+        undefined
+      );
+      if (input.username !== undefined) {
+        const validateUsername = ValidateUsername(input.username).error;
+        if (validateUsername) throw new Error(validateUsername);
+        if (user.username != input.username)
+          if (await IsUsedUsername(input.username))
+            throw new Error('Username is already used');
+      }
+      if (input.email !== undefined) {
+        const validateEmail = ValidateEmail(input.email).error;
+        if (validateEmail) throw new Error(validateEmail);
+        if (user.email != input.email)
+          if (await IsUsedEmail(input.email))
+            throw new Error('Email is already used');
+      }
+      // check first name
+      if (input.firstName !== undefined) {
+        const validateFirstName = ValidateName(input.firstName).error;
+        if (validateFirstName)
+          throw new Error('First name ' + validateFirstName);
+      }
+      if (input.lastName !== undefined) {
+        // check last name
+        const validateLastName = ValidateName(input.lastName).error;
+        if (validateLastName) throw new Error('Last name ' + validateLastName);
+      }
+
+      if (input.bio !== undefined) {
+        const validateBio = ValidateDescription(input.bio).error;
+        if (validateBio) throw new Error(validateBio);
+      }
+
       EditProfile({ ...input, id: context.decoded.id });
       return 'idk';
     },
