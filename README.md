@@ -27,16 +27,8 @@ And it also is my high school final project.
 
 ## Before pushing:
 
-- check eslint `yarn test-all`
-- format `yarn format`
-
-## Functions
-
-- [x] Follow other people
-- [ ] Create post
-- [ ] Interact with other posts (likes and comments)
-- [ ] Connection with map
-- [ ] Messaging
+- build `yarn build`
+- lint, type-check and tests `yarn test-all`
 
 ## Technologies
 
