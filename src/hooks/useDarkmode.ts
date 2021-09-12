@@ -27,7 +27,7 @@ const useDarkMode = (): {
   }, [theme]);
 
   // @ts-ignore
-  return [theme, setTheme];
+  return { theme, setTheme };
 };
 
 export default useDarkMode;

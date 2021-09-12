@@ -91,9 +91,6 @@ const Map = ({ searchCoordinates }: any): JSX.Element => {
 
   return (
     <>
-      <div className="absolute top-0 left-10" style={{ zIndex: 100 }}>
-        <TimeLine />
-      </div>
       <MapGL
         {...viewport}
         width="100%"

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import Cookie from 'js-cookie';
 import { toast } from 'react-hot-toast';
 import { Button } from '@nextui-org/react';
+import { Navbar } from '@components/Navbar';
 
 const Login: FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
@@ -19,57 +20,62 @@ const Login: FC = () => {
   if (data!.isLogged) router.replace('/');
 
   return (
-    <div>
-      <Formik
-        initialValues={{
-          username: '',
-          password: '',
-        }}
-        onSubmit={async (values) => {
-          setIsLoading(true);
-          try {
-            const result = await login({
-              variables: values,
-            });
-            if (result.data?.login !== 'error') {
-              // login successful
-              Cookie.set('jwt', result.data?.login as string, {
-                sameSite: 'strict',
+    <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark min-h-screen">
+      <Navbar data={data} />
+      <div className="max-w-screen-xl m-auto p-10">
+        <Formik
+          initialValues={{
+            username: '',
+            password: '',
+          }}
+          onSubmit={async (values) => {
+            setIsLoading(true);
+            try {
+              const result = await login({
+                variables: values,
               });
-              router.reload();
+              if (result.data?.login !== 'error') {
+                // login successful
+                Cookie.set('jwt', result.data?.login as string, {
+                  sameSite: 'strict',
+                });
+                router.reload();
+              }
+            } catch (error) {
+              toast.error(error.message);
             }
-          } catch (error) {
-            toast.error(error.message);
-          }
-          setIsLoading(false);
-        }}
-      >
-        {() => (
-          <Form>
-            <Input
-              label="Username or email"
-              name="username"
-              type="text"
-              autoComplete="username"
-            />
-            <Input
-              label="Password"
-              name="password"
-              type="password"
-              autoComplete="new-password"
-            />
-            {isLoading ? (
-              <Button loading loaderType="spinner" />
-            ) : (
-              <Button type="submit">Submit</Button>
-            )}
-          </Form>
-        )}
-      </Formik>
-      <Link href="/register">
-        <a className="underline">create a new account</a>
-      </Link>
-    </div>
+            setIsLoading(false);
+          }}
+        >
+          {() => (
+            <Form>
+              <Input
+                label="Username or email"
+                name="username"
+                type="text"
+                autoComplete="username"
+              />
+              <Input
+                label="Password"
+                name="password"
+                type="password"
+                autoComplete="new-password"
+              />
+              <div className="mt-4 align-center">
+                {isLoading ? (
+                  <Button loading loaderType="spinner" />
+                ) : (
+                  <Button type="submit">Submit</Button>
+                )}
+                <Link href="/register">
+                  <a className="underline pl-2">or create a new account</a>
+                </Link>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </body>
   );
 };
 

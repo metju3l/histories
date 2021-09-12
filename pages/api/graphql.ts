@@ -184,15 +184,16 @@ const resolvers = {
         ValidateUsername(input.username).error &&
         ValidateEmail(input.username).error
       )
-        throw new Error('Wtf are you trying to do');
+        throw new Error('Wrong credentials');
 
       // check password
-      if (ValidatePassword(input.password).error) throw new Error('The fuck');
+      if (ValidatePassword(input.password).error)
+        throw new Error('Wrong credentials');
 
       // if credentials are wrong returns null
       const login = await Login(input);
       if (login !== null) return login;
-      else throw new Error('Something went wrong');
+      else throw new Error('Wrong credentials');
     },
 
     createUser: async (

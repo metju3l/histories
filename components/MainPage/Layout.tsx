@@ -18,7 +18,7 @@ const Layout: FC = () => {
   if (suggestedUsers.data) console.log(suggestedUsers.data);
 
   return (
-    <body className="bg-[#DADADB] dark:bg-[#06080E]">
+    <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
       <Navbar data={data} />
       <div className="flex text-black max-w-screen-xl m-auto">
         <div className="w-[30%] p-[1em] hidden xl:block">

@@ -4,10 +4,10 @@ import router from 'next/router';
 import Link from 'next/link';
 import { useCreateUserMutation } from '@graphql/user.graphql';
 import { useTranslation } from 'react-i18next';
-import Head from 'next/head';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-hot-toast';
 import { Button } from '@nextui-org/react';
+import { Navbar } from '@components/Navbar';
 
 const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
   const [createUser] = useCreateUserMutation();
@@ -19,82 +19,84 @@ const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
   if (data!.isLogged) router.replace('/');
 
   return (
-    <>
-      <Head>
-        <title>{t('sign up')}</title>
-        <meta name="description" content="login to histories" />
-      </Head>
-
-      <Formik
-        initialValues={{
-          firstName: '',
-          lastName: '',
-          username: '',
-          email: '',
-          password: '',
-          repeatPassword: '',
-        }}
-        onSubmit={async (values) => {
-          setIsLoading(true);
-          try {
-            await createUser({
-              variables: values,
-            });
-            router.push('/login');
-          } catch (error) {
-            toast.error(error.message);
-          }
-          setIsLoading(false);
-        }}
-      >
-        {() => (
-          <Form>
-            <Input
-              label="First name"
-              name="firstName"
-              type="text"
-              autoComplete="given-name"
-            />
-            <Input
-              label="Last name"
-              name="lastName"
-              type="text"
-              autoComplete="family-name"
-            />
-            <Input
-              label="Username"
-              name="username"
-              type="text"
-              autoComplete="username"
-            />{' '}
-            <Input
-              label="Email"
-              name="email"
-              type="email"
-              autoComplete="email"
-            />
-            <Input
-              label="Password"
-              name="password"
-              type="password"
-              autoComplete="new-password"
-            />
-            <Input
-              label="Repeat password"
-              name="repeatPassword"
-              type="password"
-              autoComplete="new-password"
-            />
-            {isLoading ? (
-              <Button loading loaderType="spinner" />
-            ) : (
-              <Button type="submit">Submit</Button>
-            )}
-            <Link href="/login">log in</Link>
-          </Form>
-        )}
-      </Formik>
-    </>
+    <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark min-h-screen">
+      <Navbar data={data} />
+      <div className="max-w-screen-xl m-auto p-10">
+        <Formik
+          initialValues={{
+            firstName: '',
+            lastName: '',
+            username: '',
+            email: '',
+            password: '',
+            repeatPassword: '',
+          }}
+          onSubmit={async (values) => {
+            setIsLoading(true);
+            try {
+              await createUser({
+                variables: values,
+              });
+              router.push('/login');
+            } catch (error) {
+              toast.error(error.message);
+            }
+            setIsLoading(false);
+          }}
+        >
+          {() => (
+            <Form>
+              <Input
+                label="First name"
+                name="firstName"
+                type="text"
+                autoComplete="given-name"
+              />
+              <Input
+                label="Last name"
+                name="lastName"
+                type="text"
+                autoComplete="family-name"
+              />
+              <Input
+                label="Username"
+                name="username"
+                type="text"
+                autoComplete="username"
+              />{' '}
+              <Input
+                label="Email"
+                name="email"
+                type="email"
+                autoComplete="email"
+              />
+              <Input
+                label="Password"
+                name="password"
+                type="password"
+                autoComplete="new-password"
+              />
+              <Input
+                label="Repeat password"
+                name="repeatPassword"
+                type="password"
+                autoComplete="new-password"
+              />
+              <div className="mt-4">
+                {isLoading ? (
+                  <Button loading loaderType="spinner" />
+                ) : (
+                  <Button type="submit">Submit</Button>
+                )}
+                <Link href="/login">
+                  <a className="underline pl-2">or login to existing account</a>
+                </Link>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </body>
   );
 };
 
@@ -116,7 +118,6 @@ const Input: FC<{
         autoComplete={autoComplete}
       />
       <ErrorMessage name={name} />
-      <br />
     </div>
   );
 };

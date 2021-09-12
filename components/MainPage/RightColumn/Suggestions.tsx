@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Loading } from '@nextui-org/react';
 
 const Suggestions: FC<{
   suggestedUsers: any;
@@ -52,7 +53,14 @@ const Suggestions: FC<{
       </div>
     </>
   ) : (
-    <div>loading</div>
+    <>
+      <h2 className="text-center font-semibold text-lg">
+        {data!.isLogged ? 'People you might know' : 'Popular users'}
+      </h2>
+      <div className="w-full p-8">
+        <Loading type="spinner" size="large" className="m-auto" color="gray" />
+      </div>
+    </>
   );
 };
 

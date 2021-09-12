@@ -7,6 +7,10 @@ module.exports = {
       boxShadow: {
         custom: '0px 3px 12px rgba(0, 0, 0, 0.48)',
       },
+      colors: {
+        background: { dark: '#18191A', light: '#FFFFFF' },
+        text: { dark: '#FFFFFF', light: '#18191A' },
+      },
     },
   },
   variants: {
