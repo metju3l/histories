@@ -20,7 +20,7 @@ const Layout: FC = () => {
   return (
     <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
       <Navbar data={data} />
-      <div className="flex text-black max-w-screen-xl m-auto">
+      <div className="flex max-w-screen-xl m-auto">
         <div className="w-[30%] p-[1em] hidden xl:block">
           <div className="sticky top-20">
             <Menu data={data} />
@@ -35,7 +35,7 @@ const Layout: FC = () => {
           <Post />
         </div>
         {/* RIGHT COLUMN */}
-        <div className="w-[30%] md:w-[40%] p-[1em] hidden md:block">
+        <div className="w-[40%] xl:w-[30%] p-[1em] hidden md:block">
           <div className="sticky top-20">
             <div className="w-full p-[1em] bg-white shadow-lg dark:bg-[#343233] rounded-xl text-text-light dark:text-white mb-8 ">
               <Suggestions data={data} suggestedUsers={suggestedUsers} />
