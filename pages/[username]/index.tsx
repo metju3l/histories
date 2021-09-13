@@ -15,7 +15,7 @@ import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 import { AccountCreatedPost } from 'components/ProfilePage';
 import { Navbar } from 'components/Navbar';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
-import { Button } from '@nextui-org/react';
+import { Button, Tooltip } from '@nextui-org/react';
 import { toast } from 'react-hot-toast';
 
 const User: FC<{ username: string }> = ({ username }) => {
@@ -45,7 +45,7 @@ const User: FC<{ username: string }> = ({ username }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
-        <Navbar data={data} />
+        <Navbar data={logged.data} />
         <main className="flex max-w-screen-xl m-auto">
           <div className="w-full">
             <div className="relative rounded-full w-36 h-36 m-auto">
@@ -64,7 +64,16 @@ const User: FC<{ username: string }> = ({ username }) => {
 
             <h2 className="text-center text-2xl py-4">
               {`${data.user.firstName} ${data.user.lastName}`}
+              {new Date().getTime() - parseInt(data.user.createdAt) <
+                129600000 && (
+                <Button auto flat color="#ff4ecd">
+                  New user
+                </Button>
+              )}
             </h2>
+            {isLogged && logged.data?.isLogged!.id !== data.user.id && (
+              <FollowButton data={data} refetch={refetch} />
+            )}
             <div className="text-center text-md py-4 w-[60%] m-auto">
               {isLogged && logged.data?.isLogged!.id === data.user.id ? (
                 <>
@@ -109,18 +118,20 @@ const User: FC<{ username: string }> = ({ username }) => {
                       >
                         {() => (
                           <Form>
-                            <Input
-                              label="First name"
-                              name="firstName"
-                              type="text"
-                              autoComplete="given-name"
-                            />
-                            <Input
-                              label="Last name"
-                              name="lastName"
-                              type="text"
-                              autoComplete="family-name"
-                            />
+                            <div className="flex justify-between">
+                              <Input
+                                label="First name"
+                                name="firstName"
+                                type="text"
+                                autoComplete="given-name"
+                              />
+                              <Input
+                                label="Last name"
+                                name="lastName"
+                                type="text"
+                                autoComplete="family-name"
+                              />
+                            </div>
                             <Input
                               label="Username"
                               name="username"
@@ -196,7 +207,7 @@ const Input: FC<{
       <label htmlFor={name}>{label}</label>
       <Field
         type={type}
-        className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
         name={name}
         autoComplete={autoComplete}
       />
@@ -206,40 +217,40 @@ const Input: FC<{
   );
 };
 
-const FollowButton = ({ data, logged, refetch }: any) => {
+const FollowButton = ({ data, refetch }: any) => {
   const [followMutation] = useFollowMutation();
   const [unfollowMutation] = useUnfollowMutation();
-
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <>
-      <button
-        className={`float-right ml-4 rounded-lg text-white ${
-          data.user.isFollowing ? 'bg-indigo-400' : 'bg-indigo-600'
-        } p-2`}
-        onClick={async () => {
-          try {
-            if (data.user.isFollowing) {
-              await unfollowMutation({
-                variables: { userID: data.user.userID },
-              });
-              refetch({
-                username: data.user.username,
-              });
-            } else {
-              await followMutation({
-                variables: { userID: data.user.userID },
-              });
-              refetch({
-                username: data.user.username,
-              });
+      {isLoading ? (
+        <Button loading loaderType="spinner" />
+      ) : (
+        <Button
+          color={data.user.isFollowing ? '#ff4ecd' : 'primary'}
+          onClick={async () => {
+            setIsLoading(true);
+            try {
+              if (data.user.isFollowing) {
+                await unfollowMutation({
+                  variables: { userID: data.user.id },
+                });
+              } else {
+                await followMutation({
+                  variables: { userID: data.user.id },
+                });
+              }
+              await refetch();
+            } catch (error) {
+              // @ts-ignore
+              toast.error(error.message);
             }
-          } catch (error) {
-            console.log(error);
-          }
-        }}
-      >
-        {data.user.isFollowing ? 'Unfollow' : 'Follow'}
-      </button>
+            setIsLoading(false);
+          }}
+        >
+          {data.user.isFollowing ? 'Unfollow' : 'Follow'}
+        </Button>
+      )}
     </>
   );
 };
