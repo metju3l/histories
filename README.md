@@ -1,5 +1,7 @@
 # hiStories
 
+[![Edit with Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/hiStories-cc/hiStories)
+
 ## About
 
 HiStories is a social site for sharing historical photos of places, so anyone can see, how the place has changed over time.
