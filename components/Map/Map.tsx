@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import MapGL, {
+import ReactMapGL, {
   Marker,
   NavigationControl,
   ScaleControl,
@@ -91,13 +91,13 @@ const Map = ({ searchCoordinates }: any): JSX.Element => {
 
   return (
     <>
-      <MapGL
+      <ReactMapGL
         {...viewport}
         width="100%"
         height="100%"
-        mapStyle={`mapbox://styles/${process.env.NEXT_PUBLIC_MAPBOX_USER}/${process.env.NEXT_PUBLIC_MAPBOX_STYLE}`}
         onViewportChange={setViewport}
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+        mapStyle="mapbox://styles/mapbox/streets-v11"
         dragRotate={false}
       >
         <GeolocateControl
@@ -123,7 +123,7 @@ const Map = ({ searchCoordinates }: any): JSX.Element => {
         <div className="absolute bottom-28 right-2 bg-white rounded-md">
           <Image src={LayerIcon} width={32} height={32} alt="alt" />
         </div>
-      </MapGL>
+      </ReactMapGL>
     </>
   );
 };
