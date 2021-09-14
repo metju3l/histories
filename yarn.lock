@@ -2199,10 +2199,10 @@
   resolved "https://registry.yarnpkg.com/@napi-rs/triples/-/triples-1.0.3.tgz#76d6d0c3f4d16013c61e45dfca5ff1e6c31ae53c"
   integrity sha512-jDJTpta+P4p1NZTFVLHJ/TLFVYVcOqv6l8xwOeBKNPMgY/zDYH/YH7SJbvrr/h1RcS9GzbPcLKGzpuK9cV56UA==
 
-"@neo4j/graphql@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@neo4j/graphql/-/graphql-2.1.0.tgz#0fad6f616fb94ef307037ed099d5bbeb09342a6b"
-  integrity sha512-u2O3Q8hWQ2x+DlG9Ff3b6DpAfnVbJ4UhrXFIGWlBJC4WqsIV9I3wnwBfHR1+oShtoQqH+bk9uG1rstp+IcFhOg==
+"@neo4j/graphql@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@neo4j/graphql/-/graphql-2.2.0.tgz#081748a3939b25b9e41e99cfa11c8fc4395669c6"
+  integrity sha512-1daG0yOznJwlXgjxpiWS3tjFw3f6FOenmkOvUPLLl0eLU7KlnlUL9lmKdCPILr6wJUYYwVWqjP8qm9ooeIX5Sg==
   dependencies:
     "@graphql-tools/merge" "6.2.14"
     "@graphql-tools/schema" "^7.1.5"
