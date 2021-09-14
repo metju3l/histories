@@ -1,0 +1,13 @@
+# Commands to start on workspace startup
+tasks:
+  - init: yarn install
+    command:  >
+      docker-compose up -d;
+      cp .env.local.example .env.local;
+      yarn build;
+
+# Ports to expose on workspace startup
+ports:
+  - port: 3000
+    onOpen: open-preview
+    visibility: public
