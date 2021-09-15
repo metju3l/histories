@@ -103,9 +103,9 @@ const Login: FC = () => {
             {...viewport}
             width="100%"
             height="100%"
-            mapStyle={`mapbox://styles/${process.env.NEXT_PUBLIC_MAPBOX_USER}/${process.env.NEXT_PUBLIC_MAPBOX_STYLE}`}
-            onViewportChange={setViewport}
             mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+            mapStyle="mapbox://styles/mapbox/streets-v11"
+            onViewportChange={setViewport}
             dragRotate={false}
           >
             <GeolocateControl

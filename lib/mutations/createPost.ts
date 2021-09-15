@@ -23,7 +23,7 @@ const CreatePost = async ({
   const query = `
   MATCH (user:User)
   WHERE ID(user) = ${userID} 
-  CREATE (user)-[:CREATED]->(:Post
+  CREATE (user)-[:CREATED]->(post:Post
   {
     description:"${description}",
     hashtags: '${hashtags}',
@@ -32,12 +32,24 @@ const CreatePost = async ({
     longitude: ${longitude},
     latitude: ${latitude},
     url: "https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
-  })`;
+  })
+  RETURN ID(post) as id`;
 
   const driver = DbConnector();
   const session = driver.session();
 
-  await session.run(query);
+  const postID = await (await session.run(query)).records[0]
+    .get('id')
+    .toNumber();
+
+  await session.run(`WITH ${hashtags} AS tags
+  MATCH (user:User), (post:Post)
+  WHERE ID(post) = ${postID} AND ID(user) = ${userID} AND (user:User)-[:CREATED]->(post:Post)
+  FOREACH (tag IN tags |
+  MERGE (hashtag:Hashtag {name:tag})
+  MERGE (hashtag)-[:CONTAINS]->(post)
+  )`);
+
   driver.close();
 
   return 'post created';
