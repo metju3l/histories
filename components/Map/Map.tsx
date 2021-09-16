@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import ReactMapGL, {
   Marker,
   NavigationControl,
@@ -7,13 +7,29 @@ import ReactMapGL, {
   FlyToInterpolator,
   Layer,
 } from 'react-map-gl';
-import { usePathsQuery } from '@graphql/geo.graphql';
+import {
+  MapPostsQuery,
+  useMapPostsQuery,
+  usePathsQuery,
+} from '@graphql/geo.graphql';
 import MapLoading from './MapLoading';
 import LayerIcon from '@public/mapLayerIcon.png';
 import Image from 'next/image';
 import { TimeLine } from 'components/TimeLine/index';
+import { QueryResult } from '@apollo/client';
 
-const Map = ({ searchCoordinates }: any): JSX.Element => {
+const Map: FC<{
+  searchCoordinates: { lat: number; lng: number };
+  images: any;
+  setBounds: React.Dispatch<
+    React.SetStateAction<{
+      maxLatitude: number;
+      minLatitude: number;
+      maxLongitude: number;
+      minLongitude: number;
+    }>
+  >;
+}> = ({ searchCoordinates, setBounds, images }) => {
   const [coordinates, setCoordinates] = useState([21, 20]);
 
   const paths = usePathsQuery();
@@ -41,6 +57,7 @@ const Map = ({ searchCoordinates }: any): JSX.Element => {
     '#ff5964',
     '#a572d5',
   ];
+
   useEffect(() => {
     setViewport({
       ...viewport,
@@ -97,16 +114,27 @@ const Map = ({ searchCoordinates }: any): JSX.Element => {
         height="100%"
         onViewportChange={setViewport}
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-        mapStyle="mapbox://styles/mapbox/streets-v11"
+        mapStyle="mapbox://styles/leighhalliday/ckhjaksxg0x2v19s1ovps41ef"
         dragRotate={false}
         ref={(instance) => (mapRef.current = instance)}
         onLoad={() => {
-          console.log('load');
-          if (mapRef.current) console.log(mapRef.current.getMap().getBounds());
+          if (mapRef.current)
+            setBounds({
+              maxLatitude: mapRef.current.getMap().getBounds()._ne.lat,
+              minLatitude: mapRef.current.getMap().getBounds()._sw.lat,
+              maxLongitude: mapRef.current.getMap().getBounds()._ne.lng,
+              minLongitude: mapRef.current.getMap().getBounds()._sw.lng,
+            });
         }}
-        onInteractionStateChange={(extra: any) => {
-          if (!extra.isDragging && mapRef.current)
-            console.log(mapRef.current.getMap().getBounds());
+        onInteractionStateChange={async (extra: any) => {
+          if (!extra.isDragging && mapRef.current) {
+            setBounds({
+              maxLatitude: mapRef.current.getMap().getBounds()._ne.lat,
+              minLatitude: mapRef.current.getMap().getBounds()._sw.lat,
+              maxLongitude: mapRef.current.getMap().getBounds()._ne.lng,
+              minLongitude: mapRef.current.getMap().getBounds()._sw.lng,
+            });
+          }
         }}
       >
         <GeolocateControl
@@ -125,10 +153,25 @@ const Map = ({ searchCoordinates }: any): JSX.Element => {
           }}
           showCompass={false}
         />
-        {Paths}
-        <Marker key={1} latitude={50.089748} longitude={14.3984}>
-          🏰
-        </Marker>
+        {viewport.zoom > 12 && Paths}
+        {images.data?.mapPosts &&
+          // @ts-ignore
+          images.data.mapPosts.map((image) => (
+            <Marker
+              key={image.id}
+              latitude={image.latitude}
+              longitude={image.longitude}
+            >
+              <a className="">
+                <img
+                  src={image.url}
+                  className="rounded-full w-8 h-8 object-cover"
+                  alt="Picture on map"
+                />
+              </a>
+            </Marker>
+          ))}
+
         <div className="absolute bottom-28 right-2 bg-white rounded-md">
           <Image src={LayerIcon} width={32} height={32} alt="alt" />
         </div>

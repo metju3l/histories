@@ -22,5 +22,6 @@ query MapPosts(
     id
     latitude
     longitude
+    url
   }
 }

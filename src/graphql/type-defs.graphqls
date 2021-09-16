@@ -8,7 +8,7 @@ type Query {
   userPosts(input: UserPostsInput!): [Post]
   interClipCode(id: Int!): String!
   suggestedUsers: [UserInfoMinimal]
-  mapPosts(input: MapPostsInput!): [MapPost]
+  mapPosts(input: MapPostsInput!): [MapPost!]!
 }
 
 type Mutation {
