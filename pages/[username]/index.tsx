@@ -141,7 +141,7 @@ const User: FC<{ username: string }> = ({ username }) => {
                             <Input
                               label="Bio"
                               name="bio"
-                              type="text"
+                              type="textarea"
                               autoComplete="bio"
                             />
                             <Input
@@ -207,6 +207,7 @@ const Input: FC<{
       <label htmlFor={name}>{label}</label>
       <Field
         type={type}
+        as={type === 'textarea' ? 'textarea' : 'input'}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
         name={name}
         autoComplete={autoComplete}

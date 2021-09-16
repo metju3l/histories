@@ -1,8 +1,7 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactMapGL, {
   Marker,
   NavigationControl,
-  ScaleControl,
   GeolocateControl,
   Source,
   FlyToInterpolator,
@@ -54,8 +53,9 @@ const Map = ({ searchCoordinates }: any): JSX.Element => {
     });
   }, [searchCoordinates]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (paths.loading)
-    return <MapLoading viewport={viewport} setViewport={setViewport} />;
+  const mapRef = useRef<any>(null);
+
+  if (paths.loading) return <div>loading</div>;
   if (paths.error) return <div>error...</div>;
 
   const Paths = paths.data!.paths!.map((path: any, index: number) => {
@@ -99,6 +99,15 @@ const Map = ({ searchCoordinates }: any): JSX.Element => {
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
         mapStyle="mapbox://styles/mapbox/streets-v11"
         dragRotate={false}
+        ref={(instance) => (mapRef.current = instance)}
+        onLoad={() => {
+          console.log('load');
+          if (mapRef.current) console.log(mapRef.current.getMap().getBounds());
+        }}
+        onInteractionStateChange={(extra: any) => {
+          if (!extra.isDragging && mapRef.current)
+            console.log(mapRef.current.getMap().getBounds());
+        }}
       >
         <GeolocateControl
           style={{
