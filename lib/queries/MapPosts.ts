@@ -11,6 +11,13 @@ const MapPosts = async ({
   maxLongitude: number;
   minLongitude: number;
 }) => {
+  console.log({
+    maxLatitude,
+    minLatitude,
+    maxLongitude,
+    minLongitude,
+  });
+
   const query = `MATCH (post:Post)
   WHERE post.latitude > ${minLatitude} AND post.latitude < ${maxLatitude}
   AND post.longitude > ${minLongitude} AND post.longitude < ${maxLongitude}

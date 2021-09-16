@@ -33,6 +33,7 @@ import {
   ValidateDate,
 } from '@lib/validation';
 import IsUsedEmail from '@lib/validation/dbValidation/IsUsedEmail';
+import MapPosts from '@lib/queries/MapPosts';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -57,6 +58,21 @@ const resolvers = {
       );
     },
 
+    mapPosts: async (
+      _parent: undefined,
+      {
+        input,
+      }: {
+        input: {
+          maxLatitude: number;
+          minLatitude: number;
+          maxLongitude: number;
+          minLongitude: number;
+        };
+      }
+    ) => {
+      return MapPosts(input);
+    },
     interClipCode: async (
       _parent: undefined,
       { id }: { id: number },
