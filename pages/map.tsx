@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Menu } from '@headlessui/react';
 import useDarkMode from '@hooks/useDarkmode';
@@ -17,14 +17,33 @@ import { BiSearchAlt2 } from 'react-icons/bi';
 import { RiLoginBoxFill, RiLogoutBoxFill } from 'react-icons/ri';
 import LogOut from '@lib/functions/LogOut';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
+import { useMapPostsQuery } from '@graphql/geo.graphql';
 
 const MapPage: FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
+  const [bounds, setBounds] = useState<{
+    maxLatitude: number;
+    minLatitude: number;
+    maxLongitude: number;
+    minLongitude: number;
+  }>({
+    maxLatitude: 0,
+    minLatitude: 0,
+    maxLongitude: 0,
+    minLongitude: 0,
+  });
+
+  const images = useMapPostsQuery({ variables: bounds });
 
   const [searchCoordinates, setSearchCoordinates] = useState({
     lat: 50,
     lng: 15,
   });
+
+  useEffect(() => {
+    images.refetch(bounds);
+  }, [bounds]);
+
   if (loading) return <div></div>;
   if (error) return <div></div>;
   return (
@@ -37,7 +56,11 @@ const MapPage: FC = () => {
       </Head>
       <Navbar data={data} setSearchCoordinates={setSearchCoordinates} />
       <div className="w-full" style={{ height: 'calc(100vh - 14px)' }}>
-        <Map searchCoordinates={searchCoordinates} />
+        <Map
+          searchCoordinates={searchCoordinates}
+          setBounds={setBounds}
+          images={images}
+        />
       </div>
       <Search setSearchCoordinates={setSearchCoordinates} />
     </>

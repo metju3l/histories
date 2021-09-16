@@ -4,3 +4,24 @@ query Paths {
     coordinates
   }
 }
+
+query MapPosts(
+  $maxLatitude: Float!
+  $minLatitude: Float!
+  $maxLongitude: Float!
+  $minLongitude: Float!
+) {
+  mapPosts(
+    input: {
+      maxLatitude: $maxLatitude
+      minLatitude: $minLatitude
+      maxLongitude: $maxLongitude
+      minLongitude: $minLongitude
+    }
+  ) {
+    id
+    latitude
+    longitude
+    url
+  }
+}
