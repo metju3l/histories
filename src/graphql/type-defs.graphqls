@@ -120,6 +120,10 @@ type Post {
   longitude: String!
   url: String!
   postID: Int!
+  id: Int!
+  author: UserInfoMinimal!
+  likes: [UserInfoMinimal]!
+  liked: Boolean!
 }
 
 type Collection {

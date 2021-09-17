@@ -110,9 +110,16 @@ const resolvers = {
     },
 
     post: async (_parent: undefined, { id }: { id: number }, context: any) => {
-      return GetPostInfo({
+      console.log(
+        await GetPostInfo({
+          id,
+          logged: context.decoded === null ? null : context.decoded.id,
+        })
+      );
+
+      return await GetPostInfo({
         id,
-        logged: context.decoded === null ? null : context.decoded.username,
+        logged: context.decoded === null ? null : context.decoded.id,
       });
     },
 
