@@ -7,14 +7,22 @@ const GetPostInfo = async ({
   id: number;
   logged: string | null;
 }) => {
-  const query = `MATCH (post:Post) WHERE ID(post) = ${id} RETURN post`;
+  const query = `MATCH (author:User)-[:CREATED]->(post:Post), (post:Post)<-[:LIKE]-(like:User)
+  WHERE ID(post) = 17
+  RETURN post, author, COLLECT(like) AS likes`;
 
   const driver = DbConnector();
   const session = driver.session();
 
-  const queryResult = await session.run(query);
+  const result = await session.run(query);
   driver.close();
-  return { ...queryResult.records[0].get('post').properties, postID: id };
+
+  return {
+    ...result.records[0].get('post').properties,
+    latitude: parseFloat(result.records[0].get('post').properties.latitude),
+    longitude: parseFloat(result.records[0].get('post').properties.longitude),
+    id: result.records[0].get('post').identity.toNumber(),
+  };
 };
 
 export default GetPostInfo;
