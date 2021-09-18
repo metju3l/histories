@@ -1,7 +1,7 @@
 type Query {
   hello: String!
   user(input: UserInput!): UserInfo!
-  post(id: Int!): Post
+  post(id: Int!): Post!
   tag(label: String!): TagInfo
   paths: [Path]
   isLogged: UserInfoMinimal
@@ -101,7 +101,11 @@ type UserInfo {
   following: [UserInfoMinimal]
   followers: [UserInfoMinimal]
   collections: [Collection]
-  posts: [Post]
+  posts: [PostID]
+}
+
+type PostID {
+  id: Int!
 }
 
 type UserInfoMinimal {
@@ -115,7 +119,7 @@ type UserInfoMinimal {
 type Post {
   createdAt: String!
   description: String
-  hashtags: String
+  hashtags: [String]
   latitude: String!
   longitude: String!
   url: String!

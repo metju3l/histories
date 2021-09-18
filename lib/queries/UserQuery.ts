@@ -53,7 +53,7 @@ const UserQuery = async (
             ? posts.records.map((x) => {
                 return {
                   ...x.get('post').properties,
-                  postID: x.get('post').identity.toNumber(),
+                  id: x.get('post').identity.toNumber(),
                 };
               })
             : null,

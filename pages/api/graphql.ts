@@ -45,7 +45,7 @@ const resolvers = {
     },
 
     paths: async () => {
-      return GetPaths();
+      return await GetPaths();
     },
 
     suggestedUsers: async (
@@ -71,7 +71,7 @@ const resolvers = {
         };
       }
     ) => {
-      return MapPosts(input);
+      return await MapPosts(input);
     },
     interClipCode: async (
       _parent: undefined,
@@ -110,13 +110,6 @@ const resolvers = {
     },
 
     post: async (_parent: undefined, { id }: { id: number }, context: any) => {
-      console.log(
-        await GetPostInfo({
-          id,
-          logged: context.decoded === null ? null : context.decoded.id,
-        })
-      );
-
       return await GetPostInfo({
         id,
         logged: context.decoded === null ? null : context.decoded.id,
@@ -157,7 +150,7 @@ const resolvers = {
       }
 
       // return user data
-      return UserQuery(
+      return await UserQuery(
         context.validToken ? context.decoded.username : null,
         username,
         id,

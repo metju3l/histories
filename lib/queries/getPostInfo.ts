@@ -5,15 +5,16 @@ const GetPostInfo = async ({
   logged,
 }: {
   id: number;
-  logged: string | null;
+  logged: number | null;
 }) => {
   const query = `
 WITH ${logged} AS loggedID  
 MATCH (author:User)-[:CREATED]->(post:Post)
 OPTIONAL MATCH (post:Post)<-[:LIKE]-(like:User)
+OPTIONAL MATCH (post:Post)<-[:CONTAINS]-(hashtag:Hashtag)
 MATCH (logged:User)
 WHERE ID(post) = ${id} AND ID(logged) = 0
-RETURN post, author, COLLECT(like) AS likes, 
+RETURN post, author, COLLECT(like) AS likes, COLLECT(hashtag) AS hashtags, 
 CASE loggedID 
     WHEN null THEN false 
     ELSE EXISTS ((post:Post)<-[:LIKE]-(logged:User))
@@ -24,9 +25,14 @@ END AS liked`;
 
   const result = await session.run(query);
   driver.close();
-  console.log(query);
+
   return {
     ...result.records[0].get('post').properties,
+    hashtags: result.records[0]
+      .get('hashtags')
+      .map(
+        (hashtag: { properties: { name: string } }) => hashtag.properties.name
+      ),
     latitude: parseFloat(result.records[0].get('post').properties.latitude),
     longitude: parseFloat(result.records[0].get('post').properties.longitude),
     id: result.records[0].get('post').identity.toNumber(),

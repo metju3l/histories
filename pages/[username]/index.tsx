@@ -12,7 +12,7 @@ import {
 import { useUpdateProfileMutation } from '@graphql/user.graphql';
 import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 
-import { AccountCreatedPost } from 'components/ProfilePage';
+import { AccountCreatedPost, Post } from 'components/ProfilePage';
 import { Navbar } from 'components/Navbar';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import { Button, Tooltip } from '@nextui-org/react';
@@ -171,6 +171,15 @@ const User: FC<{ username: string }> = ({ username }) => {
                 data.user.bio
               )}
             </div>
+            {data.user.posts &&
+              data.user.posts.map((post) => (
+                <Post
+                  key={post!.id}
+                  id={post!.id}
+                  isLoggedQuery={logged}
+                  refetch={refetch}
+                />
+              ))}
             <AccountCreatedPost
               date={data.user.createdAt}
               firstName={data.user.firstName}

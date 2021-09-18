@@ -7,7 +7,6 @@ import React, { FC } from 'react';
 
 import Suggestions from './RightColumn/Suggestions';
 import Menu from './LeftColumn/Menu';
-import Post from '@components/Post/Post';
 
 const Layout: FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
@@ -24,14 +23,7 @@ const Layout: FC = () => {
             <Menu data={data} />
           </div>
         </div>
-        <div className="xl:w-[40%] md:w-[60%] w-full p-[1em] mt-2">
-          <Post />
-          <Post />
-          <Post />
-          <Post />
-          <Post />
-          <Post />
-        </div>
+        <div className="xl:w-[40%] md:w-[60%] w-full p-[1em] mt-2"></div>
         {/* RIGHT COLUMN */}
         <div className="w-[40%] xl:w-[30%] p-[1em] hidden md:block">
           <div className="sticky top-20">

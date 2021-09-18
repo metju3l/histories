@@ -31,18 +31,25 @@ query tag($label: String!) {
 
 query post($id: Int!) {
   post(id: $id) {
-    postID
+    createdAt
     description
     hashtags
     latitude
     longitude
-    createdAt
     url
-  }
-}
+    likes {
+      id
+      username
+      firstName
+      lastName
+    }
+    liked
 
-query userPosts($id: Int!, $offset: Int) {
-  userPosts(input: { id: $id, offset: $offset }) {
-    postID
+    author {
+      id
+      username
+      firstName
+      lastName
+    }
   }
 }
