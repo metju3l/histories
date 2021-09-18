@@ -1224,6 +1224,11 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@corex/deepmerge@^2.6.34":
+  version "2.6.34"
+  resolved "https://registry.yarnpkg.com/@corex/deepmerge/-/deepmerge-2.6.34.tgz#8dd084f2bcc9cf54f6b1210a1aebd25206de2a84"
+  integrity sha512-5l3bQRGOoCJ1nYTxEaOW/MRuwNDq32KYatWO5rwOlOzxY4beVCrxDBaDBX5wpDn0PYm0QAul/vAC9GDHShEbTw==
+
 "@deck.gl/core@^8.5.8":
   version "8.5.8"
   resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-8.5.8.tgz#85ca416faa05748f365ceeae6b76d07df4d27d2e"
@@ -8768,6 +8773,13 @@ matcher@^3.0.0:
   dependencies:
     escape-string-regexp "^4.0.0"
 
+matcher@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/matcher/-/matcher-4.0.0.tgz#a42a05a09aaed92e2d241eb91fddac689461ea51"
+  integrity sha512-S6x5wmcDmsDRRU/c2dkccDwQPXoFczc5+HpQ2lON8pnvHlnvHAHj5WlLVvw6n6vNyHuVugYrFohYxbS+pvFpKQ==
+  dependencies:
+    escape-string-regexp "^4.0.0"
+
 math-interval-parser@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/math-interval-parser/-/math-interval-parser-2.0.1.tgz#e22cd6d15a0a7f4c03aec560db76513da615bed4"
@@ -9068,6 +9080,15 @@ neo4j-driver@^4.3.1:
     neo4j-driver-bolt-connection "^4.3.3"
     neo4j-driver-core "^4.3.3"
     rxjs "^6.6.3"
+
+next-sitemap@^1.6.168:
+  version "1.6.168"
+  resolved "https://registry.yarnpkg.com/next-sitemap/-/next-sitemap-1.6.168.tgz#5d184b7713edf03c16e6d9064c9a00b2339ec78c"
+  integrity sha512-zzveI/1tjyvdTHd9qoxzH1JyK+wNqW3L+AxHf7Ppa7FbmcLb9Gj30b2pBLTK9wSiRVuSYAjOGxsPliL+daxspQ==
+  dependencies:
+    "@corex/deepmerge" "^2.6.34"
+    matcher "^4.0.0"
+    minimist "^1.2.5"
 
 next@^11.1.2:
   version "11.1.2"

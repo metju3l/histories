@@ -91,6 +91,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "jest-expect-message": "^1.0.2",
     "jest-extended": "^0.11.5",
+    "next-sitemap": "^1.6.168",
     "postcss": "^8.3.0",
     "tailwindcss": "^2.2.15",
     "ts-jest": "^27.0.3",
