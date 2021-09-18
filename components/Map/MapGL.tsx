@@ -16,9 +16,20 @@ import MapLoading from './MapLoading';
 import LayerIcon from '@public/mapLayerIcon.png';
 import Image from 'next/image';
 import { TimeLine } from 'components/TimeLine/index';
-import { QueryResult } from '@apollo/client';
 
-const Map: FC<{
+const GetBounds = (bounds: {
+  _ne: { lat: number; lng: number };
+  _sw: { lat: number; lng: number };
+}) => {
+  return {
+    maxLatitude: bounds._ne.lat,
+    minLatitude: bounds._sw.lat,
+    maxLongitude: bounds._ne.lng,
+    minLongitude: bounds._sw.lng,
+  };
+};
+
+const MapGL: FC<{
   searchCoordinates: { lat: number; lng: number };
   images: any;
   setBounds: React.Dispatch<
@@ -118,23 +129,11 @@ const Map: FC<{
         dragRotate={false}
         ref={(instance) => (mapRef.current = instance)}
         onLoad={() => {
-          if (mapRef.current)
-            setBounds({
-              maxLatitude: mapRef.current.getMap().getBounds()._ne.lat,
-              minLatitude: mapRef.current.getMap().getBounds()._sw.lat,
-              maxLongitude: mapRef.current.getMap().getBounds()._ne.lng,
-              minLongitude: mapRef.current.getMap().getBounds()._sw.lng,
-            });
+          if (mapRef.current) setBounds(mapRef.current.getMap().getBounds());
         }}
         onInteractionStateChange={async (extra: any) => {
-          if (!extra.isDragging && mapRef.current) {
-            setBounds({
-              maxLatitude: mapRef.current.getMap().getBounds()._ne.lat,
-              minLatitude: mapRef.current.getMap().getBounds()._sw.lat,
-              maxLongitude: mapRef.current.getMap().getBounds()._ne.lng,
-              minLongitude: mapRef.current.getMap().getBounds()._sw.lng,
-            });
-          }
+          if (!extra.isDragging && mapRef.current)
+            setBounds(GetBounds(mapRef.current.getMap().getBounds()));
         }}
       >
         <GeolocateControl
@@ -180,4 +179,4 @@ const Map: FC<{
   );
 };
 
-export default Map;
+export default MapGL;

@@ -36,11 +36,7 @@ query getUserInfo($username: String, $id: Int) {
       description
     }
     posts {
-      postID
-      description
-      hashtags
-      createdAt
-      url
+      id
     }
   }
 }

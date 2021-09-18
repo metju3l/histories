@@ -6,7 +6,7 @@ import useDarkMode from '@hooks/useDarkmode';
 import Image from 'next/image';
 
 import { Search } from 'components/MainPage';
-import { Map } from 'components/Map';
+import { MapGL } from 'components/Map';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 
 // ICONS
@@ -56,7 +56,7 @@ const MapPage: FC = () => {
       </Head>
       <Navbar data={data} setSearchCoordinates={setSearchCoordinates} />
       <div className="w-full" style={{ height: 'calc(100vh - 14px)' }}>
-        <Map
+        <MapGL
           searchCoordinates={searchCoordinates}
           setBounds={setBounds}
           images={images}
