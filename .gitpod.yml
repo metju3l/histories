@@ -5,9 +5,29 @@ tasks:
       docker-compose up -d;
       cp .env.local.example .env.local;
       yarn build;
+      yarn start;
 
 # Ports to expose on workspace startup
 ports:
   - port: 3000
     onOpen: open-preview
     visibility: public
+  - port: 7687
+    onOpen: ignore
+    visibility: public
+  - port: 7474
+    onOpen: notify
+    visibility: public
+  - port: 27018
+    onOpen: ignore
+    visibility: public
+  - port: 9001
+    onOpen: ignore
+    visibility: public
+  - port: 9002
+    onOpen: ignore
+    visibility: public
+
+vscode:
+  extensions:
+    - "material-icon-theme"

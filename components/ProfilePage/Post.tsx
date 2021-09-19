@@ -92,7 +92,7 @@ const Post: FC<{
       {data!.post.hashtags && (
         <div>
           hashtags:
-          {data!.post.hashtags.map((hashtag) => (
+          {data!.post.hashtags.map((hashtag: any) => (
             <Button key={hashtag} auto flat color="#ff4ecd">
               {hashtag}
             </Button>

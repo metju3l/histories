@@ -172,7 +172,7 @@ const User: FC<{ username: string }> = ({ username }) => {
               )}
             </div>
             {data.user.posts &&
-              data.user.posts.map((post) => (
+              data.user.posts.map((post: any) => (
                 <Post
                   key={post!.id}
                   id={post!.id}

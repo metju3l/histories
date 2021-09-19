@@ -34,6 +34,7 @@ import {
 } from '@lib/validation';
 import IsUsedEmail from '@lib/validation/dbValidation/IsUsedEmail';
 import MapPosts from '@lib/queries/MapPosts';
+import PerosnalizedPostsQuery from '@lib/queries/PerosnalizedPostsQuery';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -42,6 +43,16 @@ const resolvers = {
   Query: {
     hello: () => {
       return 'Hello';
+    },
+
+    personalizedPosts: async (
+      _parent: undefined,
+      _input: undefined,
+      context: any
+    ) => {
+      return await PerosnalizedPostsQuery(
+        context.validToken ? context.decoded.id : null
+      );
     },
 
     paths: async () => {

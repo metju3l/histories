@@ -8,7 +8,7 @@ services:
       - 7474:7474
       - 7687:7687
     volumes:
-      - DBdata:/data
+      - Neo4jData:/data
     environment:
       # Raise memory limits
       - NEO4J_dbms_memory_pagecache_size=1G
@@ -25,8 +25,21 @@ services:
       - 9001:9000
       - 9002:9001
 
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27018:27017
+    volumes:
+      - MongodbData:/data
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
 volumes:
-  DBdata:
+  Neo4jData:
+    driver: local
+  MongodbData:
     driver: local
   MinioData:
     driver: local
