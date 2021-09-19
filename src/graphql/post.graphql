@@ -20,6 +20,12 @@ mutation createPost(
   )
 }
 
+query personalizedPosts {
+  personalizedPosts {
+    id
+  }
+}
+
 query tag($label: String!) {
   tag(label: $label) {
     label
