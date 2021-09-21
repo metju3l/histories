@@ -79,7 +79,7 @@
     "@types/googlemaps": "^3.43.3",
     "@types/react": "17.0.21",
     "@types/validator": "^13.6.2",
-    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.2",
     "@typescript-eslint/parser": "^4.31.2",
     "autoprefixer": "^10.3.4",
     "babel-jest": "^27.2.0",
