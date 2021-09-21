@@ -20,7 +20,7 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "type-check": "tsc --pretty --noEmit",
-    "test": "jest",
+    "test": "ts-jest",
     "test-all": "yarn test && yarn lint && yarn type-check",
     "prepare": "husky install"
   },
@@ -34,7 +34,7 @@
     "@nextui-org/react": "^1.0.1-alpha.32",
     "@reach/combobox": "^0.16.1",
     "@types/bcryptjs": "^2.4.2",
-    "@types/jest": "^27.0.1",
+    "@types/jest": "^27.0.2",
     "@types/jest-expect-message": "^1.0.3",
     "@types/js-cookie": "^2.2.7",
     "@types/jsonwebtoken": "^8.5.5",
@@ -48,7 +48,6 @@
     "graphql-let": "^0.18.5",
     "i18n": "^0.13.3",
     "i18next": "^21.0.0",
-    "jest": "^27.2.1",
     "js-cookie": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.1.2",
@@ -91,13 +90,15 @@
     "eslint-plugin-react": "^7.25.3",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.2",
+    "jest": "^27.2.1",
     "jest-expect-message": "^1.0.2",
     "jest-extended": "^0.11.5",
     "lint-staged": "^11.1.2",
     "next-sitemap": "^1.6.168",
     "postcss": "^8.3.0",
     "tailwindcss": "^2.2.15",
-    "ts-jest": "^27.0.3",
+    "test-jest": "^1.0.1",
+    "ts-jest": "^27.0.5",
     "typescript": "^4.4.3"
   }
 }

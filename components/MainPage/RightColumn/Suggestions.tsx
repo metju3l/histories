@@ -7,7 +7,8 @@ import { useSuggestedUsersQuery } from '@graphql/user.graphql';
 
 const Suggestions: FC<{ logged: any }> = ({ logged }) => {
   const { data, loading, error } = useSuggestedUsersQuery();
-  if (loading)
+
+  if (error)
     return (
       <>
         <h2 className="text-center font-semibold text-lg">
@@ -17,7 +18,7 @@ const Suggestions: FC<{ logged: any }> = ({ logged }) => {
       </>
     );
 
-  if (error)
+  if (loading)
     return (
       <>
         <h2 className="text-center font-semibold text-lg">

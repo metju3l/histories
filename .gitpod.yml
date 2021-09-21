@@ -30,4 +30,4 @@ ports:
 
 vscode:
   extensions:
-    - "material-icon-theme"
+    - "pkief.material-icon-theme"
