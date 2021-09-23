@@ -8,17 +8,12 @@ const GetPostInfo = async ({
   logged: number | null;
 }) => {
   const query = `
-WITH ${logged} AS loggedID  
 MATCH (author:User)-[:CREATED]->(post:Post)
 OPTIONAL MATCH (post:Post)<-[:LIKE]-(like:User)
 OPTIONAL MATCH (post:Post)<-[:CONTAINS]-(hashtag:Hashtag)
 MATCH (logged:User)
-WHERE ID(post) = ${id} AND ID(logged) = loggedID
-RETURN post, author, COLLECT(like) AS likes, COLLECT(hashtag) AS hashtags, 
-CASE loggedID 
-    WHEN null THEN false 
-    ELSE EXISTS ((post:Post)<-[:LIKE]-(logged:User))
-END AS liked`;
+WHERE ID(post) = ${id} 
+RETURN post, author, COLLECT(like) AS likes, COLLECT(hashtag) AS hashtags`;
 
   const driver = DbConnector();
   const session = driver.session();
@@ -40,7 +35,6 @@ END AS liked`;
       id: result.records[0].get('author').identity.toNumber(),
       ...result.records[0].get('author').properties,
     },
-    liked: result.records[0].get('liked'),
     likes: result.records[0]
       .get('likes')
       .map(

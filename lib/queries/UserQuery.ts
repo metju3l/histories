@@ -42,7 +42,8 @@ const UserQuery = async (
     ? null
     : {
         ...userInfo.records[0].get('n').properties,
-        id: userInfo.records[0].get('ID(n)').toNumber(),
+        id: Number(userInfo.records[0].get('ID(n)')),
+        createdAt: Number(userInfo.records[0].get('n').properties.createdAt),
         // @ts-ignore
         isFollowing: logged ? isFollowing.records[0] !== undefined : false,
         following,

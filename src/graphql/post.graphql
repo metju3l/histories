@@ -49,8 +49,6 @@ query post($id: Int!) {
       firstName
       lastName
     }
-    liked
-
     author {
       id
       username

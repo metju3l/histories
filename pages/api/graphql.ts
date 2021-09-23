@@ -412,7 +412,6 @@ const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
   context: (context) => {
-    console.log(context);
     try {
       // get JWT
       const jwt = context.req.headers.authorization.substring(7);
