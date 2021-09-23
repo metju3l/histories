@@ -2,6 +2,12 @@
 tasks:
   - init: yarn install
     command:  >
+      # Install mkcert and generate certificates
+      cd ./certificate;
+      sh install.sh
+      mkcert localhost;
+      cd ../;
+
       docker-compose up -d;
       cp .env.local.example .env.local;
       yarn build;
