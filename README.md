@@ -12,8 +12,8 @@ And it also is my high school final project.
 1. rename `.env.local.example` to `.env.local` and change values
 2. generate certificate
    ```bash
-   yarn install
    cd certificate
+   sh install.sh
    mkcert localhost
    ```
 3. run `yarn dev` / `yarn dev-ssl`
