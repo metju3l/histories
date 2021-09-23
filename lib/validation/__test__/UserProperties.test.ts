@@ -3,7 +3,7 @@ import {
   ValidateEmail,
   ValidatePassword,
   ValidateName,
-} from '../lib/validation';
+} from '..';
 
 test('Username', () => {
   // correct

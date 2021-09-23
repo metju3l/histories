@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaConnectdevelop } from 'react-icons/fa';
 
-const AccountCreatedPost = ({
+const AccountCreatedCard = ({
   firstName,
   date,
 }: {
@@ -20,4 +20,4 @@ const AccountCreatedPost = ({
   );
 };
 
-export default AccountCreatedPost;
+export default AccountCreatedCard;

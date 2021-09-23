@@ -11,7 +11,7 @@ import { Button } from '@nextui-org/react';
 import Router from 'next/router';
 import { toast } from 'react-hot-toast';
 
-const Post: FC<{
+const PostCard: FC<{
   isLoggedQuery: any;
   id: number;
   refetch: any;
@@ -124,4 +124,4 @@ const Post: FC<{
   );
 };
 
-export default Post;
+export default PostCard;

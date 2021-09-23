@@ -2,10 +2,10 @@ import { Navbar } from '@components/Navbar';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { usePersonalizedPostsQuery } from '@graphql/post.graphql';
 import React, { FC } from 'react';
-import { Post } from 'components/ProfilePage';
 
 import Suggestions from './RightColumn/Suggestions';
 import Menu from './LeftColumn/Menu';
+import { PostCard } from '@components/PostCard';
 
 const Layout: FC = () => {
   const logged = useIsLoggedQuery();
@@ -47,7 +47,7 @@ const PersonalizedPosts = ({ logged }: { logged: any }) => {
   return (
     <div>
       {data?.personalizedPosts.map((post: any) => (
-        <Post
+        <PostCard
           key={post.id}
           id={post.id}
           isLoggedQuery={logged}

@@ -20,7 +20,7 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "type-check": "tsc --pretty --noEmit",
-    "test": "ts-jest",
+    "test": "jest",
     "test-all": "yarn test && yarn lint && yarn type-check",
     "prepare": "husky install"
   },
