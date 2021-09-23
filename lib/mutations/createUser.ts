@@ -37,7 +37,7 @@ const CreateUser = async (input: {
   await session.run(query);
   driver.close();
 
-  const emailHtml = `<a href="http://histories.cc/verify?token=${authorizationToken}">verify email address here</a>`;
+  const emailHtml = `<a href="https://www.histories.cc/verify?token=${authorizationToken}">click here</a>`;
   await SendEmail('Verify email', emailHtml, email);
 
   return 'success';

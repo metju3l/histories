@@ -13,7 +13,7 @@ MATCH (author:User)-[:CREATED]->(post:Post)
 OPTIONAL MATCH (post:Post)<-[:LIKE]-(like:User)
 OPTIONAL MATCH (post:Post)<-[:CONTAINS]-(hashtag:Hashtag)
 MATCH (logged:User)
-WHERE ID(post) = ${id} AND ID(logged) = 0
+WHERE ID(post) = ${id} AND ID(logged) = loggedID
 RETURN post, author, COLLECT(like) AS likes, COLLECT(hashtag) AS hashtags, 
 CASE loggedID 
     WHEN null THEN false 

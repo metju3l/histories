@@ -22,7 +22,7 @@ query getUserInfo($username: String, $id: Int) {
     firstName
     lastName
     bio
-    authenticated
+    verified
     createdAt
     id
     isFollowing

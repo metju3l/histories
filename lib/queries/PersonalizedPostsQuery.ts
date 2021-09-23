@@ -1,6 +1,6 @@
 import DbConnector from '../database/driver';
 
-const PerosnalizedPostsQuery = async (logged: number | null) => {
+const PersonalizedPostsQuery = async (logged: number | null) => {
   const query =
     logged === null
       ? `
@@ -30,4 +30,4 @@ RETURN COLLECT(post) AS posts`;
   );
 };
 
-export default PerosnalizedPostsQuery;
+export default PersonalizedPostsQuery;

@@ -24,7 +24,11 @@ const Post: FC<{
   const [isLoading, setIsLoading] = useState(false);
 
   if (loading) return <div>loading</div>;
-  if (error) return <div>error</div>;
+  if (error) {
+    console.log(error);
+
+    return <div>error</div>;
+  }
 
   const time = new Date(parseInt(data!.post.createdAt)).toLocaleDateString(
     'cs-cz',
@@ -88,8 +92,8 @@ const Post: FC<{
       )}
       {time}
       <br />
-      {data!.post.description}
-      {data!.post.hashtags && (
+      {data?.post.description}
+      {data?.post.hashtags && (
         <div>
           hashtags:
           {data!.post.hashtags.map((hashtag: any) => (
