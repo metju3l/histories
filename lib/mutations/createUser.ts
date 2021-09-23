@@ -1,6 +1,7 @@
 import DbConnector from '../database/driver';
 import { hash } from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
+import SendEmail from '@lib/email/SendEmail';
 
 const CreateUser = async (input: {
   username: string;
@@ -16,6 +17,8 @@ const CreateUser = async (input: {
     parseInt(process.env.HASH_SALT || '10')
   );
 
+  const authorizationToken = `${new Date().getTime()}-${uuidv4()}`;
+
   const query = `CREATE
     (n:User {
       username : "${username}",
@@ -25,7 +28,7 @@ const CreateUser = async (input: {
       password: "${hashedPassword}",
       createdAt: "${new Date().getTime()}",
       verified: "false",
-      authorizationToken: "${new Date().getTime()}-${uuidv4()}"
+      authorizationToken: "${authorizationToken}"
     })`;
 
   const driver = DbConnector();
@@ -33,6 +36,9 @@ const CreateUser = async (input: {
 
   await session.run(query);
   driver.close();
+
+  const emailHtml = `<a href="http://histories.cc/verify?token=${authorizationToken}">verify email address here</a>`;
+  await SendEmail('Verify email', emailHtml, email);
 
   return 'success';
 };
