@@ -2971,10 +2971,10 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.4.tgz#cd667bcfdd025213aafb7ca5915a932590acdcdc"
   integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
 
-"@types/react-map-gl@^5.2.10":
-  version "5.2.10"
-  resolved "https://registry.yarnpkg.com/@types/react-map-gl/-/react-map-gl-5.2.10.tgz#adac497807dea4e134377039e5abb14c4160bd03"
-  integrity sha512-9NPlPnBOXoa8gpyhnYhhpUNYFs/pDIwmLJhcwepOgYRvjgKMDIFHnc0mZycfTRMpF6SrMcFaSObI67Fu2f0Kng==
+"@types/react-map-gl@^5.2.11":
+  version "5.2.11"
+  resolved "https://registry.yarnpkg.com/@types/react-map-gl/-/react-map-gl-5.2.11.tgz#440323fb4ca8b72899ba2e544cc924bcdf8e3cfa"
+  integrity sha512-yK9O7szpEgWiYZVBZKuWXCTk+elSn/g1GFUc2MYE38XSWSE0zdCbFRRbTwMZjG6WxbJ/UkC8sHyKI73xC2a8ew==
   dependencies:
     "@types/geojson" "*"
     "@types/mapbox-gl" "*"
