@@ -37,6 +37,7 @@ export default function Page() {
                 toast.error(error.message);
               }
             setIsLoading(false);
+            router.replace('/login');
           }}
         >
           Authorize email
