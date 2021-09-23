@@ -39,7 +39,7 @@ const Post: FC<{
     <div className="w-[75%] m-auto p-[1em] bg-white shadow-lg dark:bg-[#343233] rounded-xl text-text-light dark:text-white mb-8">
       <div className="flex items-center">
         <Link href={`/${data!.post.author.username}`}>
-          <>
+          <a className="flex">
             <div className="relative rounded-full w-12 h-12 mr-4">
               <Image
                 src={GeneratedProfileUrl(
@@ -59,7 +59,7 @@ const Post: FC<{
                 {data!.post.author.firstName} {data!.post.author.lastName}
               </div>
             </a>
-          </>
+          </a>
         </Link>
       </div>
       {isLoggedQuery?.data?.isLogged?.id === data!.post.author.id && (

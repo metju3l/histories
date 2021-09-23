@@ -35,6 +35,7 @@ import {
 import IsUsedEmail from '@lib/validation/dbValidation/IsUsedEmail';
 import MapPosts from '@lib/queries/MapPosts';
 import PerosnalizedPostsQuery from '@lib/queries/PerosnalizedPostsQuery';
+import VerifyToken from '@lib/mutations/VerifyToken';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -368,6 +369,10 @@ const resolvers = {
       { input }: { input: { username: string; password: string } }
     ) => {
       return DeleteUser(input);
+    },
+
+    verifyToken: async (_parent: undefined, { token }: { token: string }) => {
+      return await VerifyToken(token);
     },
 
     follow: async (
