@@ -1,3 +1,11 @@
+mutation verifyToken($token: String!) {
+  verifyToken(token: $token)
+}
+
+mutation login($username: String!, $password: String!) {
+  login(input: { username: $username, password: $password })
+}
+
 query suggestedUsers {
   suggestedUsers {
     id
@@ -79,10 +87,6 @@ query IsLogged {
     username
     email
   }
-}
-
-mutation login($username: String!, $password: String!) {
-  login(input: { username: $username, password: $password })
 }
 
 mutation searchUser($username: String!) {

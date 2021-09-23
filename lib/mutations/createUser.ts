@@ -1,6 +1,6 @@
 import DbConnector from '../database/driver';
-import { UserExists } from '../validation';
 import { hash } from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid';
 
 const CreateUser = async (input: {
   username: string;
@@ -23,8 +23,9 @@ const CreateUser = async (input: {
       lastName: "${lastName}",
       email: "${email}",
       password: "${hashedPassword}",
-      authenticated: "false",
-      createdAt: "${new Date().getTime()}"
+      createdAt: "${new Date().getTime()}",
+      verified: "false",
+      authorizationToken: "${new Date().getTime()}-${uuidv4()}"
     })`;
 
   const driver = DbConnector();
