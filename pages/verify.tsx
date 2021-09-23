@@ -25,15 +25,18 @@ export default function Page() {
         <Button
           type="submit"
           onClick={async () => {
+            setIsLoading(true);
             if (router.query.token !== undefined)
               try {
                 await verifyToken({
-                  variables: { token: router.query.token[0] },
+                  variables: { token: router.query.token.toString() },
                 });
+                toast.success('success');
               } catch (error) {
                 // @ts-ignore
                 toast.error(error.message);
               }
+            setIsLoading(false);
           }}
         >
           Authorize email
