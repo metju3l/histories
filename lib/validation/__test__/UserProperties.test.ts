@@ -4,7 +4,6 @@ import {
   ValidatePassword,
   ValidateName,
 } from '..';
-import ValidateVerificationToken from '../inputValidation/ValidateVerificationToken';
 
 test('Username', () => {
   // correct
@@ -102,12 +101,4 @@ test('Firstname and lastname', () => {
   ).toEqual({
     error: 'has to be shorter than 128 characters',
   }); // too long
-});
-
-test('Firstname and lastname', () => {
-  expect(
-    ValidateVerificationToken(
-      '1632445649755-b8a689c1-cdae-450e-9da1-770e63dfb8b2'
-    )
-  ).toEqual({ error: null });
 });

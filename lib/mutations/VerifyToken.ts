@@ -1,6 +1,10 @@
+import { ValidateVerificationToken } from '@lib/validation';
 import DbConnector from '../database/driver';
 
 const CreateCollection = async (token: string): Promise<string> => {
+  const validateToken = ValidateVerificationToken(token).error;
+  if (validateToken !== null) throw new Error(validateToken);
+
   const query = `
   MATCH (user:User {authorizationToken: "${token}"}) 
   SET user.authorizationToken = NULL,
