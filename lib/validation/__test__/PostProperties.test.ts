@@ -1,4 +1,4 @@
-import { ValidateCoordinates, ValidateDate } from '../lib/validation';
+import { ValidateCoordinates, ValidateDate } from '..';
 
 test('Coordinates', () => {
   // correct

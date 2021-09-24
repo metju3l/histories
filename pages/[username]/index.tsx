@@ -12,11 +12,11 @@ import {
 import { useUpdateProfileMutation } from '@graphql/user.graphql';
 import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 
-import { AccountCreatedPost, Post } from 'components/ProfilePage';
 import { Navbar } from 'components/Navbar';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
-import { Button, Tooltip } from '@nextui-org/react';
+import { Button } from '@nextui-org/react';
 import { toast } from 'react-hot-toast';
+import { AccountCreatedCard, PostCard } from '@components/PostCard';
 
 const User: FC<{ username: string }> = ({ username }) => {
   const { data, loading, error, refetch } = useGetUserInfoQuery({
@@ -173,14 +173,14 @@ const User: FC<{ username: string }> = ({ username }) => {
             </div>
             {data.user.posts &&
               data.user.posts.map((post: any) => (
-                <Post
+                <PostCard
                   key={post!.id}
                   id={post!.id}
                   isLoggedQuery={logged}
                   refetch={refetch}
                 />
               ))}
-            <AccountCreatedPost
+            <AccountCreatedCard
               date={data.user.createdAt}
               firstName={data.user.firstName}
             />

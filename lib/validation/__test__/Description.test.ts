@@ -1,4 +1,4 @@
-import { ValidateDescription } from '../lib/validation';
+import { ValidateDescription } from '..';
 
 test('Description', () => {
   // correct
