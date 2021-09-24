@@ -65,7 +65,7 @@
     "react-map-gl": "^6.1.17",
     "tailwind-scrollbar-hide": "^1.0.3",
     "use-places-autocomplete": "^1.9.4",
-    "uuid": "^8.3.2",
+    "uuidv4": "^6.2.12",
     "validator": "^13.6.0",
     "yup": "^0.32.9"
   },
@@ -81,6 +81,7 @@
     "@types/nodemailer": "^6.4.4",
     "@types/react": "17.0.24",
     "@types/uuid": "^8.3.1",
+    "@types/uuidv4": "^5.0.0",
     "@types/validator": "^13.6.2",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
     "@typescript-eslint/parser": "^4.31.2",
