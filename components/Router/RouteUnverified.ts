@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router';
 
 const RouteUnverified = ({
-  isLogged,
+  logged,
   verified,
 }: {
-  isLogged: boolean;
-  verified: boolean | null;
+  logged: boolean;
+  verified: boolean | undefined | null;
 }) => {
   const router = useRouter();
-  if (isLogged && !verified) router.replace('/verify');
+  if (logged && verified === false) router.replace('/checkYourEmail');
 };
 
 export default RouteUnverified;

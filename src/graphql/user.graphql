@@ -2,6 +2,13 @@ mutation verifyToken($token: String!) {
   verifyToken(token: $token)
 }
 
+query checkIfLogged {
+  checkIfLogged {
+    logged
+    verified
+  }
+}
+
 mutation login($username: String!, $password: String!) {
   login(input: { username: $username, password: $password })
 }
