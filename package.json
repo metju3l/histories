@@ -31,7 +31,7 @@
     "@graphql-tools/merge": "^8.1.2",
     "@headlessui/react": "^1.4.1",
     "@neo4j/graphql": "^2.2.0",
-    "@nextui-org/react": "^1.0.1-alpha.33",
+    "@nextui-org/react": "^1.0.1-alpha.34",
     "@reach/combobox": "^0.16.1",
     "@types/bcryptjs": "^2.4.2",
     "@types/jest": "^27.0.2",
@@ -66,8 +66,7 @@
     "tailwind-scrollbar-hide": "^1.0.3",
     "use-places-autocomplete": "^1.9.4",
     "uuidv4": "^6.2.12",
-    "validator": "^13.6.0",
-    "yup": "^0.32.9"
+    "validator": "^13.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
