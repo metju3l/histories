@@ -10,3 +10,4 @@ export { default as ValidateName } from './inputValidation/ValidateName';
 export { default as ValidateCoordinates } from './inputValidation/ValidateCoordinates';
 export { default as ValidateDate } from './inputValidation/ValidateDate';
 export { default as ValidateDescription } from './inputValidation/ValidateDescription';
+export { default as ValidateVerificationToken } from './inputValidation/ValidateVerificationToken';

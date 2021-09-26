@@ -32,12 +32,12 @@ export default function Page() {
                   variables: { token: router.query.token.toString() },
                 });
                 toast.success('success');
+                router.replace('/login');
               } catch (error) {
                 // @ts-ignore
                 toast.error(error.message);
               }
             setIsLoading(false);
-            router.replace('/login');
           }}
         >
           Authorize email

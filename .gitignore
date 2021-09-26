@@ -38,3 +38,9 @@ yarn-error.log*
 *.graphql.d.ts
 *.graphqls.d.ts
 /.cache
+
+# PWA
+sw.js
+sw.js.map
+workbox*.js
+workbox*.js.map

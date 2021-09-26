@@ -1,0 +1,15 @@
+{
+    "name": "hiStories",
+    "short_name": "hiStories",
+    "theme_color": "#17A6FA",
+    "background_color": "#17A6FA",
+    "display": "standalone",
+    "orientation": "portrait",
+    "scope": "/",
+    "start_url": "/",
+    "icons": [{
+      "src": "/logo.png",
+      "sizes": "200x200",
+      "type": "image/png"
+    }]
+  }

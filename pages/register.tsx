@@ -1,19 +1,37 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import router from 'next/router';
 import Link from 'next/link';
 import { useCreateUserMutation } from '@graphql/user.graphql';
 import { useTranslation } from 'react-i18next';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-hot-toast';
-import { Button } from '@nextui-org/react';
+import { Button, Input, Spacer } from '@nextui-org/react';
 import { Navbar } from '@components/Navbar';
+import {
+  ValidateEmail,
+  ValidateName,
+  ValidatePassword,
+  ValidateUsername,
+} from '@lib/validation';
 
 const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
   const [createUser] = useCreateUserMutation();
   const { t } = useTranslation();
   const { data, loading, error } = useIsLoggedQuery();
   const [isLoading, setIsLoading] = useState(false);
+
+  const formInputs = {
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    password: '',
+    repeatPassword: '',
+  };
+
+  const [formValues, setFormValues] = useState(formInputs);
+  const [errors, setErrors] = useState(formInputs);
+
   if (loading) return <div></div>;
   if (error) return <div></div>;
   if (data!.isLogged) router.replace('/');
@@ -22,103 +40,164 @@ const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
     <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark min-h-screen">
       <Navbar data={data} />
       <div className="max-w-screen-xl m-auto p-10">
-        <Formik
-          initialValues={{
-            firstName: '',
-            lastName: '',
-            username: '',
-            email: '',
-            password: '',
-            repeatPassword: '',
-          }}
-          onSubmit={async (values) => {
+        <form
+          onSubmit={async (event) => {
+            event.preventDefault();
             setIsLoading(true);
-            try {
-              await createUser({
-                variables: values,
-              });
-              router.push('/login');
-            } catch (error) {
-              // @ts-ignore
-              toast.error(error.message);
+
+            if (formValues.password !== formValues.repeatPassword) {
+              toast.error('Passwords must match');
+            } else {
+              try {
+                await createUser({
+                  variables: formValues,
+                });
+                router.push('/login');
+              } catch (error) {
+                // @ts-ignore
+                toast.error(error.message);
+              }
             }
             setIsLoading(false);
           }}
         >
-          {() => (
-            <Form>
-              <Input
-                label="First name"
-                name="firstName"
-                type="text"
-                autoComplete="given-name"
-              />
-              <Input
-                label="Last name"
-                name="lastName"
-                type="text"
-                autoComplete="family-name"
-              />
-              <Input
-                label="Username"
-                name="username"
-                type="text"
-                autoComplete="username"
-              />{' '}
-              <Input
-                label="Email"
-                name="email"
-                type="email"
-                autoComplete="email"
-              />
-              <Input
-                label="Password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-              />
-              <Input
-                label="Repeat password"
-                name="repeatPassword"
-                type="password"
-                autoComplete="new-password"
-              />
-              <div className="mt-4">
-                {isLoading ? (
-                  <Button loading loaderType="spinner" />
-                ) : (
-                  <Button type="submit">Submit</Button>
-                )}
-                <Link href="/login">
-                  <a className="underline pl-2">or login to existing account</a>
-                </Link>
-              </div>
-            </Form>
-          )}
-        </Formik>
+          <FormInput
+            label="First name"
+            autoComplete="given-name"
+            color={errors.firstName && 'error'}
+            helperText={errors.firstName && 'First name ' + errors.firstName}
+            value={formValues.firstName}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setFormValues({ ...formValues, firstName: e.target.value });
+              setErrors({
+                ...errors,
+                firstName: ValidateName(e.target.value).error ?? '',
+              });
+            }}
+          />
+
+          <FormInput
+            label="Last name"
+            autoComplete="family-name"
+            color={errors.lastName && 'error'}
+            helperText={errors.lastName && 'Last name ' + errors.lastName}
+            value={formValues.lastName}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setFormValues({ ...formValues, lastName: e.target.value });
+              setErrors({
+                ...errors,
+                lastName: ValidateName(e.target.value).error ?? '',
+              });
+            }}
+          />
+
+          <FormInput
+            label="Username"
+            autoComplete="username"
+            color={errors.username && 'error'}
+            helperText={errors.username}
+            value={formValues.username}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setFormValues({ ...formValues, username: e.target.value });
+              setErrors({
+                ...errors,
+                username: ValidateUsername(e.target.value).error ?? '',
+              });
+            }}
+          />
+
+          <FormInput
+            label="Email"
+            type="email"
+            autoComplete="email"
+            color={errors.email && 'error'}
+            helperText={errors.email}
+            value={formValues.email}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setFormValues({ ...formValues, email: e.target.value });
+              setErrors({
+                ...errors,
+                email: ValidateEmail(e.target.value).error ?? '',
+              });
+            }}
+          />
+
+          <FormInput
+            label="Password"
+            type="password"
+            autoComplete="new-password"
+            color={errors.password && 'error'}
+            helperText={errors.password}
+            value={formValues.password}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setFormValues({ ...formValues, password: e.target.value });
+              setErrors({
+                ...errors,
+                password: ValidatePassword(e.target.value).error ?? '',
+              });
+            }}
+          />
+
+          <FormInput
+            label="Repeat password"
+            type="password"
+            autoComplete="new-password"
+            color={errors.repeatPassword && 'error'}
+            helperText={errors.repeatPassword}
+            value={formValues.repeatPassword}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setFormValues({ ...formValues, repeatPassword: e.target.value });
+              setErrors({
+                ...errors,
+                repeatPassword:
+                  ValidatePassword(e.target.value).error ??
+                  formValues.password !== e.target.value
+                    ? 'Passwords must match'
+                    : '',
+              });
+            }}
+          />
+
+          <div className="mt-4">
+            {isLoading ? (
+              <Button loading loaderType="spinner" />
+            ) : (
+              <Button type="submit">Submit</Button>
+            )}
+            <Link href="/login">
+              <a className="underline pl-2">or login to existing account</a>
+            </Link>
+          </div>
+        </form>
       </div>
     </body>
   );
 };
 
-export default SignUp;
-
-const Input: FC<{
-  type: string;
-  name: string;
-  autoComplete: string;
-  label: string;
-}> = ({ type, name, autoComplete, label }) => {
+const FormInput = (props: any) => {
   return (
-    <div>
-      <label htmlFor={name}>{label}</label>
-      <Field
-        type={type}
-        className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-        name={name}
-        autoComplete={autoComplete}
-      />
-      <ErrorMessage name={name} />
+    <div className="w-96">
+      <Spacer y={1.6} />
+      {props.type === 'password' ? (
+        <Input.Password
+          {...props}
+          width="100%"
+          required={true}
+          labelPlaceholder="Default"
+        />
+      ) : (
+        <>
+          {props.label}
+          <input
+            {...props}
+            className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            required={true}
+            type={props.type ?? 'text'}
+          />
+        </>
+      )}
     </div>
   );
 };
+
+export default SignUp;

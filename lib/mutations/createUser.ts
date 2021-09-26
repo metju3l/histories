@@ -1,6 +1,6 @@
 import DbConnector from '../database/driver';
 import { hash } from 'bcryptjs';
-import { v4 as uuidv4 } from 'uuid';
+import { uuid } from 'uuidv4';
 import SendEmail from '@lib/email/SendEmail';
 
 const CreateUser = async (input: {
@@ -17,7 +17,7 @@ const CreateUser = async (input: {
     parseInt(process.env.HASH_SALT || '10')
   );
 
-  const authorizationToken = `${new Date().getTime()}-${uuidv4()}`;
+  const authorizationToken = `${new Date().getTime()}-${uuid()}`;
 
   const query = `CREATE
     (n:User {
