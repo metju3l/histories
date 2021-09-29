@@ -6,15 +6,15 @@ import { useCreateUserMutation } from '@graphql/user.graphql';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 import { Button, Input, Spacer } from '@nextui-org/react';
-import { Navbar } from '@components/Navbar';
 import {
   ValidateEmail,
   ValidateName,
   ValidatePassword,
   ValidateUsername,
 } from '@lib/validation';
+import { Layout } from '@components/Layout';
 
-const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
+const Register: React.FC = () => {
   const [createUser] = useCreateUserMutation();
   const { t } = useTranslation();
   const { data, loading, error } = useIsLoggedQuery();
@@ -37,8 +37,7 @@ const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
   if (data!.isLogged) router.replace('/');
 
   return (
-    <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark min-h-screen">
-      <Navbar data={data} />
+    <Layout redirectLogged title={''}>
       <div className="max-w-screen-xl m-auto p-10">
         <form
           onSubmit={async (event) => {
@@ -170,7 +169,7 @@ const SignUp = (props: { setForm: (string: string) => void }): JSX.Element => {
           </div>
         </form>
       </div>
-    </body>
+    </Layout>
   );
 };
 
@@ -200,4 +199,4 @@ const FormInput = (props: any) => {
   );
 };
 
-export default SignUp;
+export default Register;
