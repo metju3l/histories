@@ -202,6 +202,7 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
               <Input label="photoDate" type="date" name="photoDate" />
               <Input label="Description" name="description" type="text" />
               <label>hashtags</label>
+              <Field type="file" id="myfile" name="myfile" />
               <input
                 className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 name="hashtags"
