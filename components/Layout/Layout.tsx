@@ -1,11 +1,7 @@
 import React from 'react';
 import { Navbar } from '@components/Navbar';
 import Head from 'next/head';
-import {
-  RedirectLogged,
-  RedirectNotLogged,
-  RedirectUnverified,
-} from '@components/Router';
+import ProtectedRoutes from './ProtectedRoutes';
 
 type LayoutProps = {
   title: string;
@@ -24,10 +20,15 @@ const Layout: React.FC<LayoutProps> = ({
 }) => {
   return (
     <div>
-      {dontRedirectUnverified === false && <RedirectUnverified />}
-      {redirectLogged && <RedirectLogged />}
-      {redirectNotLogged && <RedirectNotLogged />}
-
+      {(dontRedirectUnverified !== true ||
+        redirectLogged ||
+        redirectNotLogged) && (
+        <ProtectedRoutes
+          dontRedirectUnverified={dontRedirectUnverified}
+          redirectLogged={redirectLogged}
+          redirectNotLogged={redirectNotLogged}
+        />
+      )}
       <Head>
         <title>{title}</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
