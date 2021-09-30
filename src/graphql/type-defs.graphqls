@@ -11,6 +11,7 @@ type Query {
   mapPosts(input: MapPostsInput!): [MapPost!]!
   personalizedPosts: [PostID]!
   checkIfLogged: CheckIfLoggedInfo!
+  place(id: Int!): PlaceInfo
 }
 
 type Mutation {
@@ -27,6 +28,13 @@ type Mutation {
   searchUser(input: SearchUserInput!): String!
   createUser(input: CreateUserInput!): String!
   verifyToken(token: String!): String!
+}
+
+type PlaceInfo {
+  id: Int!
+  latitude: Float!
+  longitude: Float!
+  posts: [PostID]
 }
 
 type CheckIfLoggedInfo {

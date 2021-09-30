@@ -37,6 +37,7 @@ import MapPosts from '@lib/queries/MapPosts';
 import PersonalizedPostsQuery from '@lib/queries/PersonalizedPostsQuery';
 import VerifyToken from '@lib/mutations/VerifyToken';
 import IsVerified from '@lib/queries/IsVerified';
+import GetPlaceInfo from '@lib/queries/GetPlaceInfo';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -45,6 +46,9 @@ const resolvers = {
   Query: {
     hello: () => {
       return 'Hello';
+    },
+    place: async (_parent: undefined, { id }: { id: number }) => {
+      return await GetPlaceInfo({ id });
     },
 
     personalizedPosts: async (
