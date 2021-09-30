@@ -1,7 +1,12 @@
+import { Layout } from '@components/Layout';
 import React from 'react';
 
 const PageNotFound: React.FC = () => {
-  return <h1>collections</h1>;
+  return (
+    <Layout title="collections">
+      <>children</>
+    </Layout>
+  );
 };
 
 export default PageNotFound;

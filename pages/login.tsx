@@ -8,75 +8,68 @@ import Cookie from 'js-cookie';
 import { toast } from 'react-hot-toast';
 import { Button } from '@nextui-org/react';
 import { Navbar } from '@components/Navbar';
+import { Layout } from '@components/Layout';
 
 const Login: FC = () => {
-  const { data, loading, error } = useIsLoggedQuery();
   const [login] = useLoginMutation();
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
-  if (loading) return <div></div>;
-  if (error) return <div></div>;
-
-  if (data!.isLogged) Router.replace('/');
 
   return (
-    <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark min-h-screen">
-      <Navbar data={data} />
-      <div className="max-w-screen-xl m-auto p-10">
-        <Formik
-          initialValues={{
-            username: '',
-            password: '',
-          }}
-          onSubmit={async (values) => {
-            setIsLoading(true);
-            try {
-              const result = await login({
-                variables: values,
+    <Layout redirectLogged title={''}>
+      <Formik
+        initialValues={{
+          username: '',
+          password: '',
+        }}
+        onSubmit={async (values) => {
+          setIsLoading(true);
+          try {
+            const result = await login({
+              variables: values,
+            });
+            if (result.data?.login !== 'error') {
+              // login successful
+              Cookie.set('jwt', result.data?.login as string, {
+                sameSite: 'strict',
               });
-              if (result.data?.login !== 'error') {
-                // login successful
-                Cookie.set('jwt', result.data?.login as string, {
-                  sameSite: 'strict',
-                });
-                Router.reload();
-              }
-            } catch (error) {
-              // @ts-ignore
-              toast.error(error.message);
+              Router.reload();
             }
-            setIsLoading(false);
-          }}
-        >
-          {() => (
-            <Form>
-              <Input
-                label="Username or email"
-                name="username"
-                type="text"
-                autoComplete="username"
-              />
-              <Input
-                label="Password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-              />
-              <div className="mt-4 align-center">
-                {isLoading ? (
-                  <Button loading loaderType="spinner" />
-                ) : (
-                  <Button type="submit">Submit</Button>
-                )}
-                <Link href="/register">
-                  <a className="underline pl-2">or create a new account</a>
-                </Link>
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </div>
-    </body>
+          } catch (error) {
+            // @ts-ignore
+            toast.error(error.message);
+          }
+          setIsLoading(false);
+        }}
+      >
+        {() => (
+          <Form>
+            <Input
+              label="Username or email"
+              name="username"
+              type="text"
+              autoComplete="username"
+            />
+            <Input
+              label="Password"
+              name="password"
+              type="password"
+              autoComplete="new-password"
+            />
+            <div className="mt-4 align-center">
+              {isLoading ? (
+                <Button loading loaderType="spinner" />
+              ) : (
+                <Button type="submit">Submit</Button>
+              )}
+              <Link href="/register">
+                <a className="underline pl-2">or create a new account</a>
+              </Link>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </Layout>
   );
 };
 

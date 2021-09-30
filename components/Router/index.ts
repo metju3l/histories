@@ -1,1 +1,1 @@
-export { default as RouteUnverified } from './RouteUnverified';
+export { default as Redirect } from './Redirect';

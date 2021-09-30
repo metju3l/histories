@@ -6,7 +6,7 @@ import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../lib/apollo';
 import Script from 'next/script';
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const apolloClient = useApollo(null);

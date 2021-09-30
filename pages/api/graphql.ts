@@ -36,6 +36,7 @@ import IsUsedEmail from '@lib/validation/dbValidation/IsUsedEmail';
 import MapPosts from '@lib/queries/MapPosts';
 import PersonalizedPostsQuery from '@lib/queries/PersonalizedPostsQuery';
 import VerifyToken from '@lib/mutations/VerifyToken';
+import IsVerified from '@lib/queries/IsVerified';
 
 const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
 const typeDefs = mergeTypeDefs(loadedFiles);
@@ -107,6 +108,20 @@ const resolvers = {
         .catch((error) => {
           throw new Error(error);
         });
+    },
+
+    checkIfLogged: async (
+      _parent: undefined,
+      _input: undefined,
+      context: any
+    ) => {
+      // return user data
+      if (context.validToken) {
+        return {
+          logged: true,
+          verified: await IsVerified(context.decoded.id),
+        };
+      } else return { logged: false, verified: undefined };
     },
 
     isLogged: async (_parent: undefined, _input: undefined, context: any) => {
