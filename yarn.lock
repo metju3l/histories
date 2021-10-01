@@ -1216,15 +1216,6 @@
     "@babel/helper-validator-identifier" "^7.14.9"
     to-fast-properties "^2.0.0"
 
-"@babel/types@7.8.3":
-  version "7.8.3"
-  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.8.3.tgz#5a383dffa5416db1b73dedffd311ffd0788fb31c"
-  integrity sha512-jBD+G8+LWpMBBWvVcdr4QysjUE4mU/syrhN17o1u3gx0/WzJB1kwiVZAXRtWbsIPOwW8pF/YJV5+nmetPzepXg==
-  dependencies:
-    esutils "^2.0.2"
-    lodash "^4.17.13"
-    to-fast-properties "^2.0.0"
-
 "@babel/types@^7.0.0", "@babel/types@^7.14.5", "@babel/types@^7.14.8", "@babel/types@^7.15.0", "@babel/types@^7.15.4", "@babel/types@^7.15.6", "@babel/types@^7.3.0", "@babel/types@^7.3.3", "@babel/types@^7.4.4":
   version "7.15.6"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.15.6.tgz#99abdc48218b2881c058dd0a7ab05b99c9be758f"
@@ -2295,12 +2286,13 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-11.1.2.tgz#e15824405df137129918205e43cb5e9339589745"
   integrity sha512-e/pIKVdB+tGQYa1cW3sAeHm8gzEri/HYLZHT4WZojrUxgWXqx8pk7S7Xs47uBcFTqBDRvK3EcQpPLf3XdVsDdg==
 
-"@nextui-org/react@^1.0.1-alpha.35":
-  version "1.0.1-alpha.35"
-  resolved "https://registry.yarnpkg.com/@nextui-org/react/-/react-1.0.1-alpha.35.tgz#077ba210d2618372b80fd49b9844c44fa4ae1a76"
-  integrity sha512-muIM5589p2BGrWJRbOAAdFx+CqYje1rCRsLuYeWbw9FmnwEU9VCGA1x6mEpWhQCEBRuTBmw4A+oaslPy4GxpWg==
+"@nextui-org/react@^1.0.1-alpha.44":
+  version "1.0.1-alpha.44"
+  resolved "https://registry.yarnpkg.com/@nextui-org/react/-/react-1.0.1-alpha.44.tgz#bc1127c29f5ef4ec96818fdfdf371b118b906473"
+  integrity sha512-IlplwejUoLCTG+zahxNxoifS2yd5JzzFaH83Eo2hCIYEzRK+PO0tWkaC4q85PvXgCYH85UyvfM+Q9XBXVXDezg==
   dependencies:
-    styled-jsx "^3.4.4"
+    "@types/styled-jsx" "^3.4.4"
+    styled-jsx "^4.0.1"
 
 "@node-rs/helper@1.2.1":
   version "1.2.1"
@@ -3097,6 +3089,13 @@
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
+
+"@types/styled-jsx@^3.4.4":
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/@types/styled-jsx/-/styled-jsx-3.4.4.tgz#643b49a892f596ee8d8e588e0270d6c05947048d"
+  integrity sha512-PRRa7gU7ske4Vs7sKWrqfKnuIIS6E/Yj5oKyxuM11AwOKhH9HlbQ7cKGLluXkOXzpEoDJE+6kQMj3AE34/JooQ==
+  dependencies:
+    styled-jsx "*"
 
 "@types/tapable@^1":
   version "1.0.8"
@@ -4130,11 +4129,6 @@ babel-plugin-polyfill-regenerator@^0.2.2:
   integrity sha512-Goy5ghsc21HgPDFtzRkSirpZVW35meGoTmTOb2bxqdl60ghub4xOidgNTHaZfQ2FaxQsKmwvXtOAkcIS4SMBWg==
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.2.2"
-
-babel-plugin-syntax-jsx@6.18.0:
-  version "6.18.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-syntax-jsx/-/babel-plugin-syntax-jsx-6.18.0.tgz#0af32a9a6e13ca7a3fd5069e62d7b0f58d0d8946"
-  integrity sha1-CvMqmm4Tyno/1QaeYtew9Y0NiUY=
 
 babel-plugin-syntax-trailing-function-commas@^7.0.0-beta.0:
   version "7.0.0-beta.0"
@@ -11864,27 +11858,13 @@ style-value-types@4.1.4:
     hey-listen "^1.0.8"
     tslib "^2.1.0"
 
-styled-jsx@4.0.1:
+styled-jsx@*, styled-jsx@4.0.1, styled-jsx@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/styled-jsx/-/styled-jsx-4.0.1.tgz#ae3f716eacc0792f7050389de88add6d5245b9e9"
   integrity sha512-Gcb49/dRB1k8B4hdK8vhW27Rlb2zujCk1fISrizCcToIs+55B4vmUM0N9Gi4nnVfFZWe55jRdWpAqH1ldAKWvQ==
   dependencies:
     "@babel/plugin-syntax-jsx" "7.14.5"
     "@babel/types" "7.15.0"
-    convert-source-map "1.7.0"
-    loader-utils "1.2.3"
-    source-map "0.7.3"
-    string-hash "1.1.3"
-    stylis "3.5.4"
-    stylis-rule-sheet "0.0.10"
-
-styled-jsx@^3.4.4:
-  version "3.4.7"
-  resolved "https://registry.yarnpkg.com/styled-jsx/-/styled-jsx-3.4.7.tgz#803bc8a36f1c359cc99691b6db6e0791ea3e1e31"
-  integrity sha512-PkImcCsovR39byv4Tz83tAPsYs2CiTPOmDSplhe0lsIFVYJyd7rzJ7fbm41vSNsF/lnO+Ob5n/jgMookwY0pww==
-  dependencies:
-    "@babel/types" "7.8.3"
-    babel-plugin-syntax-jsx "6.18.0"
     convert-source-map "1.7.0"
     loader-utils "1.2.3"
     source-map "0.7.3"
