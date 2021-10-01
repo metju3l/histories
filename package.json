@@ -27,7 +27,7 @@
   "dependencies": {
     "@apollo/client": "^3.4.15",
     "@deck.gl/core": "^8.5.10",
-    "@graphql-tools/load-files": "^6.4.0",
+    "@graphql-tools/load-files": "^6.5.0",
     "@graphql-tools/merge": "^8.1.2",
     "@headlessui/react": "^1.4.1",
     "@neo4j/graphql": "^2.2.0",
