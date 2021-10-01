@@ -1,7 +1,5 @@
 import { ApolloServer } from 'apollo-server-micro';
-import { mergeTypeDefs } from '@graphql-tools/merge';
-import { loadFilesSync } from '@graphql-tools/load-files';
-import { join } from 'path';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import {
   UserQuery,
   CreateUser,
@@ -16,6 +14,7 @@ import {
   DeletePost,
   Like,
   GetTagInfo,
+  GetMapPlaces,
   SuggestedUsersQuery,
 } from '../../lib';
 import { verify } from 'jsonwebtoken';
@@ -33,18 +32,19 @@ import {
   ValidateDate,
 } from '@lib/validation';
 import IsUsedEmail from '@lib/validation/dbValidation/IsUsedEmail';
-import MapPosts from '@lib/queries/MapPosts';
 import PersonalizedPostsQuery from '@lib/queries/PersonalizedPostsQuery';
 import VerifyToken from '@lib/mutations/VerifyToken';
 import IsVerified from '@lib/queries/IsVerified';
-
-const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
-const typeDefs = mergeTypeDefs(loadedFiles);
+import GetPlaceInfo from '@lib/queries/GetPlaceInfo';
+import typeDefs from '@graphql/type-defs';
 
 const resolvers = {
   Query: {
     hello: () => {
       return 'Hello';
+    },
+    place: async (_parent: undefined, { id }: { id: number }) => {
+      return await GetPlaceInfo({ id });
     },
 
     personalizedPosts: async (
@@ -84,7 +84,7 @@ const resolvers = {
         };
       }
     ) => {
-      return await MapPosts(input);
+      return await GetMapPlaces(input);
     },
     interClipCode: async (
       _parent: undefined,
@@ -423,9 +423,10 @@ const resolvers = {
   },
 };
 
+const schema = makeExecutableSchema({ typeDefs, resolvers });
+
 const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
   context: (context) => {
     try {
       // get JWT

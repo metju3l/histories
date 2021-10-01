@@ -12,3 +12,4 @@ export { default as EditProfile } from './mutations/editProfile';
 export { default as GetPaths } from './queries/getPaths';
 export { default as GetTagInfo } from './queries/getTagInfo';
 export { default as SuggestedUsersQuery } from './queries/SuggestedUsersQuery';
+export { default as GetMapPlaces } from './queries/GetMapPlaces';

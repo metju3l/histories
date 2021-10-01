@@ -26,8 +26,8 @@ const CreateUser = async (input: {
       lastName: "${lastName}",
       email: "${email}",
       password: "${hashedPassword}",
-      createdAt: "${new Date().getTime()}",
-      verified: "false",
+      createdAt: ${new Date().getTime()},
+      verified: false,
       authorizationToken: "${authorizationToken}"
     })`;
 
