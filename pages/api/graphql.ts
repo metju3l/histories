@@ -1,7 +1,5 @@
 import { ApolloServer } from 'apollo-server-micro';
-import { mergeTypeDefs } from '@graphql-tools/merge';
-import { loadFilesSync } from '@graphql-tools/load-files';
-import { join } from 'path';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import {
   UserQuery,
   CreateUser,
@@ -38,9 +36,7 @@ import PersonalizedPostsQuery from '@lib/queries/PersonalizedPostsQuery';
 import VerifyToken from '@lib/mutations/VerifyToken';
 import IsVerified from '@lib/queries/IsVerified';
 import GetPlaceInfo from '@lib/queries/GetPlaceInfo';
-
-const loadedFiles = loadFilesSync(join(process.cwd(), '**/*.graphqls'));
-const typeDefs = mergeTypeDefs(loadedFiles);
+import typeDefs from '@graphql/type-defs';
 
 const resolvers = {
   Query: {
@@ -427,9 +423,10 @@ const resolvers = {
   },
 };
 
+const schema = makeExecutableSchema({ typeDefs, resolvers });
+
 const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
   context: (context) => {
     try {
       // get JWT
