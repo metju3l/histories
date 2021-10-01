@@ -26,7 +26,7 @@ const CreatePost = async ({
   CREATE (user)-[:CREATED]->(post:Post
   {
     description:"${description}",
-    createdAt: "${new Date().getTime()}",
+    createdAt: ${new Date().getTime()},
     photoDate: "${photoDate}",
     url: "https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
   })
