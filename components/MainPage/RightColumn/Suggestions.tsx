@@ -65,11 +65,13 @@ const Suggestions: FC<{ logged: any }> = ({ logged }) => {
                     </a>
                   </Link>
                   <div>
-                    <Link href={`/${user!.username}`}>
-                      {`${user!.firstName} ${user!.lastName}`}
+                    <Link href={`/${user!.username}`} passHref>
+                      <a>
+                        {' '}
+                        {`${user!.firstName} ${user!.lastName}`}
+                        <br />@{user!.username}
+                      </a>
                     </Link>
-                    <br />
-                    <a>@{user!.username}</a>
                   </div>
                 </div>
                 {logged.isLogged && (
