@@ -79,7 +79,7 @@
     "@graphql-codegen/typescript-react-apollo": "^3.1.4",
     "@types/googlemaps": "^3.43.3",
     "@types/nodemailer": "^6.4.4",
-    "@types/react": "17.0.25",
+    "@types/react": "17.0.26",
     "@types/uuid": "^8.3.1",
     "@types/uuidv4": "^5.0.0",
     "@types/validator": "^13.6.2",
