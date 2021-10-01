@@ -28,9 +28,10 @@ RETURN post, author, COLLECT(like) AS likes, COLLECT(hashtag) AS hashtags`;
       .map(
         (hashtag: { properties: { name: string } }) => hashtag.properties.name
       ),
-    latitude: parseFloat(result.records[0].get('post').properties.latitude),
-    longitude: parseFloat(result.records[0].get('post').properties.longitude),
     id: result.records[0].get('post').identity.toNumber(),
+    createdAt: Number(result.records[0].get('post').properties.createdAt),
+    postDate: Number(result.records[0].get('post').properties.postDate),
+    liked: false,
     author: {
       id: result.records[0].get('author').identity.toNumber(),
       ...result.records[0].get('author').properties,

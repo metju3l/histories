@@ -135,13 +135,11 @@ export default gql`
   }
 
   type Post {
-    createdAt: String!
+    createdAt: Float!
+    postDate: Float!
     description: String
     hashtags: [String]
-    latitude: String!
-    longitude: String!
     url: String!
-    postID: Int!
     id: Int!
     author: UserInfoMinimal!
     likes: [UserInfoMinimal]!
