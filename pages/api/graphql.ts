@@ -16,6 +16,7 @@ import {
   DeletePost,
   Like,
   GetTagInfo,
+  GetMapPlaces,
   SuggestedUsersQuery,
 } from '../../lib';
 import { verify } from 'jsonwebtoken';
@@ -33,7 +34,6 @@ import {
   ValidateDate,
 } from '@lib/validation';
 import IsUsedEmail from '@lib/validation/dbValidation/IsUsedEmail';
-import MapPosts from '@lib/queries/MapPosts';
 import PersonalizedPostsQuery from '@lib/queries/PersonalizedPostsQuery';
 import VerifyToken from '@lib/mutations/VerifyToken';
 import IsVerified from '@lib/queries/IsVerified';
@@ -88,7 +88,7 @@ const resolvers = {
         };
       }
     ) => {
-      return await MapPosts(input);
+      return await GetMapPlaces(input);
     },
     interClipCode: async (
       _parent: undefined,

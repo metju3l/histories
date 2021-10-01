@@ -40,8 +40,6 @@ query post($id: Int!) {
     createdAt
     description
     hashtags
-    latitude
-    longitude
     url
     likes {
       id

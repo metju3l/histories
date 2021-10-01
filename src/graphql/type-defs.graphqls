@@ -8,7 +8,7 @@ type Query {
   userPosts(input: UserPostsInput!): [Post]
   interClipCode(id: Int!): String!
   suggestedUsers: [UserInfoMinimal]
-  mapPosts(input: MapPostsInput!): [MapPost!]!
+  mapPosts(input: MapPostsInput!): [MapPost]!
   personalizedPosts: [PostID]!
   checkIfLogged: CheckIfLoggedInfo!
   place(id: Int!): PlaceInfo
@@ -53,7 +53,6 @@ type MapPost {
   id: Int!
   latitude: Float!
   longitude: Float!
-  url: String!
 }
 
 input LikeInput {
