@@ -8,7 +8,6 @@ import { HiOutlineHeart, HiOutlineLocationMarker } from 'react-icons/hi';
 import Image from 'next/image';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import { Button } from '@nextui-org/react';
-import Router from 'next/router';
 import { toast } from 'react-hot-toast';
 
 const PostCard: FC<{
@@ -30,14 +29,11 @@ const PostCard: FC<{
     return <div>error</div>;
   }
 
-  const time = new Date(parseInt(data!.post.createdAt)).toLocaleDateString(
-    'cs-cz',
-    {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    }
-  );
+  const time = new Date(data!.post.createdAt).toLocaleDateString('cs-cz', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
 
   return (
     <div className="w-[75%] m-auto p-[1em] bg-white shadow-lg dark:bg-[#343233] rounded-xl text-text-light dark:text-white mb-8">

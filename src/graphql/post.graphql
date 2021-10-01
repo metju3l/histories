@@ -38,20 +38,22 @@ query tag($label: String!) {
 query post($id: Int!) {
   post(id: $id) {
     createdAt
+    postDate
     description
     hashtags
     url
-    likes {
-      id
-      username
-      firstName
-      lastName
-    }
     author {
       id
       username
       firstName
       lastName
     }
+    likes {
+      id
+      username
+      firstName
+      lastName
+    }
+    liked
   }
 }
