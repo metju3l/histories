@@ -2286,12 +2286,11 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-11.1.2.tgz#e15824405df137129918205e43cb5e9339589745"
   integrity sha512-e/pIKVdB+tGQYa1cW3sAeHm8gzEri/HYLZHT4WZojrUxgWXqx8pk7S7Xs47uBcFTqBDRvK3EcQpPLf3XdVsDdg==
 
-"@nextui-org/react@^1.0.1-alpha.44":
-  version "1.0.1-alpha.44"
-  resolved "https://registry.yarnpkg.com/@nextui-org/react/-/react-1.0.1-alpha.44.tgz#bc1127c29f5ef4ec96818fdfdf371b118b906473"
-  integrity sha512-IlplwejUoLCTG+zahxNxoifS2yd5JzzFaH83Eo2hCIYEzRK+PO0tWkaC4q85PvXgCYH85UyvfM+Q9XBXVXDezg==
+"@nextui-org/react@^1.0.1-alpha.46":
+  version "1.0.1-alpha.46"
+  resolved "https://registry.yarnpkg.com/@nextui-org/react/-/react-1.0.1-alpha.46.tgz#d8d675c7783d6ab1e22f71d4906d3c03398f1af2"
+  integrity sha512-/z2DDiSYJWYk4UJmycZDysPH+t9/lmjvozG8kXXpZqXOp35sK4wpBWnmBVNpgQKPTBuTnlaw1zDTGjwUz5sqUw==
   dependencies:
-    "@types/styled-jsx" "^3.4.4"
     styled-jsx "^4.0.1"
 
 "@node-rs/helper@1.2.1":
@@ -3089,13 +3088,6 @@
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
-
-"@types/styled-jsx@^3.4.4":
-  version "3.4.4"
-  resolved "https://registry.yarnpkg.com/@types/styled-jsx/-/styled-jsx-3.4.4.tgz#643b49a892f596ee8d8e588e0270d6c05947048d"
-  integrity sha512-PRRa7gU7ske4Vs7sKWrqfKnuIIS6E/Yj5oKyxuM11AwOKhH9HlbQ7cKGLluXkOXzpEoDJE+6kQMj3AE34/JooQ==
-  dependencies:
-    styled-jsx "*"
 
 "@types/tapable@^1":
   version "1.0.8"
@@ -11858,7 +11850,7 @@ style-value-types@4.1.4:
     hey-listen "^1.0.8"
     tslib "^2.1.0"
 
-styled-jsx@*, styled-jsx@4.0.1, styled-jsx@^4.0.1:
+styled-jsx@4.0.1, styled-jsx@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/styled-jsx/-/styled-jsx-4.0.1.tgz#ae3f716eacc0792f7050389de88add6d5245b9e9"
   integrity sha512-Gcb49/dRB1k8B4hdK8vhW27Rlb2zujCk1fISrizCcToIs+55B4vmUM0N9Gi4nnVfFZWe55jRdWpAqH1ldAKWvQ==

@@ -8,8 +8,12 @@
     "scope": "/",
     "start_url": "/",
     "icons": [{
-      "src": "/logo.png",
-      "sizes": "200x200",
+      "src": "icons/icon-512x512.jpg",
+      "sizes": "512x512",
+      "type": "image/jpg"
+    },{
+      "src": "icons/icon-72x72.png",
+      "sizes": "72x72",
       "type": "image/png"
     }]
   }
