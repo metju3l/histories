@@ -1,64 +1,69 @@
 import DbConnector from '../database/driver';
 
+type queryResult = {
+  id: Number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  bio: string | null;
+  verified: boolean;
+  created: Number;
+  following?: {
+    id: Number;
+    email: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    bio: string | null;
+  };
+  followers?: {
+    id: Number;
+    email: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    bio: string | null;
+  };
+  posts?: {
+    id: Number;
+    description: string;
+  };
+};
+
 const UserQuery = async (
   logged: string | null,
   username: string | undefined,
   userID: number | undefined,
   queries: any
-): Promise<any> => {
+): Promise<queryResult> => {
   const matchString =
     userID !== undefined
-      ? ` WHERE ID(n) = ${userID} `
-      : ` WHERE n.username =~ "(?i)${username}" `;
+      ? ` WHERE ID(user) = ${userID} `
+      : ` WHERE user.username =~ "(?i)${username}" `;
 
-  const userInfoQuery = `MATCH (n:User) ${matchString} RETURN n, ID(n)`;
-  const followersQuery = `MATCH (n:User)<-[:FOLLOW]-(user) ${matchString} RETURN user`;
-  const followingQuery = `MATCH (n:User)-[:FOLLOW]->(user) ${matchString} RETURN user`;
-  const collectionsQuery = `MATCH (n:User)-[:CREATED]->(collection:Collection) ${matchString} RETURN collection`;
-  const postsQuery = `MATCH (n:User)-[:CREATED]->(post:Post) ${matchString} RETURN post ORDER BY post.createdAt DESC`;
-  const isFollowingQuery = logged
-    ? `MATCH (:User {username: "${logged}"})-[r:FOLLOW]->(n:User) ${matchString} RETURN r`
-    : '';
-  // const followQuery = `RETURN {follows:EXISTS((:User {username: ${username}})<-[:FOLLOW]-(:User {username:${logged}})),isFollowed:EXISTS((:User {username:${logged}})<-[:FOLLOW]-(:User {username:${username}}))}`;
+  const query = `
+MATCH (user:User)
+${matchString}
+OPTIONAL MATCH (user:User)<-[:FOLLOW]-(follower:User)
+${matchString}
+OPTIONAL MATCH (user:User)-[:FOLLOW]->(following:User)
+${matchString}
+OPTIONAL MATCH (user:User)-[:CREATED]->(post:Post)-[:IS_LOCATED]->(place:Place)
+${matchString}
+RETURN user{.*,
+  id: ID(user), 
+  followers: COLLECT(DISTINCT follower{.*, id: ID(follower)}),
+  following: COLLECT(DISTINCT following{.*, id: ID(following)}),
+  posts: COLLECT(DISTINCT post{.*, id: ID(post), place:place{.*, id: ID(place)}})
+} AS user`;
 
   const driver = DbConnector();
   const session = driver.session();
-
-  const posts = await session.run(postsQuery);
-  const isFollowing = logged ? await session.run(isFollowingQuery) : false;
-  const userInfo = await session.run(userInfoQuery);
-  const following = (await session.run(followingQuery)).records.map((x) => {
-    return x.get('user').properties;
-  });
-  const followers = (await session.run(followersQuery)).records.map((x) => {
-    return x.get('user').properties;
-  });
-  const collections = (await session.run(collectionsQuery)).records.map((x) => {
-    return x.get('collection').properties;
-  });
+  const result = await session.run(query);
   driver.close();
 
-  return userInfo.records[0] === undefined
-    ? null
-    : {
-        ...userInfo.records[0].get('n').properties,
-        id: Number(userInfo.records[0].get('ID(n)')),
-        createdAt: Number(userInfo.records[0].get('n').properties.createdAt),
-        // @ts-ignore
-        isFollowing: logged ? isFollowing.records[0] !== undefined : false,
-        following,
-        followers,
-        collections,
-        posts:
-          posts !== null
-            ? posts.records.map((x) => {
-                return {
-                  ...x.get('post').properties,
-                  id: x.get('post').identity.toNumber(),
-                };
-              })
-            : null,
-      };
+  return result.records[0].get('user') as queryResult;
 };
 
 export default UserQuery;

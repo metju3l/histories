@@ -126,13 +126,19 @@ export default gql`
     lastName: String!
     bio: String
     verified: String!
-    createdAt: String!
+    createdAt: Float!
     isFollowing: Boolean!
-    id: Int!
+    id: Float!
     following: [UserInfoMinimal]
     followers: [UserInfoMinimal]
     collections: [Collection]
-    posts: [PostID]
+    posts: [PostInfoNew]
+  }
+
+  type PostInfoNew {
+    id: Float!
+    url: String!
+    description: String
   }
 
   type PostID {
@@ -140,7 +146,7 @@ export default gql`
   }
 
   type UserInfoMinimal {
-    id: Int!
+    id: Float!
     username: String!
     firstName: String!
     lastName: String!

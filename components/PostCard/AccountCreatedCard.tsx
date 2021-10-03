@@ -6,9 +6,9 @@ const AccountCreatedCard = ({
   date,
 }: {
   firstName: string;
-  date: string;
+  date: number;
 }) => {
-  const time = new Date(parseInt(date)).toLocaleDateString('cs-cz');
+  const time = new Date(date).toLocaleDateString('cs-cz');
 
   return (
     <div className="w-full p-4 rounded-2xl text-black text-center shadow-sm border border-indigo-600">

@@ -64,8 +64,7 @@ const User: FC<{ username: string }> = ({ username }) => {
 
             <h2 className="text-center text-2xl py-4">
               {`${data.user.firstName} ${data.user.lastName}`}
-              {new Date().getTime() - parseInt(data.user.createdAt) <
-                129600000 && (
+              {new Date().getTime() - data.user.createdAt < 129600000 && (
                 <Button auto flat color="#ff4ecd">
                   New user
                 </Button>
