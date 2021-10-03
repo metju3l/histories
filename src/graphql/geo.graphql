@@ -22,6 +22,17 @@ query MapPosts(
     id
     latitude
     longitude
+    posts {
+      id
+      url
+      description
+      author {
+        id
+        username
+        firstName
+        lastName
+      }
+    }
   }
 }
 

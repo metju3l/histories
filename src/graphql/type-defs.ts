@@ -56,6 +56,19 @@ export default gql`
     id: Int!
     latitude: Float!
     longitude: Float!
+    posts: [Post]!
+  }
+
+  type Post {
+    createdAt: Float!
+    postDate: Float!
+    description: String
+    hashtags: [String]
+    url: String!
+    id: Int!
+    author: UserInfoMinimal!
+    likes: [UserInfoMinimal]!
+    liked: Boolean!
   }
 
   input LikeInput {
@@ -132,18 +145,6 @@ export default gql`
     firstName: String!
     lastName: String!
     email: String!
-  }
-
-  type Post {
-    createdAt: Float!
-    postDate: Float!
-    description: String
-    hashtags: [String]
-    url: String!
-    id: Int!
-    author: UserInfoMinimal!
-    likes: [UserInfoMinimal]!
-    liked: Boolean!
   }
 
   type Collection {

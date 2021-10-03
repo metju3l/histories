@@ -35,7 +35,7 @@ const GetBounds = (bounds: {
 
 const MapGL: FC<{
   searchCoordinates: { lat: number; lng: number };
-  images: any;
+  posts: any;
   setBounds: React.Dispatch<
     React.SetStateAction<{
       maxLatitude: number;
@@ -44,7 +44,7 @@ const MapGL: FC<{
       minLongitude: number;
     }>
   >;
-}> = ({ searchCoordinates, setBounds, images }) => {
+}> = ({ searchCoordinates, setBounds, posts }) => {
   const [coordinates, setCoordinates] = useState([21, 20]);
 
   const paths = usePathsQuery();
@@ -157,10 +157,10 @@ const MapGL: FC<{
           showCompass={false}
         />
         {viewport.zoom > 12 && Paths}
-        {images.data?.mapPosts &&
+        {posts.data?.mapPosts &&
           // @ts-ignore
-          images.data.mapPosts.map((image) => (
-            <MapPlace image={image} key={image.id} />
+          posts.data.mapPosts.map((post) => (
+            <MapPlace place={post} key={post.id} />
           ))}
 
         <div className="absolute bottom-28 right-2 bg-white rounded-md">
@@ -171,12 +171,11 @@ const MapGL: FC<{
   );
 };
 
-const MapPlace = ({ image }: { image: any }) => {
+const MapPlace = ({ place }: { place: any }) => {
   const [isOpen, setIsOpen] = useState(false);
-
   return (
     <>
-      <Marker latitude={image.latitude} longitude={image.longitude}>
+      <Marker latitude={place.latitude} longitude={place.longitude}>
         <a
           className=""
           onClick={() => {
@@ -192,91 +191,83 @@ const MapPlace = ({ image }: { image: any }) => {
           />
         </a>
       </Marker>
-      <Modal id={image.id} setIsOpen={setIsOpen} isOpen={isOpen} />
-    </>
-  );
-};
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 z-10 overflow-y-auto"
+          onClose={() => {
+            setIsOpen(false);
+          }}
+        >
+          <div className="min-h-screen px-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay className="fixed inset-0" />
+            </Transition.Child>
 
-const Modal: React.FC<{
-  id: number;
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ id, isOpen, setIsOpen }) => {
-  const { data, loading, error } = usePlaceQuery({ variables: { id } });
-
-  if (loading) return <div>loading...</div>;
-  if (error) return <div>error...</div>;
-
-  return (
-    <Transition appear show={isOpen} as={Fragment}>
-      <Dialog
-        as="div"
-        className="fixed inset-0 z-10 overflow-y-auto"
-        onClose={() => {
-          setIsOpen(false);
-        }}
-      >
-        {console.log(data)}
-
-        <div className="min-h-screen px-4 text-center">
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Dialog.Overlay className="fixed inset-0" />
-          </Transition.Child>
-
-          {/* This element is to trick the browser into centering the modal contents. */}
-          <span
-            className="inline-block h-screen align-middle"
-            aria-hidden="true"
-          >
-            &#8203;
-          </span>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-              <Dialog.Title
-                as="h3"
-                className="text-lg font-medium leading-6 text-gray-900"
-              >
-                image.latitude
-              </Dialog.Title>
-              <div className="mt-2">
-                <p className="text-sm text-gray-500">
-                  Your payment has been successfully submitted. We’ve sent you
-                  an email with all of the details of your order.
-                </p>
-              </div>
-
-              <div className="mt-4">
-                <button
-                  type="button"
-                  className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                  onClick={() => {
-                    setIsOpen(false);
-                  }}
+            {/* This element is to trick the browser into centering the modal contents. */}
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <Dialog.Title
+                  as="h3"
+                  className="text-lg font-medium leading-6 text-gray-900"
                 >
-                  close
-                </button>
+                  {`Found ${place.posts.length} posts`}
+                </Dialog.Title>
+                <div className="mt-2">
+                  {place.posts.map((post: any) => (
+                    <div key={post.id}>
+                      <img
+                        src={post.url}
+                        className="w-12 h-12 object-cover"
+                        alt="Picture on map"
+                      />
+                      author:{' '}
+                      {`${post.author.firstName} ${post.author.lastName}`}
+                      <br />
+                      {post.description}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-4">
+                  <button
+                    type="button"
+                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                    onClick={() => {
+                      setIsOpen(false);
+                    }}
+                  >
+                    close
+                  </button>
+                </div>
               </div>
-            </div>
-          </Transition.Child>
-        </div>
-      </Dialog>
-    </Transition>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
+    </>
   );
 };
 

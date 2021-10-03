@@ -33,7 +33,7 @@ const MapPage: React.FC = () => {
     minLongitude: 0,
   });
 
-  const images = useMapPostsQuery({ variables: bounds });
+  const posts = useMapPostsQuery({ variables: bounds });
 
   const [searchCoordinates, setSearchCoordinates] = useState({
     lat: 50,
@@ -41,7 +41,7 @@ const MapPage: React.FC = () => {
   });
 
   useEffect(() => {
-    images.refetch(bounds);
+    posts.refetch(bounds);
   }, [bounds]);
 
   if (loading) return <div></div>;
@@ -59,7 +59,7 @@ const MapPage: React.FC = () => {
         <MapGL
           searchCoordinates={searchCoordinates}
           setBounds={setBounds}
-          images={images}
+          posts={posts}
         />
       </div>
       <Search setSearchCoordinates={setSearchCoordinates} />
