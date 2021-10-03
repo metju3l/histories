@@ -1,64 +1,83 @@
-import DbConnector from '../database/driver';
+import RunCypherQuery from '@lib/database/RunCypherQuery';
+import { ValidateUsername } from '@lib/validation';
 
-const UserQuery = async (
-  logged: string | null,
-  username: string | undefined,
-  userID: number | undefined,
-  queries: any
-): Promise<any> => {
+type queryResult = {
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  bio: string | null;
+  verified: boolean;
+  created: number;
+  following?: {
+    id: number;
+    email: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    bio: string | null;
+  };
+  followers?: {
+    id: number;
+    email: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    bio: string | null;
+  };
+  posts?: {
+    id: number;
+    description: string;
+  };
+};
+
+const UserQuery = async ({
+  logged,
+  username,
+  id,
+}: {
+  logged?: number;
+  username?: string;
+  id?: number;
+}): Promise<queryResult> => {
+  // if username and id are undefined
+  if (username === undefined && id === undefined)
+    throw new Error('Username or id required');
+
+  // if username is filled in
+  if (username) {
+    const validateUsername = ValidateUsername(username).error;
+    if (validateUsername) throw new Error(validateUsername);
+  }
+
   const matchString =
-    userID !== undefined
-      ? ` WHERE ID(n) = ${userID} `
-      : ` WHERE n.username =~ "(?i)${username}" `;
+    id !== undefined
+      ? ` WHERE ID(user) = ${id} `
+      : ` WHERE user.username =~ "(?i)${username}" `;
 
-  const userInfoQuery = `MATCH (n:User) ${matchString} RETURN n, ID(n)`;
-  const followersQuery = `MATCH (n:User)<-[:FOLLOW]-(user) ${matchString} RETURN user`;
-  const followingQuery = `MATCH (n:User)-[:FOLLOW]->(user) ${matchString} RETURN user`;
-  const collectionsQuery = `MATCH (n:User)-[:CREATED]->(collection:Collection) ${matchString} RETURN collection`;
-  const postsQuery = `MATCH (n:User)-[:CREATED]->(post:Post) ${matchString} RETURN post ORDER BY post.createdAt DESC`;
-  const isFollowingQuery = logged
-    ? `MATCH (:User {username: "${logged}"})-[r:FOLLOW]->(n:User) ${matchString} RETURN r`
-    : '';
-  // const followQuery = `RETURN {follows:EXISTS((:User {username: ${username}})<-[:FOLLOW]-(:User {username:${logged}})),isFollowed:EXISTS((:User {username:${logged}})<-[:FOLLOW]-(:User {username:${username}}))}`;
+  const query = `
+MATCH (user:User)
+${matchString}
+OPTIONAL MATCH (user:User)<-[:FOLLOW]-(follower:User)
+${matchString}
+OPTIONAL MATCH (user:User)-[:FOLLOW]->(following:User)
+${matchString}
+OPTIONAL MATCH (user:User)-[:CREATED]->(post:Post)-[:IS_LOCATED]->(place:Place)
+${matchString}
+RETURN user{.*,
+  id: ID(user), 
+  followers: COLLECT(DISTINCT follower{.*, id: ID(follower)}),
+  following: COLLECT(DISTINCT following{.*, id: ID(following)}),
+  posts: COLLECT(DISTINCT post{.*, id: ID(post), place:place{.*, id: ID(place)}})
+} AS user`;
 
-  const driver = DbConnector();
-  const session = driver.session();
+  const result = await RunCypherQuery(query);
 
-  const posts = await session.run(postsQuery);
-  const isFollowing = logged ? await session.run(isFollowingQuery) : false;
-  const userInfo = await session.run(userInfoQuery);
-  const following = (await session.run(followingQuery)).records.map((x) => {
-    return x.get('user').properties;
-  });
-  const followers = (await session.run(followersQuery)).records.map((x) => {
-    return x.get('user').properties;
-  });
-  const collections = (await session.run(collectionsQuery)).records.map((x) => {
-    return x.get('collection').properties;
-  });
-  driver.close();
-
-  return userInfo.records[0] === undefined
-    ? null
-    : {
-        ...userInfo.records[0].get('n').properties,
-        id: Number(userInfo.records[0].get('ID(n)')),
-        createdAt: Number(userInfo.records[0].get('n').properties.createdAt),
-        // @ts-ignore
-        isFollowing: logged ? isFollowing.records[0] !== undefined : false,
-        following,
-        followers,
-        collections,
-        posts:
-          posts !== null
-            ? posts.records.map((x) => {
-                return {
-                  ...x.get('post').properties,
-                  id: x.get('post').identity.toNumber(),
-                };
-              })
-            : null,
-      };
+  // If user doesn't exist
+  if (result.records[0] === undefined) throw new Error('User does not exist');
+  // else
+  else return result.records[0].get('user') as queryResult;
 };
 
 export default UserQuery;

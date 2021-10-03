@@ -1,6 +1,6 @@
 import DbConnector from '../database/driver';
 
-const GetPlaceInfo = async ({ id }: { id: number }) => {
+const PlaceQuery = async ({ id }: { id: number }) => {
   const query = `
 MATCH (post:Post)-[:IS_LOCATED]->(place:Place)
 WHERE ID(place) = ${id}
@@ -22,4 +22,4 @@ RETURN COLLECT(post) AS posts, place`;
   };
 };
 
-export default GetPlaceInfo;
+export default PlaceQuery;

@@ -17,7 +17,7 @@ const Login = async (input: {
   const userInfo = await session.run(userInfoQuery);
   driver.close();
 
-  const id = userInfo.records[0].get('id').toInt();
+  const id = userInfo.records[0].get('id');
   if (
     compareSync(
       input.password,

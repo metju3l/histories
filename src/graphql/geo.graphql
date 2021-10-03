@@ -22,5 +22,24 @@ query MapPosts(
     id
     latitude
     longitude
+    posts {
+      id
+      url
+      description
+      author {
+        id
+        username
+        firstName
+        lastName
+      }
+    }
+  }
+}
+
+query Place($id: Int!) {
+  place(id: $id) {
+    posts {
+      id
+    }
   }
 }
