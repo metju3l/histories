@@ -24,3 +24,11 @@ query MapPosts(
     longitude
   }
 }
+
+query Place($id: Int!) {
+  place(id: $id) {
+    posts {
+      id
+    }
+  }
+}
