@@ -122,18 +122,18 @@ const resolvers = {
       else return null;
     },
 
-    post: async (_parent: undefined, { id }: { id: number }, context: any) => {
+    post: async (
+      _parent: undefined,
+      { id }: { id: number },
+      context: contextType
+    ) => {
       return await PostQuery({
         id,
         logged: context.decoded === null ? null : context.decoded.id,
       });
     },
 
-    tag: async (
-      _parent: undefined,
-      { label }: { label: string },
-      context: any
-    ) => {
+    tag: async (_parent: undefined, { label }: { label: string }) => {
       return GetTagInfo({ label });
     },
 
