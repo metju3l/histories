@@ -16,9 +16,9 @@ import {
   GetTagInfo,
   GetMapPlaces,
   SuggestedUsersQuery,
-} from '../../lib';
+} from '@lib/index';
 import { verify } from 'jsonwebtoken';
-import GetPostInfo from '@lib/queries/getPostInfo';
+import PostQuery from '@lib/queries/PostQuery';
 import {
   IsUsedUsername,
   ExistsUser,
@@ -37,6 +37,11 @@ import VerifyToken from '@lib/mutations/VerifyToken';
 import IsVerified from '@lib/queries/IsVerified';
 import GetPlaceInfo from '@lib/queries/GetPlaceInfo';
 import typeDefs from '@graphql/type-defs';
+
+type contextType = {
+  decoded: { id: number };
+  validToken: boolean;
+};
 
 const resolvers = {
   Query: {
@@ -86,29 +91,6 @@ const resolvers = {
     ) => {
       return await GetMapPlaces(input);
     },
-    interClipCode: async (
-      _parent: undefined,
-      { id }: { id: number },
-      context: any
-    ) => {
-      // check if user exists
-      const userExists = ExistsUser(id);
-      if (!userExists) throw new Error("User doesn't exist");
-      // get username
-      const username = (await UserQuery(null, undefined, id, undefined))
-        .username;
-      // create url
-      const url = `http://localhost:3000/${username}`;
-      // api call
-      return await fetch(`https://interclip.app/api/set?url=${url}`)
-        .then((response) => response.json())
-        .then((data) => {
-          return data.result;
-        })
-        .catch((error) => {
-          throw new Error(error);
-        });
-    },
 
     checkIfLogged: async (
       _parent: undefined,
@@ -124,20 +106,19 @@ const resolvers = {
       } else return { logged: false, verified: undefined };
     },
 
-    isLogged: async (_parent: undefined, _input: undefined, context: any) => {
+    isLogged: async (
+      _parent: undefined,
+      _input: undefined,
+      context: contextType
+    ) => {
       // return user data
       if (context.validToken)
-        return await UserQuery(
-          context.decoded.username,
-          undefined,
-          context.decoded.id,
-          undefined
-        );
+        return await UserQuery({ id: context.decoded.id });
       else return null;
     },
 
     post: async (_parent: undefined, { id }: { id: number }, context: any) => {
-      return await GetPostInfo({
+      return await PostQuery({
         id,
         logged: context.decoded === null ? null : context.decoded.id,
       });
@@ -154,35 +135,24 @@ const resolvers = {
     user: async (
       _parent: undefined,
       { input: { username, id } }: { input: { username: string; id: number } },
-      context: any,
-      { operation }: any
+      context: contextType
     ) => {
       // if username and id are undefined
       if (username === undefined && id === undefined)
         throw new Error('Username or id required');
 
-      // if ID is filled in
-      if (id) {
-        // check if user exists
-        const userExists = ExistsUser(id);
-        if (!userExists) throw new Error("User doesn't exist");
-      }
-      // if USERNAME is filled in
-      else if (username) {
-        // checks if username exists and if username is valid
-        const isUsedUsername = await IsUsedUsername(username);
-        if (typeof isUsedUsername === 'string') throw new Error(isUsedUsername);
-        // if user doesn't exist
-        else if (!isUsedUsername) throw new Error("User doesn't exist");
+      // if username is filled in
+      if (username) {
+        const validateUsername = ValidateUsername(username).error;
+        if (validateUsername) throw new Error(validateUsername);
       }
 
       // return user data
-      return await UserQuery(
-        context.validToken ? context.decoded.username : null,
+      return await UserQuery({
+        logged: context.validToken ? context.decoded.id : undefined,
         username,
         id,
-        operation.selectionSet.selections[0].selectionSet.selections
-      );
+      });
     },
   },
   Mutation: {
@@ -210,12 +180,10 @@ const resolvers = {
       },
       context: any
     ) => {
-      const user = await UserQuery(
-        context.validToken ? context.decoded.username : null,
-        undefined,
-        context.decoded.id,
-        undefined
-      );
+      const user = await UserQuery({
+        logged: context.validToken ? context.decoded.username : undefined,
+        id: context.decoded.id,
+      });
       if (input.username !== undefined) {
         const validateUsername = ValidateUsername(input.username).error;
         if (validateUsername) throw new Error(validateUsername);

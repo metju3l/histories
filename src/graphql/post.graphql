@@ -40,7 +40,9 @@ query post($id: Int!) {
     createdAt
     postDate
     description
-    hashtags
+    hashtags {
+      name
+    }
     url
     author {
       id
@@ -54,6 +56,5 @@ query post($id: Int!) {
       firstName
       lastName
     }
-    liked
   }
 }

@@ -9,7 +9,7 @@ const Like = async ({
   id: number;
 }): Promise<string> => {
   if (logged === null) return 'user not logged in';
-  const loggedID = (await UserQuery(null, logged, undefined, null)).id;
+  const loggedID = (await UserQuery({ username: logged })).id;
   const query = `MATCH (n:User)-[like:LIKE]->(m)
                 WHERE ID(n) = ${loggedID} AND ID(m) = ${id}
                 DELETE like`;

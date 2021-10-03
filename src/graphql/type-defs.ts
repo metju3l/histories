@@ -3,15 +3,14 @@ import { gql } from '@apollo/client';
 export default gql`
   type Query {
     hello: String!
-    user(input: UserInput!): UserInfo!
+    user(input: UserInput!): User!
     post(id: Int!): Post!
+    mapPosts(input: MapPostsInput!): [MapPost]!
+    suggestedUsers: [User]!
     tag(label: String!): TagInfo
     paths: [Path]
     isLogged: UserInfoMinimal
     userPosts(input: UserPostsInput!): [Post]
-    interClipCode(id: Int!): String!
-    suggestedUsers: [UserInfoMinimal]
-    mapPosts(input: MapPostsInput!): [MapPost]!
     personalizedPosts: [PostID]!
     checkIfLogged: CheckIfLoggedInfo!
     place(id: Int!): PlaceInfo
@@ -63,12 +62,16 @@ export default gql`
     createdAt: Float!
     postDate: Float!
     description: String
-    hashtags: [String]
+    hashtags: [Hashtag]
     url: String!
     id: Int!
     author: UserInfoMinimal!
     likes: [UserInfoMinimal]!
     liked: Boolean!
+  }
+
+  type Hashtag {
+    name: String!
   }
 
   input LikeInput {
@@ -119,7 +122,7 @@ export default gql`
     coordinates: String!
   }
 
-  type UserInfo {
+  type User {
     username: String!
     email: String!
     firstName: String!

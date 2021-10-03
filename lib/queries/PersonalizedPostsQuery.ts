@@ -1,33 +1,19 @@
-import DbConnector from '../database/driver';
+import RunCypherQuery from '@lib/database/RunCypherQuery';
 
 const PersonalizedPostsQuery = async (logged: number | null) => {
   const query =
     logged === null
       ? `
-MATCH (post:Post)
-RETURN COLLECT(post) AS posts LIMIT 125`
+      MATCH (post:Post)
+      RETURN COLLECT(post{.*, id: ID(post)}) AS posts LIMIT 125`
       : `
-MATCH (user:User)-[:FOLLOW]->(author:User)-[:CREATED]->(post:Post)
-WHERE ID(user) = ${logged}
-RETURN COLLECT(post) AS posts`;
+      OPTIONAL MATCH (user:User)-[:FOLLOW]->(author:User)-[:CREATED]->(post:Post)
+      WHERE ID(user) = ${logged} OR ID(author) = ${logged}
+      RETURN COLLECT(DISTINCT post{.*, id: ID(post)}) AS posts`;
 
-  const driver = DbConnector();
-  const session = driver.session();
+  const result = await RunCypherQuery(query);
 
-  const result = await session.run(query);
-  driver.close();
-
-  return result.records[0].get('posts').map(
-    (node: {
-      identity: any;
-      properties: {
-        description: string;
-        url: string;
-      };
-    }) => ({
-      id: node.identity.toNumber(),
-    })
-  );
+  return result.records[0].get('posts');
 };
 
 export default PersonalizedPostsQuery;

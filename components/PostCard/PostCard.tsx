@@ -93,8 +93,8 @@ const PostCard: FC<{
         <div>
           hashtags:
           {data!.post.hashtags.map((hashtag: any) => (
-            <Button key={hashtag} auto flat color="#ff4ecd">
-              {hashtag}
+            <Button key={hashtag.name} auto flat color="#ff4ecd">
+              {hashtag.name}
             </Button>
           ))}
         </div>
