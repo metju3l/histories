@@ -19,10 +19,7 @@ RETURN post{.*, id: ID(post), author: author{.*, id: ID(author)}, likes: COLLECT
   const result = await RunCypherQuery(query);
 
   if (result.records[0] === undefined) throw new Error('Post does not exist');
-  else {
-    console.log(result.records[0].get('post'));
-    return result.records[0].get('post');
-  }
+  else return result.records[0].get('post');
 };
 
 export default PostQuery;

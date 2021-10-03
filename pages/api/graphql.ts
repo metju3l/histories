@@ -1,22 +1,6 @@
 import { ApolloServer } from 'apollo-server-micro';
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import {
-  UserQuery,
-  CreateUser,
-  DeleteUser,
-  Follow,
-  Unfollow,
-  CreateCollection,
-  Login,
-  GetPaths,
-  EditProfile,
-  CreatePost,
-  DeletePost,
-  Like,
-  GetTagInfo,
-  GetMapPlaces,
-  SuggestedUsersQuery,
-} from '@lib/index';
+
 import { verify } from 'jsonwebtoken';
 import PostQuery from '@lib/queries/PostQuery';
 import {
@@ -35,8 +19,27 @@ import IsUsedEmail from '@lib/validation/dbValidation/IsUsedEmail';
 import PersonalizedPostsQuery from '@lib/queries/PersonalizedPostsQuery';
 import VerifyToken from '@lib/mutations/VerifyToken';
 import IsVerified from '@lib/queries/IsVerified';
-import GetPlaceInfo from '@lib/queries/GetPlaceInfo';
+import PlaceQuery from '@lib/queries/PlaceQuery';
 import typeDefs from '@graphql/type-defs';
+import {
+  GetPaths,
+  GetTagInfo,
+  Login,
+  SuggestedUsersQuery,
+  UserQuery,
+} from '@lib/queries';
+import {
+  CreateCollection,
+  CreatePost,
+  CreateUser,
+  DeletePost,
+  DeleteUser,
+  EditProfile,
+  Follow,
+  Like,
+  Unfollow,
+} from '@lib/mutations';
+import FilterPlaces from '@lib/queries/FilterPlaces';
 
 type contextType = {
   decoded: { id: number };
@@ -49,7 +52,7 @@ const resolvers = {
       return 'Hello';
     },
     place: async (_parent: undefined, { id }: { id: number }) => {
-      return await GetPlaceInfo({ id });
+      return await PlaceQuery({ id });
     },
 
     personalizedPosts: async (
@@ -89,7 +92,7 @@ const resolvers = {
         };
       }
     ) => {
-      return await GetMapPlaces(input);
+      return await FilterPlaces(input);
     },
 
     checkIfLogged: async (
@@ -134,24 +137,12 @@ const resolvers = {
 
     user: async (
       _parent: undefined,
-      { input: { username, id } }: { input: { username: string; id: number } },
+      { input }: { input: { username: string; id: number } },
       context: contextType
     ) => {
-      // if username and id are undefined
-      if (username === undefined && id === undefined)
-        throw new Error('Username or id required');
-
-      // if username is filled in
-      if (username) {
-        const validateUsername = ValidateUsername(username).error;
-        if (validateUsername) throw new Error(validateUsername);
-      }
-
-      // return user data
       return await UserQuery({
         logged: context.validToken ? context.decoded.id : undefined,
-        username,
-        id,
+        ...input,
       });
     },
   },

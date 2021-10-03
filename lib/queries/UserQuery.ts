@@ -1,4 +1,5 @@
 import RunCypherQuery from '@lib/database/RunCypherQuery';
+import { ValidateUsername } from '@lib/validation';
 
 type queryResult = {
   id: number;
@@ -40,6 +41,16 @@ const UserQuery = async ({
   username?: string;
   id?: number;
 }): Promise<queryResult> => {
+  // if username and id are undefined
+  if (username === undefined && id === undefined)
+    throw new Error('Username or id required');
+
+  // if username is filled in
+  if (username) {
+    const validateUsername = ValidateUsername(username).error;
+    if (validateUsername) throw new Error(validateUsername);
+  }
+
   const matchString =
     id !== undefined
       ? ` WHERE ID(user) = ${id} `

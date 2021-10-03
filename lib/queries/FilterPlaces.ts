@@ -1,6 +1,6 @@
 import DbConnector from '../database/driver';
 
-const GetMapPlaces = async ({
+const FilterPlacesQuery = async ({
   maxLatitude,
   minLatitude,
   maxLongitude,
@@ -46,4 +46,4 @@ RETURN COLLECT(result) AS places`;
     });
 };
 
-export default GetMapPlaces;
+export default FilterPlacesQuery;
