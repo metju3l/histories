@@ -89,6 +89,8 @@ const resolvers = {
           minLatitude: number;
           maxLongitude: number;
           minLongitude: number;
+          minDate: number;
+          maxDate: number;
         };
       }
     ) => {
