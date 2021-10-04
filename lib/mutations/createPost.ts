@@ -27,12 +27,13 @@ const CreatePost = async ({
   {
     description:"${description}",
     createdAt: ${new Date().getTime()},
-    postDate: "${photoDate}",
+    postDate: ${photoDate},
     url: "https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80"
   })
   MERGE (place:Place {    
     longitude: ${longitude},
-    latitude: ${latitude}
+    latitude: ${latitude},
+    location: point({longitude: ${longitude}, latitude: ${latitude}, srid: 4326})
   })
   MERGE (post)-[:IS_LOCATED]->(place)
   RETURN ID(post) as id`;
@@ -40,9 +41,7 @@ const CreatePost = async ({
   const driver = DbConnector();
   const session = driver.session();
 
-  const postID = await (await session.run(query)).records[0]
-    .get('id')
-    .toNumber();
+  const postID = await (await session.run(query)).records[0].get('id');
 
   await session.run(`WITH ${hashtags} AS tags
   MATCH (user:User), (post:Post)

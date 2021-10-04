@@ -17,6 +17,7 @@ import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import { Button } from '@nextui-org/react';
 import { toast } from 'react-hot-toast';
 import { AccountCreatedCard, PostCard } from '@components/PostCard';
+import { LoadingButton } from '@components/LoadingButton';
 
 const User: FC<{ username: string }> = ({ username }) => {
   const { data, loading, error, refetch } = useGetUserInfoQuery({
@@ -28,10 +29,13 @@ const User: FC<{ username: string }> = ({ username }) => {
   const [editMode, setEditMode] = useState(false);
   const [editProfileMutation] = useUpdateProfileMutation();
 
-  if (error) return <div>error</div>;
+  if (error) {
+    console.log(error);
+    return <div>error...</div>;
+  }
   if (loading) return <div>loading</div>;
   if (logged.loading) return <div>loading</div>;
-  if (logged.error) return <div>error</div>;
+  if (logged.error) return <div>error...</div>;
   if (data === null || data === undefined)
     return <div>user does not exist</div>;
   const isLogged = logged.data!.isLogged;
@@ -44,6 +48,7 @@ const User: FC<{ username: string }> = ({ username }) => {
         <meta name="description" content="hiStories" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
+
       <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
         <Navbar data={logged.data} />
         <main className="flex max-w-screen-xl m-auto">
@@ -228,38 +233,28 @@ const Input: FC<{
 const FollowButton = ({ data, refetch }: any) => {
   const [followMutation] = useFollowMutation();
   const [unfollowMutation] = useUnfollowMutation();
-  const [isLoading, setIsLoading] = useState(false);
+
   return (
-    <>
-      {isLoading ? (
-        <Button loading loaderType="spinner" />
-      ) : (
-        <Button
-          color={data.user.isFollowing ? '#ff4ecd' : 'primary'}
-          onClick={async () => {
-            setIsLoading(true);
-            try {
-              if (data.user.isFollowing) {
-                await unfollowMutation({
-                  variables: { userID: data.user.id },
-                });
-              } else {
-                await followMutation({
-                  variables: { userID: data.user.id },
-                });
-              }
-              await refetch();
-            } catch (error) {
-              // @ts-ignore
-              toast.error(error.message);
-            }
-            setIsLoading(false);
-          }}
-        >
-          {data.user.isFollowing ? 'Unfollow' : 'Follow'}
-        </Button>
-      )}
-    </>
+    <LoadingButton
+      func={async () => {
+        try {
+          if (data.user.isFollowing) {
+            await unfollowMutation({
+              variables: { userID: data.user.id },
+            });
+          } else {
+            await followMutation({
+              variables: { userID: data.user.id },
+            });
+          }
+          await refetch();
+        } catch (error) {
+          // @ts-ignore
+          toast.error(error.message);
+        }
+      }}
+      title={data.user.isFollowing ? 'Unfollow' : 'Follow'}
+    />
   );
 };
 

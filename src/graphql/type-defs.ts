@@ -49,6 +49,8 @@ export default gql`
     maxLatitude: Float!
     minLongitude: Float!
     maxLongitude: Float!
+    minDate: Float
+    maxDate: Float
   }
 
   type MapPost {

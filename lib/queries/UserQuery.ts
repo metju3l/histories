@@ -57,8 +57,8 @@ const UserQuery = async ({
       : ` WHERE user.username =~ "(?i)${username}" `;
 
   const query = `
-MATCH (user:User)
-${matchString}
+MATCH (user:User)${logged !== undefined ? `, (logged:User)` : ''}
+${matchString}${logged !== undefined ? ` AND ID(logged) = ${logged}` : ''}
 OPTIONAL MATCH (user:User)<-[:FOLLOW]-(follower:User)
 ${matchString}
 OPTIONAL MATCH (user:User)-[:FOLLOW]->(following:User)
@@ -67,6 +67,9 @@ OPTIONAL MATCH (user:User)-[:CREATED]->(post:Post)-[:IS_LOCATED]->(place:Place)
 ${matchString}
 RETURN user{.*,
   id: ID(user), 
+  isFollowing: ${
+    logged !== undefined ? `EXISTS( (logged)-[:FOLLOW]->(user) )` : 'false'
+  },
   followers: COLLECT(DISTINCT follower{.*, id: ID(follower)}),
   following: COLLECT(DISTINCT following{.*, id: ID(following)}),
   posts: COLLECT(DISTINCT post{.*, id: ID(post), place:place{.*, id: ID(place)}})
