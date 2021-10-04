@@ -32,7 +32,8 @@ const CreatePost = async ({
   })
   MERGE (place:Place {    
     longitude: ${longitude},
-    latitude: ${latitude}
+    latitude: ${latitude},
+    location: point({longitude: ${longitude}, latitude: ${latitude}, srid: 4326})
   })
   MERGE (post)-[:IS_LOCATED]->(place)
   RETURN ID(post) as id`;
