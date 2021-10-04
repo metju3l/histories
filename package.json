@@ -22,7 +22,8 @@
     "type-check": "tsc --pretty --noEmit",
     "test": "jest",
     "test-all": "yarn test && yarn lint && yarn type-check",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "migration": "node ./lib/database/Constraints/migration.js"
   },
   "dependencies": {
     "@apollo/client": "^3.4.15",
@@ -41,6 +42,7 @@
     "apollo": "^2.33.4",
     "apollo-server-micro": "^2.25.2",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^10.0.0",
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "graphql": "^15.6.0",
