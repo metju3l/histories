@@ -35,7 +35,7 @@ const GetBounds = (bounds: {
 
 const MapGL: FC<{
   searchCoordinates: { lat: number; lng: number };
-  posts: any;
+  points: any;
   setBounds: React.Dispatch<
     React.SetStateAction<{
       maxLatitude: number;
@@ -44,7 +44,7 @@ const MapGL: FC<{
       minLongitude: number;
     }>
   >;
-}> = ({ searchCoordinates, setBounds, posts }) => {
+}> = ({ searchCoordinates, setBounds, points }) => {
   const [coordinates, setCoordinates] = useState([21, 20]);
 
   const paths = usePathsQuery();
@@ -157,11 +157,9 @@ const MapGL: FC<{
           showCompass={false}
         />
         {viewport.zoom > 12 && Paths}
-        {posts.data?.mapPosts &&
+        {points &&
           // @ts-ignore
-          posts.data.mapPosts.map((post) => (
-            <MapPlace place={post} key={post.id} />
-          ))}
+          points.map((post) => <MapPlace place={post} key={post.id} />)}
 
         <div className="absolute bottom-28 right-2 bg-white rounded-md">
           <Image src={LayerIcon} width={32} height={32} alt="alt" />
