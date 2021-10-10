@@ -35,6 +35,8 @@ import PersonalizedPostsQuery from '../queries/PersonalizedPostsQuery';
 import PlaceQuery from '../queries/PlaceQuery';
 import PostQuery from '../queries/PostQuery';
 import IsUsedEmail from '../validation/dbValidation/IsUsedEmail';
+import { GraphQLUpload } from 'graphql-upload';
+const { finished } = require('stream/promises');
 
 type contextType = {
   decoded: { id: number };
@@ -42,6 +44,8 @@ type contextType = {
 };
 
 const resolvers = {
+  Upload: GraphQLUpload,
+
   Query: {
     hello: () => {
       return 'Hello';
@@ -144,6 +148,22 @@ const resolvers = {
     },
   },
   Mutation: {
+    singleUpload: async (_parent: undefined, { file }: { file: any }) => {
+      const { createReadStream, filename, mimetype, encoding } = await file;
+
+      // Invoking the `createReadStream` will return a Readable Stream.
+      // See https://nodejs.org/api/stream.html#stream_readable_streams
+      const stream = createReadStream();
+
+      // This is purely for demonstration purposes and will overwrite the
+      // local-file-output.txt in the current working directory on EACH upload.
+      const out = require('fs').createWriteStream('local-file-output.txt');
+      stream.pipe(out);
+      await finished(out);
+
+      return { filename, mimetype, encoding };
+    },
+
     like: async (
       _parent: undefined,
       { input }: { input: { id: number; type: string; to: string } },

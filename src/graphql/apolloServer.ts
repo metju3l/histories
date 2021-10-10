@@ -5,6 +5,7 @@ import {
 import { ApolloServer } from 'apollo-server-express';
 import { verify } from 'jsonwebtoken';
 import schema from './schema';
+import { GraphQLUpload, graphqlUploadExpress } from 'graphql-upload';
 
 const apolloServer = new ApolloServer({
   schema,
@@ -20,16 +21,6 @@ const apolloServer = new ApolloServer({
       return { validToken: false, decoded: null };
     }
   },
-
-  plugins: [
-    // Install a landing page plugin based on NODE_ENV
-    process.env.NODE_ENV === 'production'
-      ? ApolloServerPluginLandingPageProductionDefault({
-          graphRef: 'my-graph-id@my-graph-variant',
-          footer: false,
-        })
-      : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
-  ],
 });
 
 export const ApplyMidleware = async (server: any) => {
