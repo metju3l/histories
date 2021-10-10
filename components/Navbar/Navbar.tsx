@@ -1,19 +1,19 @@
-import React, { FC } from 'react';
-import Link from 'next/link';
-import { Menu } from '@headlessui/react';
-import useDarkMode from '@hooks/useDarkmode';
-import Image from 'next/image';
-import LogOut from '@lib/functions/LogOut';
-import { Switch } from '@nextui-org/react';
+import React, { FC } from "react";
+import Link from "next/link";
+import { Menu } from "@headlessui/react";
+import useDarkMode from "@lib/hooks/useDarkmode";
+import Image from "next/image";
+import LogOut from "@lib/functions/LogOut";
+import { Switch } from "@nextui-org/react";
 
 // ICONS
-import { IoIosArrowDropdownCircle, IoMdSettings } from 'react-icons/io';
-import { MdNotificationsActive, MdPeople } from 'react-icons/md';
-import { FaMapMarkedAlt, FaUserCircle } from 'react-icons/fa';
-import { BiSearchAlt2 } from 'react-icons/bi';
-import { RiLoginBoxFill, RiLogoutBoxFill } from 'react-icons/ri';
-import { HiSun, HiMoon } from 'react-icons/hi';
-import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
+import { IoIosArrowDropdownCircle, IoMdSettings } from "react-icons/io";
+import { MdNotificationsActive, MdPeople } from "react-icons/md";
+import { FaMapMarkedAlt, FaUserCircle } from "react-icons/fa";
+import { BiSearchAlt2 } from "react-icons/bi";
+import { RiLoginBoxFill, RiLogoutBoxFill } from "react-icons/ri";
+import { HiSun, HiMoon } from "react-icons/hi";
+import GeneratedProfileUrl from "@lib/functions/GeneratedProfileUrl";
 
 const Navbar: FC<{ data: any }> = ({ data }) => {
   const { theme, setTheme } = useDarkMode();
@@ -88,12 +88,12 @@ const Navbar: FC<{ data: any }> = ({ data }) => {
               Theme
               <Switch
                 className="text-black ml-4"
-                checked={theme === 'dark'}
+                checked={theme === "dark"}
                 size="xlarge"
                 iconOn={<HiMoon />}
                 iconOff={<HiSun />}
                 onChange={(e) => {
-                  setTheme(e.target.checked ? 'dark' : 'light');
+                  setTheme(e.target.checked ? "dark" : "light");
                 }}
               />
             </div>

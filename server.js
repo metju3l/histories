@@ -1,16 +1,15 @@
 const express = require('express');
 const next = require('next');
+const { ApplyMidleware } = require('./dist/graphql/apolloServer');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-app.prepare().then(() => {
+app.prepare().then(async () => {
   const server = express();
 
-  server.get('/test', (req, res) => {
-    res.json(JSON.stringify({ ok: 'oke' }));
-  });
+  await ApplyMidleware(server);
 
   server.all('*', (req, res) => {
     return handle(req, res);

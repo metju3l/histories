@@ -1,8 +1,3 @@
-import { ApolloServer } from 'apollo-server-micro';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-
-import { verify } from 'jsonwebtoken';
-import PostQuery from '@lib/queries/PostQuery';
 import {
   IsUsedUsername,
   ExistsUser,
@@ -14,20 +9,7 @@ import {
   ValidateCoordinates,
   ValidateDescription,
   ValidateDate,
-} from '@lib/validation';
-import IsUsedEmail from '@lib/validation/dbValidation/IsUsedEmail';
-import PersonalizedPostsQuery from '@lib/queries/PersonalizedPostsQuery';
-import VerifyToken from '@lib/mutations/VerifyToken';
-import IsVerified from '@lib/queries/IsVerified';
-import PlaceQuery from '@lib/queries/PlaceQuery';
-import typeDefs from '@graphql/type-defs';
-import {
-  GetPaths,
-  GetTagInfo,
-  Login,
-  SuggestedUsersQuery,
-  UserQuery,
-} from '@lib/queries';
+} from '../validation';
 import {
   CreateCollection,
   CreatePost,
@@ -38,8 +20,21 @@ import {
   Follow,
   Like,
   Unfollow,
-} from '@lib/mutations';
-import FilterPlaces from '@lib/queries/FilterPlaces';
+} from '../mutations';
+import {
+  GetPaths,
+  GetTagInfo,
+  Login,
+  SuggestedUsersQuery,
+  UserQuery,
+} from '../queries';
+import VerifyToken from '../mutations/VerifyToken';
+import FilterPlaces from '../queries/FilterPlaces';
+import IsVerified from '../queries/IsVerified';
+import PersonalizedPostsQuery from '../queries/PersonalizedPostsQuery';
+import PlaceQuery from '../queries/PlaceQuery';
+import PostQuery from '../queries/PostQuery';
+import IsUsedEmail from '../validation/dbValidation/IsUsedEmail';
 
 type contextType = {
   decoded: { id: number };
@@ -387,30 +382,4 @@ const resolvers = {
   },
 };
 
-const schema = makeExecutableSchema({ typeDefs, resolvers });
-
-const apolloServer = new ApolloServer({
-  schema,
-  context: (context) => {
-    try {
-      // get JWT
-      const jwt = context.req.headers.authorization.substring(7);
-      // verify JWT
-      const decoded = verify(jwt, process.env.JWT_SECRET!);
-      return { validToken: true, decoded: decoded };
-      // if JWT is nto valid
-    } catch (err) {
-      return { validToken: false, decoded: null };
-    }
-  },
-});
-
-const handler = apolloServer.createHandler({ path: '/api/graphql' });
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-export default handler;
+export default resolvers;

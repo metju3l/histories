@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@validation/*": ["src/validation/*"]
+    },
     "module": "commonjs",
     "outDir": "dist",
     "sourceMap": true,
@@ -9,5 +14,6 @@
     "skipLibCheck": true
   },
   "compileOnSave": true,
-  "include": ["lib", "src/graphql"]
+  "include": ["src"],
+  "exclude": ["**/__test__"]
 }

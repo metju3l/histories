@@ -1,4 +1,4 @@
-import { ValidateVerificationToken } from '@lib/validation';
+import { ValidateVerificationToken } from '../validation';
 import DbConnector from '../database/driver';
 
 const CreateCollection = async (token: string): Promise<string> => {

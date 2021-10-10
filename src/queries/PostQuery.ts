@@ -1,4 +1,4 @@
-import RunCypherQuery from '@lib/database/RunCypherQuery';
+import RunCypherQuery from '../database/RunCypherQuery';
 
 const PostQuery = async ({
   id,
