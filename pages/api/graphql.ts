@@ -171,12 +171,14 @@ const resolvers = {
           password: string | undefined;
         };
       },
-      context: any
+      context: contextType
     ) => {
+      if (!context.validToken) throw new Error('User is not logged in');
+
       const user = await UserQuery({
-        logged: context.validToken ? context.decoded.username : undefined,
         id: context.decoded.id,
       });
+
       if (input.username !== undefined) {
         const validateUsername = ValidateUsername(input.username).error;
         if (validateUsername) throw new Error(validateUsername);
@@ -184,6 +186,7 @@ const resolvers = {
           if (await IsUsedUsername(input.username))
             throw new Error('Username is already used');
       }
+
       if (input.email !== undefined) {
         const validateEmail = ValidateEmail(input.email).error;
         if (validateEmail) throw new Error(validateEmail);
@@ -197,8 +200,9 @@ const resolvers = {
         if (validateFirstName)
           throw new Error('First name ' + validateFirstName);
       }
+
+      // check last name
       if (input.lastName !== undefined) {
-        // check last name
         const validateLastName = ValidateName(input.lastName).error;
         if (validateLastName) throw new Error('Last name ' + validateLastName);
       }
@@ -208,8 +212,7 @@ const resolvers = {
         if (validateBio) throw new Error(validateBio);
       }
 
-      EditProfile({ ...input, id: context.decoded.id });
-      return 'idk';
+      return EditProfile({ ...input, id: context.decoded.id });
     },
 
     searchUser: async () => {

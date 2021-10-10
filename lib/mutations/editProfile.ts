@@ -1,3 +1,4 @@
+import RunCypherQuery from '@lib/database/RunCypherQuery';
 import DbConnector from '../database/driver';
 
 const EditProfile = async ({
@@ -16,22 +17,19 @@ const EditProfile = async ({
   lastName: string | undefined;
   email: string | undefined;
   password: string | undefined;
-}): Promise<void> => {
-  const query = `MATCH (n:User)
-WHERE ID(n) = ${id}
-${username !== undefined ? `SET n.username = "${username}"\n` : ''}${
-    bio !== undefined ? `SET n.bio = "${bio}"\n` : ''
-  }${firstName !== undefined ? `SET n.firstName = "${firstName}"\n` : ''}${
-    lastName !== undefined ? `SET n.lastName = "${lastName}"\n` : ''
-  }${email !== undefined ? `SET n.email = "${email}"\n` : ''}${
-    password !== undefined ? `SET n.password = "${password}"\n` : ''
+}): Promise<string> => {
+  const query = `MATCH (user:User)
+WHERE ID(user) = ${id}
+${username !== undefined ? `SET user.username = "${username}"\n` : ''}${
+    bio !== undefined ? `SET user.bio = "${bio}"\n` : ''
+  }${firstName !== undefined ? `SET user.firstName = "${firstName}"\n` : ''}${
+    lastName !== undefined ? `SET user.lastName = "${lastName}"\n` : ''
+  }${email !== undefined ? `SET user.email = "${email}"\n` : ''}${
+    password !== undefined ? `SET user.password = "${password}"\n` : ''
   }`;
 
-  const driver = DbConnector();
-  const session = driver.session();
-
-  await session.run(query);
-  driver.close();
+  await RunCypherQuery(query);
+  return 'Info edited succesfully';
 };
 
 export default EditProfile;
