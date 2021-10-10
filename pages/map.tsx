@@ -10,8 +10,6 @@ import { MapGL } from 'components/Map';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { useMapPostsQuery } from '@graphql/geo.graphql';
 
-import { EnumNumberMember } from '@babel/types';
-
 const MapPage: React.FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
   const [bounds, setBounds] = useState<{
@@ -64,7 +62,7 @@ const MapPage: React.FC = () => {
         <MapGL
           searchCoordinates={searchCoordinates}
           setBounds={setBounds}
-          points={points}
+          oldPoints={points}
         />
       </div>
       <Search setSearchCoordinates={setSearchCoordinates} />

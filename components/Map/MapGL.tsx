@@ -19,7 +19,7 @@ import Image from 'next/image';
 import { TimeLine } from 'components/TimeLine/index';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { EnumBooleanMember } from '@babel/types';
+import useSuperCluster from 'use-supercluster';
 
 const GetBounds = (bounds: {
   _ne: { lat: number; lng: number };
@@ -35,7 +35,7 @@ const GetBounds = (bounds: {
 
 const MapGL: FC<{
   searchCoordinates: { lat: number; lng: number };
-  points: any;
+  oldPoints: any;
   setBounds: React.Dispatch<
     React.SetStateAction<{
       maxLatitude: number;
@@ -44,7 +44,7 @@ const MapGL: FC<{
       minLongitude: number;
     }>
   >;
-}> = ({ searchCoordinates, setBounds, points }) => {
+}> = ({ searchCoordinates, setBounds, oldPoints }) => {
   const [coordinates, setCoordinates] = useState([21, 20]);
 
   const paths = usePathsQuery();
@@ -86,6 +86,28 @@ const MapGL: FC<{
   }, [searchCoordinates]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const mapRef = useRef<any>(null);
+
+  // convert points to geoJSON format
+  const points = oldPoints.map((point: any) => ({
+    type: 'Feature',
+    properties: {
+      cluster: false,
+      id: point.id,
+      category: 'place',
+      url: point.url,
+    },
+    geometry: { type: 'Point', coordinates: [point.longitude, point.latitude] },
+  }));
+
+  // generate clusters from points
+  const { clusters, supercluster } = useSuperCluster({
+    points: points,
+    zoom: viewport.zoom,
+    bounds: mapRef.current
+      ? mapRef.current.getMap().getBounds().toArray().flat()
+      : null,
+    options: { radius: 75, maxZoom: 20 },
+  });
 
   if (paths.loading) return <div>loading</div>;
   if (paths.error) return <div>error...</div>;
@@ -156,14 +178,51 @@ const MapGL: FC<{
           }}
           showCompass={false}
         />
-        {viewport.zoom > 12 && Paths}
-        {points &&
-          // @ts-ignore
-          points.map((post) => <MapPlace place={post} key={post.id} />)}
 
-        <div className="absolute bottom-28 right-2 bg-white rounded-md">
-          <Image src={LayerIcon} width={32} height={32} alt="alt" />
-        </div>
+        {clusters.map((cluster) => {
+          const [longitude, latitude] = cluster.geometry.coordinates;
+          const { cluster: isCluster, point_count: pointCount } =
+            cluster.properties;
+
+          if (isCluster) {
+            return (
+              <Marker
+                key={`cluster-${cluster.id}`}
+                latitude={latitude}
+                longitude={longitude}
+              >
+                <div
+                  className="text-white bg-red-500 h-20 w-20 rounded-full py-[2em] text-center "
+                  onClick={() => {
+                    const expansionZoom = Math.min(
+                      supercluster.getClusterExpansionZoom(cluster.id),
+                      20
+                    );
+
+                    setViewport({
+                      ...viewport,
+                      latitude,
+                      longitude,
+                      zoom: expansionZoom,
+                    });
+                  }}
+                >
+                  {pointCount}
+                </div>
+              </Marker>
+            );
+          }
+
+          return (
+            <MapPlace
+              key={cluster.id}
+              place={oldPoints.find(
+                (point: any) =>
+                  point.latitude === latitude && point.longitude === longitude
+              )}
+            />
+          );
+        })}
       </ReactMapGL>
     </>
   );
