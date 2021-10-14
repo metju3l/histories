@@ -9,7 +9,12 @@ const handle = app.getRequestHandler();
 app.prepare().then(async () => {
   const server = express();
 
-  server.use(graphqlUploadExpress());
+  server.use(
+    graphqlUploadExpress({
+      maxFiles: 5,
+      maxFileSize: 20000000,
+    })
+  );
 
   await ApplyMidleware(server);
 

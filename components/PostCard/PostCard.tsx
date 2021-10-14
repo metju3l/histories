@@ -101,7 +101,7 @@ const PostCard: FC<{
       )}
       <div className="relative rounded-xl w-full h-[16em] mt-8">
         <Image
-          src={`https://images.unsplash.com/photo-1561457013-a8b23513739a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1124&q=80`}
+          src={data!.post.url}
           layout="fill"
           objectFit="contain"
           objectPosition="center"

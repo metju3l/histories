@@ -36,7 +36,10 @@ import PlaceQuery from '../queries/PlaceQuery';
 import PostQuery from '../queries/PostQuery';
 import IsUsedEmail from '../validation/dbValidation/IsUsedEmail';
 import { GraphQLUpload } from 'graphql-upload';
-const { finished } = require('stream/promises');
+import AWS from 'aws-sdk';
+import { uuid } from 'uuidv4';
+import sharp from 'sharp';
+import streamToPromise from 'stream-to-promise';
 
 type contextType = {
   decoded: { id: number };
@@ -148,22 +151,6 @@ const resolvers = {
     },
   },
   Mutation: {
-    singleUpload: async (_parent: undefined, { file }: { file: any }) => {
-      const { createReadStream, filename, mimetype, encoding } = await file;
-
-      // Invoking the `createReadStream` will return a Readable Stream.
-      // See https://nodejs.org/api/stream.html#stream_readable_streams
-      const stream = createReadStream();
-
-      // This is purely for demonstration purposes and will overwrite the
-      // local-file-output.txt in the current working directory on EACH upload.
-      const out = require('fs').createWriteStream('local-file-output.txt');
-      stream.pipe(out);
-      await finished(out);
-
-      return { filename, mimetype, encoding };
-    },
-
     like: async (
       _parent: undefined,
       { input }: { input: { id: number; type: string; to: string } },
@@ -319,6 +306,7 @@ const resolvers = {
         input,
       }: {
         input: {
+          photo: any;
           description: string;
           hashtags: string;
           photoDate: string;
@@ -343,9 +331,60 @@ const resolvers = {
       const validateDate = ValidateDate(Number(input.photoDate)).error;
       if (validateDate) throw new Error(validateDate);
 
+      const { createReadStream, filename, mimetype, encoding } =
+        await input.photo;
+      if (!mimetype.startsWith('image/'))
+        throw new Error('file is not a image');
+
+      const uniqueFileName = `${new Date().getTime()}-${uuid().substring(
+        0,
+        8
+      )}.jpg`;
+
+      const stream = await createReadStream();
+      const buffer = await streamToPromise(stream);
+      const image = await sharp(buffer)
+        .resize(800, undefined, { withoutEnlargement: true })
+        .jpeg()
+        .toBuffer();
+
+      if (!process.env.AWS_BUCKET) throw new Error('S3 bucket is not defined');
+      if (!process.env.S3_ACCESS_KEY)
+        throw new Error('S3 access key is not defined');
+      if (!process.env.S3_SECRET_ACCESS_KEY)
+        throw new Error('S3 secret access key is not defined');
+
+      const params = {
+        Bucket: 'histories-bucket',
+        Key: uniqueFileName,
+        Body: image,
+        ACL: 'public-read',
+      };
+
+      const s3 = new AWS.S3({
+        accessKeyId: process.env.S3_ACCESS_KEY,
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+      });
+
+      const promise = await s3
+        .upload(params, (error: any, data: any) => {
+          if (error) {
+            console.error(error);
+          } else {
+            console.log(data);
+          }
+        })
+        .promise();
+
       if (context.validToken)
-        return CreatePost({ ...input, userID: context.decoded.id });
+        CreatePost({
+          ...input,
+          userID: context.decoded.id,
+          url: promise.Location,
+        });
       else throw new Error('User is not logged');
+
+      return 'post created';
     },
 
     deletePost: async (

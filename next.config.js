@@ -31,6 +31,10 @@ module.exports = withPWA({
     return config;
   },
   images: {
-    domains: ['images.unsplash.com', 'avatars.dicebear.com'],
+    domains: [
+      'images.unsplash.com',
+      'avatars.dicebear.com',
+      'histories-bucket.s3.amazonaws.com',
+    ],
   },
 });

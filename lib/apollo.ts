@@ -23,8 +23,8 @@ function createIsomorphLink(context: ResolverContext = {}) {
     return new SchemaLink({ schema, context });
   } else {
     // eslint-disable-next-line
-    const { HttpLink } = require('@apollo/client');
-    return new HttpLink({
+    const { createUploadLink } = require('apollo-upload-client');
+    return new createUploadLink({
       uri: '/api/graphql',
       credentials: 'same-origin',
 
