@@ -1,6 +1,8 @@
 import { gql } from '@apollo/client';
 
 export default gql`
+  scalar Upload
+
   type Query {
     hello: String!
     user(input: UserInput!): User!
@@ -88,6 +90,7 @@ export default gql`
     photoDate: String!
     latitude: Float!
     longitude: Float!
+    photo: Upload!
   }
 
   input UpdateProfileInput {

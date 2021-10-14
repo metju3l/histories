@@ -1,23 +1,29 @@
-const { createServer } = require('https');
-const { parse } = require('url');
+const express = require('express');
 const next = require('next');
-const fs = require('fs');
-const port = 3000;
+const { ApplyMidleware } = require('./dist/graphql/apolloServer');
+const { GraphQLUpload, graphqlUploadExpress } = require('graphql-upload');
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-const httpsOptions = {
-  key: fs.readFileSync('./certificate/localhost-key.pem'),
-  cert: fs.readFileSync('./certificate/localhost.pem'),
-};
+app.prepare().then(async () => {
+  const server = express();
 
-app.prepare().then(() => {
-  createServer(httpsOptions, (req, res) => {
-    const parsedUrl = parse(req.url, true);
-    handle(req, res, parsedUrl);
-  }).listen(port, (err) => {
+  server.use(
+    graphqlUploadExpress({
+      maxFiles: 5,
+      maxFileSize: 20000000,
+    })
+  );
+
+  await ApplyMidleware(server);
+
+  server.all('*', (req, res) => {
+    return handle(req, res);
+  });
+
+  server.listen(3000, (err) => {
     if (err) throw err;
-    console.log('ready - started server on url: https://localhost:' + port);
+    console.log(`🚀 Server ready`);
   });
 });

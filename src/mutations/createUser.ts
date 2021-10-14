@@ -1,7 +1,7 @@
 import DbConnector from '../database/driver';
 import { hash } from 'bcryptjs';
 import { uuid } from 'uuidv4';
-import SendEmail from '@lib/email/SendEmail';
+import SendEmail from '../email/SendEmail';
 
 const CreateUser = async (input: {
   username: string;

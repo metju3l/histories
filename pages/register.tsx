@@ -11,7 +11,7 @@ import {
   ValidateName,
   ValidatePassword,
   ValidateUsername,
-} from '@lib/validation';
+} from '@src/validation';
 import { Layout } from '@components/Layout';
 
 const Register: React.FC = () => {

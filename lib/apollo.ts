@@ -19,12 +19,12 @@ function createIsomorphLink(context: ResolverContext = {}) {
     // eslint-disable-next-line
     const { SchemaLink } = require('@apollo/client/link/schema');
     // eslint-disable-next-line
-    const { schema } = require('../pages/api/graphql');
+    const schema = require('../src/graphql/schema');
     return new SchemaLink({ schema, context });
   } else {
     // eslint-disable-next-line
-    const { HttpLink } = require('@apollo/client');
-    return new HttpLink({
+    const { createUploadLink } = require('apollo-upload-client');
+    return new createUploadLink({
       uri: '/api/graphql',
       credentials: 'same-origin',
 

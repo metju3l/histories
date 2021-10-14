@@ -3,10 +3,11 @@
     "baseUrl": "./",
     "paths": {
       "@components/*": ["components/*"],
-      "@graphql/*": ["src/graphql/*"],
-      "@hooks/*": ["src/hooks/*"],
+      "@graphql/*": ["lib/graphql/*"],
+      "@hooks/*": ["lib/hooks/*"],
       "@lib/*": ["lib/*"],
-      "@validation/*": ["lib/validation/*"],
+      "@src/*": ["src/*"],
+      "@validation/*": ["validation/*"],
       "@public/*": ["public/*"]
     },
     "target": "es5",
@@ -23,6 +24,12 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "lib/database/driver.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/database/driver.ts",
+    "server.js"
+  ],
   "exclude": ["node_modules", ".cache"]
 }

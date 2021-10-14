@@ -1,14 +1,14 @@
-import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Menu } from '@headlessui/react';
-import useDarkMode from '@hooks/useDarkmode';
-import Image from 'next/image';
+import Head from "next/head";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { Menu } from "@headlessui/react";
+import useDarkMode from "@lib/hooks/useDarkmode";
+import Image from "next/image";
 
-import { Search } from 'components/MainPage';
-import { MapGL } from 'components/Map';
-import { useIsLoggedQuery } from '@graphql/user.graphql';
-import { useMapPostsQuery } from '@graphql/geo.graphql';
+import { Search } from "components/MainPage";
+import { MapGL } from "components/Map";
+import { useIsLoggedQuery } from "@graphql/user.graphql";
+import { useMapPostsQuery } from "@graphql/geo.graphql";
 
 const MapPage: React.FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
@@ -58,7 +58,7 @@ const MapPage: React.FC = () => {
         <meta name="description" content="hiStories" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div className="w-full" style={{ height: 'calc(100vh - 14px)' }}>
+      <div className="w-full" style={{ height: "calc(100vh - 14px)" }}>
         <MapGL
           searchCoordinates={searchCoordinates}
           setBounds={setBounds}

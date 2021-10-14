@@ -1,5 +1,5 @@
-import RunCypherQuery from '@lib/database/RunCypherQuery';
-import { ValidateUsername } from '@lib/validation';
+import RunCypherQuery from '../database/RunCypherQuery';
+import { ValidateUsername } from '../validation';
 
 type queryResult = {
   id: number;
