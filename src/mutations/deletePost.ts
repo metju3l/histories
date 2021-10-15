@@ -7,6 +7,7 @@ const DeletePost = async ({
   logged: string;
   id: number;
 }): Promise<string> => {
+  
   const query = `MATCH (user:User)-[:CREATED]->(post:Post)
   WHERE user.username = "${logged}" AND ID(post) = ${id}
   DETACH DELETE post`;

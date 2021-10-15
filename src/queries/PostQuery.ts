@@ -1,3 +1,4 @@
+import { ParseUrls } from '../functions';
 import RunCypherQuery from '../database/RunCypherQuery';
 
 const PostQuery = async ({
@@ -22,7 +23,7 @@ RETURN post{.*, id: ID(post), author: author{.*, id: ID(author)}, likes: COLLECT
   else
     return {
       ...result.records[0].get('post'),
-      url: JSON.parse(result.records[0].get('post').url.replace(/'/gm, '"')),
+      url: ParseUrls(result.records[0].get('post').url),
     };
 };
 

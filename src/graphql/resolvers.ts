@@ -36,8 +36,7 @@ import PlaceQuery from '../queries/PlaceQuery';
 import PostQuery from '../queries/PostQuery';
 import IsUsedEmail from '../validation/dbValidation/IsUsedEmail';
 import { GraphQLUpload } from 'graphql-upload';
-import {DeleteFile} from '../s3/';
-
+import { UploadPhoto } from '../s3/';
 
 type contextType = {
   decoded: { id: number };
@@ -330,7 +329,7 @@ const resolvers = {
       if (validateDate) throw new Error(validateDate);
 
       const urls = await Promise.all(
-        input.photo.map(async (photo: any) => await DeleteFile(photo))
+        input.photo.map(async (photo: any) => await UploadPhoto(photo))
       );
 
       if (context.validToken)
