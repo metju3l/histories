@@ -2298,10 +2298,10 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-11.1.2.tgz#e15824405df137129918205e43cb5e9339589745"
   integrity sha512-e/pIKVdB+tGQYa1cW3sAeHm8gzEri/HYLZHT4WZojrUxgWXqx8pk7S7Xs47uBcFTqBDRvK3EcQpPLf3XdVsDdg==
 
-"@nextui-org/react@^1.0.1-alpha.48":
-  version "1.0.1-alpha.48"
-  resolved "https://registry.yarnpkg.com/@nextui-org/react/-/react-1.0.1-alpha.48.tgz#f8bed4a4074430ea40061a6f581077fb27946b0f"
-  integrity sha512-yG1pL7rEpxwB1f6ff5F0q0eXg2M5GkSM3ZJIMgzCztpytUXxVjbDAccxw42+r885Fbj9YWrlU9rETX27avNUXQ==
+"@nextui-org/react@^1.0.1-alpha.50":
+  version "1.0.1-alpha.50"
+  resolved "https://registry.yarnpkg.com/@nextui-org/react/-/react-1.0.1-alpha.50.tgz#60c2ac7e39dd2de9b82fb47100f766ffaeb85fc3"
+  integrity sha512-9DgEWbFeJm+okrEO6eIeXPzykg4TPRaV2smlc+bZOPtWIiiKBdAJrXO/sTijPxuVlUkK31uXTFeCy0AUZ9p88Q==
   dependencies:
     styled-jsx "^4.0.1"
 
