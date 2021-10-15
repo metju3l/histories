@@ -42,8 +42,6 @@ const UploadPhoto = async (photo: any) => {
     .upload(params, (error: any, data: any) => {
       if (error) {
         console.error(error);
-      } else {
-        console.log(data);
       }
     })
     .promise();

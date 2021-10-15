@@ -1,7 +1,7 @@
 import AWS from 'aws-sdk';
 
 const DeleteFile = async (key: string) => {
-  const s3url = 'https://histories-bucket.s3.amazonaws.com/';
+  const s3url = 'https://histories-bucket.s3.eu-central-1.amazonaws.com/';
 
   if (!process.env.AWS_BUCKET) throw new Error('S3 bucket is not defined');
   if (!process.env.S3_ACCESS_KEY)
@@ -19,13 +19,11 @@ const DeleteFile = async (key: string) => {
     Key: key.startsWith(s3url) ? key.substring(s3url.length) : key,
   };
 
-  await s3
-    .deleteObject(params, function (err, data) {
-      if (err) console.log(err, err.stack);
-      // error
-      else console.log(); // deleted
-    })
-    .promise();
+  await s3.deleteObject(params, function (err, data) {
+    // error
+    if (err) console.log(err, err.stack);
+    else console.log(data);
+  });
 };
 
 export default DeleteFile;
