@@ -94,7 +94,6 @@ const MapGL: FC<{
       cluster: false,
       id: point.id,
       category: 'place',
-      url: point.url,
     },
     geometry: { type: 'Point', coordinates: [point.longitude, point.latitude] },
   }));
@@ -239,8 +238,10 @@ const MapPlace = ({ place }: { place: any }) => {
             setIsOpen(true);
           }}
         >
+          {console.log(place.posts[0])}
+
           <Image
-            src={place.posts[0].url}
+            src={place.posts[0].url[0]}
             width={60}
             height={60}
             className="rounded-full w-12 h-12 object-cover"
@@ -296,7 +297,7 @@ const MapPlace = ({ place }: { place: any }) => {
                   {place.posts.map((post: any) => (
                     <div key={post.id}>
                       <img
-                        src={post.url}
+                        src={post.url[0]}
                         className="w-12 h-12 object-cover"
                         alt="Picture on map"
                       />

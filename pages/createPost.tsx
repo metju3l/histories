@@ -175,9 +175,10 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
         </div>
         <input
           type="file"
+          multiple={true}
           accept="image/*"
           onChange={(e: any) => {
-            setFile(e.target.files[0]);
+            setFile(e.target.files);
           }}
         />
         <Formik

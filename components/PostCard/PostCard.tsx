@@ -99,15 +99,19 @@ const PostCard: FC<{
           ))}
         </div>
       )}
-      <div className="relative rounded-xl w-full h-[16em] mt-8">
-        <Image
-          src={data!.post.url}
-          layout="fill"
-          objectFit="contain"
-          objectPosition="center"
-          className="rounded-xl"
-          alt="Profile picture"
-        />
+      <div className="relative rounded-xl w-full mt-8">
+        {data!.post.url.map((url) => (
+          <div key={url} className="relative rounded-xl w-full h-[16em]">
+            <Image
+              src={url}
+              layout="fill"
+              objectFit="contain"
+              objectPosition="center"
+              className="rounded-xl"
+              alt="Profile picture"
+            />
+          </div>
+        ))}
         <div className="absolute right-2 bottom-4 p-2 bg-white shadow-lg dark:bg-[#343233] rounded-xl text-text-light dark:text-white">
           <Link href="/map">
             <a>

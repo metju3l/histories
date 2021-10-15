@@ -8,7 +8,7 @@ mutation createPost(
   $photoDate: String!
   $latitude: Float!
   $longitude: Float!
-  $photo: Upload!
+  $photo: [Upload!]!
 ) {
   createPost(
     input: {
