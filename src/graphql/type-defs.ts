@@ -90,7 +90,7 @@ export default gql`
     photoDate: String!
     latitude: Float!
     longitude: Float!
-    photo: Upload!
+    photo: [Upload!]!
   }
 
   input UpdateProfileInput {
