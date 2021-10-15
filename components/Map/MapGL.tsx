@@ -238,8 +238,6 @@ const MapPlace = ({ place }: { place: any }) => {
             setIsOpen(true);
           }}
         >
-          {console.log(place.posts[0])}
-
           <Image
             src={place.posts[0].url[0]}
             width={60}
