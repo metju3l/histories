@@ -67,7 +67,7 @@ export default gql`
     postDate: Float!
     description: String
     hashtags: [Hashtag]
-    url: String!
+    url: [String!]!
     id: Int!
     author: UserInfoMinimal!
     likes: [UserInfoMinimal]!

@@ -38,7 +38,15 @@ RETURN COLLECT(result) AS places`;
 
   const result = await RunCypherQuery(query);
 
-  return result.records[0].get('places');
+  return result.records[0]
+    .get('places')
+    .map((x: any) => ({
+      ...x,
+      posts: x.posts.map((post: any) => ({
+        ...post,
+        url: JSON.parse(post.url.replace(/'/gm, '"')),
+      })),
+    }));
 };
 
 const ValidateQueryInput = ({

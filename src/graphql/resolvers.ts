@@ -383,8 +383,6 @@ const resolvers = {
         input.photo.map(async (photo: any) => await UploadPhoto(photo))
       );
 
-      console.log();
-
       if (context.validToken)
         CreatePost({
           ...input,
