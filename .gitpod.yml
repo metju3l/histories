@@ -2,21 +2,16 @@
 tasks:
   - init: yarn install
     command:  >
-      # Install mkcert and generate certificates
-      cd ./certificate;
-      sh install.sh
-      mkcert localhost;
-      cd ../;
-
       docker-compose up -d;
       cp .env.local.example .env.local;
+      cp nodemon.json.example nodemon.json;
       yarn build;
       yarn start;
 
 # Ports to expose on workspace startup
 ports:
   - port: 3000
-    onOpen: open-preview
+    onOpen: ignore
     visibility: public
   - port: 7687
     onOpen: ignore

@@ -9,28 +9,14 @@ And it also is my high school final project.
 
 ## Setup dev:
 
-1. rename `.env.local.example` to `.env.local` and change values
-2. generate certificate
-   ```bash
-   cd certificate
-   sh install.sh
-   mkcert localhost
-   ```
-3. run `yarn dev` / `yarn dev-ssl`
-
-## Production:
-
-1. rename `.env.local.example` to `.env.local` and change values
-2. ```bash
-   yarn install
-   yarn build
-   yarn start
-   ```
+1. rename `.env.local.example` to `.env.local` and change value
+2. rename `nodemon.json.example` to `nodemon.json` and change value
+3. run `yarn dev`
 
 ## Before pushing:
 
 - build `yarn build`
-- lint, type-check and tests `yarn test-all`
+- lint, type-check and jest `yarn test-all`
 
 ## Technologies
 
