@@ -15,7 +15,6 @@ const Index: React.FC = () => {
 
   return (
     <Layout title="hiStories">
-      <Navbar data={logged.data} />
       <div className="flex max-w-screen-xl m-auto">
         <div className="w-[30%] p-[1em] hidden xl:block">
           <div className="sticky top-20">

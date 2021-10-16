@@ -93,8 +93,7 @@ const Login: FC = () => {
   if (!data!.isLogged) router.replace('/');
   return (
     <body>
-      <Navbar data={data} />
-
+      <Navbar />
       <div className="h-screen text-black bg-[#F6F8FA]">
         <div className="h-[30vh] flex">
           <div className=" p-[10px]">

@@ -50,7 +50,7 @@ const User: FC<{ username: string }> = ({ username }) => {
       </Head>
 
       <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
-        <Navbar data={logged.data} />
+        <Navbar />
         <main className="flex max-w-screen-xl m-auto">
           <div className="w-full">
             <div className="relative rounded-full w-36 h-36 m-auto">
