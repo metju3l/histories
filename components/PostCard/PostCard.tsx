@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import React, { FC, useState } from 'react';
 import { useDeletePostMutation, usePostQuery } from '@graphql/post.graphql';
-import { useLikeMutation } from '@graphql/relations.graphql';
+import {
+  useLikeMutation,
+  useUnfollowMutation,
+} from '@graphql/relations.graphql';
 import { FiSend } from 'react-icons/fi';
 import Image from 'next/image';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
@@ -16,6 +19,7 @@ const PostCard: FC<{
   refetch: any;
 }> = ({ id, isLoggedQuery, refetch }) => {
   const { data, loading, error } = usePostQuery({ variables: { id } });
+  const [unfollowMutation] = useUnfollowMutation();
 
   const [deletePostMutation] = useDeletePostMutation();
   const [likeMutation] = useLikeMutation();
@@ -75,7 +79,16 @@ const PostCard: FC<{
               warning
             />
             <ModalOption
-              onClick={() => setModal(false)}
+              onClick={async () => {
+                try {
+                  await unfollowMutation({
+                    variables: { userID: data!.post.author.id },
+                  });
+                } catch (error) {
+                  // @ts-ignore
+                  toast.error(error.message);
+                }
+              }}
               text="Unfollow"
               warning
             />
