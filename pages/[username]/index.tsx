@@ -18,6 +18,7 @@ import { Button } from '@nextui-org/react';
 import { toast } from 'react-hot-toast';
 import { AccountCreatedCard, PostCard } from '@components/PostCard';
 import { LoadingButton } from '@components/LoadingButton';
+import { Layout } from '@components/Layout';
 
 const User: FC<{ username: string }> = ({ username }) => {
   const { data, loading, error, refetch } = useGetUserInfoQuery({
@@ -41,16 +42,8 @@ const User: FC<{ username: string }> = ({ username }) => {
   const isLogged = logged.data!.isLogged;
 
   return (
-    <>
-      <Head>
-        <title>{`${data.user.firstName} ${data.user.lastName} | hiStories`}</title>
-        <link rel="icon" href="/favicon.ico" />
-        <meta name="description" content="hiStories" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-
-      <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
-        <Navbar />
+    <Layout title={`${data.user.username} | hiStories`}>
+      <div className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
         <main className="flex max-w-screen-xl m-auto">
           <div className="w-full">
             <div className="relative rounded-full w-36 h-36 m-auto">
@@ -190,8 +183,8 @@ const User: FC<{ username: string }> = ({ username }) => {
             />
           </div>
         </main>
-      </body>
-    </>
+      </div>
+    </Layout>
   );
 };
 

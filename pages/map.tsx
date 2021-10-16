@@ -1,14 +1,15 @@
-import Head from "next/head";
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import { Menu } from "@headlessui/react";
-import useDarkMode from "@lib/hooks/useDarkmode";
-import Image from "next/image";
+import Head from 'next/head';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { Menu } from '@headlessui/react';
+import useDarkMode from '@lib/hooks/useDarkmode';
+import Image from 'next/image';
 
-import { Search } from "components/MainPage";
-import { MapGL } from "components/Map";
-import { useIsLoggedQuery } from "@graphql/user.graphql";
-import { useMapPostsQuery } from "@graphql/geo.graphql";
+import { Search } from 'components/MainPage';
+import { MapGL } from 'components/Map';
+import { useIsLoggedQuery } from '@graphql/user.graphql';
+import { useMapPostsQuery } from '@graphql/geo.graphql';
+import { Layout } from '@components/Layout';
 
 const MapPage: React.FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
@@ -51,14 +52,8 @@ const MapPage: React.FC = () => {
   if (loading) return <div></div>;
   if (error) return <div></div>;
   return (
-    <>
-      <Head>
-        <title>hiStories</title>
-        <link rel="icon" href="/favicon.ico" />
-        <meta name="description" content="hiStories" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <div className="w-full" style={{ height: "calc(100vh - 14px)" }}>
+    <Layout title="map | hiStories">
+      <div className="w-full" style={{ height: 'calc(100vh - 14px)' }}>
         <MapGL
           searchCoordinates={searchCoordinates}
           setBounds={setBounds}
@@ -66,7 +61,7 @@ const MapPage: React.FC = () => {
         />
       </div>
       <Search setSearchCoordinates={setSearchCoordinates} />
-    </>
+    </Layout>
   );
 };
 
