@@ -39,6 +39,7 @@ query tag($label: String!) {
 
 query post($id: Int!) {
   post(id: $id) {
+    id
     createdAt
     postDate
     description
