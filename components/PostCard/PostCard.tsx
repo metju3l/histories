@@ -1,14 +1,17 @@
 import Link from 'next/link';
 import React, { FC, useState } from 'react';
-import { useDeletePostMutation, usePostQuery } from '@graphql/post.graphql';
+import {
+  useCreateCommentMutation,
+  useDeletePostMutation,
+  usePostQuery,
+} from '@graphql/post.graphql';
 import {
   useLikeMutation,
   useUnfollowMutation,
 } from '@graphql/relations.graphql';
 import { FiSend } from 'react-icons/fi';
-import Image from 'next/image';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
-import { Avatar, Button, Grid, Modal, Text } from '@nextui-org/react';
+import { Avatar, Button, Grid, Input, Modal, Text } from '@nextui-org/react';
 import { toast } from 'react-hot-toast';
 import { MdPhotoCamera } from 'react-icons/md';
 import { AiFillLike, AiOutlineComment, AiOutlineMore } from 'react-icons/ai';
@@ -26,6 +29,8 @@ const PostCard: FC<{
 
   const [deletePostMutation] = useDeletePostMutation();
   const [likeMutation] = useLikeMutation();
+  const [createCommentMutation] = useCreateCommentMutation();
+  const [commentContent, setCommentContent] = useState('');
 
   const [modal, setModal] = useState(false);
   const [modalScreen, setModalScreen] = useState('main');
@@ -204,13 +209,39 @@ const PostCard: FC<{
                 {data?.post.description}
               </>
             )}
-
             {data?.post.hashtags && data?.post.hashtags.length > 0 && (
               <div>
                 <a className="font-semibold"> hashtags:</a>
                 {data!.post.hashtags.map((hashtag: any) => ` ${hashtag.name} `)}
               </div>
             )}
+            <div className="border-t border-gray-300 mt-2 pt-2">
+              {isLoggedQuery?.data?.isLogged && (
+                <>
+                  <Input
+                    type="text"
+                    onChange={(e: any) => setCommentContent(e.target.value)}
+                  />
+                  <Button
+                    onClick={async () => {
+                      await createCommentMutation({
+                        variables: { target: id, content: commentContent },
+                      });
+                    }}
+                  >
+                    Comment
+                  </Button>
+                </>
+              )}
+              <div>
+                comments:
+                {data?.post.comments.map((comment: any) => (
+                  <div key={comment.id}>
+                    {comment.author.username}: {comment.content}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

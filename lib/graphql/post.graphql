@@ -2,6 +2,10 @@ mutation deletePost($id: Int!) {
   deletePost(id: $id)
 }
 
+mutation createComment($target: Int!, $content: String!) {
+  createComment(input: { target: $target, content: $content })
+}
+
 mutation createPost(
   $description: String
   $hashtags: String
@@ -58,6 +62,17 @@ query post($id: Int!) {
       username
       firstName
       lastName
+    }
+    comments {
+      id
+      createdAt
+      content
+      author {
+        id
+        username
+        firstName
+        lastName
+      }
     }
   }
 }
