@@ -20,11 +20,10 @@ import { useRouter } from 'next/router';
 const PostCard: FC<{
   isLoggedQuery: any;
   id: number;
-  refetch: any;
-}> = ({ id, isLoggedQuery, refetch }) => {
+}> = ({ id, isLoggedQuery }) => {
   const router = useRouter();
 
-  const { data, loading, error } = usePostQuery({ variables: { id } });
+  const { data, loading, error, refetch } = usePostQuery({ variables: { id } });
   const [unfollowMutation] = useUnfollowMutation();
 
   const [deletePostMutation] = useDeletePostMutation();
@@ -221,12 +220,19 @@ const PostCard: FC<{
                   <Input
                     type="text"
                     onChange={(e: any) => setCommentContent(e.target.value)}
+                    value={commentContent}
                   />
                   <Button
                     onClick={async () => {
-                      await createCommentMutation({
-                        variables: { target: id, content: commentContent },
-                      });
+                      try {
+                        await createCommentMutation({
+                          variables: { target: id, content: commentContent },
+                        });
+                        setCommentContent('');
+                        await refetch();
+                      } catch (error: any) {
+                        toast.error(error.message);
+                      }
                     }}
                   >
                     Comment
