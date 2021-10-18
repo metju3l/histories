@@ -37,6 +37,7 @@ import PostQuery from '../queries/PostQuery';
 import IsUsedEmail from '../validation/dbValidation/IsUsedEmail';
 import { GraphQLUpload } from 'graphql-upload';
 import { UploadPhoto } from '../s3/';
+import { CreateComment } from '../mutations/Create';
 
 type contextType = {
   decoded: { id: number };
@@ -212,6 +213,23 @@ const resolvers = {
       }
 
       return EditProfile({ ...input, id: context.decoded.id });
+    },
+
+    createComment: async (
+      _parent: undefined,
+      {
+        input: { target, content },
+      }: { input: { target: number; content: string } },
+      context: any
+    ) => {
+      if (context.validToken) {
+        await CreateComment({
+          targetID: target,
+          authorID: context.decoded.id,
+          content,
+        });
+        return 'success';
+      } else throw new Error('User is not logged');
     },
 
     searchUser: async () => {

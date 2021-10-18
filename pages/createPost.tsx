@@ -12,6 +12,7 @@ import { Button } from '@nextui-org/react';
 import router from 'next/router';
 import { toast } from 'react-hot-toast';
 import { Search } from '@components/MainPage';
+import { Layout } from '@components/Layout';
 
 const Login: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -92,9 +93,7 @@ const Login: FC = () => {
 
   if (!data!.isLogged) router.replace('/');
   return (
-    <body>
-      <Navbar data={data} />
-
+    <Layout title="Create post | hiStories">
       <div className="h-screen text-black bg-[#F6F8FA]">
         <div className="h-[30vh] flex">
           <div className=" p-[10px]">
@@ -228,7 +227,7 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
           )}
         </Formik>
       </div>
-    </body>
+    </Layout>
   );
 };
 

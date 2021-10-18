@@ -11,3 +11,4 @@ export { default as ValidateCoordinates } from './inputValidation/ValidateCoordi
 export { default as ValidateDate } from './inputValidation/ValidateDate';
 export { default as ValidateDescription } from './inputValidation/ValidateDescription';
 export { default as ValidateVerificationToken } from './inputValidation/ValidateVerificationToken';
+export { default as ValidateHashtag } from './inputValidation/ValidateHashtag';

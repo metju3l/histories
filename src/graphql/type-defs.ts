@@ -32,6 +32,12 @@ export default gql`
     searchUser(input: SearchUserInput!): String!
     createUser(input: CreateUserInput!): String!
     verifyToken(token: String!): String!
+    createComment(input: CreateCommentInput!): String!
+  }
+
+  input CreateCommentInput {
+    target: Int!
+    content: String!
   }
 
   type PlaceInfo {
@@ -72,6 +78,14 @@ export default gql`
     author: UserInfoMinimal!
     likes: [UserInfoMinimal]!
     liked: Boolean!
+    comments: [Comment]!
+  }
+
+  type Comment {
+    id: Int!
+    createdAt: Float!
+    content: String!
+    author: UserInfoMinimal!
   }
 
   type Hashtag {

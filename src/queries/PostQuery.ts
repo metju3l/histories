@@ -8,14 +8,16 @@ const PostQuery = async ({
   id: number;
   logged: number | null;
 }) => {
-  const query = `
+  const query = `WITH ${id} AS inputID
 MATCH (author:User)-[:CREATED]->(post:Post)
-WHERE ID(post) = ${id}
+WHERE ID(post) = inputID
 OPTIONAL MATCH (post:Post)<-[:LIKE]-(like:User)
-WHERE ID(post) = ${id}
+WHERE ID(post) = inputID
 OPTIONAL MATCH (post:Post)<-[:CONTAINS]-(hashtag:Hashtag)
-WHERE ID(post) = ${id}
-RETURN post{.*, id: ID(post), author: author{.*, id: ID(author)}, likes: COLLECT(DISTINCT like{.*, id: ID(like)}), hashtags: COLLECT(DISTINCT hashtag{.*})} AS post`;
+WHERE ID(post) = inputID
+OPTIONAL MATCH (post:Post)<-[:BELONGS_TO]-(comment:Comment)<-[:CREATED]-(commentAuthor:User)
+WHERE ID(post) = inputID
+RETURN post{.*, id: ID(post), author: author{.*, id: ID(author)}, likes: COLLECT(DISTINCT like{.*, id: ID(like)}), hashtags: COLLECT(DISTINCT hashtag{.*}), comments: COLLECT(comment{.*, id:ID(comment), author: commentAuthor{.*, id: ID(commentAuthor)}})} AS post`;
 
   const result = await RunCypherQuery(query);
 

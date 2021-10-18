@@ -1,25 +1,47 @@
 import Link from 'next/link';
 import React, { FC, useState } from 'react';
-import { useDeletePostMutation, usePostQuery } from '@graphql/post.graphql';
-import { useLikeMutation } from '@graphql/relations.graphql';
+import {
+  useCreateCommentMutation,
+  useDeletePostMutation,
+  usePostQuery,
+} from '@graphql/post.graphql';
+import {
+  useLikeMutation,
+  useUnfollowMutation,
+} from '@graphql/relations.graphql';
 import { FiSend } from 'react-icons/fi';
-import Image from 'next/image';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
-import { Avatar, Button, Grid, Modal } from '@nextui-org/react';
+import { Avatar, Button, Grid, Input, Modal, Text } from '@nextui-org/react';
 import { toast } from 'react-hot-toast';
 import { MdPhotoCamera } from 'react-icons/md';
 import { AiFillLike, AiOutlineComment, AiOutlineMore } from 'react-icons/ai';
+import { useRouter } from 'next/router';
 
 const PostCard: FC<{
   isLoggedQuery: any;
   id: number;
   refetch: any;
 }> = ({ id, isLoggedQuery, refetch }) => {
+  const router = useRouter();
+
   const { data, loading, error } = usePostQuery({ variables: { id } });
+  const [unfollowMutation] = useUnfollowMutation();
 
   const [deletePostMutation] = useDeletePostMutation();
   const [likeMutation] = useLikeMutation();
+  const [createCommentMutation] = useCreateCommentMutation();
+  const [commentContent, setCommentContent] = useState('');
+
   const [modal, setModal] = useState(false);
+  const [modalScreen, setModalScreen] = useState('main');
+  const modalProps = {
+    open: modal,
+    onClose: () => {
+      setModal(false);
+      setModalScreen('main');
+    },
+  };
+
   const [currentImage, setCurrentImage] = useState(0);
   const [editMode, setEditMode] = useState(false);
 
@@ -44,48 +66,95 @@ const PostCard: FC<{
 
   return (
     <>
-      <Modal
-        aria-labelledby="modal-title"
-        open={modal}
-        onClose={() => setModal(false)}
-      >
-        {isLoggedQuery?.data?.isLogged?.id === data!.post.author.id ? (
-          <>
-            <ModalOption
-              onClick={async () => {
-                try {
-                  await deletePostMutation({
-                    variables: { id },
-                  });
-                } catch (error) {
-                  // @ts-ignore
-                  toast.error(error.message);
-                }
-              }}
-              text="Delete post"
-              warning
-            />
-            <ModalOption onClick={() => setEditMode(true)} text="Edit" />
-          </>
-        ) : (
-          <>
-            <ModalOption
-              onClick={() => setModal(false)}
-              text="Report"
-              warning
-            />
-            <ModalOption
-              onClick={() => setModal(false)}
-              text="Unfollow"
-              warning
-            />
-          </>
-        )}
-        <ModalOption onClick={() => setModal(false)} text="Share" />
-        <ModalOption onClick={() => setModal(false)} text="Go to post" />
-        <ModalOption onClick={() => setModal(false)} text="Copy link" />
-        <ModalOption onClick={() => setModal(false)} text="Cancel" />
-      </Modal>
+      {modalScreen === 'main' ? (
+        <Modal {...modalProps} aria-labelledby="modal-title">
+          {isLoggedQuery?.data?.isLogged?.id === data!.post.author.id ? (
+            <>
+              <ModalOption
+                onClick={async () => {
+                  try {
+                    await deletePostMutation({
+                      variables: { id },
+                    });
+                  } catch (error) {
+                    // @ts-ignore
+                    toast.error(error.message);
+                  }
+                }}
+                text="Delete post"
+                warning
+              />
+              <ModalOption
+                onClick={() => {
+                  setEditMode(true);
+                  setModalScreen('report');
+                }}
+                text="Edit"
+              />
+            </>
+          ) : (
+            isLoggedQuery?.data?.isLogged?.id && (
+              <>
+                <ModalOption
+                  onClick={() => setModalScreen('report')}
+                  text="Report"
+                  warning
+                />
+
+                <ModalOption
+                  onClick={async () => {
+                    try {
+                      await unfollowMutation({
+                        variables: { userID: data!.post.author.id },
+                      });
+                    } catch (error) {
+                      // @ts-ignore
+                      toast.error(error.message);
+                    }
+                  }}
+                  text="Unfollow"
+                  warning
+                />
+              </>
+            )
+          )}
+          <ModalOption onClick={() => setModal(false)} text="Share" />
+          <ModalOption
+            onClick={() =>
+              router.push(`https://www.histories.cc/post/${data?.post.id}`)
+            }
+            text="Go to post"
+          />
+          <ModalOption
+            onClick={async () => {
+              await navigator.clipboard.writeText(
+                `https://www.histories.cc/post/${data?.post.id}`
+              );
+              modalProps.onClose();
+            }}
+            text="Copy link"
+          />
+          <ModalOption onClick={() => setModal(false)} text="Cancel" />
+        </Modal>
+      ) : modalScreen === 'report' ? (
+        <Modal aria-labelledby="modal-title" {...modalProps}>
+          <div className="w-full py-4 relative border-b border-[#DADBDA]">
+            <a className="text-center">Report</a>
+            <button
+              className="absolute top-1 right-4 text-3xl font-semibold"
+              onClick={modalProps.onClose}
+            >
+              x
+            </button>
+          </div>
+          <ModalOption onClick={() => setModal(false)} text="Reason 1" />
+          <ModalOption onClick={() => setModal(false)} text="Reason 2" />
+          <ModalOption onClick={() => setModal(false)} text="Reason 3" />
+          <ModalOption onClick={() => setModal(false)} text="Reason 4" />
+        </Modal>
+      ) : (
+        <></>
+      )}
 
       <div className="w-full m-auto bg-white dark:bg-[#343233] border-gray-[#DADBDA] border rounded-lg text-text-light dark:text-white mb-8">
         <div className="w-full flex space-between p-[1em]">
@@ -140,13 +209,39 @@ const PostCard: FC<{
                 {data?.post.description}
               </>
             )}
-
             {data?.post.hashtags && data?.post.hashtags.length > 0 && (
               <div>
                 <a className="font-semibold"> hashtags:</a>
                 {data!.post.hashtags.map((hashtag: any) => ` ${hashtag.name} `)}
               </div>
             )}
+            <div className="border-t border-gray-300 mt-2 pt-2">
+              {isLoggedQuery?.data?.isLogged && (
+                <>
+                  <Input
+                    type="text"
+                    onChange={(e: any) => setCommentContent(e.target.value)}
+                  />
+                  <Button
+                    onClick={async () => {
+                      await createCommentMutation({
+                        variables: { target: id, content: commentContent },
+                      });
+                    }}
+                  >
+                    Comment
+                  </Button>
+                </>
+              )}
+              <div>
+                comments:
+                {data?.post.comments.map((comment: any) => (
+                  <div key={comment.id}>
+                    {comment.author.username}: {comment.content}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
