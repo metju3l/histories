@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React, { FC, useState } from 'react';
 import {
   useCreateCommentMutation,
-  useDeletePostMutation,
+  useDeleteMutation,
   usePostQuery,
 } from '@graphql/post.graphql';
 import {
@@ -26,7 +26,7 @@ const PostCard: FC<{
   const { data, loading, error, refetch } = usePostQuery({ variables: { id } });
   const [unfollowMutation] = useUnfollowMutation();
 
-  const [deletePostMutation] = useDeletePostMutation();
+  const [deletePostMutation] = useDeleteMutation();
   const [likeMutation] = useLikeMutation();
   const [createCommentMutation] = useCreateCommentMutation();
   const [commentContent, setCommentContent] = useState('');

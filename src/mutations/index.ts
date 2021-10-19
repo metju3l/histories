@@ -1,6 +1,6 @@
 export { default as CreateUser } from './createUser';
 export { default as DeleteUser } from './deleteUser';
-export { default as DeletePost } from './deletePost';
+export { default as Delete } from './Delete';
 export { default as Follow } from './follow';
 export { default as Unfollow } from './unfollow';
 export { default as Like } from './like';

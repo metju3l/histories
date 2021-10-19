@@ -20,7 +20,7 @@ export default gql`
 
   type Mutation {
     deleteUser(input: DeleteUserInput!): String!
-    deletePost(id: Int!): String!
+    delete(id: Int!): String!
     like(input: LikeInput!): String!
     unlike(id: Int!): String!
     follow(userID: Int!): String!
