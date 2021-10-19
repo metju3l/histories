@@ -170,12 +170,7 @@ const User: FC<{ username: string }> = ({ username }) => {
             </div>
             {data.user.posts &&
               data.user.posts.map((post: any) => (
-                <PostCard
-                  key={post!.id}
-                  id={post!.id}
-                  isLoggedQuery={logged}
-                  refetch={refetch}
-                />
+                <PostCard key={post!.id} id={post!.id} isLoggedQuery={logged} />
               ))}
             <AccountCreatedCard
               date={data.user.createdAt}

@@ -9,6 +9,7 @@ import {
   ValidateCoordinates,
   ValidateDescription,
   ValidateDate,
+  ValidateComment,
 } from '../validation';
 import {
   CreateCollection,
@@ -222,6 +223,11 @@ const resolvers = {
       }: { input: { target: number; content: string } },
       context: any
     ) => {
+      const validateComment = ValidateComment(content).error;
+      if (validateComment) {
+        throw new Error(validateComment);
+      }
+
       if (context.validToken) {
         await CreateComment({
           targetID: target,

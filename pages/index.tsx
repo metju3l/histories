@@ -46,12 +46,7 @@ const PersonalizedPosts = ({ logged }: { logged: any }) => {
   return (
     <div>
       {data?.personalizedPosts.map((post: any) => (
-        <PostCard
-          key={post.id}
-          id={post.id}
-          isLoggedQuery={logged}
-          refetch={refetch}
-        />
+        <PostCard key={post.id} id={post.id} isLoggedQuery={logged} />
       ))}
     </div>
   );
