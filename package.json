@@ -8,7 +8,7 @@
     "url": "https://github.com/krystofex/hiStories"
   },
   "engines": {
-    "node": ">=16.1.1"
+    "node": ">=16.1.1 <17.0.1"
   },
   "private": true,
   "scripts": {
