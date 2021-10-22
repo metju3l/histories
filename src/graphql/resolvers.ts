@@ -15,7 +15,7 @@ import {
   CreateCollection,
   CreatePost,
   CreateUser,
-  DeletePost,
+  Delete,
   DeleteUser,
   EditProfile,
   Follow,
@@ -367,13 +367,13 @@ const resolvers = {
       return 'post created';
     },
 
-    deletePost: async (
+    delete: async (
       _parent: undefined,
       { id }: { id: number },
       context: any
     ) => {
       return context.validToken
-        ? DeletePost({ logged: context.decoded.username, id })
+        ? Delete({ logged: context.decoded.id, id })
         : null;
     },
 

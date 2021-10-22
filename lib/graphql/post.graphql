@@ -1,5 +1,5 @@
-mutation deletePost($id: Int!) {
-  deletePost(id: $id)
+mutation delete($id: Int!) {
+  delete(id: $id)
 }
 
 mutation createComment($target: Int!, $content: String!) {
