@@ -16,6 +16,7 @@ import { toast } from 'react-hot-toast';
 import { MdPhotoCamera } from 'react-icons/md';
 import { AiFillLike, AiOutlineComment, AiOutlineMore } from 'react-icons/ai';
 import { useRouter } from 'next/router';
+import { LoadingButton } from '@components/LoadingButton';
 
 const PostCard: FC<{
   isLoggedQuery: any;
@@ -26,7 +27,7 @@ const PostCard: FC<{
   const { data, loading, error, refetch } = usePostQuery({ variables: { id } });
   const [unfollowMutation] = useUnfollowMutation();
 
-  const [deletePostMutation] = useDeleteMutation();
+  const [deleteMutation] = useDeleteMutation();
   const [likeMutation] = useLikeMutation();
   const [createCommentMutation] = useCreateCommentMutation();
   const [commentContent, setCommentContent] = useState('');
@@ -72,7 +73,7 @@ const PostCard: FC<{
               <ModalOption
                 onClick={async () => {
                   try {
-                    await deletePostMutation({
+                    await deleteMutation({
                       variables: { id },
                     });
                   } catch (error) {
@@ -242,9 +243,13 @@ const PostCard: FC<{
               <div>
                 comments:
                 {data?.post.comments.map((comment: any) => (
-                  <div key={comment.id}>
-                    {comment.author.username}: {comment.content}
-                  </div>
+                  <Comment
+                    key={comment.id}
+                    {...comment}
+                    refetch={refetch}
+                    author={comment.author}
+                    loggedId={isLoggedQuery?.data?.isLogged?.id}
+                  />
                 ))}
               </div>
             </div>
@@ -252,6 +257,39 @@ const PostCard: FC<{
         </div>
       </div>
     </>
+  );
+};
+
+const Comment: React.FC<{
+  author: any;
+  id: number;
+  content: string;
+  createdAt: number;
+  loggedId?: number;
+  refetch: any;
+}> = ({ author, id, content, createdAt, loggedId, refetch }) => {
+  const [deleteMutation] = useDeleteMutation();
+
+  return (
+    <div>
+      {author.username}: {content}
+      {loggedId === author.id && (
+        <LoadingButton
+          func={async () => {
+            try {
+              await deleteMutation({
+                variables: { id },
+              });
+            } catch (error) {
+              // @ts-ignore
+              toast.error(error.message);
+            }
+            await refetch();
+          }}
+          title="delete comment"
+        />
+      )}
+    </div>
   );
 };
 
