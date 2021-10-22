@@ -218,8 +218,8 @@ const PostCard: FC<{
             <div className="border-t border-gray-300 mt-2 pt-2">
               {isLoggedQuery?.data?.isLogged && (
                 <>
-                  <Input
-                    type="text"
+                  <textarea
+                    className="border-2 border-gray-300 rounded-xl bg-gray-100 p-2"
                     onChange={(e: any) => setCommentContent(e.target.value)}
                     value={commentContent}
                   />
@@ -272,7 +272,10 @@ const Comment: React.FC<{
 
   return (
     <div>
-      {author.username}: {content}
+      <p style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+        <strong className="font-bold">{author.username}:</strong>
+        {content}
+      </p>
       {loggedId === author.id && (
         <LoadingButton
           func={async () => {

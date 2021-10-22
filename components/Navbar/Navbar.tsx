@@ -27,8 +27,6 @@ const Navbar: FC = () => {
 
   const userIsLogged = data!.isLogged !== null;
 
-  console.log(data);
-
   return (
     <nav className="h-[54px] border-b border-[#DADBDA] fixed w-full top-0 bg-white z-40">
       <div className="flex justify-between max-w-6xl w-full items-center mx-5 xl:mx-auto">
