@@ -4,16 +4,14 @@ import Image from 'next/image';
 import TimeAgo from 'react-timeago';
 import { DotsHorizontalIcon } from '@heroicons/react/solid';
 import { Menu } from '@components/Modal';
+import { useDeleteMutation } from '@graphql/post.graphql';
+import { toast } from 'react-hot-toast';
 
-const Comment = ({
-  content,
-  author,
-  createdAt,
-  logged,
-}: {
+type CommentProps = {
   content: string;
-  author: { firstName: string; lastName: string };
   createdAt: number;
+  author: { firstName: string; lastName: string; id: number; username: string };
+  id: number;
   logged: null | {
     email: string;
     firstName: string;
@@ -21,8 +19,20 @@ const Comment = ({
     id: number;
     username: string;
   };
+  refetch: any;
+};
+
+const Comment: React.FC<CommentProps> = ({
+  content,
+  id,
+  author,
+  createdAt,
+  logged,
+  refetch,
 }) => {
+  const [deleteMutation] = useDeleteMutation();
   const [mouseOver, setMouseOver] = useState(false);
+  const isCommentAuthor = author.id === logged?.id;
 
   return (
     <span
@@ -55,10 +65,29 @@ const Comment = ({
           </div>
 
           <Menu
-            items={[
-              { title: 'Show profile', onClick: () => {} },
-              { title: 'Report', onClick: () => {} },
-            ]}
+            items={
+              isCommentAuthor
+                ? [
+                    { title: 'Edit', onClick: () => {} },
+                    {
+                      title: 'Delete',
+                      onClick: async () => {
+                        try {
+                          await deleteMutation({
+                            variables: { id },
+                          });
+                        } catch (error: any) {
+                          toast.error(error.message);
+                        }
+                        await refetch();
+                      },
+                    },
+                  ]
+                : [
+                    { title: 'Show profile', onClick: () => {} },
+                    { title: 'Report', onClick: () => {} },
+                  ]
+            }
           >
             <button className="w-6 h-6 pr-2">
               {mouseOver && (

@@ -14,7 +14,7 @@ import Gallery from 'react-photo-gallery';
 import { Dialog } from '@headlessui/react';
 import { Button } from '@nextui-org/react';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
-import { usePostQuery } from '@graphql/post.graphql';
+import { useCreateCommentMutation, usePostQuery } from '@graphql/post.graphql';
 import TimeAgo from 'react-timeago';
 import { Comment } from '@components/Comment';
 import { DotsHorizontalIcon } from '@heroicons/react/solid';
@@ -28,6 +28,7 @@ import {
 } from '@heroicons/react/outline';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { Modal, Menu } from '@components/Modal';
+import { toast } from 'react-hot-toast';
 
 const GetBounds = (bounds: {
   _ne: { lat: number; lng: number };
@@ -322,6 +323,8 @@ const DetailModal: React.FC<{
     variables: { id: place.posts[currentImage].id },
   });
   const isLogged = useIsLoggedQuery();
+  const [commentContent, setCommentContent] = useState('');
+  const [createCommentMutation] = useCreateCommentMutation();
 
   if (loading || isLogged.loading) return <div>loading</div>;
   if (error || isLogged.error) return <div>error</div>;
@@ -410,22 +413,17 @@ const DetailModal: React.FC<{
           </div>
 
           {/* COMMENTS */}
-          <div id="comments" className="w-full overflow-y-auto h-[429px] pt-2">
-            {data!.post.description && (
-              <Comment
-                content={data!.post.description}
-                author={data!.post.author}
-                createdAt={data!.post.createdAt}
-                logged={isLogged.data!.isLogged ?? null}
-              />
-            )}
+          <div id="comments" className="w-full overflow-y-auto h-[400px] pt-2">
+            {data!.post.description ?? ''}
             {data!.post.comments.map((comment: any) => (
               <Comment
                 content={comment.content}
                 author={comment.author}
                 createdAt={comment.createdAt}
+                id={comment.id}
                 logged={isLogged.data!.isLogged ?? null}
                 key={comment.id}
+                refetch={refetch}
               />
             ))}
           </div>
@@ -447,9 +445,33 @@ const DetailModal: React.FC<{
             <br />
             <TimeAgo date={data!.post.createdAt} />
           </div>
-          <div className="w-full flex items-center gap-2 p-3 border-t border-[#EEEFEE]">
-            <input type="text" />
-          </div>
+          <form
+            className="w-full flex items-center gap-2 p-3 border-t border-[#EEEFEE]"
+            onSubmit={async (event) => {
+              event.preventDefault();
+
+              try {
+                await createCommentMutation({
+                  variables: {
+                    target: place.posts[currentImage].id,
+                    content: commentContent,
+                  },
+                });
+                setCommentContent('');
+                await refetch();
+              } catch (error: any) {
+                toast.error(error.message);
+              }
+            }}
+          >
+            <textarea
+              className="border-2 border-gray-300 rounded-xl bg-gray-100 p-2 resize-none overflow-hidden"
+              onChange={(e: any) => setCommentContent(e.target.value)}
+              value={commentContent}
+              placeholder="Write a comment..."
+            />
+            <Button type="submit">Submit</Button>
+          </form>
         </div>
       </section>
     </Modal>

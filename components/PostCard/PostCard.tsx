@@ -17,6 +17,7 @@ import { MdPhotoCamera } from 'react-icons/md';
 import { AiFillLike, AiOutlineComment, AiOutlineMore } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import { LoadingButton } from '@components/LoadingButton';
+import { Comment } from '@components/Comment';
 
 const PostCard: FC<{
   isLoggedQuery: any;
@@ -248,7 +249,7 @@ const PostCard: FC<{
                     {...comment}
                     refetch={refetch}
                     author={comment.author}
-                    loggedId={isLoggedQuery?.data?.isLogged?.id}
+                    logged={isLoggedQuery?.data?.isLogged}
                   />
                 ))}
               </div>
@@ -257,42 +258,6 @@ const PostCard: FC<{
         </div>
       </div>
     </>
-  );
-};
-
-const Comment: React.FC<{
-  author: any;
-  id: number;
-  content: string;
-  createdAt: number;
-  loggedId?: number;
-  refetch: any;
-}> = ({ author, id, content, createdAt, loggedId, refetch }) => {
-  const [deleteMutation] = useDeleteMutation();
-
-  return (
-    <div>
-      <p style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-        <strong className="font-bold">{author.username}:</strong>
-        {content}
-      </p>
-      {loggedId === author.id && (
-        <LoadingButton
-          func={async () => {
-            try {
-              await deleteMutation({
-                variables: { id },
-              });
-            } catch (error) {
-              // @ts-ignore
-              toast.error(error.message);
-            }
-            await refetch();
-          }}
-          title="delete comment"
-        />
-      )}
-    </div>
   );
 };
 
