@@ -5,18 +5,22 @@ import useDarkMode from '@lib/hooks/useDarkmode';
 import Image from 'next/image';
 import LogOut from '@lib/functions/LogOut';
 import { Avatar, Input, Switch } from '@nextui-org/react';
+import { useIsLoggedQuery } from '@graphql/user.graphql';
 
 // IMAGES
 import FullSizeLogo from '@public/logo/FullSizeLogo.svg';
 import MinimalLogo from '@public/logo/MinimalLogo.svg';
+import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 
 // ICONS
-import { IoMdCloseCircle } from 'react-icons/io';
-import { FaRegCompass } from 'react-icons/fa';
-import { BiSearchAlt2 } from 'react-icons/bi';
-import { RiHomeFill } from 'react-icons/ri';
-import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
-import { useIsLoggedQuery } from '@graphql/user.graphql';
+import {
+  LocationMarkerIcon,
+  HomeIcon,
+  LightningBoltIcon,
+  LoginIcon,
+  XIcon,
+  SearchIcon,
+} from '@heroicons/react/outline';
 
 const Navbar: FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
@@ -45,26 +49,30 @@ const Navbar: FC = () => {
         {/* Center */}
         <div className="hidden md:flex  bg-[#FAFBFB] border border-[#DADBDA] rounded-md p-1.5">
           <button className="focus:outline-none inline-block text-light-text dark:text-dark-text">
-            <BiSearchAlt2 size={24} className="text-[#C6C7C6]" />
+            <SearchIcon className="h-5 w-5 text-[#C6C7C6]" />
           </button>
           <input
             className="w-full outline-none bg-transparent text-lg px-2"
             placeholder="search"
           />
           <button className="focus:outline-none inline-block text-light-text dark:text-dark-text">
-            <IoMdCloseCircle size={24} className="text-[#C6C7C6]" />
+            <XIcon className="h-5 w-5 text-[#C6C7C6]" />
           </button>
         </div>
 
         {/* Right */}
         <div className="flex gap-[20px] items-center">
           <Link href="/" passHref>
-            <RiHomeFill size={32} />
+            <HomeIcon className="h-8 w-8" />
           </Link>
           <Link href="/explore" passHref>
-            <FaRegCompass size={32} />
+            <LightningBoltIcon className="h-8 w-8" />
           </Link>
-          {userIsLogged && (
+          <Link href="/map" passHref>
+            <LocationMarkerIcon className="h-8 w-8" />
+          </Link>
+
+          {userIsLogged ? (
             <Menu as="div" className="relative inline-block text-left">
               <Menu.Button>
                 <Avatar
@@ -109,6 +117,10 @@ const Navbar: FC = () => {
                 </div>
               </Menu.Items>
             </Menu>
+          ) : (
+            <Link href="/login" passHref>
+              <LoginIcon className="h-8 w-8" />
+            </Link>
           )}
         </div>
       </div>
