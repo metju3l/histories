@@ -7,6 +7,7 @@ import { Menu } from '@components/Modal';
 import { useDeleteMutation } from '@graphql/post.graphql';
 import { toast } from 'react-hot-toast';
 
+
 type CommentProps = {
   content: string;
   createdAt: number;
