@@ -13,6 +13,19 @@ import useSuperCluster from 'use-supercluster';
 import Gallery from 'react-photo-gallery';
 import { Dialog } from '@headlessui/react';
 import { Button } from '@nextui-org/react';
+import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
+import { usePostQuery } from '@graphql/post.graphql';
+import TimeAgo from 'react-timeago';
+import { Comment } from '@components/Comment';
+import { DotsHorizontalIcon } from '@heroicons/react/solid';
+import {
+  HeartIcon,
+  ChatIcon,
+  PaperAirplaneIcon,
+  BookmarkIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from '@heroicons/react/outline';
 
 const GetBounds = (bounds: {
   _ne: { lat: number; lng: number };
@@ -222,7 +235,7 @@ const MapGL: FC<{
 
 const MapPlace = ({ place }: { place: any }) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [showModal, setShowModal] = React.useState(false);
   return (
     <>
       <Marker latitude={place.latitude} longitude={place.longitude}>
@@ -266,8 +279,6 @@ const MapModal: React.FC<MapModalProps> = ({ isOpen, setIsOpen, place }) => {
     setDetail(true);
     setIsOpen(false);
   }, []);
-
-  console.log(place);
 
   return (
     <>
@@ -324,56 +335,101 @@ const DetailModal: React.FC<{
   photosLength,
 }) => {
   const [imageInSequence, setImageInSequence] = useState(0);
+  const { data, loading, error, refetch } = usePostQuery({
+    variables: { id: place.posts[currentImage].id },
+  });
+  if (loading) return <div>loading</div>;
+  if (error) return <div>error</div>;
 
-  return (
-    <Dialog open={open} onClose={onClose}>
-      <Dialog.Overlay />
-      <div className="absolute top-0 left-0 z-50 w-full h-full pb-32 px-12">
-        <div className="mt-24 h-full m-auto pt-18 p-4 bg-black rounded-2xl text-white">
-          <Button onClick={onClose}>close</Button>
-          <div className="flex gap-4">
-            {currentImage > 0 && (
-              <button onClick={() => setCurrentImage(currentImage - 1)}>
-                {'<'}
-              </button>
-            )}
-            <div>
-              <img
-                src={place.posts[currentImage].url[imageInSequence]}
-                alt="Post"
-                width="100%"
-              />
-              {place.posts[currentImage].url.length > 1 && (
-                <>
-                  {imageInSequence > 0 && (
-                    <button
-                      onClick={() => setImageInSequence(imageInSequence - 1)}
-                    >
-                      {'<'}
-                    </button>
-                  )}
-                  {imageInSequence <
-                    place.posts[currentImage].url.length - 1 && (
-                    <button
-                      onClick={() => setImageInSequence(imageInSequence + 1)}
-                    >
-                      {'>'}
-                    </button>
-                  )}
-                </>
+  return open ? (
+    <div
+      className="absolute top-0 left-0 w-full h-full bg-transparent z-20"
+      onClick={onClose}
+    >
+      <section className="absolute justify-between z-50 top-[50%] left-[50%] bg-white max-h-[600px] max-w-[800px] w-full h-full -translate-y-1/2 -translate-x-1/2 rounded-xl flex">
+        <div className="relative max-h-[600px] max-w-[480px] w-full h-full ">
+          {place.posts[currentImage].url.length > 1 && (
+            <>
+              {imageInSequence > 0 && (
+                <button onClick={() => setImageInSequence(imageInSequence - 1)}>
+                  <ChevronLeftIcon className="h-8 w-8 absolute z-50 top-[50%] left-0 -translate-y-1/2 text-white" />
+                </button>
               )}
+              {imageInSequence < place.posts[currentImage].url.length - 1 && (
+                <button onClick={() => setImageInSequence(imageInSequence + 1)}>
+                  <ChevronRightIcon className="h-8 w-8 absolute z-50 top-[50%] right-0 -translate-y-1/2 text-white" />
+                </button>
+              )}
+            </>
+          )}
+          <Image
+            src={place.posts[currentImage].url[imageInSequence]}
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center"
+            alt="Post"
+            className="rounded-l-xl"
+          />
+        </div>
+        <div className="flex-auto h-full">
+          <div className="w-full flex items-center gap-2 p-3 border-b border-[#EEEFEE]">
+            <div className="relative rounded-full w-8 h-8">
+              <Image
+                src={GeneratedProfileUrl(
+                  place.posts[currentImage].author.firstName,
+                  place.posts[currentImage].author.lastName
+                )}
+                layout="fill"
+                objectFit="contain"
+                objectPosition="center"
+                className="rounded-full"
+                alt="Profile picture"
+              />
             </div>
-            <div className="w-64 h-auto">comments</div>
-            {currentImage < photosLength - 1 && (
-              <button onClick={() => setCurrentImage(currentImage + 1)}>
-                {'>'}
-              </button>
+            {`${place.posts[currentImage].author.firstName} ${place.posts[currentImage].author.lastName}`}
+            <button className="absolute right-5">
+              <DotsHorizontalIcon className="h-6 w-6" />
+            </button>
+          </div>
+          <div className="w-full overflow-y-auto h-[429px] pt-2">
+            {/* COMMENTS */}
+
+            {data!.post.description && (
+              <Comment
+                content={data!.post.description}
+                author={data!.post.author}
+                createdAt={data!.post.createdAt}
+              />
             )}
+            {data!.post.comments.map((comment: any) => (
+              <Comment
+                content={comment.content}
+                author={comment.author}
+                createdAt={comment.createdAt}
+                key={comment.id}
+              />
+            ))}
+          </div>
+          <div className="w-full items-center gap-2 p-3 border-t border-[#EEEFEE]">
+            <div className="w-full flex gap-2">
+              <HeartIcon className="h-8 w-8" />
+              <ChatIcon className="h-8 w-8" />
+              <PaperAirplaneIcon className="h-8 w-8 rotate-45" />
+              <BookmarkIcon className="h-8 w-8 absolute right-4" />
+            </div>
+            <strong className="font-semibold">
+              {data?.post.likes.length} likes
+            </strong>
+            <br />
+            <TimeAgo date={data!.post.createdAt} />
+          </div>{' '}
+          <div className="w-full flex items-center gap-2 p-3 border-t border-[#EEEFEE]">
+            <input type="text" />
           </div>
         </div>
-      </div>
-    </Dialog>
-  );
+      </section>
+    </div>
+  ) : null;
 };
 
 export default MapGL;
