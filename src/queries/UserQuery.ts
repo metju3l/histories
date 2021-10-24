@@ -51,29 +51,56 @@ const UserQuery = async ({
     if (validateUsername) throw new Error(validateUsername);
   }
 
+  const isLogged = logged != undefined;
   const matchString =
     id !== undefined
       ? ` WHERE ID(user) = ${id} `
       : ` WHERE user.username =~ "(?i)${username}" `;
 
-  const query = `
-MATCH (user:User)${logged !== undefined ? `, (logged:User)` : ''}
-${matchString}${logged !== undefined ? ` AND ID(logged) = ${logged}` : ''}
-OPTIONAL MATCH (user:User)<-[:FOLLOW]-(follower:User)
-${matchString}
-OPTIONAL MATCH (user:User)-[:FOLLOW]->(following:User)
-${matchString}
-OPTIONAL MATCH (user:User)-[:CREATED]->(post:Post)-[:IS_LOCATED]->(place:Place)
-${matchString}
-RETURN user{.*,
-  id: ID(user), 
-  isFollowing: ${
-    logged !== undefined ? `EXISTS( (logged)-[:FOLLOW]->(user) )` : 'false'
-  },
-  followers: COLLECT(DISTINCT follower{.*, id: ID(follower)}),
-  following: COLLECT(DISTINCT following{.*, id: ID(following)}),
-  posts: COLLECT(DISTINCT post{.*, id: ID(post), place:place{.*, id: ID(place)}})
-} AS user`;
+  const query = `MATCH (user:User), (logged:User)
+  ${matchString} ${isLogged ? `AND ID(logged) = ${logged}` : ''}
+  CALL {
+      WITH user
+      OPTIONAL MATCH (user)-[created:CREATED]->(post:Post)-[:IS_LOCATED]->(place:Place)
+      RETURN DISTINCT post, place
+      ORDER BY post.createdAt DESC
+      LIMIT 100
+  }
+  CALL {
+      WITH user
+      OPTIONAL MATCH (user)-[:FOLLOW]->(following:User)
+      RETURN DISTINCT following
+      LIMIT 100
+  }
+  CALL {
+      WITH user
+      OPTIONAL MATCH (follower:User)-[:FOLLOW]->(user)
+      RETURN DISTINCT follower
+      LIMIT 100
+  }
+  CALL {
+    WITH user
+    OPTIONAL MATCH (user)-[:CREATED]->(collection:Collection)
+    RETURN DISTINCT collection
+    LIMIT 100
+}
+  ${
+    isLogged
+      ? `CALL {
+    WITH user,logged
+    OPTIONAL MATCH (logged)-[r:FOLLOW]->(user)
+    RETURN r AS isFollowing
+}`
+      : ''
+  }
+
+  RETURN user{.*, id: ID(user),
+      posts: COLLECT(DISTINCT post{.*, id: ID(post), place:place{.*, id: ID(place)}}),
+      followers: COLLECT(DISTINCT follower{.*, id: ID(follower)}), 
+      following: COLLECT(DISTINCT following{.*, id: ID(following)}),
+      collections: COLLECT(DISTINCT collection{.*, id: ID(collection)}),
+      isFollowing: ${!isLogged ? 'false' : 'COUNT(isFollowing) '}      
+  } AS user`;
 
   const result = await RunCypherQuery(query);
 
