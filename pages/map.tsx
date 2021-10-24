@@ -43,11 +43,11 @@ const MapPage: React.FC = () => {
 
     // concat already existing points with new ones
     setPoints([...tmp, ...points]);
-  }, [posts.data]);
+  }, [posts.data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     posts.refetch(bounds);
-  }, [bounds]);
+  }, [bounds]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading) return <div></div>;
   if (error) return <div></div>;

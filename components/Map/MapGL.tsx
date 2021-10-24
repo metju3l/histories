@@ -26,6 +26,8 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from '@heroicons/react/outline';
+import { useIsLoggedQuery } from '@graphql/user.graphql';
+import { Modal } from '@components/Modal';
 
 const GetBounds = (bounds: {
   _ne: { lat: number; lng: number };
@@ -236,6 +238,7 @@ const MapGL: FC<{
 const MapPlace = ({ place }: { place: any }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showModal, setShowModal] = React.useState(false);
+
   return (
     <>
       <Marker latitude={place.latitude} longitude={place.longitude}>
@@ -278,32 +281,21 @@ const MapModal: React.FC<MapModalProps> = ({ isOpen, setIsOpen, place }) => {
     setCurrentImage(index);
     setDetail(true);
     setIsOpen(false);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
-      <Dialog
+      <Modal
         open={isOpen}
         onClose={() => {
           setDetail(false);
           setIsOpen(false);
         }}
       >
-        <Dialog.Overlay />
-        <div className="absolute top-0 left-0 z-50 w-full h-full pb-32 px-12">
-          <div className="max-w-6xl w-full mt-24 h-full m-auto pt-18 p-4 bg-white rounded-2xl">
-            <Button
-              onClick={() => {
-                setDetail(false);
-                setIsOpen(false);
-              }}
-            >
-              close
-            </Button>
-            <Gallery photos={photos} onClick={openLightbox} />
-          </div>
-        </div>
-      </Dialog>
+        <section className="absolute justify-between z-50 top-[50%] left-[50%] bg-white max-h-[600px] max-w-[800px] w-full h-full -translate-y-1/2 -translate-x-1/2 rounded-xl">
+          <Gallery photos={photos} onClick={openLightbox} />
+        </section>
+      </Modal>
       <DetailModal
         open={detail}
         onClose={() => {
@@ -313,7 +305,6 @@ const MapModal: React.FC<MapModalProps> = ({ isOpen, setIsOpen, place }) => {
         place={place}
         currentImage={currentImage}
         setCurrentImage={setCurrentImage}
-        photosLength={photos.length}
       />
     </>
   );
@@ -325,29 +316,34 @@ const DetailModal: React.FC<{
   open: boolean;
   currentImage: number;
   setCurrentImage: React.Dispatch<React.SetStateAction<number>>;
-  photosLength: number;
-}> = ({
-  onClose,
-  place,
-  open,
-  currentImage,
-  setCurrentImage,
-  photosLength,
-}) => {
+}> = ({ onClose, place, open, currentImage, setCurrentImage }) => {
   const [imageInSequence, setImageInSequence] = useState(0);
   const { data, loading, error, refetch } = usePostQuery({
     variables: { id: place.posts[currentImage].id },
   });
-  if (loading) return <div>loading</div>;
-  if (error) return <div>error</div>;
+  const isLogged = useIsLoggedQuery();
 
-  return open ? (
-    <div
-      className="absolute top-0 left-0 w-full h-full bg-transparent z-20"
-      onClick={onClose}
-    >
+  if (loading || isLogged.loading) return <div>loading</div>;
+  if (error || isLogged.error) return <div>error</div>;
+
+  return (
+    <Modal onClose={onClose} open={open}>
       <section className="absolute justify-between z-50 top-[50%] left-[50%] bg-white max-h-[600px] max-w-[800px] w-full h-full -translate-y-1/2 -translate-x-1/2 rounded-xl flex">
+        {/* NAVIGATION IN PLACE PHOTOS */}
+        {currentImage > 0 && (
+          <button onClick={() => setCurrentImage(currentImage - 1)}>
+            <ChevronLeftIcon className="h-10 w-10 absolute z-50 top-[50%] -left-20 -translate-y-1/2 text-white" />
+          </button>
+        )}
+        {currentImage < place.posts.length - 1 && (
+          <button onClick={() => setCurrentImage(currentImage + 1)}>
+            <ChevronRightIcon className="h-10 w-10 absolute z-50 top-[50%] -right-20 -translate-y-1/2 text-white" />
+          </button>
+        )}
+
+        {/* PHOTO */}
         <div className="relative max-h-[600px] max-w-[480px] w-full h-full ">
+          {/* NAVIGATION IN COLLECTION */}
           {place.posts[currentImage].url.length > 1 && (
             <>
               {imageInSequence > 0 && (
@@ -372,6 +368,7 @@ const DetailModal: React.FC<{
           />
         </div>
         <div className="flex-auto h-full">
+          {/* POST DETAILS */}
           <div className="w-full flex items-center gap-2 p-3 border-b border-[#EEEFEE]">
             <div className="relative rounded-full w-8 h-8">
               <Image
@@ -391,14 +388,15 @@ const DetailModal: React.FC<{
               <DotsHorizontalIcon className="h-6 w-6" />
             </button>
           </div>
-          <div className="w-full overflow-y-auto h-[429px] pt-2">
-            {/* COMMENTS */}
 
+          {/* COMMENTS */}
+          <div id="comments" className="w-full overflow-y-auto h-[429px] pt-2">
             {data!.post.description && (
               <Comment
                 content={data!.post.description}
                 author={data!.post.author}
                 createdAt={data!.post.createdAt}
+                logged={isLogged.data!.isLogged ?? null}
               />
             )}
             {data!.post.comments.map((comment: any) => (
@@ -406,11 +404,17 @@ const DetailModal: React.FC<{
                 content={comment.content}
                 author={comment.author}
                 createdAt={comment.createdAt}
+                logged={isLogged.data!.isLogged ?? null}
                 key={comment.id}
               />
             ))}
           </div>
-          <div className="w-full items-center gap-2 p-3 border-t border-[#EEEFEE]">
+
+          {/* REACTIONS */}
+          <div
+            id="reactions"
+            className="w-full items-center gap-2 p-3 border-t border-[#EEEFEE]"
+          >
             <div className="w-full flex gap-2">
               <HeartIcon className="h-8 w-8" />
               <ChatIcon className="h-8 w-8" />
@@ -422,14 +426,14 @@ const DetailModal: React.FC<{
             </strong>
             <br />
             <TimeAgo date={data!.post.createdAt} />
-          </div>{' '}
+          </div>
           <div className="w-full flex items-center gap-2 p-3 border-t border-[#EEEFEE]">
             <input type="text" />
           </div>
         </div>
       </section>
-    </div>
-  ) : null;
+    </Modal>
+  );
 };
 
 export default MapGL;
