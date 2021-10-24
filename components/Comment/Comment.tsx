@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import TimeAgo from 'react-timeago';
 import { DotsHorizontalIcon } from '@heroicons/react/solid';
+import { Menu } from '@components/Modal';
 
 const Comment = ({
   content,
@@ -52,12 +53,22 @@ const Comment = ({
             <br />
             {content}
           </div>
-          {mouseOver && (
-            <DotsHorizontalIcon
-              id="options"
-              className="w-4 h-4 mr-2 rounded-full"
-            />
-          )}
+
+          <Menu
+            items={[
+              { title: 'Show profile', onClick: () => {} },
+              { title: 'Report', onClick: () => {} },
+            ]}
+          >
+            <button className="w-6 h-6 pr-2">
+              {mouseOver && (
+                <DotsHorizontalIcon
+                  id="options"
+                  className="w-6 h-6 rounded-full hover:bg-[#F1F2F4] p-1"
+                />
+              )}
+            </button>
+          </Menu>
         </div>
 
         <span className="pl-2">

@@ -9,7 +9,7 @@ type ModalProps = {
   additionalClassName?: string;
 };
 
-const Modal: React.FC<ModalProps> = ({
+const ModalComponent: React.FC<ModalProps> = ({
   open,
   onClose,
   children,
@@ -34,4 +34,4 @@ const Modal: React.FC<ModalProps> = ({
     </Dialog>
   );
 };
-export default Modal;
+export default ModalComponent;

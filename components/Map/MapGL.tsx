@@ -27,7 +27,7 @@ import {
   ChevronRightIcon,
 } from '@heroicons/react/outline';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
-import { Modal } from '@components/Modal';
+import { Modal, Menu } from '@components/Modal';
 
 const GetBounds = (bounds: {
   _ne: { lat: number; lng: number };
@@ -369,24 +369,44 @@ const DetailModal: React.FC<{
         </div>
         <div className="flex-auto h-full">
           {/* POST DETAILS */}
-          <div className="w-full flex items-center gap-2 p-3 border-b border-[#EEEFEE]">
-            <div className="relative rounded-full w-8 h-8">
-              <Image
-                src={GeneratedProfileUrl(
-                  place.posts[currentImage].author.firstName,
-                  place.posts[currentImage].author.lastName
-                )}
-                layout="fill"
-                objectFit="contain"
-                objectPosition="center"
-                className="rounded-full"
-                alt="Profile picture"
-              />
+          <div className="w-full justify-between flex p-3 border-b border-[#EEEFEE]">
+            <div className="flex items-center gap-2">
+              <div className="relative rounded-full w-8 h-8">
+                <Image
+                  src={GeneratedProfileUrl(
+                    place.posts[currentImage].author.firstName,
+                    place.posts[currentImage].author.lastName
+                  )}
+                  layout="fill"
+                  objectFit="contain"
+                  objectPosition="center"
+                  className="rounded-full"
+                  alt="Profile picture"
+                />
+              </div>
+              {`${place.posts[currentImage].author.firstName} ${place.posts[currentImage].author.lastName}`}
             </div>
-            {`${place.posts[currentImage].author.firstName} ${place.posts[currentImage].author.lastName}`}
-            <button className="absolute right-5">
-              <DotsHorizontalIcon className="h-6 w-6" />
-            </button>
+            <Menu
+              items={[
+                { title: 'Report', onClick: () => {} },
+                { title: 'Unfollow', onClick: () => {} },
+                {
+                  title: 'Go to post',
+                  href: `/post/${place.posts[currentImage].id}`,
+                },
+                {
+                  title: 'Copy link',
+                  onClick: () =>
+                    navigator.clipboard.writeText(
+                      `https://www.histories.cc/post/${data?.post.id}`
+                    ),
+                },
+              ]}
+            >
+              <button className="">
+                <DotsHorizontalIcon className="h-6 w-6" />
+              </button>
+            </Menu>
           </div>
 
           {/* COMMENTS */}
