@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import ReactMapGL, {
   Marker,
   NavigationControl,
@@ -7,19 +7,12 @@ import ReactMapGL, {
   FlyToInterpolator,
   Layer,
 } from 'react-map-gl';
-import {
-  MapPostsQuery,
-  useMapPostsQuery,
-  usePathsQuery,
-  usePlaceQuery,
-} from '@graphql/geo.graphql';
-import MapLoading from './MapLoading';
-import LayerIcon from '@public/mapLayerIcon.png';
+import { usePathsQuery, usePlaceQuery } from '@graphql/geo.graphql';
 import Image from 'next/image';
-import { TimeLine } from 'components/TimeLine/index';
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
 import useSuperCluster from 'use-supercluster';
+import Gallery from 'react-photo-gallery';
+import { Dialog } from '@headlessui/react';
+import { Button } from '@nextui-org/react';
 
 const GetBounds = (bounds: {
   _ne: { lat: number; lng: number };
@@ -229,6 +222,7 @@ const MapGL: FC<{
 
 const MapPlace = ({ place }: { place: any }) => {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <>
       <Marker latitude={place.latitude} longitude={place.longitude}>
@@ -247,83 +241,138 @@ const MapPlace = ({ place }: { place: any }) => {
           />
         </a>
       </Marker>
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={() => {
-            setIsOpen(false);
-          }}
-        >
-          <div className="min-h-screen px-4 text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay className="fixed inset-0" />
-            </Transition.Child>
-
-            {/* This element is to trick the browser into centering the modal contents. */}
-            <span
-              className="inline-block h-screen align-middle"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                <Dialog.Title
-                  as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900"
-                >
-                  {`Found ${place.posts.length} posts`}
-                </Dialog.Title>
-                <div className="mt-2">
-                  {place.posts.map((post: any) => (
-                    <div key={post.id}>
-                      <img
-                        src={post.url[0]}
-                        className="w-12 h-12 object-cover"
-                        alt="Picture on map"
-                      />
-                      author:{' '}
-                      {`${post.author.firstName} ${post.author.lastName}`}
-                      <br />
-                      {post.description}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-4">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={() => {
-                      setIsOpen(false);
-                    }}
-                  >
-                    close
-                  </button>
-                </div>
-              </div>
-            </Transition.Child>
-          </div>
-        </Dialog>
-      </Transition>
+      <MapModal setIsOpen={setIsOpen} isOpen={isOpen} place={place} />
     </>
+  );
+};
+
+type MapModalProps = {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  place: any;
+};
+
+const MapModal: React.FC<MapModalProps> = ({ isOpen, setIsOpen, place }) => {
+  const photos = place.posts.map((photo: { url: string[] }) => ({
+    src: photo.url[0],
+    width: 4,
+    height: 3,
+  }));
+  const [detail, setDetail] = useState(false);
+  const [currentImage, setCurrentImage] = useState(0);
+
+  const openLightbox = useCallback((event, { photo, index }) => {
+    setCurrentImage(index);
+    setDetail(true);
+    setIsOpen(false);
+  }, []);
+
+  console.log(place);
+
+  return (
+    <>
+      <Dialog
+        open={isOpen}
+        onClose={() => {
+          setDetail(false);
+          setIsOpen(false);
+        }}
+      >
+        <Dialog.Overlay />
+        <div className="absolute top-0 left-0 z-50 w-full h-full pb-32 px-12">
+          <div className="max-w-6xl w-full mt-24 h-full m-auto pt-18 p-4 bg-white rounded-2xl">
+            <Button
+              onClick={() => {
+                setDetail(false);
+                setIsOpen(false);
+              }}
+            >
+              close
+            </Button>
+            <Gallery photos={photos} onClick={openLightbox} />
+          </div>
+        </div>
+      </Dialog>
+      <DetailModal
+        open={detail}
+        onClose={() => {
+          setIsOpen(true);
+          setDetail(false);
+        }}
+        place={place}
+        currentImage={currentImage}
+        setCurrentImage={setCurrentImage}
+        photosLength={photos.length}
+      />
+    </>
+  );
+};
+
+const DetailModal: React.FC<{
+  onClose: () => void;
+  place: any;
+  open: boolean;
+  currentImage: number;
+  setCurrentImage: React.Dispatch<React.SetStateAction<number>>;
+  photosLength: number;
+}> = ({
+  onClose,
+  place,
+  open,
+  currentImage,
+  setCurrentImage,
+  photosLength,
+}) => {
+  const [imageInSequence, setImageInSequence] = useState(0);
+
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <Dialog.Overlay />
+      <div className="absolute top-0 left-0 z-50 w-full h-full pb-32 px-12">
+        <div className="mt-24 h-full m-auto pt-18 p-4 bg-black rounded-2xl text-white">
+          <Button onClick={onClose}>close</Button>
+          <div className="flex gap-4">
+            {currentImage > 0 && (
+              <button onClick={() => setCurrentImage(currentImage - 1)}>
+                {'<'}
+              </button>
+            )}
+            <div>
+              <img
+                src={place.posts[currentImage].url[imageInSequence]}
+                alt="Post"
+                width="100%"
+              />
+              {place.posts[currentImage].url.length > 1 && (
+                <>
+                  {imageInSequence > 0 && (
+                    <button
+                      onClick={() => setImageInSequence(imageInSequence - 1)}
+                    >
+                      {'<'}
+                    </button>
+                  )}
+                  {imageInSequence <
+                    place.posts[currentImage].url.length - 1 && (
+                    <button
+                      onClick={() => setImageInSequence(imageInSequence + 1)}
+                    >
+                      {'>'}
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+            <div className="w-64 h-auto">comments</div>
+            {currentImage < photosLength - 1 && (
+              <button onClick={() => setCurrentImage(currentImage + 1)}>
+                {'>'}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </Dialog>
   );
 };
 
