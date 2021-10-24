@@ -6,7 +6,7 @@ const Redirect: React.FC<{ to: string }> = ({ to }) => {
 
   useEffect(() => {
     router.push(to);
-  }, [to]);
+  }, [to]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;
 };
