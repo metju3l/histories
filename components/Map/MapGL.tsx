@@ -293,38 +293,86 @@ const MapModal: React.FC<MapModalProps> = ({ isOpen, setIsOpen, place }) => {
           </div>
         </div>
       </Dialog>
-      <Dialog
+      <DetailModal
         open={detail}
         onClose={() => {
           setIsOpen(true);
           setDetail(false);
         }}
-      >
-        <Dialog.Overlay />{' '}
-        <div className="absolute top-0 left-0 z-50 w-full h-full pb-32 px-12">
-          <div className="mt-24 h-full m-auto pt-18 p-4 bg-black rounded-2xl">
-            <Button
-              onClick={() => {
-                setDetail(false);
-                setIsOpen(true);
-              }}
-            >
-              close
-            </Button>
-            <div className="flex gap-4">
-              <div>
-                <img
-                  src={place.posts[currentImage].url[0]}
-                  alt="Post"
-                  width="100%"
-                />
-              </div>
-              <div className="w-64 h-auto text-white">comments</div>
+        place={place}
+        currentImage={currentImage}
+        setCurrentImage={setCurrentImage}
+        photosLength={photos.length}
+      />
+    </>
+  );
+};
+
+const DetailModal: React.FC<{
+  onClose: () => void;
+  place: any;
+  open: boolean;
+  currentImage: number;
+  setCurrentImage: React.Dispatch<React.SetStateAction<number>>;
+  photosLength: number;
+}> = ({
+  onClose,
+  place,
+  open,
+  currentImage,
+  setCurrentImage,
+  photosLength,
+}) => {
+  const [imageInSequence, setImageInSequence] = useState(0);
+
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <Dialog.Overlay />
+      <div className="absolute top-0 left-0 z-50 w-full h-full pb-32 px-12">
+        <div className="mt-24 h-full m-auto pt-18 p-4 bg-black rounded-2xl text-white">
+          <Button onClick={onClose}>close</Button>
+          <div className="flex gap-4">
+            {currentImage > 0 && (
+              <button onClick={() => setCurrentImage(currentImage - 1)}>
+                {'<'}
+              </button>
+            )}
+            <div>
+              <img
+                src={place.posts[currentImage].url[imageInSequence]}
+                alt="Post"
+                width="100%"
+              />
+              {place.posts[currentImage].url.length > 1 && (
+                <>
+                  {imageInSequence > 0 && (
+                    <button
+                      onClick={() => setImageInSequence(imageInSequence - 1)}
+                    >
+                      {'<'}
+                    </button>
+                  )}
+                  {imageInSequence <
+                    place.posts[currentImage].url.length - 1 && (
+                    <button
+                      onClick={() => setImageInSequence(imageInSequence + 1)}
+                    >
+                      {'>'}
+                    </button>
+                  )}
+                </>
+              )}
             </div>
+            <div className="w-64 h-auto">comments</div>
+            {currentImage < photosLength - 1 && (
+              <button onClick={() => setCurrentImage(currentImage + 1)}>
+                {'>'}
+              </button>
+            )}
           </div>
         </div>
-      </Dialog>
-    </>
+      </div>
+    </Dialog>
   );
 };
 
