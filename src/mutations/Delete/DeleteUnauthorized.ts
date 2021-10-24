@@ -1,4 +1,4 @@
-import DbConnector from '../database/driver';
+import DbConnector from '../../database/driver';
 
 const DeleteUnauthorized = async (): Promise<Boolean> => {
   const query = `

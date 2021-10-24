@@ -1,5 +1,5 @@
-import UserQuery from '../queries/UserQuery';
-import DbConnector from '../database/driver';
+import UserQuery from '../../queries/UserQuery';
+import DbConnector from '../../database/driver';
 
 const Like = async ({
   logged,

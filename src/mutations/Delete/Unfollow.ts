@@ -1,5 +1,5 @@
-import UserQuery from '../queries/UserQuery';
-import DbConnector from '../database/driver';
+import UserQuery from '../../queries/UserQuery';
+import DbConnector from '../../database/driver';
 
 const Unfollow = async (logged: string, userID: number): Promise<string> => {
   if (logged === null) return 'user not logged in';

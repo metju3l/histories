@@ -20,6 +20,7 @@ import {
   EditProfile,
   Follow,
   Like,
+  CreateComment,
   Unfollow,
 } from '../mutations';
 import {
@@ -38,7 +39,6 @@ import PostQuery from '../queries/PostQuery';
 import IsUsedEmail from '../validation/dbValidation/IsUsedEmail';
 import { GraphQLUpload } from 'graphql-upload';
 import { UploadPhoto } from '../s3/';
-import { CreateComment } from '../mutations/Create';
 
 type contextType = {
   decoded: { id: number };
