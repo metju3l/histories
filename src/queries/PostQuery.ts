@@ -37,7 +37,6 @@ const PostQuery = async ({
       hashtags: COLLECT(hashtag{.*, id:ID(hashtag)}),
       comments: COLLECT(DISTINCT comment{.*, id:ID(comment), author: commentAuthor{.*, id: ID(commentAuthor)}})    
   } AS post`;
-  console.log(query);
   const result = await RunCypherQuery(query);
 
   if (result.records[0] === undefined) throw new Error('Post does not exist');

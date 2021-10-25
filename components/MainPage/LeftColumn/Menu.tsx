@@ -14,8 +14,8 @@ const Menu: FC<{ data: any }> = ({ data }) => {
   return (
     <>
       <div className="w-full h-auto p-[1em] bg-white shadow-lg dark:bg-[#343233] rounded-xl text-text-light dark:text-white">
-        {data!.isLogged && (
-          <Link href={`/${data!.isLogged.username}`}>
+        {data?.isLogged && (
+          <Link href={`/${data?.isLogged.username}`}>
             <a className="flex items-center">
               <div className="relative rounded-full w-12 h-12 mr-4">
                 <Image
