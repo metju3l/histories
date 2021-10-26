@@ -30,6 +30,8 @@ import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { Modal, Menu } from '@components/Modal';
 import { toast } from 'react-hot-toast';
 
+import { TimeLine } from '@components/TimeLine';
+
 const GetBounds = (bounds: {
   _ne: { lat: number; lng: number };
   _sw: { lat: number; lng: number };
@@ -55,6 +57,10 @@ const MapGL: FC<{
   >;
 }> = ({ searchCoordinates, setBounds, oldPoints }) => {
   const [coordinates, setCoordinates] = useState([21, 20]);
+
+  const [timeLimitation, setTimeLimitation] = useState<[number, number]>([
+    0, 2021,
+  ]);
 
   const paths = usePathsQuery();
 
@@ -97,15 +103,32 @@ const MapGL: FC<{
   const mapRef = useRef<any>(null);
 
   // convert points to geoJSON format
-  const points = oldPoints.map((point: any) => ({
-    type: 'Feature',
-    properties: {
-      cluster: false,
-      id: point.id,
-      category: 'place',
-    },
-    geometry: { type: 'Point', coordinates: [point.longitude, point.latitude] },
-  }));
+  const points = oldPoints.map((point: any) => {
+    const minDate = new Date();
+    minDate.setFullYear(timeLimitation[0]);
+    const maxDate = new Date();
+    maxDate.setFullYear(timeLimitation[1]);
+
+    /* (
+      point.posts.filter(
+        (post) =>
+          post.postDate >= minDate.getTime() &&
+          post.postDate <= maxDate.getTime()
+      ).length > 0
+    )*/
+    return {
+      type: 'Feature',
+      properties: {
+        cluster: false,
+        id: point.id,
+        category: 'place',
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [point.longitude, point.latitude],
+      },
+    };
+  });
 
   // generate clusters from points
   const { clusters, supercluster } = useSuperCluster({
@@ -232,6 +255,12 @@ const MapGL: FC<{
           );
         })}
       </ReactMapGL>
+      <div className="absolute left-20 top-20 z-50">
+        <TimeLine
+          timeLimitation={timeLimitation}
+          setTimeLimitation={setTimeLimitation}
+        />
+      </div>
     </>
   );
 };

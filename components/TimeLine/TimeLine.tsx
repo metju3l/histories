@@ -3,8 +3,14 @@ import Handle from './Handle';
 import Track from './Track';
 import Tick from './Tick';
 
-const TimeLine = () => {
-  const domain = [1728, 2021];
+const TimeLine = ({
+  timeLimitation,
+  setTimeLimitation,
+}: {
+  timeLimitation: [number, number];
+  setTimeLimitation: any;
+}) => {
+  const domain = [0, 2020];
 
   return (
     <Slider
@@ -17,6 +23,7 @@ const TimeLine = () => {
       step={1}
       mode={2}
       values={domain}
+      onUpdate={(e) => setTimeLimitation(e)}
     >
       <Rail>
         {({ getRailProps }) => (
