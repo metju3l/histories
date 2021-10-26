@@ -1,4 +1,4 @@
-import DbConnector from '../database/driver';
+import DbConnector from '../../database/driver';
 
 const Follow = async (logged: number, userID: number): Promise<string> => {
   const query = `MATCH (a:User), (b:User)

@@ -26,8 +26,8 @@ const Navbar: FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
   const { theme, setTheme } = useDarkMode();
 
-  if (loading) return <div>loading</div>;
-  if (error) return <div>error</div>;
+  if (loading) return <div>navbar loading</div>;
+  if (error) return <div>navbar error</div>;
 
   const userIsLogged = data!.isLogged !== null;
 

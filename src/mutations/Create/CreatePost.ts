@@ -1,5 +1,5 @@
-import DbConnector from '../database/driver';
-import LastPost from './lastPost';
+import DbConnector from '../../database/driver';
+import LastPost from '../lastPost';
 
 const CreatePost = async ({
   userID,

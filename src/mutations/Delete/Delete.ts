@@ -1,7 +1,7 @@
-import { ParseUrls } from '../functions';
-import { DeleteFile } from '../s3';
-import DbConnector from '../database/driver';
-import RunCypherQuery from '../database/RunCypherQuery';
+import { ParseUrls } from '../../functions';
+import { DeleteFile } from '../../s3';
+import DbConnector from '../../database/driver';
+import RunCypherQuery from '../../database/RunCypherQuery';
 
 const Delete = async ({
   logged,

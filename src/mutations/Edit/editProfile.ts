@@ -1,5 +1,5 @@
-import RunCypherQuery from '../database/RunCypherQuery';
-import DbConnector from '../database/driver';
+import RunCypherQuery from '../../database/RunCypherQuery';
+import DbConnector from '../../database/driver';
 
 const EditProfile = async ({
   id,

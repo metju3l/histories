@@ -20,6 +20,7 @@ import {
   EditProfile,
   Follow,
   Like,
+  CreateComment,
   Unfollow,
 } from '../mutations';
 import {
@@ -38,7 +39,6 @@ import PostQuery from '../queries/PostQuery';
 import IsUsedEmail from '../validation/dbValidation/IsUsedEmail';
 import { GraphQLUpload } from 'graphql-upload';
 import { UploadPhoto } from '../s3/';
-import { CreateComment } from '../mutations/Create';
 
 type contextType = {
   decoded: { id: number };
@@ -118,9 +118,8 @@ const resolvers = {
       context: contextType
     ) => {
       // return user data
-      if (context.validToken)
-        return await UserQuery({ id: context.decoded.id });
-      else return null;
+      if (!context.validToken || context.decoded.id === undefined) return null;
+      else return await UserQuery({ id: context.decoded.id });
     },
 
     post: async (

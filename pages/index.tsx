@@ -10,8 +10,11 @@ import { Layout } from '@components/Layout';
 const Index: React.FC = () => {
   const logged = useIsLoggedQuery();
 
-  if (logged.loading) return <div>loading</div>;
-  if (logged.error) return <div>error</div>;
+  if (logged.loading) return <div>logged loading</div>;
+  if (logged.error) {
+    console.log(logged.error);
+    return <div>logged error</div>;
+  }
 
   return (
     <Layout title="hiStories">
@@ -40,8 +43,8 @@ const Index: React.FC = () => {
 const PersonalizedPosts = ({ logged }: { logged: any }) => {
   const { data, loading, error, refetch } = usePersonalizedPostsQuery();
 
-  if (loading) return <div>loading</div>;
-  if (error) return <div>error</div>;
+  if (loading) return <div>post loading</div>;
+  if (error) return <div>post error</div>;
 
   return (
     <div>

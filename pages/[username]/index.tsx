@@ -36,7 +36,10 @@ const User: FC<{ username: string }> = ({ username }) => {
   }
   if (loading) return <div>loading</div>;
   if (logged.loading) return <div>loading</div>;
-  if (logged.error) return <div>error...</div>;
+  if (logged.error) {
+    console.log(logged.error);
+    return <div>error</div>;
+  }
   if (data === null || data === undefined)
     return <div>user does not exist</div>;
   const isLogged = logged.data!.isLogged;
