@@ -8,8 +8,10 @@ const PostQuery = async ({
   id: number;
   logged: number | null;
 }) => {
-  const query = `MATCH (author:User)-[:CREATED]->(post:Post)-[:IS_LOCATED]->(place:Place)
-  WHERE ID(post) = ${id}
+  const query = `MATCH (author:User)-[:CREATED]->(post:Post)-[:IS_LOCATED]->(place:Place)${
+    logged ? ', (logged:User)' : ''
+  }
+  WHERE ID(post) = ${id} ${logged ? `AND ID(logged) = ${logged}` : ''}
   CALL {
       WITH post
       OPTIONAL MATCH (user:User)-[:LIKE]->(post)
@@ -23,20 +25,35 @@ const PostQuery = async ({
       ORDER BY comment.createdAt DESC
       LIMIT 100
   }
+  ${
+    logged
+      ? `CALL {
+    WITH comment, logged 
+    RETURN EXISTS((logged)-[:LIKE]->(comment)) AS likedComment
+}`
+      : ''
+  }
+
+
   CALL {
       WITH post
       OPTIONAL MATCH (hashtag:Hashtag)-[:CONTAINS]->(post)
       RETURN DISTINCT hashtag
       LIMIT 100
   }
-   
-   
+      
   RETURN post{.*, id: ID(post), 
       place: place{.*, id: ID(place)},
-      author: author{.*, id: ID(author)}, likes: COLLECT(like{.*, id: ID(like)}),
+      author: author{.*, id: ID(author)},
+      liked: ${logged ? 'EXISTS((logged)-[:LIKE]->(post))' : 'false'},
+      likes: COLLECT(DISTINCT like{.*, id: ID(like)}),
       hashtags: COLLECT(hashtag{.*, id:ID(hashtag)}),
-      comments: COLLECT(DISTINCT comment{.*, id:ID(comment), author: commentAuthor{.*, id: ID(commentAuthor)}})    
+      comments: COLLECT(DISTINCT comment{.*,
+        id:ID(comment),
+        liked: ${logged ? 'likedComment' : 'false'},
+        author: commentAuthor{.*, id: ID(commentAuthor)}})    
   } AS post`;
+
   const result = await RunCypherQuery(query);
 
   if (result.records[0] === undefined) throw new Error('Post does not exist');

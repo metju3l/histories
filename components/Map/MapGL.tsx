@@ -31,7 +31,11 @@ import { Modal, Menu } from '@components/Modal';
 import { toast } from 'react-hot-toast';
 
 import { TimeLine } from '@components/TimeLine';
-import { useLikeMutation, useReportMutation } from '@graphql/relations.graphql';
+import {
+  useLikeMutation,
+  useReportMutation,
+  useUnlikeMutation,
+} from '@graphql/relations.graphql';
 
 type PlaceProps = {
   id: number;
@@ -365,6 +369,7 @@ const DetailModal: React.FC<{
     variables: { id: place.posts[currentImage].id },
   });
   const [likeMutation] = useLikeMutation();
+  const [unlikeMutation] = useUnlikeMutation();
   const [reportMutation] = useReportMutation();
   const isLogged = useIsLoggedQuery();
   const [commentContent, setCommentContent] = useState('');
@@ -479,6 +484,7 @@ const DetailModal: React.FC<{
                 id={comment.id}
                 logged={isLogged.data!.isLogged ?? null}
                 key={comment.id}
+                liked={comment.liked}
                 refetch={refetch}
               />
             ))}
@@ -490,29 +496,26 @@ const DetailModal: React.FC<{
             className="w-full items-center gap-2 p-3 border-t border-[#EEEFEE]"
           >
             <div className="w-full flex gap-2">
-              <div
-                onClick={async () => {
-                  if (isLogged.data?.isLogged)
-                    try {
-                      await likeMutation({
-                        variables: { id: data!.post.id, type: 'like' },
-                      });
-                      await refetch();
-                    } catch (error) {
-                      // @ts-ignore
-                      toast.error(error.message);
-                    }
-                }}
-              >
-                {isLogged.data?.isLogged ? (
-                  data?.post.likes.find(
-                    (like) => like?.id === isLogged.data?.isLogged?.id
-                  ) !== undefined ? (
+              {isLogged.data?.isLogged ? (
+                data?.post.liked ? (
+                  <div
+                    onClick={async () => {
+                      try {
+                        await unlikeMutation({
+                          variables: { id: data!.post.id },
+                        });
+                        await refetch();
+                      } catch (error) {
+                        // @ts-ignore
+                        toast.error(error.message);
+                      }
+                    }}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
+                      className="h-6 w-6"
                       viewBox="0 0 20 20"
-                      fill="currentColor"
+                      fill="#FF0000"
                     >
                       <path
                         fillRule="evenodd"
@@ -520,7 +523,21 @@ const DetailModal: React.FC<{
                         clipRule="evenodd"
                       />
                     </svg>
-                  ) : (
+                  </div>
+                ) : (
+                  <div
+                    onClick={async () => {
+                      try {
+                        await likeMutation({
+                          variables: { id: data!.post.id, type: 'like' },
+                        });
+                        await refetch();
+                      } catch (error) {
+                        // @ts-ignore
+                        toast.error(error.message);
+                      }
+                    }}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6"
@@ -535,30 +552,31 @@ const DetailModal: React.FC<{
                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                       />
                     </svg>
-                  )
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                )}
-              </div>
+                  </div>
+                )
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+              )}
               <ChatIcon className="h-8 w-8" />
               <PaperAirplaneIcon className="h-8 w-8 rotate-45" />
               <BookmarkIcon className="h-8 w-8 absolute right-4" />
             </div>
             <strong className="font-semibold">
               {data?.post.likes.length} likes
+              {console.log(data?.post.likes)}
             </strong>
             <br />
             <TimeAgo date={data!.post.createdAt} />
