@@ -7,7 +7,6 @@ import { Menu } from '@components/Modal';
 import { useDeleteMutation } from '@graphql/post.graphql';
 import { toast } from 'react-hot-toast';
 
-
 type CommentProps = {
   content: string;
   createdAt: number;
@@ -34,6 +33,7 @@ const Comment: React.FC<CommentProps> = ({
   const [deleteMutation] = useDeleteMutation();
   const [mouseOver, setMouseOver] = useState(false);
   const isCommentAuthor = author.id === logged?.id;
+  const [showMore, setShowMore] = useState(false);
 
   return (
     <span
@@ -62,7 +62,35 @@ const Comment: React.FC<CommentProps> = ({
               {author.firstName} {author.lastName}
             </strong>
             <br />
-            {content}
+            {content.length > 500 ? (
+              <>
+                {!showMore ? (
+                  <>
+                    {content.substr(0, 500)}
+                    <a
+                      className="text-indigo-600 cursor-pointer"
+                      onClick={() => setShowMore(true)}
+                    >
+                      {' '}
+                      continue reading...
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    {content}
+                    <a
+                      className="text-indigo-600 cursor-pointer"
+                      onClick={() => setShowMore(false)}
+                    >
+                      {' '}
+                      show less...
+                    </a>
+                  </>
+                )}
+              </>
+            ) : (
+              content.substr(0, 500)
+            )}
           </div>
 
           <Menu
