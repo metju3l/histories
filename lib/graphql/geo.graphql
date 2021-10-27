@@ -26,6 +26,8 @@ query MapPosts(
       id
       url
       description
+      createdAt
+      postDate
       author {
         id
         username

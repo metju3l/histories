@@ -1,23 +1,26 @@
-import React, { FC } from 'react';
+import React from 'react';
+import { SliderItem } from 'react-compound-slider';
 
-const Tick: FC<{ tick: any; count: any }> = ({ tick, count }) => {
+const Tick: React.FC<{ tick: SliderItem; count: number }> = ({
+  tick,
+  count,
+}) => {
   return (
     <div>
       <div
+        className="absolute bg-white"
         style={{
-          position: 'absolute',
-          marginTop: 52,
+          marginTop: 20,
           marginLeft: -0.5,
           width: 1,
           height: 8,
-          backgroundColor: 'blue',
           left: `${tick.percent}%`,
         }}
       />
       <div
         style={{
           position: 'absolute',
-          marginTop: 60,
+          marginTop: 5,
           fontSize: 10,
           textAlign: 'center',
           color: 'white',

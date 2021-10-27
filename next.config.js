@@ -6,6 +6,7 @@ module.exports = withPWA({
     register: true,
     skipWaiting: true,
   },
+  swcMinify: true,
   typescript: {
     ignoreBuildErrors: false,
   },

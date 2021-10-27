@@ -39,6 +39,7 @@ import PostQuery from '../queries/PostQuery';
 import IsUsedEmail from '../validation/dbValidation/IsUsedEmail';
 import { GraphQLUpload } from 'graphql-upload';
 import { UploadPhoto } from '../s3/';
+import Report from '../mutations/Create/Report';
 
 type contextType = {
   decoded: { id: number };
@@ -155,6 +156,17 @@ const resolvers = {
       context: any
     ) => {
       return Like({ ...input, logged: context.decoded.username });
+    },
+
+    report: async (
+      _parent: undefined,
+      { input }: { input: { id: number } },
+      context: any
+    ) => {
+      if (context.validToken) {
+        await Report({ logged: context.decoded.id, target: input.id });
+        return 'success';
+      } else throw new Error('User is not logged');
     },
 
     updateProfile: async (

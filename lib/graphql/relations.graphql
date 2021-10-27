@@ -13,3 +13,7 @@ mutation like($id: Int!, $type: String!, $to: String!) {
 mutation unlike($id: Int!) {
   unlike(id: $id)
 }
+
+mutation report($id: Int!) {
+  report(input: { id: $id })
+}
