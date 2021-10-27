@@ -7,24 +7,35 @@ const Handle: FC<{
 }> = ({ handle: { id, value, percent }, getHandleProps }) => {
   return (
     <div
+      className="absolute mt-12 text-white"
       style={{
         left: `${percent}%`,
-        position: 'absolute',
         marginLeft: -15,
-        marginTop: 25,
         zIndex: 2,
         width: 30,
         height: 30,
         border: 0,
         textAlign: 'center',
         cursor: 'pointer',
-        borderRadius: '50%',
-        backgroundColor: '#2C4870',
         color: '#333',
       }}
       {...getHandleProps(id)}
     >
-      <div style={{ fontFamily: 'Roboto', fontSize: 11, marginTop: -35 }}>
+      <div className="text-white" style={{ fontSize: 11 }}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="white"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M5 15l7-7 7 7"
+          />
+        </svg>
         {value}
       </div>
     </div>

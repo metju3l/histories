@@ -3,38 +3,33 @@ import Handle from './Handle';
 import Track from './Track';
 import Tick from './Tick';
 
-const TimeLine = ({
-  timeLimitation,
-  setTimeLimitation,
-}: {
-  timeLimitation: [number, number];
-  setTimeLimitation: any;
-}) => {
-  const domain = [0, 2020];
+type TimelineProps = {
+  domain: [number, number];
+  setTimeLimitation: React.Dispatch<React.SetStateAction<[number, number]>>;
+};
 
+const TimeLine: React.FC<TimelineProps> = ({ domain, setTimeLimitation }) => {
   return (
     <Slider
       rootStyle={{
         position: 'relative',
-        width: '600px',
+        width: '100%',
         height: 80,
       }}
       domain={domain}
       step={1}
       mode={2}
       values={domain}
-      onUpdate={(e) => setTimeLimitation(e)}
+      onUpdate={(limits) => setTimeLimitation(limits as [number, number])}
     >
       <Rail>
         {({ getRailProps }) => (
           <div
+            className="absolute w-full bg-gray-600"
             style={{
-              position: 'absolute',
-              width: '100%',
               height: 10,
               marginTop: 35,
               borderRadius: 5,
-              backgroundColor: '#8B9CB6',
             }}
             {...getRailProps()}
           />
@@ -67,7 +62,7 @@ const TimeLine = ({
           </div>
         )}
       </Tracks>
-      <Ticks count={5}>
+      <Ticks count={10}>
         {({ ticks }) => (
           <div className="slider-ticks">
             {ticks.map((tick) => (

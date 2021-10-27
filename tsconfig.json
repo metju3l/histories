@@ -2,16 +2,34 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@components/*": ["components/*"],
-      "@graphql/*": ["lib/graphql/*"],
-      "@hooks/*": ["lib/hooks/*"],
-      "@lib/*": ["lib/*"],
-      "@src/*": ["src/*"],
-      "@validation/*": ["validation/*"],
-      "@public/*": ["public/*"]
+      "@components/*": [
+        "components/*"
+      ],
+      "@graphql/*": [
+        "lib/graphql/*"
+      ],
+      "@hooks/*": [
+        "lib/hooks/*"
+      ],
+      "@lib/*": [
+        "lib/*"
+      ],
+      "@src/*": [
+        "src/*"
+      ],
+      "@validation/*": [
+        "validation/*"
+      ],
+      "@public/*": [
+        "public/*"
+      ]
     },
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -22,7 +40,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "incremental": true
   },
   "include": [
     "next-env.d.ts",
@@ -31,5 +50,8 @@
     "src/database/driver.ts",
     "server.js"
   ],
-  "exclude": ["node_modules", ".cache"]
+  "exclude": [
+    "node_modules",
+    ".cache"
+  ]
 }

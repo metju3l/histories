@@ -7,12 +7,11 @@ const Track: FC<{ source: any; target: any; getTrackProps: any }> = ({
 }) => {
   return (
     <div
+      className="absolute bg-white"
       style={{
-        position: 'absolute',
         height: 10,
         zIndex: 1,
         marginTop: 35,
-        backgroundColor: '#546C91',
         borderRadius: 5,
         cursor: 'pointer',
         left: `${source.percent}%`,

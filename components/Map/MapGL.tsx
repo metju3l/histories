@@ -32,6 +32,19 @@ import { toast } from 'react-hot-toast';
 
 import { TimeLine } from '@components/TimeLine';
 
+type PlaceProps = {
+  id: number;
+  latitude: number;
+  longitude: number;
+  posts: Array<{
+    id: number;
+    createdAt: number;
+    postDate: number;
+    description: string;
+    url: Array<string>;
+  }>;
+};
+
 const GetBounds = (bounds: {
   _ne: { lat: number; lng: number };
   _sw: { lat: number; lng: number };
@@ -46,7 +59,7 @@ const GetBounds = (bounds: {
 
 const MapGL: FC<{
   searchCoordinates: { lat: number; lng: number };
-  oldPoints: any;
+  oldPoints: Array<PlaceProps>;
   setBounds: React.Dispatch<
     React.SetStateAction<{
       maxLatitude: number;
@@ -59,7 +72,8 @@ const MapGL: FC<{
   const [coordinates, setCoordinates] = useState([21, 20]);
 
   const [timeLimitation, setTimeLimitation] = useState<[number, number]>([
-    0, 2021,
+    0,
+    new Date().getTime(),
   ]);
 
   const paths = usePathsQuery();
@@ -102,33 +116,37 @@ const MapGL: FC<{
 
   const mapRef = useRef<any>(null);
 
-  // convert points to geoJSON format
-  const points = oldPoints.map((point: any) => {
-    const minDate = new Date();
-    minDate.setFullYear(timeLimitation[0]);
-    const maxDate = new Date();
-    maxDate.setFullYear(timeLimitation[1]);
+  /* PLACES FILTER
+   * filters `posts` in `places` by timeline requirements
+   * returns only `places` that has at least one `post`
+   */
+  const filteredPlaces =
+    oldPoints.length > 0
+      ? oldPoints.reduce((filtered: PlaceProps[], original: PlaceProps) => {
+          const posts = original.posts.filter((post: { postDate: number }) => {
+            const postYear = new Date(post.postDate).getFullYear();
+            return (
+              timeLimitation[0] <= postYear && postYear <= timeLimitation[1]
+            );
+          });
+          if (posts.length > 0) filtered.push({ ...original, posts });
+          return filtered;
+        }, [])
+      : [];
 
-    /* (
-      point.posts.filter(
-        (post) =>
-          post.postDate >= minDate.getTime() &&
-          post.postDate <= maxDate.getTime()
-      ).length > 0
-    )*/
-    return {
-      type: 'Feature',
-      properties: {
-        cluster: false,
-        id: point.id,
-        category: 'place',
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [point.longitude, point.latitude],
-      },
-    };
-  });
+  // convert points to geoJSON format
+  const points = filteredPlaces.map((place: PlaceProps) => ({
+    type: 'Feature',
+    properties: {
+      cluster: false,
+      id: place.id,
+      category: 'place',
+    },
+    geometry: {
+      type: 'Point',
+      coordinates: [place.longitude, place.latitude],
+    },
+  }));
 
   // generate clusters from points
   const { clusters, supercluster } = useSuperCluster({
@@ -243,21 +261,16 @@ const MapGL: FC<{
               </Marker>
             );
           }
-
-          return (
-            <MapPlace
-              key={cluster.id}
-              place={oldPoints.find(
-                (point: any) =>
-                  point.latitude === latitude && point.longitude === longitude
-              )}
-            />
+          const place = filteredPlaces.find(
+            (place: PlaceProps) =>
+              place.latitude === latitude && place.longitude === longitude
           );
+          return place ? <MapPlace key={cluster.id} place={place} /> : null;
         })}
       </ReactMapGL>
-      <div className="absolute left-20 top-20 z-50">
+      <div className="absolute left-[10vw] top-20 z-50 w-[80vw]">
         <TimeLine
-          timeLimitation={timeLimitation}
+          domain={[1000, new Date().getFullYear()]}
           setTimeLimitation={setTimeLimitation}
         />
       </div>
