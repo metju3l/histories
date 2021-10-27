@@ -31,7 +31,7 @@ import { Modal, Menu } from '@components/Modal';
 import { toast } from 'react-hot-toast';
 
 import { TimeLine } from '@components/TimeLine';
-import { useReportMutation } from '@graphql/relations.graphql';
+import { useLikeMutation, useReportMutation } from '@graphql/relations.graphql';
 
 type PlaceProps = {
   id: number;
@@ -281,7 +281,6 @@ const MapGL: FC<{
 
 const MapPlace = ({ place }: { place: any }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showModal, setShowModal] = React.useState(false);
 
   return (
     <>
@@ -365,6 +364,7 @@ const DetailModal: React.FC<{
   const { data, loading, error, refetch } = usePostQuery({
     variables: { id: place.posts[currentImage].id },
   });
+  const [likeMutation] = useLikeMutation();
   const [reportMutation] = useReportMutation();
   const isLogged = useIsLoggedQuery();
   const [commentContent, setCommentContent] = useState('');
@@ -490,7 +490,69 @@ const DetailModal: React.FC<{
             className="w-full items-center gap-2 p-3 border-t border-[#EEEFEE]"
           >
             <div className="w-full flex gap-2">
-              <HeartIcon className="h-8 w-8" />
+              <div
+                onClick={async () => {
+                  if (isLogged.data?.isLogged)
+                    try {
+                      await likeMutation({
+                        variables: { id: data!.post.id, type: 'like' },
+                      });
+                      await refetch();
+                    } catch (error) {
+                      // @ts-ignore
+                      toast.error(error.message);
+                    }
+                }}
+              >
+                {isLogged.data?.isLogged ? (
+                  data?.post.likes.find(
+                    (like) => like?.id === isLogged.data?.isLogged?.id
+                  ) !== undefined ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
+                    </svg>
+                  )
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    />
+                  </svg>
+                )}
+              </div>
               <ChatIcon className="h-8 w-8" />
               <PaperAirplaneIcon className="h-8 w-8 rotate-45" />
               <BookmarkIcon className="h-8 w-8 absolute right-4" />

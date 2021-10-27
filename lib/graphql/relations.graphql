@@ -6,8 +6,8 @@ mutation unfollow($userID: Int!) {
   unfollow(userID: $userID)
 }
 
-mutation like($id: Int!, $type: String!, $to: String!) {
-  like(input: { id: $id, type: $type, to: $to })
+mutation like($id: Int!, $type: String!) {
+  like(input: { id: $id, type: $type })
 }
 
 mutation unlike($id: Int!) {
