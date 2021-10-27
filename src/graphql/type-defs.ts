@@ -90,6 +90,7 @@ export default gql`
     id: Int!
     createdAt: Float!
     content: String!
+    liked: Boolean!
     author: UserInfoMinimal!
   }
 

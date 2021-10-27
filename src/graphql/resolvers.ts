@@ -22,6 +22,7 @@ import {
   Like,
   CreateComment,
   Unfollow,
+  Unlike,
 } from '../mutations';
 import {
   GetPaths,
@@ -160,6 +161,18 @@ const resolvers = {
           logged: context.decoded.id,
           target: input.id,
           type: input.type,
+        });
+      } else throw new Error('User is not logged');
+    },
+    unlike: async (
+      _parent: undefined,
+      { id }: { id: number },
+      context: any
+    ) => {
+      if (context.validToken) {
+        return await Unlike({
+          loggedID: context.decoded.id,
+          id,
         });
       } else throw new Error('User is not logged');
     },

@@ -1,24 +1,17 @@
-import UserQuery from '../../queries/UserQuery';
-import DbConnector from '../../database/driver';
+import RunCypherQuery from '../../database/RunCypherQuery';
 
 const Like = async ({
-  logged,
+  loggedID,
   id,
 }: {
-  logged: string;
+  loggedID: number;
   id: number;
 }): Promise<string> => {
-  if (logged === null) return 'user not logged in';
-  const loggedID = (await UserQuery({ username: logged })).id;
-  const query = `MATCH (n:User)-[like:LIKE]->(m)
-                WHERE ID(n) = ${loggedID} AND ID(m) = ${id}
-                DELETE like`;
+  const query = `MATCH (user:User)-[like:LIKE]->(target)
+WHERE ID(user) = ${loggedID} AND ID(target) = ${id}
+DELETE like`;
 
-  const driver = DbConnector();
-  const session = driver.session();
-
-  await session.run(query);
-  driver.close();
+  await RunCypherQuery(query);
 
   return 'relation created';
 };

@@ -6,7 +6,11 @@ import { DotsHorizontalIcon } from '@heroicons/react/solid';
 import { Menu } from '@components/Modal';
 import { useDeleteMutation } from '@graphql/post.graphql';
 import { toast } from 'react-hot-toast';
-import { useReportMutation } from '@graphql/relations.graphql';
+import {
+  useLikeMutation,
+  useReportMutation,
+  useUnlikeMutation,
+} from '@graphql/relations.graphql';
 
 type CommentProps = {
   content: string;
@@ -20,12 +24,14 @@ type CommentProps = {
     id: number;
     username: string;
   };
+  liked: boolean;
   refetch: any;
 };
 
 const Comment: React.FC<CommentProps> = ({
   content,
   id,
+  liked,
   author,
   createdAt,
   logged,
@@ -33,6 +39,8 @@ const Comment: React.FC<CommentProps> = ({
 }) => {
   const [deleteMutation] = useDeleteMutation();
   const [reportMutation] = useReportMutation();
+  const [likeMutation] = useLikeMutation();
+  const [unlikeMutation] = useUnlikeMutation();
   const [mouseOver, setMouseOver] = useState(false);
   const isCommentAuthor = author.id === logged?.id;
   const [showMore, setShowMore] = useState(false);
@@ -107,10 +115,10 @@ const Comment: React.FC<CommentProps> = ({
                           await deleteMutation({
                             variables: { id },
                           });
+                          await refetch();
                         } catch (error: any) {
                           toast.error(error.message);
                         }
-                        await refetch();
                       },
                     },
                   ]
@@ -142,7 +150,26 @@ const Comment: React.FC<CommentProps> = ({
         </div>
 
         <span className="pl-2">
-          Like · Reply · <TimeAgo date={createdAt} />
+          <button
+            onClick={async () => {
+              try {
+                if (liked)
+                  await unlikeMutation({
+                    variables: { id },
+                  });
+                else
+                  await likeMutation({
+                    variables: { id, type: 'like' },
+                  });
+                await refetch();
+              } catch (error: any) {
+                toast.error(error.message);
+              }
+            }}
+          >
+            {liked ? 'Unlike' : 'Like'}
+          </button>{' '}
+          · Reply · <TimeAgo date={createdAt} />
         </span>
       </div>
     </span>

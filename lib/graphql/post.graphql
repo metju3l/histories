@@ -44,6 +44,7 @@ query tag($label: String!) {
 query post($id: Int!) {
   post(id: $id) {
     id
+    liked
     createdAt
     postDate
     description
@@ -65,6 +66,7 @@ query post($id: Int!) {
     }
     comments {
       id
+      liked
       createdAt
       content
       author {
