@@ -33,6 +33,11 @@ export default gql`
     createUser(input: CreateUserInput!): String!
     verifyToken(token: String!): String!
     createComment(input: CreateCommentInput!): String!
+    report(input: ReportInput!): String!
+  }
+
+  input ReportInput {
+    id: Int!
   }
 
   input CreateCommentInput {

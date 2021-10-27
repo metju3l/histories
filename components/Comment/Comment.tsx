@@ -6,6 +6,7 @@ import { DotsHorizontalIcon } from '@heroicons/react/solid';
 import { Menu } from '@components/Modal';
 import { useDeleteMutation } from '@graphql/post.graphql';
 import { toast } from 'react-hot-toast';
+import { useReportMutation } from '@graphql/relations.graphql';
 
 type CommentProps = {
   content: string;
@@ -31,6 +32,7 @@ const Comment: React.FC<CommentProps> = ({
   refetch,
 }) => {
   const [deleteMutation] = useDeleteMutation();
+  const [reportMutation] = useReportMutation();
   const [mouseOver, setMouseOver] = useState(false);
   const isCommentAuthor = author.id === logged?.id;
   const [showMore, setShowMore] = useState(false);
@@ -114,7 +116,17 @@ const Comment: React.FC<CommentProps> = ({
                   ]
                 : [
                     { title: 'Show profile', onClick: () => {} },
-                    { title: 'Report', onClick: () => {} },
+                    {
+                      title: 'Report',
+                      onClick: async () => {
+                        try {
+                          await reportMutation({ variables: { id } });
+                          toast.success('Comment reported');
+                        } catch (error: any) {
+                          toast.error(error.message);
+                        }
+                      },
+                    },
                   ]
             }
           >

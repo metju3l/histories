@@ -1,4 +1,4 @@
-import RunCypherQuery from '@src/database/RunCypherQuery';
+import RunCypherQuery from '../../database/RunCypherQuery';
 
 const Report = async ({
   logged,
@@ -9,7 +9,8 @@ const Report = async ({
 }) => {
   const query = `MATCH (user:User), (target)
   WHERE ID(user) = ${logged} AND ID(target) = ${target}
-  MERGE (user)-[:REPORT {createdAt: ${new Date().getTime()}}]-(target)
+  MERGE (user)-[r:REPORT]-(target)
+  SET r.createdAt = ${new Date().getTime()}
   `;
 
   await RunCypherQuery(query);
