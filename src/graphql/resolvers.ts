@@ -152,10 +152,16 @@ const resolvers = {
   Mutation: {
     like: async (
       _parent: undefined,
-      { input }: { input: { id: number; type: string; to: string } },
+      { input }: { input: { type: string; id: number } },
       context: any
     ) => {
-      return Like({ ...input, logged: context.decoded.username });
+      if (context.validToken) {
+        return await Like({
+          logged: context.decoded.id,
+          target: input.id,
+          type: input.type,
+        });
+      } else throw new Error('User is not logged');
     },
 
     report: async (

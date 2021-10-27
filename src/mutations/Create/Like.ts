@@ -1,32 +1,21 @@
-import UserQuery from '../../queries/UserQuery';
-import DbConnector from '../../database/driver';
+import RunCypherQuery from '../../database/RunCypherQuery';
 
 const Like = async ({
   logged,
-  id,
+  target,
   type,
-  to,
 }: {
-  logged: string;
-  id: number;
+  logged: number;
+  target: number;
   type: string;
-  to: string;
 }): Promise<string> => {
-  const formatedTo = to[0].toUpperCase() + to.slice(1).toLowerCase();
-  const enabledObjects = ['Post', 'Collection', 'Path'];
+  const query = `MATCH (user:User), (target)
+WHERE ID(user) = ${logged} AND ID(target) = ${target}
+MERGE (user)-[r:LIKE]->(target)
+SET r.createdAt = ${new Date().getTime()},
+r.type = "${type}"`;
 
-  if (!enabledObjects.includes(formatedTo)) return 'wrong object';
-  if (logged === null) return 'user not logged in';
-  const loggedID = (await UserQuery({ username: logged })).id;
-  const query = `MATCH (user:User), (object:${formatedTo})
-  WHERE ID(user) = ${loggedID} AND ID(object) = ${id}
-  CREATE (user)-[:LIKE {type:"${type}"}]->(object)`;
-
-  const driver = DbConnector();
-  const session = driver.session();
-
-  await session.run(query);
-  driver.close();
+  await RunCypherQuery(query);
 
   return 'relation created';
 };

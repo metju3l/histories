@@ -100,7 +100,6 @@ export default gql`
   input LikeInput {
     id: Int!
     type: String!
-    to: String!
   }
 
   input CreatePostInput {
