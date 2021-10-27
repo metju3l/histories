@@ -31,6 +31,7 @@ import { Modal, Menu } from '@components/Modal';
 import { toast } from 'react-hot-toast';
 
 import { TimeLine } from '@components/TimeLine';
+import { useReportMutation } from '@graphql/relations.graphql';
 
 type PlaceProps = {
   id: number;
@@ -364,6 +365,7 @@ const DetailModal: React.FC<{
   const { data, loading, error, refetch } = usePostQuery({
     variables: { id: place.posts[currentImage].id },
   });
+  const [reportMutation] = useReportMutation();
   const isLogged = useIsLoggedQuery();
   const [commentContent, setCommentContent] = useState('');
   const [createCommentMutation] = useCreateCommentMutation();
@@ -433,7 +435,19 @@ const DetailModal: React.FC<{
             </div>
             <Menu
               items={[
-                { title: 'Report', onClick: () => {} },
+                {
+                  title: 'Report',
+                  onClick: async () => {
+                    try {
+                      await reportMutation({
+                        variables: { id: place.posts[currentImage].id },
+                      });
+                      toast.success('Post reported');
+                    } catch (error: any) {
+                      toast.error(error.message);
+                    }
+                  },
+                },
                 { title: 'Unfollow', onClick: () => {} },
                 {
                   title: 'Go to post',
