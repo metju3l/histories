@@ -39,7 +39,7 @@ import PlaceQuery from '../queries/PlaceQuery';
 import PostQuery from '../queries/PostQuery';
 import IsUsedEmail from '../validation/dbValidation/IsUsedEmail';
 import { GraphQLUpload } from 'graphql-upload';
-import { UploadPhoto } from '../s3/';
+import { Upload } from '../IPFS';
 import Report from '../mutations/Create/Report';
 
 type contextType = {
@@ -383,7 +383,7 @@ const resolvers = {
       if (validateDate) throw new Error(validateDate);
 
       const urls = await Promise.all(
-        input.photo.map(async (photo: any) => await UploadPhoto(photo))
+        input.photo.map(async (photo: any) => await Upload(photo))
       );
 
       if (context.validToken)

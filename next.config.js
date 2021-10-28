@@ -32,6 +32,7 @@ module.exports = withPWA({
   },
   images: {
     domains: [
+      'ipfs.io',
       'avatars.dicebear.com',
       'histories-bucket.s3.amazonaws.com',
       'histories-bucket.s3.eu-central-1.amazonaws.com',

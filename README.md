@@ -24,3 +24,4 @@ And it also is my high school final project.
 - TypeScript
 - GraphQL
 - Neo4j
+- IPFS
