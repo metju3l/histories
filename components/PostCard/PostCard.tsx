@@ -189,10 +189,7 @@ const PostCard: FC<{
         </div>
 
         <div className="relative w-full">
-          <img
-            src={`https://ipfs.io/ipfs/${data!.post.url[currentImage]}`}
-            alt="Post"
-          />
+          <img src={data!.post.url[currentImage]} alt="Post" />
           {currentImage > 0 && (
             <button onClick={() => setCurrentImage(currentImage - 1)}>
               {'<'}
