@@ -1,5 +1,4 @@
 import { ParseUrls } from '../../functions';
-import { DeleteFile } from '../../s3';
 import DbConnector from '../../database/driver';
 import RunCypherQuery from '../../database/RunCypherQuery';
 
@@ -30,9 +29,7 @@ WHERE ID(user) = ${logged} AND ID(post) = ${id}
 RETURN post.url as urls`);
 
     await Promise.all(
-      ParseUrls(fileAddress.records[0].get('urls')).map((url: string) =>
-        DeleteFile(url)
-      )
+      ParseUrls(fileAddress.records[0].get('urls')).map((url: string) => {})
     );
   }
   await session.run(query);

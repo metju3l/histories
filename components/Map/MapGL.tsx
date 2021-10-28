@@ -296,7 +296,7 @@ const MapPlace = ({ place }: { place: any }) => {
           }}
         >
           <Image
-            src={place.posts[0].url[0]}
+            src={`https://ipfs.io/ipfs/${place.posts[0].url[0]}`}
             width={60}
             height={60}
             className="rounded-full w-12 h-12 object-cover"
@@ -317,7 +317,7 @@ type MapModalProps = {
 
 const MapModal: React.FC<MapModalProps> = ({ isOpen, setIsOpen, place }) => {
   const photos = place.posts.map((photo: { url: string[] }) => ({
-    src: photo.url[0],
+    src: `https://ipfs.io/ipfs/${photo.url[0]}`,
     width: 4,
     height: 3,
   }));
@@ -411,7 +411,7 @@ const DetailModal: React.FC<{
             </>
           )}
           <Image
-            src={place.posts[currentImage].url[imageInSequence]}
+            src={`https://ipfs.io/ipfs/${place.posts[currentImage].url[imageInSequence]}`}
             layout="fill"
             objectFit="cover"
             objectPosition="center"
