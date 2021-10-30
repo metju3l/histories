@@ -39,7 +39,7 @@ import PlaceQuery from '../queries/PlaceQuery';
 import PostQuery from '../queries/PostQuery';
 import IsUsedEmail from '../validation/dbValidation/IsUsedEmail';
 import { GraphQLUpload } from 'graphql-upload';
-import { Upload } from '../IPFS';
+import { UploadPhoto } from '../s3/';
 import Report from '../mutations/Create/Report';
 
 type contextType = {
@@ -157,11 +157,12 @@ const resolvers = {
       context: any
     ) => {
       if (context.validToken) {
-        return await Like({
+        await Like({
           logged: context.decoded.id,
           target: input.id,
           type: input.type,
         });
+        return 0;
       } else throw new Error('User is not logged');
     },
     unlike: async (
@@ -184,7 +185,7 @@ const resolvers = {
     ) => {
       if (context.validToken) {
         await Report({ logged: context.decoded.id, target: input.id });
-        return 'success';
+        return 0;
       } else throw new Error('User is not logged');
     },
 
@@ -264,7 +265,7 @@ const resolvers = {
           authorID: context.decoded.id,
           content,
         });
-        return 'success';
+        return 0;
       } else throw new Error('User is not logged');
     },
 
@@ -333,7 +334,8 @@ const resolvers = {
       const validatePassword = ValidatePassword(input.password).error;
       if (validatePassword) throw new Error(validatePassword);
 
-      return await CreateUser(input);
+      await CreateUser(input);
+      return 0;
     },
 
     createCollection: async (
@@ -383,7 +385,7 @@ const resolvers = {
       if (validateDate) throw new Error(validateDate);
 
       const urls = await Promise.all(
-        input.photo.map(async (photo: any) => await Upload(photo))
+        input.photo.map(async (photo: any) => await UploadPhoto(photo))
       );
 
       if (context.validToken)
@@ -426,17 +428,6 @@ const resolvers = {
       // if user wants to follow himself
       if (context.decoded.id == userID)
         throw new Error('You cannot follow yourself');
-
-      // if logged user does not exist
-      if (!(await ExistsUser(context.decoded.id)))
-        throw new Error('Logged user is not valid');
-
-      // if user to follow does not exist
-      if (!(await ExistsUser(userID))) throw new Error('User does not exist');
-
-      // check if there already is relation
-      if (await FollowsUser(context.decoded.id, userID))
-        throw new Error('User is already followed');
 
       return await Follow(context.decoded.id, userID);
     },

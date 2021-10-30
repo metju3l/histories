@@ -1,20 +1,16 @@
-import UserQuery from '../../queries/UserQuery';
-import DbConnector from '../../database/driver';
+import RunCypherQuery from '../../database/RunCypherQuery';
 
-const Unfollow = async (logged: string, userID: number): Promise<string> => {
-  if (logged === null) return 'user not logged in';
-  const loggedID = (await UserQuery({ username: logged })).id;
-  const query = `MATCH (a)-[r:FOLLOW]->(b)
-  WHERE ID(a) = ${loggedID} AND ID(b) = ${userID}
-  DELETE r`;
+// QUERY
+/*
+ * MATCH (user:User)-[r:FOLLOW]->(target)  - match follow relation
+ * WHERE ID(user) = 1 AND ID(target) = 2   - match nodes by IDs
+ * DELETE r                                - delete relation
+ */
 
-  const driver = DbConnector();
-  const session = driver.session();
-
-  await session.run(query);
-  driver.close();
-
-  return 'relation created';
+const Unfollow = async (logged: string, userID: number): Promise<void> => {
+  await RunCypherQuery(`logged (user:User)-[r:FOLLOW]->(target)
+  WHERE ID(user) = ${logged} AND ID(target) = ${userID}
+  DELETE r`);
 };
 
 export default Unfollow;

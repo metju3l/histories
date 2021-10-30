@@ -1,5 +1,16 @@
 import RunCypherQuery from '../../database/RunCypherQuery';
 
+// QUERY
+/*
+ * MATCH (author:User), (target)
+ * WHERE ID(author) = 1 AND ID(target) = 6    - match nodes by IDs
+ * CREATE (author)-[:CREATED]->(:Comment {    - create yrelation
+ *    createdAt: 1635490076649,               - created at
+ *    content: "comment content"              - comment content
+ *    edited: false                           - default edited false
+ * })-[:BELONGS_TO]->(target)                 - target relation
+ */
+
 const CreateComment = async ({
   authorID,
   targetID,
@@ -8,14 +19,9 @@ const CreateComment = async ({
   authorID: number;
   targetID: number;
   content: string;
-}) => {
-  const query = `MATCH (target),(author:User) 
-WHERE ID(target) = ${targetID} AND ID(author) = ${authorID}
-CREATE (author)-[:CREATED]->(comment:Comment{createdAt:${new Date().getTime()},content:"${content}"})-[:BELONGS_TO]->(target)`;
-
-  await RunCypherQuery(query);
-
-  return 'success';
+}): Promise<void> => {
+  await RunCypherQuery(`MATCH (target),(author:User) WHERE ID(target) = ${targetID} AND ID(author) = ${authorID}
+CREATE (author)-[:CREATED]->(:Comment{createdAt:${new Date().getTime()},edited:false,content:"${content}"})-[:BELONGS_TO]->(target)`);
 };
 
 export default CreateComment;

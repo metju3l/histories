@@ -24,4 +24,25 @@ And it also is my high school final project.
 - TypeScript
 - GraphQL
 - Neo4j
-- IPFS
+
+## Project structure
+
+```
+hiStories/
+├── pages (using nextjs routing)
+├── src (backend)
+│   ├── graphql
+│   │   ├── schema
+│   │   └── resolvers
+│   ├── queries
+│   ├── mutations
+|   └── validation
+├── dist (compiled backend)
+├── lib (frontend)
+│   ├── graphql
+│   ├── hooks
+│   ├── functions
+│   └── tranlation (i18n)
+├── components (reusable react components)
+└── public
+```

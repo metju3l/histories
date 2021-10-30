@@ -27,10 +27,13 @@ const CreatePost = async ({
   WHERE ID(user) = ${userID} 
   CREATE (user)-[:CREATED]->(post:Post
   {
-    description:"${description}",
+    description: "${description}",
     createdAt: ${new Date().getTime()},
     postDate: ${photoDate},
-    url: "${url}"
+    url: "${url}",
+    nsfw: false,
+    edited: false,
+    public: true
   })
   MERGE (place:Place {    
     longitude: ${longitude},
