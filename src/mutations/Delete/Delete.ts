@@ -10,13 +10,19 @@ const Delete = async ({
   logged: number;
   id: number;
 }): Promise<void> => {
-  const query = `MATCH (user:User)-[:CREATED]->(target)
-WHERE ID(user) = ${logged} AND ID(target) = ${id}
-AND labels(target) in [["Post"],["Comment"],["Collection"]]
-DETACH DELETE target`;
+  const query = `MATCH (user:User), (target)
+  WHERE ID(user) = ${logged} AND ID(target) = ${id}
+  AND ((user)-[:CREATED]->(target) OR user :Admin)
+  AND labels(target) in [["Post"],["Comment"],["Collection"]]
+  OPTIONAL MATCH (comment:Comment)-[:BELONGS_TO]->(target)
+  WHERE ID(user) = ${logged} AND ID(target) = ${id}
+  AND ((user)-[:CREATED]->(target) OR user :Admin)
+  AND labels(target) in [["Post"],["Comment"],["Collection"]]
+  DETACH DELETE comment, target`;
 
-  const labels = await RunCypherQuery(`MATCH (user:User)-[:CREATED]->(target)
+  const labels = await RunCypherQuery(`MATCH (user:User), (target)
 WHERE ID(user) = ${logged} AND ID(target) = ${id}
+AND ((user)-[:CREATED]->(target) OR user :Admin)
 AND labels(target) in [["Post"],["Comment"],["Collection"]]
 RETURN labels(target) AS labels`);
 
