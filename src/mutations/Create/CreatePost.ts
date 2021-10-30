@@ -1,5 +1,5 @@
+import { NSFWCheck } from '../../functions';
 import DbConnector from '../../database/driver';
-import LastPost from '../lastPost';
 
 const CreatePost = async ({
   userID,
@@ -18,9 +18,17 @@ const CreatePost = async ({
   latitude: number;
   url: Array<string>;
 }): Promise<string> => {
-  // if last post / collection was created less than 10 seconds ago
-  if (new Date().getTime() - parseInt(await LastPost({ userID })) < 10000)
-    throw new Error('you can create post every 10sec');
+  // check every image in an array with NSFW api
+  // if any of images is NSFW set `post.nsfw = true` and `post.public = false` by default
+  const isNSFW = (
+    await Promise.all(
+      url.map(async (x) => {
+        const res = await NSFWCheck(x);
+        // if NSFW probability is more than 0.8 out of 1 return NSFW as true
+        return res !== undefined && res > 0.8;
+      })
+    )
+  ).find((x) => x); // check if there is any true in an array
 
   const query = `MATCH (user:User)
   WHERE ID(user) = ${userID} 
@@ -30,9 +38,9 @@ const CreatePost = async ({
     createdAt: ${new Date().getTime()},
     postDate: ${photoDate},
     url: ${JSON.stringify(url)},
-    nsfw: false, 
+    nsfw: ${isNSFW ?? false}, 
     edited: false,
-    public: true
+    public: ${!(isNSFW ?? false)}
   })
   MERGE (place:Place {    
     location: point({longitude: ${longitude}, latitude: ${latitude}, srid: 4326})

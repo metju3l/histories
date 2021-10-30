@@ -41,6 +41,7 @@ import IsUsedEmail from '../validation/dbValidation/IsUsedEmail';
 import { GraphQLUpload } from 'graphql-upload';
 import { UploadPhoto } from '../s3/';
 import Report from '../mutations/Create/Report';
+import LastPost from '../mutations/lastPost';
 
 type contextType = {
   decoded: { id: number };
@@ -383,6 +384,14 @@ const resolvers = {
       // check date
       const validateDate = ValidateDate(Number(input.photoDate)).error;
       if (validateDate) throw new Error(validateDate);
+
+      // if last post / collection was created less than 10 seconds ago
+      if (
+        new Date().getTime() -
+          parseInt(await LastPost({ userID: context.decoded.id })) <
+        10000
+      )
+        throw new Error('you can create post every 10sec');
 
       const urls: Array<string> = await Promise.all(
         input.photo.map(async (photo: any) => await UploadPhoto(photo))
