@@ -20,11 +20,11 @@ export default gql`
 
   type Mutation {
     deleteUser(input: DeleteUserInput!): String!
-    delete(id: Int!): String!
-    like(input: LikeInput!): String!
-    unlike(id: Int!): String!
-    follow(userID: Int!): String!
-    unfollow(userID: Int!): String!
+    delete(id: Int!): String
+    like(input: LikeInput!): String
+    unlike(id: Int!): String
+    follow(userID: Int!): String
+    unfollow(userID: Int!): String
     createCollection(input: CreateCollectionInput!): String!
     updateProfile(input: UpdateProfileInput!): String!
     createPost(input: CreatePostInput!): String!

@@ -4,7 +4,7 @@ import sharp from 'sharp';
 import streamToPromise from 'stream-to-promise';
 
 const UploadPhoto = async (photo: any) => {
-  if (!process.env.AWS_BUCKET) throw new Error('S3 bucket is not defined');
+  if (!process.env.S3_BUCKET) throw new Error('S3 bucket is not defined');
   if (!process.env.S3_ACCESS_KEY)
     throw new Error('S3 access key is not defined');
   if (!process.env.S3_SECRET_ACCESS_KEY)
@@ -32,7 +32,7 @@ const UploadPhoto = async (photo: any) => {
     .toBuffer();
 
   const params = {
-    Bucket: 'histories-bucket',
+    Bucket: process.env.S3_BUCKET,
     Key: uniqueFileName,
     Body: image,
     ACL: 'public-read',
@@ -40,9 +40,7 @@ const UploadPhoto = async (photo: any) => {
 
   const promise = await s3
     .upload(params, (error: any, data: any) => {
-      if (error) {
-        console.error(error);
-      }
+      if (error) throw new Error(error.message);
     })
     .promise();
 

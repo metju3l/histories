@@ -1,21 +1,21 @@
 import nodemailer from 'nodemailer';
 
-const { MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD } = process.env;
-
 const SendEmail = async (subject: string, html: string, target: string) => {
+  console.log(process.env);
+
   const transport = nodemailer.createTransport({
-    host: MAIL_HOST,
-    port: parseInt(MAIL_PORT!),
+    host: process.env.MAIL_HOST,
+    port: parseInt(process.env.MAIL_PORT!),
     secure: false,
     auth: {
-      user: MAIL_USERNAME,
-      pass: MAIL_PASSWORD,
+      user: process.env.MAIL_USERNAME,
+      pass: process.env.MAIL_PASSWORD,
     },
   });
 
   try {
     await transport.sendMail({
-      from: `hiStories <${MAIL_USERNAME}>`,
+      from: `hiStories <${process.env.MAIL_USERNAME}>`,
       to: target,
       subject,
       html,

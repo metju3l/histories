@@ -1,18 +1,19 @@
-import DbConnector from '../../database/driver';
+import RunCypherQuery from '@src/database/RunCypherQuery';
 
-const DeleteUnauthorized = async (): Promise<Boolean> => {
-  const query = `
-  MATCH (user:User) 
-  WHERE user.verified = false AND user.createdAt < ${
-    new Date().getTime() - 1000 * 60 * 60 * 24 * 3
-  } DELETE user`;
+// QUERY
+/*
+ * MATCH (user:User)
+ * WHERE user.verified = false                                      - not verified users
+ * AND user.createdAt < (1635086849331 - 1000 * 60 * 60 * 24 * 3)   - calculates in js current time minus 3 days
+ * DELETE user                                                      - delete all matching
+ */
 
-  const driver = DbConnector();
-  const session = driver.session();
-
-  await session.run(query);
-  driver.close();
-  return true;
+const DeleteUnauthorized = async (): Promise<void> => {
+  await RunCypherQuery(
+    `MATCH (user:User) WHERE user.verified = false AND user.createdAt < ${
+      new Date().getTime() - 1000 * 60 * 60 * 24 * 3
+    } DELETE user`
+  );
 };
 
 export default DeleteUnauthorized;

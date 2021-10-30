@@ -9,7 +9,7 @@ const Delete = async ({
 }: {
   logged: number;
   id: number;
-}): Promise<string> => {
+}): Promise<void> => {
   const query = `MATCH (user:User)-[:CREATED]->(target)
 WHERE ID(user) = ${logged} AND ID(target) = ${id}
 AND labels(target) in [["Post"],["Comment"],["Collection"]]
@@ -38,8 +38,6 @@ RETURN post.url as urls`);
   await session.run(query);
 
   driver.close();
-
-  return 'post deleted';
 };
 
 export default Delete;
