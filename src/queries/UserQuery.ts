@@ -154,7 +154,7 @@ CALL {
     RETURN r AS isFollowing
 }
 RETURN user{.*, id: ID(user),
-    posts: COLLECT(DISTINCT post{.*, id: ID(post), place:place{.*, id: ID(place)}}),
+    posts: COLLECT(DISTINCT post{.*, id: ID(post), place:place{.*, latitude: place.location.latitude, longitude: place.location.longitude, id: ID(place)}}),
     followers: COLLECT(DISTINCT follower{.*, id: ID(follower)}), 
     following: COLLECT(DISTINCT following{.*, id: ID(following)}),
     collections: COLLECT(DISTINCT collection{.*, id: ID(collection)}),

@@ -384,7 +384,7 @@ const resolvers = {
       const validateDate = ValidateDate(Number(input.photoDate)).error;
       if (validateDate) throw new Error(validateDate);
 
-      const urls = await Promise.all(
+      const urls: Array<string> = await Promise.all(
         input.photo.map(async (photo: any) => await UploadPhoto(photo))
       );
 
@@ -392,7 +392,7 @@ const resolvers = {
         CreatePost({
           ...input,
           userID: context.decoded.id,
-          url: JSON.stringify(urls).replace(/"/gm, "'"),
+          url: urls,
         });
       else throw new Error('User is not logged');
 

@@ -16,37 +16,34 @@ const CreatePost = async ({
   photoDate: string;
   longitude: number;
   latitude: number;
-  url: string;
+  url: Array<string>;
 }): Promise<string> => {
   // if last post / collection was created less than 10 seconds ago
   if (new Date().getTime() - parseInt(await LastPost({ userID })) < 10000)
     throw new Error('you can create post every 10sec');
 
-  const query = `
-  MATCH (user:User)
+  const query = `MATCH (user:User)
   WHERE ID(user) = ${userID} 
   CREATE (user)-[:CREATED]->(post:Post
   {
     description: "${description}",
     createdAt: ${new Date().getTime()},
     postDate: ${photoDate},
-    url: "${url}",
-    nsfw: false,
+    url: ${JSON.stringify(url)},
+    nsfw: false, 
     edited: false,
     public: true
   })
   MERGE (place:Place {    
-    longitude: ${longitude},
-    latitude: ${latitude},
     location: point({longitude: ${longitude}, latitude: ${latitude}, srid: 4326})
   })
   MERGE (post)-[:IS_LOCATED]->(place)
-  RETURN ID(post) as id`;
+  RETURN post{.*, id: ID(post)} as post`;
 
   const driver = DbConnector();
   const session = driver.session();
 
-  const postID = await (await session.run(query)).records[0].get('id');
+  const postID = await (await session.run(query)).records[0].get('post').id;
 
   await session.run(`WITH ${hashtags} AS tags
   MATCH (user:User), (post:Post)

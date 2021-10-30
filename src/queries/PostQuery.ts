@@ -1,4 +1,3 @@
-import { ParseUrls } from '../functions';
 import RunCypherQuery from '../database/RunCypherQuery';
 
 const PostQuery = async ({
@@ -43,7 +42,7 @@ const PostQuery = async ({
   }
       
   RETURN post{.*, id: ID(post), 
-      place: place{.*, id: ID(place)},
+      place: place{.*, latitude: place.location.latitude, longitude: place.location.longitude, id: ID(place)},
       author: author{.*, id: ID(author)},
       liked: ${logged ? 'EXISTS((logged)-[:LIKE]->(post))' : 'false'},
       likes: COLLECT(DISTINCT like{.*, id: ID(like)}),
@@ -60,7 +59,7 @@ const PostQuery = async ({
   else
     return {
       ...result.records[0].get('post'),
-      url: ParseUrls(result.records[0].get('post').url),
+      url: result.records[0].get('post').url,
     };
 };
 

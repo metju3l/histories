@@ -29,24 +29,22 @@ const FilterPlacesQuery = async ({
 
   const query = `
 MATCH (place:Place)<-[:IS_LOCATED]-(post:Post)<-[:CREATED]-(author:User)
-WHERE place.latitude >= ${minLatitude} AND place.latitude <= ${maxLatitude}
-AND place.longitude >= ${minLongitude} AND place.longitude <= ${maxLongitude}
+WHERE place.location.latitude >= ${minLatitude} AND place.location.latitude <= ${maxLatitude}
+AND place.location.longitude >= ${minLongitude} AND place.location.longitude <= ${maxLongitude}
 ${minDate ? ` AND post.postDate >= ${minDate} ` : ''}
 ${maxDate ? ` AND post.postDate <= ${maxDate} ` : ''}
-WITH place{.*, id: ID(place), posts: COLLECT(post{.*, id: ID(post), author: author{.*, id: ID(author)}})} AS result
+WITH place{.*,latitude: place.location.latitude, longitude: place.location.longitude, id: ID(place), posts: COLLECT(post{.*, id: ID(post), author: author{.*, id: ID(author)}})} AS result
 RETURN COLLECT(result) AS places`;
 
   const result = await RunCypherQuery(query);
 
-  return result.records[0]
-    .get('places')
-    .map((x: any) => ({
-      ...x,
-      posts: x.posts.map((post: any) => ({
-        ...post,
-        url: JSON.parse(post.url.replace(/'/gm, '"')),
-      })),
-    }));
+  return result.records[0].get('places').map((x: any) => ({
+    ...x,
+    posts: x.posts.map((post: any) => ({
+      ...post,
+      url: post.url,
+    })),
+  }));
 };
 
 const ValidateQueryInput = ({
