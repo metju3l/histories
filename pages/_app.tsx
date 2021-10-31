@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app';
 import '../lib/translation/i18n';
 import 'tailwindcss/tailwind.css';
+import './app.scss';
 
 import React from 'react';
 import { ApolloProvider } from '@apollo/client';

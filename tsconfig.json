@@ -3,6 +3,7 @@
     "baseUrl": "./",
     "paths": {
       "@components/*": ["components/*"],
+      "@icons/*": ["public/icons/*"],
       "@graphql/*": ["lib/graphql/*"],
       "@hooks/*": ["lib/hooks/*"],
       "@lib/*": ["lib/*"],
