@@ -1,1 +1,1 @@
-export { default as ParseUrls } from './ParseUrls';
+export { default as NSFWCheck } from './NSFWCheck';

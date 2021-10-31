@@ -41,15 +41,18 @@ const Comment: React.FC<CommentProps> = ({
   const [reportMutation] = useReportMutation();
   const [likeMutation] = useLikeMutation();
   const [unlikeMutation] = useUnlikeMutation();
-  const [mouseOver, setMouseOver] = useState(false);
+
+  const [mouseOverComment, setMouseOverComment] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
+  const [showLikeOptions, setShowLikeOptions] = useState(false);
+
   const isCommentAuthor = author.id === logged?.id;
-  const [showMore, setShowMore] = useState(false);
 
   return (
     <span
       className="w-full flex flex- gap-2 pl-3"
-      onMouseOver={() => setMouseOver(true)}
-      onMouseLeave={() => setMouseOver(false)}
+      onMouseOver={() => setMouseOverComment(true)}
+      onMouseLeave={() => setMouseOverComment(false)}
     >
       <div id="userProfile" className="relative rounded-full w-8 h-8">
         <Image
@@ -74,12 +77,12 @@ const Comment: React.FC<CommentProps> = ({
             <br />
             {content.length > 500 ? (
               <>
-                {!showMore ? (
+                {!showOptions ? (
                   <>
                     {content.substr(0, 500)}
                     <a
                       className="text-indigo-600 cursor-pointer"
-                      onClick={() => setShowMore(true)}
+                      onClick={() => setShowOptions(true)}
                     >
                       {' '}
                       continue reading...
@@ -90,7 +93,7 @@ const Comment: React.FC<CommentProps> = ({
                     {content}
                     <a
                       className="text-indigo-600 cursor-pointer"
-                      onClick={() => setShowMore(false)}
+                      onClick={() => setShowOptions(false)}
                     >
                       {' '}
                       show less...
@@ -139,7 +142,7 @@ const Comment: React.FC<CommentProps> = ({
             }
           >
             <button className="w-6 h-6 pr-2">
-              {mouseOver && (
+              {mouseOverComment && (
                 <DotsHorizontalIcon
                   id="options"
                   className="w-6 h-6 rounded-full hover:bg-[#F1F2F4] p-1"

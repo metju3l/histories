@@ -55,7 +55,6 @@ const Layout: React.FC<LayoutProps> = ({
         <meta name="theme-color" content="#17A6FA" />
       </Head>
       <Navbar />
-      <div id="Spacer" className="h-[54px] w-full" />
       {children}
     </div>
   );

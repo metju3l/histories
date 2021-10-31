@@ -14,8 +14,12 @@ RETURN COLLECT(post) AS posts, place`;
 
   return {
     id: Number(result.records[0].get('place').identity),
-    latitude: Number(result.records[0].get('place').properties.latitude),
-    longitude: Number(result.records[0].get('place').properties.longitude),
+    latitude: Number(
+      result.records[0].get('place').properties.location.latitude
+    ),
+    longitude: Number(
+      result.records[0].get('place').properties.location.longitude
+    ),
     posts: result.records[0].get('posts').map((post: { identity: any }) => {
       return { id: Number(post.identity) };
     }),

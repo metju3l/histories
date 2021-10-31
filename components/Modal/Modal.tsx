@@ -18,7 +18,9 @@ const ModalComponent: React.FC<ModalProps> = ({
   additionalClassName,
 }) => {
   const blurClassName = blur
-    ? `backdrop-filter backdrop-blur${blurSize ? `-${blurSize}` : ''}`
+    ? `backdrop-filter ${
+        blurSize ? `backdrop-blur-${blurSize}` : 'backdrop-blur'
+      }`
     : '';
 
   return (

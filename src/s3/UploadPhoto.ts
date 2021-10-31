@@ -3,7 +3,7 @@ import { uuid } from 'uuidv4';
 import sharp from 'sharp';
 import streamToPromise from 'stream-to-promise';
 
-const UploadPhoto = async (photo: any) => {
+const UploadPhoto = async (photo: any): Promise<string> => {
   if (!process.env.S3_BUCKET) throw new Error('S3 bucket is not defined');
   if (!process.env.S3_ACCESS_KEY)
     throw new Error('S3 access key is not defined');

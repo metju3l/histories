@@ -1,131 +1,237 @@
-import React, { FC } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { Menu } from '@headlessui/react';
 import useDarkMode from '@lib/hooks/useDarkmode';
-import Image from 'next/image';
 import LogOut from '@lib/functions/LogOut';
-import { Avatar, Input, Switch } from '@nextui-org/react';
+import { Avatar } from '@nextui-org/react';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
+
+import styles from './Navbar.module.scss';
+import transition from './transitions/primary.module.scss';
+import transitionSecondary from './transitions/secondary.module.scss';
+import { CSSTransition } from 'react-transition-group';
 
 // IMAGES
 import FullSizeLogo from '@public/logo/FullSizeLogo.svg';
 import MinimalLogo from '@public/logo/MinimalLogo.svg';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
+import PlusIcon from '@components/Icons/PlusIcon';
+import BellIcon from '@components/Icons/BellIcon';
+import MenuIcon from '@components/Icons/MenuIcon';
+import SettingsIcon from '@components/Icons/SettingsIcon';
+import MoonIcon from '@components/Icons/MoonIcon';
+import BackIcon from '@components/Icons/BackIcon';
+import LoginIcon from '@components/Icons/LoginIcon';
+import LogOutIcon from '@components/Icons/LogOutIcon';
+import NextIcon from '@components/Icons/NextIcon';
+import ExploreIcon from '@components/Icons/ExploreIcon';
+import HomeIcon from '@components/Icons/HomeIcon';
+import MapIcon from '@components/Icons/MapIcon';
 
-// ICONS
-import {
-  LocationMarkerIcon,
-  HomeIcon,
-  LightningBoltIcon,
-  LoginIcon,
-  XIcon,
-  SearchIcon,
-} from '@heroicons/react/outline';
-
-const Navbar: FC = () => {
+const Navbar: React.FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
   const { theme, setTheme } = useDarkMode();
 
   if (loading) return <div>navbar loading</div>;
   if (error) return <div>navbar error</div>;
 
-  const userIsLogged = data!.isLogged !== null;
-
   return (
-    <nav className="h-[54px] border-b border-[#DADBDA] fixed w-full top-0 bg-white z-40">
-      <div className="flex justify-between max-w-6xl w-full items-center mx-5 xl:mx-auto">
-        {/* Left */}
-        <div className="relative h-[54px] w-24 cursor-pointer">
-          <Link href="/" passHref>
-            <Image
-              src={FullSizeLogo}
-              layout="fill"
-              objectFit="contain"
-              alt="hiStories logo"
-            />
+    <nav className={styles.navbarNav}>
+      <div className={styles.navbar}>
+        <div className={styles.navBlock}>
+          <Link href="/">hiStories</Link>
+        </div>{' '}
+        <div className={styles.navBlock}>
+          <Link href={'/'} passHref>
+            <a className={styles.iconButton}>
+              <HomeIcon />
+            </a>
+          </Link>
+          <Link href={'/explore'} passHref>
+            <a className={styles.iconButton}>
+              <ExploreIcon />
+            </a>
+          </Link>
+          <Link href={'/map'} passHref>
+            <a className={styles.iconButton}>
+              <MapIcon />
+            </a>
           </Link>
         </div>
-
-        {/* Center */}
-        <div className="hidden md:flex  bg-[#FAFBFB] border border-[#DADBDA] rounded-md p-1.5">
-          <button className="focus:outline-none inline-block text-light-text dark:text-dark-text">
-            <SearchIcon className="h-5 w-5 text-[#C6C7C6]" />
-          </button>
-          <input
-            className="w-full outline-none bg-transparent text-lg px-2"
-            placeholder="search"
-          />
-          <button className="focus:outline-none inline-block text-light-text dark:text-dark-text">
-            <XIcon className="h-5 w-5 text-[#C6C7C6]" />
-          </button>
-        </div>
-
-        {/* Right */}
-        <div className="flex gap-[20px] items-center">
-          <Link href="/" passHref>
-            <HomeIcon className="h-8 w-8" />
+        <div className={styles.navBlock}>
+          {/* <NavbarItem1 link="createPost" icon={PlusIcon} />
+           */}
+          <Link href={'/createPost'} passHref>
+            <a className={styles.iconButton}>
+              <PlusIcon />
+            </a>
+          </Link>{' '}
+          <Link href={'/'} passHref>
+            <a className={styles.iconButton}>
+              <BellIcon />
+            </a>
           </Link>
-          <Link href="/explore" passHref>
-            <LightningBoltIcon className="h-8 w-8" />
-          </Link>
-          <Link href="/map" passHref>
-            <LocationMarkerIcon className="h-8 w-8" />
-          </Link>
-
-          {userIsLogged ? (
-            <Menu as="div" className="relative inline-block text-left">
-              <Menu.Button>
-                <Avatar
-                  size="small"
-                  src={GeneratedProfileUrl(
-                    data!.isLogged!.firstName,
-                    data!.isLogged!.lastName
-                  )}
-                />
-              </Menu.Button>
-              <Menu.Items className="absolute z-50 right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div className="py-1">
-                  <Menu.Item>
-                    <Link href={`/${data!.isLogged!.username}`}>
-                      <a className="text-gray-900 group flex rounded-md items-center w-full px-3 py-2 text-sm">
-                        Profile
-                      </a>
-                    </Link>
-                  </Menu.Item>
-                  <Menu.Item>
-                    <Link href={`/${data!.isLogged!.username}/collections`}>
-                      <a className="text-gray-900 group flex rounded-md items-center w-full px-3 py-2 text-sm">
-                        Collections
-                      </a>
-                    </Link>
-                  </Menu.Item>
-                  <Menu.Item>
-                    <Link href={`/settings`}>
-                      <a className="text-gray-900 group flex rounded-md items-center w-full px-3 py-2 text-sm">
-                        Settings
-                      </a>
-                    </Link>
-                  </Menu.Item>
-                  <Menu.Item>
-                    <button
-                      onClick={LogOut}
-                      className="text-gray-900 group flex rounded-b-md items-center w-full px-3 py-2 text-sm border-t border-[#DADBDA]"
-                    >
-                      Log out
-                    </button>
-                  </Menu.Item>
-                </div>
-              </Menu.Items>
-            </Menu>
-          ) : (
-            <Link href="/login" passHref>
-              <LoginIcon className="h-8 w-8" />
-            </Link>
-          )}
+          <NavbarItem icon={<MenuIcon />}>
+            <DropdownMenu data={data} setTheme={setTheme} theme={theme} />
+          </NavbarItem>
         </div>
       </div>
     </nav>
   );
 };
+const NavbarItem: React.FC<{ link?: string; icon: any }> = ({
+  link,
+  icon,
+  children,
+}) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <section
+        id="overlay"
+        className={`absolute top-[60px] left-0 w-full h-full z-[18]`}
+        onClick={() => setOpen(false)}
+      />
+      <div>
+        {link ? (
+          <Link href={link} passHref>
+            <a className={styles.iconButton}>{icon}</a>
+          </Link>
+        ) : (
+          <a className={styles.iconButton} onClick={() => setOpen(!open)}>
+            {icon}
+          </a>
+        )}
+        {open && children}
+      </div>
+    </>
+  );
+};
 
 export default Navbar;
+
+const DropdownItem: React.FC<{
+  link?: string;
+  leftIcon?: any;
+  rightIcon?: any;
+  onClick?: any;
+}> = ({ link, children, leftIcon, onClick, rightIcon }) => {
+  return link ? (
+    <Link href={link} passHref>
+      <a className={styles.menuItem} onClick={onClick}>
+        {leftIcon && <span className={styles.iconButton}>{leftIcon}</span>}{' '}
+        {children}
+        {rightIcon && <span className={styles.iconRight}>{rightIcon}</span>}
+      </a>
+    </Link>
+  ) : (
+    <a className={styles.menuItem} onClick={onClick}>
+      {leftIcon && <span className={styles.iconButton}>{leftIcon}</span>}{' '}
+      {children}
+      {rightIcon && <span className={styles.iconRight}>{rightIcon}</span>}
+    </a>
+  );
+};
+
+const DropdownMenu: React.FC<{ data: any; setTheme: any; theme: string }> = ({
+  data,
+  setTheme,
+  theme,
+}) => {
+  const [activeMenu, setActiveMenu] = useState('main');
+  const [menuHeight, setMenuHeight] = useState(0);
+
+  const userIsLogged = data!.isLogged !== null;
+
+  const calculateHeight = (element: any) => {
+    const height = element.offsetHeight;
+    console.log(menuHeight);
+    setMenuHeight(height);
+  };
+
+  return (
+    <div className={styles.dropdown} style={{}}>
+      <CSSTransition
+        in={activeMenu === 'main'}
+        timeout={500}
+        classNames={{ ...transition }}
+        onEnter={calculateHeight}
+        unmountOnExit
+      >
+        <div className={styles.menu}>
+          {userIsLogged && (
+            <DropdownItem
+              link={`/${data.isLogged.username}`}
+              leftIcon={
+                <Avatar
+                  size="small"
+                  src={GeneratedProfileUrl(
+                    data.isLogged.firstName,
+                    data.isLogged.lastName
+                  )}
+                />
+              }
+            >
+              {`${data.isLogged.firstName} ${data.isLogged.lastName}`}
+            </DropdownItem>
+          )}
+          <DropdownItem link="#" leftIcon={<SettingsIcon />}>
+            Settings & Privacy
+          </DropdownItem>
+          <DropdownItem
+            link="#"
+            leftIcon={<MoonIcon />}
+            rightIcon={<NextIcon />}
+            onClick={() => setActiveMenu('settings')}
+          >
+            Display & Accessibility
+          </DropdownItem>{' '}
+          {userIsLogged ? (
+            <DropdownItem onClick={() => LogOut()} leftIcon={<LogOutIcon />}>
+              Log out
+            </DropdownItem>
+          ) : (
+            <DropdownItem link="login" leftIcon={<LoginIcon />}>
+              Log in
+            </DropdownItem>
+          )}
+        </div>
+      </CSSTransition>
+      <CSSTransition
+        in={activeMenu === 'settings'}
+        timeout={500}
+        classNames={{ ...transitionSecondary }}
+        onEnter={calculateHeight}
+        unmountOnExit
+      >
+        <div className={styles.menu}>
+          <DropdownItem
+            link="#"
+            leftIcon={<BackIcon />}
+            onClick={() => setActiveMenu('main')}
+          >
+            <h2 className="text-lg"> Display & Accessibility</h2>
+          </DropdownItem>
+          <a className={styles.menuItem}>
+            <span className={styles.iconButton}>
+              <MoonIcon />
+            </span>
+            Dark mode
+          </a>
+          <DropdownItem onClick={() => setTheme('dark')}>
+            <div className="w-full flex justify-between ml-8 items-center cursor-pointer">
+              On
+              <input type="radio" checked={theme === 'dark'} />
+            </div>
+          </DropdownItem>{' '}
+          <DropdownItem onClick={() => setTheme('light')}>
+            <div className="w-full flex justify-between ml-8 items-center cursor-pointer">
+              Off
+              <input type="radio" checked={theme === 'light'} />
+            </div>
+          </DropdownItem>
+        </div>
+      </CSSTransition>
+    </div>
+  );
+};
