@@ -87,11 +87,13 @@ const NavbarItem: React.FC<{ link?: string; icon: any }> = ({
 
   return (
     <>
-      <section
-        id="overlay"
-        className={`absolute top-[60px] left-0 w-full h-full z-[18]`}
-        onClick={() => setOpen(false)}
-      />
+      {open && (
+        <section
+          id="overlay"
+          className={`absolute top-[60px] left-0 w-full h-full z-[40]`}
+          onClick={() => setOpen(false)}
+        />
+      )}
       <div>
         {link ? (
           <Link href={link} passHref>

@@ -29,13 +29,14 @@ import {
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { Modal, Menu } from '@components/Modal';
 import { toast } from 'react-hot-toast';
-
+import { NextRouter, useRouter } from 'next/router';
 import { TimeLine } from '@components/TimeLine';
 import {
   useLikeMutation,
   useReportMutation,
   useUnlikeMutation,
 } from '@graphql/relations.graphql';
+import { query } from 'express';
 
 type PlaceProps = {
   id: number;
@@ -62,6 +63,30 @@ const GetBounds = (bounds: {
   };
 };
 
+type UpdateUrlProps = {
+  longitude: number;
+  latitude: number;
+  zoom: number;
+  router: NextRouter;
+};
+
+// save latitude, longitude, zoom in url props
+const UpdateUrl = ({
+  router,
+  longitude,
+  latitude,
+  zoom,
+}: UpdateUrlProps): void => {
+  router.replace({
+    pathname: 'map',
+    query: {
+      lat: latitude.toFixed(6),
+      lng: longitude.toFixed(6),
+      zoom: zoom.toFixed(2),
+    },
+  });
+};
+
 const MapGL: FC<{
   searchCoordinates: { lat: number; lng: number };
   oldPoints: Array<PlaceProps>;
@@ -74,8 +99,7 @@ const MapGL: FC<{
     }>
   >;
 }> = ({ searchCoordinates, setBounds, oldPoints }) => {
-  const [coordinates, setCoordinates] = useState([21, 20]);
-
+  const router = useRouter();
   const [timeLimitation, setTimeLimitation] = useState<[number, number]>([
     0,
     new Date().getTime(),
@@ -83,15 +107,9 @@ const MapGL: FC<{
 
   const paths = usePathsQuery();
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      setCoordinates([position.coords.latitude, position.coords.longitude]);
-    });
-  }, []);
-
   const [viewport, setViewport] = useState({
-    latitude: 40,
-    longitude: -100,
+    latitude: 50,
+    longitude: 15,
     zoom: 3.5,
     bearing: 0,
     pitch: 0,
@@ -107,6 +125,7 @@ const MapGL: FC<{
     '#a572d5',
   ];
 
+  // when search result changes move to search result coordinates
   useEffect(() => {
     setViewport({
       ...viewport,
@@ -118,6 +137,22 @@ const MapGL: FC<{
       transitionInterpolator: new FlyToInterpolator(),
     });
   }, [searchCoordinates]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // on reload change map viewport coordinates according to url parameter
+  useEffect(() => {
+    setViewport({
+      ...viewport,
+      // @ts-ignore
+      longitude: parseFloat(router.query?.lng ?? 15),
+      // @ts-ignore
+      latitude: parseFloat(router.query?.lat ?? 50),
+      // @ts-ignore
+      zoom: parseFloat(router.query?.zoom ?? 14),
+      // @ts-ignore
+      transitionDuration: 5000,
+      transitionInterpolator: new FlyToInterpolator(),
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const mapRef = useRef<any>(null);
 
@@ -208,12 +243,26 @@ const MapGL: FC<{
         mapStyle="mapbox://styles/leighhalliday/ckhjaksxg0x2v19s1ovps41ef"
         dragRotate={false}
         ref={(instance) => (mapRef.current = instance)}
-        onLoad={() => {
+        onLoad={(event) => {
           if (mapRef.current) setBounds(mapRef.current.getMap().getBounds());
         }}
-        onInteractionStateChange={async (extra: any) => {
-          if (!extra.isDragging && mapRef.current)
+        onInteractionStateChange={async (s: any) => {
+          // when map state changes (dragging, zooming, rotating, etc.)
+          if (!s.isDragging && mapRef.current)
             setBounds(GetBounds(mapRef.current.getMap().getBounds()));
+
+          // if there is no interaction with map update lat, lng... props in url
+          if (
+            !(
+              s.isDragging ||
+              s.inTransition ||
+              s.isRotating ||
+              s.isZooming ||
+              s.isHovering ||
+              s.isPanning
+            )
+          )
+            UpdateUrl({ ...viewport, router });
         }}
       >
         <GeolocateControl
@@ -576,7 +625,6 @@ const DetailModal: React.FC<{
             </div>
             <strong className="font-semibold">
               {data?.post.likes.length} likes
-              {console.log(data?.post.likes)}
             </strong>
             <br />
             <TimeAgo date={data!.post.createdAt} />
