@@ -20,7 +20,7 @@ const CreateComment = async ({
   targetID: number;
   content: string;
 }): Promise<void> => {
-  await RunCypherQuery(`MATCH (target),(author:User) WHERE ID(target) = ${targetID} AND ID(author) = ${authorID}
+  await RunCypherQuery(`MATCH (target),(author:User) WHERE ID(target) = ${targetID} AND ID(author) = ${authorID} AND (target:Post OR target:Comment)
 CREATE (author)-[:CREATED]->(:Comment{createdAt:${new Date().getTime()},edited:false,content:"${content}"})-[:BELONGS_TO]->(target)`);
 };
 

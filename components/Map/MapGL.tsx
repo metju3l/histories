@@ -29,13 +29,16 @@ import {
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { Modal, Menu } from '@components/Modal';
 import { toast } from 'react-hot-toast';
-
+import { NextRouter, useRouter } from 'next/router';
 import { TimeLine } from '@components/TimeLine';
 import {
   useLikeMutation,
   useReportMutation,
   useUnlikeMutation,
 } from '@graphql/relations.graphql';
+import { query } from 'express';
+import UpdateUrl from './UpdateUrl';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type PlaceProps = {
   id: number;
@@ -62,7 +65,7 @@ const GetBounds = (bounds: {
   };
 };
 
-const MapGL: FC<{
+type MapGLProps = {
   searchCoordinates: { lat: number; lng: number };
   oldPoints: Array<PlaceProps>;
   setBounds: React.Dispatch<
@@ -73,25 +76,19 @@ const MapGL: FC<{
       minLongitude: number;
     }>
   >;
-}> = ({ searchCoordinates, setBounds, oldPoints }) => {
-  const [coordinates, setCoordinates] = useState([21, 20]);
+};
 
+const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
+  const router = useRouter();
   const [timeLimitation, setTimeLimitation] = useState<[number, number]>([
     0,
     new Date().getTime(),
   ]);
-
   const paths = usePathsQuery();
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      setCoordinates([position.coords.latitude, position.coords.longitude]);
-    });
-  }, []);
-
   const [viewport, setViewport] = useState({
-    latitude: 40,
-    longitude: -100,
+    latitude: 50,
+    longitude: 15,
     zoom: 3.5,
     bearing: 0,
     pitch: 0,
@@ -107,6 +104,7 @@ const MapGL: FC<{
     '#a572d5',
   ];
 
+  // when search result changes move to search result coordinates
   useEffect(() => {
     setViewport({
       ...viewport,
@@ -118,6 +116,22 @@ const MapGL: FC<{
       transitionInterpolator: new FlyToInterpolator(),
     });
   }, [searchCoordinates]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // on reload change map viewport coordinates according to url parameter
+  useEffect(() => {
+    setViewport({
+      ...viewport,
+      // @ts-ignore
+      longitude: parseFloat(router.query?.lng ?? 15),
+      // @ts-ignore
+      latitude: parseFloat(router.query?.lat ?? 50),
+      // @ts-ignore
+      zoom: parseFloat(router.query?.zoom ?? 14),
+      // @ts-ignore
+      transitionDuration: 5000,
+      transitionInterpolator: new FlyToInterpolator(),
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const mapRef = useRef<any>(null);
 
@@ -208,12 +222,26 @@ const MapGL: FC<{
         mapStyle="mapbox://styles/leighhalliday/ckhjaksxg0x2v19s1ovps41ef"
         dragRotate={false}
         ref={(instance) => (mapRef.current = instance)}
-        onLoad={() => {
+        onLoad={(event) => {
           if (mapRef.current) setBounds(mapRef.current.getMap().getBounds());
         }}
-        onInteractionStateChange={async (extra: any) => {
-          if (!extra.isDragging && mapRef.current)
+        onInteractionStateChange={async (s: any) => {
+          // when map state changes (dragging, zooming, rotating, etc.)
+          if (!s.isDragging && mapRef.current)
             setBounds(GetBounds(mapRef.current.getMap().getBounds()));
+
+          // if there is no interaction with map update lat, lng... props in url
+          if (
+            !(
+              s.isDragging ||
+              s.inTransition ||
+              s.isRotating ||
+              s.isZooming ||
+              s.isHovering ||
+              s.isPanning
+            )
+          )
+            UpdateUrl({ ...viewport, router });
         }}
       >
         <GeolocateControl
@@ -233,45 +261,47 @@ const MapGL: FC<{
           showCompass={false}
         />
 
-        {clusters.map((cluster) => {
-          const [longitude, latitude] = cluster.geometry.coordinates;
-          const { cluster: isCluster, point_count: pointCount } =
-            cluster.properties;
+        <AnimatePresence>
+          {clusters.map((cluster) => {
+            const [longitude, latitude] = cluster.geometry.coordinates;
+            const { cluster: isCluster, point_count: pointCount } =
+              cluster.properties;
 
-          if (isCluster) {
-            return (
-              <Marker
-                key={`cluster-${cluster.id}`}
-                latitude={latitude}
-                longitude={longitude}
-              >
-                <div
-                  className="text-white bg-red-500 h-20 w-20 rounded-full py-[2em] text-center "
-                  onClick={() => {
-                    const expansionZoom = Math.min(
-                      supercluster.getClusterExpansionZoom(cluster.id),
-                      20
-                    );
-
-                    setViewport({
-                      ...viewport,
-                      latitude,
-                      longitude,
-                      zoom: expansionZoom,
-                    });
-                  }}
+            if (isCluster) {
+              return (
+                <Marker
+                  key={`cluster-${cluster.id}`}
+                  latitude={latitude}
+                  longitude={longitude}
                 >
-                  {pointCount}
-                </div>
-              </Marker>
+                  <div
+                    className="text-white bg-red-500 h-20 w-20 rounded-full py-[2em] text-center "
+                    onClick={() => {
+                      const expansionZoom = Math.min(
+                        supercluster.getClusterExpansionZoom(cluster.id),
+                        20
+                      );
+
+                      setViewport({
+                        ...viewport,
+                        latitude,
+                        longitude,
+                        zoom: expansionZoom,
+                      });
+                    }}
+                  >
+                    {pointCount}
+                  </div>
+                </Marker>
+              );
+            }
+            const place = filteredPlaces.find(
+              (place: PlaceProps) =>
+                place.latitude === latitude && place.longitude === longitude
             );
-          }
-          const place = filteredPlaces.find(
-            (place: PlaceProps) =>
-              place.latitude === latitude && place.longitude === longitude
-          );
-          return place ? <MapPlace key={cluster.id} place={place} /> : null;
-        })}
+            return place ? <MapPlace key={cluster.id} place={place} /> : null;
+          })}
+        </AnimatePresence>
       </ReactMapGL>
       <div className="absolute left-[10vw] top-20 z-50 w-[80vw]">
         <TimeLine
@@ -289,11 +319,16 @@ const MapPlace = ({ place }: { place: any }) => {
   return (
     <>
       <Marker latitude={place.latitude} longitude={place.longitude}>
-        <a
-          className=""
-          onClick={() => {
-            setIsOpen(true);
+        {/* marker appear and disappear animation */}
+        <motion.div
+          initial={{ scale: 0.4, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.4, opacity: 0 }}
+          transition={{
+            ease: 'easeOut',
+            duration: 0.2,
           }}
+          onClick={() => setIsOpen(true)}
         >
           <Image
             src={place.posts[0].url[0]}
@@ -302,20 +337,24 @@ const MapPlace = ({ place }: { place: any }) => {
             className="rounded-full w-12 h-12 object-cover"
             alt="Picture on map"
           />
-        </a>
+        </motion.div>
       </Marker>
-      <MapModal setIsOpen={setIsOpen} isOpen={isOpen} place={place} />
+      <PlaceModal setIsOpen={setIsOpen} isOpen={isOpen} place={place} />
     </>
   );
 };
 
-type MapModalProps = {
+type PlaceModalProps = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   place: any;
 };
 
-const MapModal: React.FC<MapModalProps> = ({ isOpen, setIsOpen, place }) => {
+const PlaceModal: React.FC<PlaceModalProps> = ({
+  isOpen,
+  setIsOpen,
+  place,
+}) => {
   const photos = place.posts.map((photo: { url: string[] }) => ({
     src: photo.url[0],
     width: 4,
@@ -332,17 +371,29 @@ const MapModal: React.FC<MapModalProps> = ({ isOpen, setIsOpen, place }) => {
 
   return (
     <>
-      <Modal
-        open={isOpen}
-        onClose={() => {
-          setDetail(false);
-          setIsOpen(false);
-        }}
-      >
-        <section className="absolute justify-between z-50 top-[50%] left-[50%] bg-white max-h-[600px] max-w-[800px] w-full h-full -translate-y-1/2 -translate-x-1/2 rounded-xl">
-          <Gallery photos={photos} onClick={openLightbox} />
-        </section>
-      </Modal>
+      <AnimatePresence>
+        <motion.section
+          initial={{ scale: 0.4, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.4, opacity: 0 }}
+          transition={{
+            ease: 'easeOut',
+            duration: 0.2,
+          }}
+        >
+          <Modal
+            open={isOpen}
+            onClose={() => {
+              setDetail(false);
+              setIsOpen(false);
+            }}
+          >
+            <section className="absolute justify-between z-50 top-[50%] left-[50%] bg-white max-h-[600px] max-w-[800px] w-full h-full -translate-y-1/2 -translate-x-1/2 rounded-xl">
+              <Gallery photos={photos} onClick={openLightbox} />
+            </section>
+          </Modal>
+        </motion.section>
+      </AnimatePresence>
       <DetailModal
         open={detail}
         onClose={() => {
@@ -352,7 +403,7 @@ const MapModal: React.FC<MapModalProps> = ({ isOpen, setIsOpen, place }) => {
         place={place}
         currentImage={currentImage}
         setCurrentImage={setCurrentImage}
-      />
+      />{' '}
     </>
   );
 };
@@ -576,7 +627,6 @@ const DetailModal: React.FC<{
             </div>
             <strong className="font-semibold">
               {data?.post.likes.length} likes
-              {console.log(data?.post.likes)}
             </strong>
             <br />
             <TimeAgo date={data!.post.createdAt} />
