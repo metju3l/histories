@@ -86,18 +86,25 @@ const NavbarItem: React.FC<{ link?: string; icon: any }> = ({
   const [open, setOpen] = useState(false);
 
   return (
-    <div>
-      {link ? (
-        <Link href={link} passHref>
-          <a className={styles.iconButton}>{icon}</a>
-        </Link>
-      ) : (
-        <a className={styles.iconButton} onClick={() => setOpen(!open)}>
-          {icon}
-        </a>
-      )}
-      {open && children}
-    </div>
+    <>
+      <section
+        id="overlay"
+        className={`absolute top-[60px] left-0 w-full h-full z-[18]`}
+        onClick={() => setOpen(false)}
+      />
+      <div>
+        {link ? (
+          <Link href={link} passHref>
+            <a className={styles.iconButton}>{icon}</a>
+          </Link>
+        ) : (
+          <a className={styles.iconButton} onClick={() => setOpen(!open)}>
+            {icon}
+          </a>
+        )}
+        {open && children}
+      </div>
+    </>
   );
 };
 
