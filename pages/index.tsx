@@ -1,7 +1,5 @@
 import React from 'react';
 import { useCheckIfLoggedQuery, useIsLoggedQuery } from '@graphql/user.graphql';
-import { Navbar } from '@components/Navbar';
-import Menu from '@components/MainPage/LeftColumn/Menu';
 import Suggestions from '@components/MainPage/RightColumn/Suggestions';
 import { usePersonalizedPostsQuery } from '@graphql/post.graphql';
 import { PostCard } from '@components/PostCard';
@@ -20,9 +18,7 @@ const Index: React.FC = () => {
     <Layout title="hiStories">
       <div className="flex max-w-screen-xl m-auto">
         <div className="w-[30%] p-[1em] hidden xl:block">
-          <div className="sticky top-20">
-            <Menu data={logged.data} />
-          </div>
+          <div className="sticky top-20"></div>
         </div>
         <div className="xl:w-[40%] md:w-[60%] w-full p-[1em] mt-2">
           <PersonalizedPosts logged={logged} />
