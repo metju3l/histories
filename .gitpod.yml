@@ -1,12 +1,11 @@
 # Commands to start on workspace startup
 tasks:
-  - init: yarn install
-    command:  >
+  - init: >
+      yarn install
       docker-compose up -d;
       cp .env.local.example .env.local;
       cp nodemon.json.example nodemon.json;
-      yarn build;
-      yarn start;
+    command:  yarn dev
 
 # Ports to expose on workspace startup
 ports:
