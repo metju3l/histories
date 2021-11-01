@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useCreateUserMutation } from '@graphql/user.graphql';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
-import { Button, Input, Spacer } from '@nextui-org/react';
 import {
   ValidateEmail,
   ValidateName,
@@ -13,6 +12,7 @@ import {
   ValidateUsername,
 } from '@src/validation';
 import { Layout } from '@components/Layout';
+import SubmitButton from '@components/LoadingButton/SubmitButton';
 
 const Register: React.FC = () => {
   const [createUser] = useCreateUserMutation();
@@ -27,6 +27,7 @@ const Register: React.FC = () => {
     email: '',
     password: '',
     repeatPassword: '',
+    emailSubscription: false,
   };
 
   const [formValues, setFormValues] = useState(formInputs);
@@ -38,7 +39,7 @@ const Register: React.FC = () => {
 
   return (
     <Layout redirectLogged title={''}>
-      <div className="max-w-screen-xl m-auto p-10">
+      <div className="max-w-[27rem] m-auto p-10">
         <form
           onSubmit={async (event) => {
             event.preventDefault();
@@ -60,40 +61,38 @@ const Register: React.FC = () => {
             setIsLoading(false);
           }}
         >
-          <FormInput
-            label="First name"
-            autoComplete="given-name"
-            color={errors.firstName && 'error'}
-            helperText={errors.firstName && 'First name ' + errors.firstName}
-            value={formValues.firstName}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setFormValues({ ...formValues, firstName: e.target.value });
-              setErrors({
-                ...errors,
-                firstName: ValidateName(e.target.value).error ?? '',
-              });
-            }}
-          />
+          <div className="flex gap-4">
+            <FormInput
+              placeholder="First name"
+              autoComplete="given-name"
+              helperText={errors.firstName && 'First name ' + errors.firstName}
+              value={formValues.firstName}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setFormValues({ ...formValues, firstName: e.target.value });
+                setErrors({
+                  ...errors,
+                  firstName: ValidateName(e.target.value).error ?? '',
+                });
+              }}
+            />
 
+            <FormInput
+              placeholder="Last name"
+              autoComplete="family-name"
+              helperText={errors.lastName && 'Last name ' + errors.lastName}
+              value={formValues.lastName}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setFormValues({ ...formValues, lastName: e.target.value });
+                setErrors({
+                  ...errors,
+                  lastName: ValidateName(e.target.value).error ?? '',
+                });
+              }}
+            />
+          </div>
           <FormInput
-            label="Last name"
-            autoComplete="family-name"
-            color={errors.lastName && 'error'}
-            helperText={errors.lastName && 'Last name ' + errors.lastName}
-            value={formValues.lastName}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setFormValues({ ...formValues, lastName: e.target.value });
-              setErrors({
-                ...errors,
-                lastName: ValidateName(e.target.value).error ?? '',
-              });
-            }}
-          />
-
-          <FormInput
-            label="Username"
+            placeholder="Username"
             autoComplete="username"
-            color={errors.username && 'error'}
             helperText={errors.username}
             value={formValues.username}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,10 +105,9 @@ const Register: React.FC = () => {
           />
 
           <FormInput
-            label="Email"
+            placeholder="Email"
             type="email"
             autoComplete="email"
-            color={errors.email && 'error'}
             helperText={errors.email}
             value={formValues.email}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,10 +120,9 @@ const Register: React.FC = () => {
           />
 
           <FormInput
-            label="Password"
+            placeholder="Password"
             type="password"
             autoComplete="new-password"
-            color={errors.password && 'error'}
             helperText={errors.password}
             value={formValues.password}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,10 +135,9 @@ const Register: React.FC = () => {
           />
 
           <FormInput
-            label="Repeat password"
+            placeholder="Repeat password"
             type="password"
             autoComplete="new-password"
-            color={errors.repeatPassword && 'error'}
             helperText={errors.repeatPassword}
             value={formValues.repeatPassword}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,16 +153,27 @@ const Register: React.FC = () => {
             }}
           />
 
-          <div className="mt-4">
-            {isLoading ? (
-              <Button loading loaderType="spinner" />
-            ) : (
-              <Button type="submit">Submit</Button>
-            )}
-            <Link href="/login">
-              <a className="underline pl-2">or login to existing account</a>
-            </Link>
+          <label className="inline-flex items-center mt-3">
+            <input
+              type="checkbox"
+              className="form-checkbox h-5 w-5 text-orange-600 rounded-lg"
+              checked={formValues.emailSubscription}
+              onClick={() =>
+                setFormValues({
+                  ...formValues,
+                  emailSubscription: !formValues.emailSubscription,
+                })
+              }
+            />
+            <span className="ml-2 text-gray-700">Send me email updates</span>
+          </label>
+
+          <div className="mt-2 mb-2">
+            <SubmitButton isLoading={isLoading} text="Sign up" />
           </div>
+          <Link href="/login">
+            <a className="underline pl-2">login to an existing account</a>
+          </Link>
         </form>
       </div>
     </Layout>
@@ -175,26 +182,14 @@ const Register: React.FC = () => {
 
 const FormInput = (props: any) => {
   return (
-    <div className="w-96">
-      <Spacer y={1.6} />
-      {props.type === 'password' ? (
-        <Input.Password
-          {...props}
-          width="100%"
-          required={true}
-          labelPlaceholder="Default"
-        />
-      ) : (
-        <>
-          {props.label}
-          <input
-            {...props}
-            className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            required={true}
-            type={props.type ?? 'text'}
-          />
-        </>
-      )}
+    <div className="w-full mb-6 h-12">
+      <input
+        {...props}
+        className="shadow appearance-none border rounded-lg w-full h-10 px-3 mt-2 mb-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        required={true}
+        type={props.type ?? 'text'}
+      />
+      <p className="text-red-500">{props.helperText}</p>
     </div>
   );
 };
