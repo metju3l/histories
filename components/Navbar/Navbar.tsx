@@ -46,12 +46,12 @@ const Navbar: React.FC = () => {
               <HomeIcon />
             </a>
           </Link>
-          <Link href={'/explore'} passHref>
+          <Link href={'explore'} passHref>
             <a className={styles.iconButton}>
               <ExploreIcon />
             </a>
           </Link>
-          <Link href={'/map'} passHref>
+          <Link href={'map'} passHref>
             <a className={styles.iconButton}>
               <MapIcon />
             </a>
@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
         <div className={styles.navBlock}>
           {/* <NavbarItem1 link="createPost" icon={PlusIcon} />
            */}
-          <Link href={'/createPost'} passHref>
+          <Link href={'createPost'} passHref>
             <a className={styles.iconButton}>
               <PlusIcon />
             </a>
