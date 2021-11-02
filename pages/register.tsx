@@ -38,7 +38,7 @@ const Register: React.FC = () => {
   if (data!.isLogged) router.replace('/');
 
   return (
-    <Layout redirectLogged title={''}>
+    <Layout redirectLogged title={'sign up | hiStories'}>
       <div className="max-w-[27rem] m-auto p-10">
         <form
           onSubmit={async (event) => {

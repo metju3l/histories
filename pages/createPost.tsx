@@ -1,5 +1,4 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { Navbar } from '@components/Navbar';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { useCreatePostMutation } from '@graphql/post.graphql';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
@@ -8,11 +7,11 @@ import MapGL, {
   NavigationControl,
   GeolocateControl,
 } from 'react-map-gl';
-import { Button } from '@nextui-org/react';
 import router from 'next/router';
 import { toast } from 'react-hot-toast';
 import { Search } from '@components/MainPage';
 import { Layout } from '@components/Layout';
+import SubmitButton from '@components/LoadingButton/SubmitButton';
 
 const Login: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -94,15 +93,15 @@ const Login: FC = () => {
   if (!data!.isLogged) router.replace('/');
   return (
     <Layout title="Create post | hiStories">
-      <div className="h-screen text-black bg-[#F6F8FA]">
-        <div className="h-[30vh] flex">
-          <div className=" p-[10px]">
-            <Search setSearchCoordinates={setSearchCoordinates} />
-          </div>
+      <div className="max-w-[27rem] m-auto p-10">
+        <div className="absolute z-10 p-[10px]">
+          <Search setSearchCoordinates={setSearchCoordinates} />
+        </div>
+        <div className="mt-[60px]">
           <MapGL
             {...viewport}
             width="100%"
-            height="100%"
+            height="30vh"
             mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
             mapStyle="mapbox://styles/mapbox/streets-v11"
             onViewportChange={setViewport}
@@ -212,17 +211,14 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
               <Input label="Description" name="description" type="text" />
               <label>hashtags</label>
               <input
-                className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded-lg w-full h-10 px-3 mt-2 mb-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 name="hashtags"
                 type="text"
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
               />
-              {isLoading ? (
-                <Button loading loaderType="spinner" />
-              ) : (
-                <Button type="submit">Submit</Button>
-              )}
+
+              <SubmitButton isLoading={isLoading} text="submit" />
             </Form>
           )}
         </Formik>
@@ -241,7 +237,7 @@ const Input: FC<{
       <label htmlFor={name}>{label}</label>
       <Field
         type={type}
-        className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow appearance-none border rounded-lg w-full h-10 px-3 mt-2 mb-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         name={name}
       />
       <ErrorMessage name={name} />

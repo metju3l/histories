@@ -21,7 +21,7 @@ const Login: FC = () => {
   const [formValues, setFormValues] = useState(formInputs);
 
   return (
-    <Layout redirectLogged title={''}>
+    <Layout redirectLogged title={'login | hiStories'}>
       <div className="max-w-[27rem] m-auto p-10">
         <form
           onSubmit={async (event) => {
@@ -64,7 +64,7 @@ const Login: FC = () => {
           />
 
           <div className="pt-2 mb-2">
-            <SubmitButton isLoading={isLoading} text="Sign up" />
+            <SubmitButton isLoading={isLoading} text="Log in" />
           </div>
           <Link href="/register">
             <a className="underline pl-2">create new account</a>
