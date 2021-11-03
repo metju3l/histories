@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import {
   useCreateCommentMutation,
   useDeleteMutation,
@@ -12,13 +12,13 @@ import {
 } from '@graphql/relations.graphql';
 import { FiSend } from 'react-icons/fi';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
-import { Avatar, Button, Grid, Input, Modal, Text } from '@nextui-org/react';
+import { Avatar, Button, Modal } from '@nextui-org/react';
 import { toast } from 'react-hot-toast';
 import { MdPhotoCamera } from 'react-icons/md';
 import { AiFillLike, AiOutlineComment, AiOutlineMore } from 'react-icons/ai';
 import { useRouter } from 'next/router';
-import { LoadingButton } from '@components/LoadingButton';
 import { Comment } from '@components/Comment';
+import TimeAgo from 'react-timeago';
 
 const PostCard: FC<{
   isLoggedQuery: any;
@@ -32,6 +32,12 @@ const PostCard: FC<{
   const [deleteMutation] = useDeleteMutation();
   const [likeMutation] = useLikeMutation();
   const [unlikeMutation] = useUnlikeMutation();
+
+  // local like state tracking for real time changes
+  const [localLikeState, setLocalLikeState] = useState<boolean | null>(null);
+  // save comment input to ref for focus on button click
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const [createCommentMutation] = useCreateCommentMutation();
   const [commentContent, setCommentContent] = useState('');
 
@@ -49,17 +55,11 @@ const PostCard: FC<{
   const [editMode, setEditMode] = useState(false);
 
   if (loading) return <div>loading</div>;
-  if (error) {
+  if (error || data?.post.liked === undefined) {
     console.log(error);
 
     return <div>error</div>;
   }
-
-  const time = new Date(data!.post.createdAt).toLocaleDateString('cs-cz', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  });
 
   const postDate = new Date(data!.post.postDate).toLocaleDateString('cs-cz', {
     day: '2-digit',
@@ -176,8 +176,7 @@ const PostCard: FC<{
                     {data!.post.author.firstName} {data!.post.author.lastName}
                   </a>
                   <a className="flex gap-[10px]">
-                    <MdPhotoCamera size={24} />
-                    {postDate}
+                    <TimeAgo date={data.post.createdAt} />
                   </a>
                 </div>
               </>
@@ -188,8 +187,15 @@ const PostCard: FC<{
           </button>
         </div>
 
-        <div className="relative w-full">
-          <img src={data!.post.url[currentImage]} alt="Post" />
+        <div className="w-full">
+          <p className="p-3">
+            {data.post.description}
+            <a className="flex gap-[10px] mt-2">
+              <MdPhotoCamera size={24} />
+              {postDate}
+            </a>
+          </p>
+          <img src={data.post.url[currentImage]} alt="Post" />
           {currentImage > 0 && (
             <button onClick={() => setCurrentImage(currentImage - 1)}>
               {'<'}
@@ -200,72 +206,37 @@ const PostCard: FC<{
               {'>'}
             </button>
           )}
-          <div className="flex gap-4">
-            {isLoggedQuery?.data?.isLogged ? (
-              data?.post.liked ? (
-                <div
-                  onClick={async () => {
-                    try {
-                      await unlikeMutation({
-                        variables: { id: data!.post.id },
-                      });
-                      await refetch();
-                    } catch (error) {
-                      // @ts-ignore
-                      toast.error(error.message);
-                    }
-                  }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    viewBox="0 0 20 20"
-                    fill="#FF0000"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              ) : (
-                <div
-                  onClick={async () => {
-                    try {
-                      await likeMutation({
-                        variables: { id: data!.post.id, type: 'like' },
-                      });
-                      await refetch();
-                    } catch (error) {
-                      // @ts-ignore
-                      toast.error(error.message);
-                    }
-                  }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                </div>
-              )
-            ) : (
+          <div className="pt-2 pl-4">
+            <a className="font-semibold">{data.post.likes.length}</a>{' '}
+            {data.post.likes.length === 1 ? 'like' : 'likes'}
+          </div>
+          <div className="flex py-1 px-2 w-full justify-around">
+            <div
+              onClick={async () => {
+                const likedTmp = localLikeState ?? data.post.liked;
+                setLocalLikeState(!likedTmp);
+                try {
+                  if (likedTmp)
+                    await unlikeMutation({
+                      variables: { id: data.post.id },
+                    });
+                  else
+                    await likeMutation({
+                      variables: { id: data.post.id, type: 'like' },
+                    });
+                  await refetch();
+                } catch (error) {
+                  // @ts-ignore
+                  toast.error(error.message);
+                }
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke="currentColor"
+                stroke={localLikeState ?? data.post.liked ? '#FF0000' : '#000'}
               >
                 <path
                   strokeLinecap="round"
@@ -274,18 +245,19 @@ const PostCard: FC<{
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                 />
               </svg>
-            )}
-            <AiOutlineComment size={24} />
+            </div>
+
+            <AiOutlineComment
+              size={24}
+              // @ts-ignore
+              // on click focus to comment input
+              onClick={() => inputRef.current.focus()}
+            />
             <FiSend size={24} />
           </div>
+
           <div className="p-2">
-            {data?.post.description && (
-              <>
-                <a className="font-semibold">{data?.post.author.username}:</a>{' '}
-                {data?.post.description}
-              </>
-            )}
-            {data?.post.hashtags && data?.post.hashtags.length > 0 && (
+            {data.post.hashtags && data.post.hashtags.length > 0 && (
               <div>
                 <a className="font-semibold"> hashtags:</a>
                 {data!.post.hashtags.map((hashtag: any) => ` ${hashtag.name} `)}
@@ -298,6 +270,9 @@ const PostCard: FC<{
                     className="border-2 border-gray-300 rounded-xl bg-gray-100 p-2"
                     onChange={(e: any) => setCommentContent(e.target.value)}
                     value={commentContent}
+                    // @ts-ignore
+                    // save comment input element to ref for focus
+                    ref={inputRef}
                   />
                   <Button
                     onClick={async () => {
@@ -318,7 +293,7 @@ const PostCard: FC<{
               )}
               <div>
                 comments:
-                {data?.post.comments.map((comment: any) => (
+                {data.post.comments.map((comment: any) => (
                   <Comment
                     key={comment.id}
                     {...comment}

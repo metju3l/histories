@@ -1,5 +1,5 @@
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import TimeAgo from 'react-timeago';
 import { DotsHorizontalIcon } from '@heroicons/react/solid';
@@ -45,12 +45,20 @@ const Comment: React.FC<CommentProps> = ({
   const [mouseOverComment, setMouseOverComment] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [showLikeOptions, setShowLikeOptions] = useState(false);
+  const [commentContent, setCommentContent] = useState('');
+  const [showReplyInput, setShowReplyInput] = useState(false);
+
+  // save comment input to ref for focus on button click
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // local like state tracking for real time changes
+  const [localLikeState, setLocalLikeState] = useState<boolean | null>(null);
 
   const isCommentAuthor = author.id === logged?.id;
 
   return (
     <span
-      className="w-full flex flex- gap-2 pl-3"
+      className="w-full flex gap-2 pl-3"
       onMouseOver={() => setMouseOverComment(true)}
       onMouseLeave={() => setMouseOverComment(false)}
     >
@@ -64,6 +72,7 @@ const Comment: React.FC<CommentProps> = ({
           alt="Profile picture"
         />
       </div>
+
       <div>
         <div className="flex items-center gap-2">
           <div
@@ -155,8 +164,10 @@ const Comment: React.FC<CommentProps> = ({
         <span className="pl-2">
           <button
             onClick={async () => {
+              const likedTmp = localLikeState ?? liked;
+              setLocalLikeState(!likedTmp);
               try {
-                if (liked)
+                if (likedTmp)
                   await unlikeMutation({
                     variables: { id },
                   });
@@ -165,15 +176,30 @@ const Comment: React.FC<CommentProps> = ({
                     variables: { id, type: 'like' },
                   });
                 await refetch();
-              } catch (error: any) {
+              } catch (error) {
+                // @ts-ignore
                 toast.error(error.message);
               }
             }}
           >
-            {liked ? 'Unlike' : 'Like'}
+            {localLikeState ?? liked ? 'Unlike' : 'Like'}
           </button>{' '}
-          · Reply · <TimeAgo date={createdAt} />
+          · <button onClick={() => setShowReplyInput(true)}>Reply</button> ·{' '}
+          <TimeAgo date={createdAt} />
         </span>
+        <br />
+        {showReplyInput && (
+          <form>
+            <textarea
+              className="border-2 border-gray-300 rounded-xl bg-gray-100 p-2 ml-6 w-full"
+              onChange={(e: any) => setCommentContent(e.target.value)}
+              value={commentContent}
+              // @ts-ignore
+              // save comment input element to ref for focus
+              ref={inputRef}
+            />
+          </form>
+        )}
       </div>
     </span>
   );
