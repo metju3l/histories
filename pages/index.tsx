@@ -26,7 +26,7 @@ const Index: React.FC = () => {
         {/* RIGHT COLUMN */}
         <div className="w-[40%] xl:w-[30%] p-[1em] hidden md:block">
           <div className="sticky top-20">
-            <div className="w-full p-[1em] bg-white shadow-lg dark:bg-[#343233] rounded-xl text-text-light dark:text-white mb-8 ">
+            <div className="w-full p-[1em] rounded-lg text-text-light mb-8 ">
               <Suggestions logged={logged.data} />
             </div>
           </div>

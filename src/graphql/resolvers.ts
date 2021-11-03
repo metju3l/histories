@@ -447,7 +447,7 @@ const resolvers = {
       { userID }: { userID: number },
       context: any
     ) => {
-      return Unfollow(context.decoded.username, userID);
+      return Unfollow(context.decoded.id, userID);
     },
   },
 };

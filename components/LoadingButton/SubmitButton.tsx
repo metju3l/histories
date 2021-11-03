@@ -1,9 +1,11 @@
-const SubmitButton: React.FC<{ isLoading: boolean; text: string }> = ({
-  isLoading,
-  text,
-}) => (
+const SubmitButton: React.FC<{
+  isLoading: boolean;
+  text: string;
+  onClick?: () => void;
+}> = ({ isLoading, text, onClick }) => (
   <button
     type={isLoading ? 'button' : 'submit'}
+    onClick={onClick !== undefined ? onClick : () => {}}
     className="inline-flex items-center justify-center h-10 w-52 font-medium tracking-wide text-white transition duration-200 bg-gray-900 rounded-lg hover:bg-gray-800"
   >
     {isLoading ? (

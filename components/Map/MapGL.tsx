@@ -11,7 +11,6 @@ import { usePathsQuery, usePlaceQuery } from '@graphql/geo.graphql';
 import Image from 'next/image';
 import useSuperCluster from 'use-supercluster';
 import Gallery from 'react-photo-gallery';
-import { Dialog } from '@headlessui/react';
 import { Button } from '@nextui-org/react';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import { useCreateCommentMutation, usePostQuery } from '@graphql/post.graphql';
@@ -36,9 +35,8 @@ import {
   useReportMutation,
   useUnlikeMutation,
 } from '@graphql/relations.graphql';
-import { query } from 'express';
 import UpdateUrl from './UpdateUrl';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 type PlaceProps = {
   id: number;
@@ -261,47 +259,45 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
           showCompass={false}
         />
 
-        <AnimatePresence>
-          {clusters.map((cluster) => {
-            const [longitude, latitude] = cluster.geometry.coordinates;
-            const { cluster: isCluster, point_count: pointCount } =
-              cluster.properties;
+        {clusters.map((cluster) => {
+          const [longitude, latitude] = cluster.geometry.coordinates;
+          const { cluster: isCluster, point_count: pointCount } =
+            cluster.properties;
 
-            if (isCluster) {
-              return (
-                <Marker
-                  key={`cluster-${cluster.id}`}
-                  latitude={latitude}
-                  longitude={longitude}
+          if (isCluster) {
+            return (
+              <Marker
+                key={`cluster-${cluster.id}`}
+                latitude={latitude}
+                longitude={longitude}
+              >
+                <div
+                  className="text-white bg-red-500 h-20 w-20 rounded-full py-[2em] text-center "
+                  onClick={() => {
+                    const expansionZoom = Math.min(
+                      supercluster.getClusterExpansionZoom(cluster.id),
+                      20
+                    );
+
+                    setViewport({
+                      ...viewport,
+                      latitude,
+                      longitude,
+                      zoom: expansionZoom,
+                    });
+                  }}
                 >
-                  <div
-                    className="text-white bg-red-500 h-20 w-20 rounded-full py-[2em] text-center "
-                    onClick={() => {
-                      const expansionZoom = Math.min(
-                        supercluster.getClusterExpansionZoom(cluster.id),
-                        20
-                      );
-
-                      setViewport({
-                        ...viewport,
-                        latitude,
-                        longitude,
-                        zoom: expansionZoom,
-                      });
-                    }}
-                  >
-                    {pointCount}
-                  </div>
-                </Marker>
-              );
-            }
-            const place = filteredPlaces.find(
-              (place: PlaceProps) =>
-                place.latitude === latitude && place.longitude === longitude
+                  {pointCount}
+                </div>
+              </Marker>
             );
-            return place ? <MapPlace key={cluster.id} place={place} /> : null;
-          })}
-        </AnimatePresence>
+          }
+          const place = filteredPlaces.find(
+            (place: PlaceProps) =>
+              place.latitude === latitude && place.longitude === longitude
+          );
+          return place ? <MapPlace key={cluster.id} place={place} /> : null;
+        })}
       </ReactMapGL>
       <div className="absolute left-[10vw] top-20 z-50 w-[80vw]">
         <TimeLine
@@ -371,29 +367,27 @@ const PlaceModal: React.FC<PlaceModalProps> = ({
 
   return (
     <>
-      <AnimatePresence>
-        <motion.section
-          initial={{ scale: 0.4, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.4, opacity: 0 }}
-          transition={{
-            ease: 'easeOut',
-            duration: 0.2,
+      <motion.section
+        initial={{ scale: 0.4, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.4, opacity: 0 }}
+        transition={{
+          ease: 'easeOut',
+          duration: 0.2,
+        }}
+      >
+        <Modal
+          open={isOpen}
+          onClose={() => {
+            setDetail(false);
+            setIsOpen(false);
           }}
         >
-          <Modal
-            open={isOpen}
-            onClose={() => {
-              setDetail(false);
-              setIsOpen(false);
-            }}
-          >
-            <section className="absolute justify-between z-50 top-[50%] left-[50%] bg-white max-h-[600px] max-w-[800px] w-full h-full -translate-y-1/2 -translate-x-1/2 rounded-xl">
-              <Gallery photos={photos} onClick={openLightbox} />
-            </section>
-          </Modal>
-        </motion.section>
-      </AnimatePresence>
+          <section className="absolute justify-between z-50 top-[50%] left-[50%] bg-white max-h-[600px] max-w-[800px] w-full h-full -translate-y-1/2 -translate-x-1/2 rounded-xl">
+            <Gallery photos={photos} onClick={openLightbox} />
+          </section>
+        </Modal>
+      </motion.section>
       <DetailModal
         open={detail}
         onClose={() => {

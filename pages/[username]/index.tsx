@@ -19,6 +19,7 @@ import { toast } from 'react-hot-toast';
 import { AccountCreatedCard, PostCard } from '@components/PostCard';
 import { LoadingButton } from '@components/LoadingButton';
 import { Layout } from '@components/Layout';
+import SubmitButton from '@components/LoadingButton/SubmitButton';
 
 const User: FC<{ username: string }> = ({ username }) => {
   const { data, loading, error, refetch } = useGetUserInfoQuery({
@@ -224,10 +225,14 @@ const Input: FC<{
 const FollowButton = ({ data, refetch }: any) => {
   const [followMutation] = useFollowMutation();
   const [unfollowMutation] = useUnfollowMutation();
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <LoadingButton
-      func={async () => {
+    <SubmitButton
+      text={data.user.isFollowing ? 'Unfollow' : 'Follow'}
+      isLoading={isLoading}
+      onClick={async () => {
+        setIsLoading(true);
         try {
           if (data.user.isFollowing) {
             await unfollowMutation({
@@ -243,8 +248,8 @@ const FollowButton = ({ data, refetch }: any) => {
           // @ts-ignore
           toast.error(error.message);
         }
+        setIsLoading(false);
       }}
-      title={data.user.isFollowing ? 'Unfollow' : 'Follow'}
     />
   );
 };

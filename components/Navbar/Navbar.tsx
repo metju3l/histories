@@ -33,6 +33,8 @@ const Navbar: React.FC = () => {
   if (loading) return <div>navbar loading</div>;
   if (error) return <div>navbar error</div>;
 
+  const userIsLogged = data!.isLogged !== null;
+
   return (
     <nav className={styles.navbarNav}>
       <div className={styles.navbar}>
@@ -57,13 +59,13 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
         <div className={styles.navBlock}>
-          {/* <NavbarItem1 link="createPost" icon={PlusIcon} />
-           */}
-          <Link href={'createPost'} passHref>
-            <a className={styles.iconButton}>
-              <PlusIcon />
-            </a>
-          </Link>{' '}
+          {userIsLogged && (
+            <Link href={'createPost'} passHref>
+              <a className={styles.iconButton}>
+                <PlusIcon />
+              </a>
+            </Link>
+          )}
           <Link href={'/'} passHref>
             <a className={styles.iconButton}>
               <BellIcon />
