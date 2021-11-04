@@ -12,6 +12,55 @@ import { toast } from 'react-hot-toast';
 import { Search } from '@components/MainPage';
 import { Layout } from '@components/Layout';
 import SubmitButton from '@components/LoadingButton/SubmitButton';
+import Dropzone, { useDropzone } from 'react-dropzone';
+
+const DropZoneComponent = ({
+  setFiles,
+}: {
+  setFiles: React.Dispatch<File[]>;
+}) => {
+  const onDrop = useCallback((acceptedFiles) => {
+    setFiles(acceptedFiles);
+  }, []);
+
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({
+    onDrop,
+    multiple: true,
+    accept: 'image/*',
+  });
+
+  return (
+    <div className={`rounded-2xl p-4 mt-4 bg-gray-100 cursor-pointer`}>
+      <div
+        {...getRootProps()}
+        className={`w-full h-30 p-8 ${
+          isDragAccept
+            ? 'border-green-400'
+            : isDragReject
+            ? 'border-red-400'
+            : 'border-[#949191]'
+        } border-2 rounded-2xl border-dashed`}
+      >
+        <input {...getInputProps()} />
+        <div className="flex flex-col items-center justify-center text-gray-600">
+          <p>
+            {isDragActive
+              ? isDragReject
+                ? 'Please upload images only'
+                : 'Drop images here'
+              : 'Drag and drop images here, or click to select images'}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Login: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +78,7 @@ const Login: FC = () => {
     lat: 50,
     lng: 15,
   });
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File[]>([]);
 
   const onMarkerDragStart = useCallback((event) => {
     logEvents((_events) => ({ ..._events, onDragStart: event.lngLat }));
@@ -171,14 +220,9 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
             );
           })}
         </div>
-        <input
-          type="file"
-          multiple={true}
-          accept="image/*"
-          onChange={(e: any) => {
-            setFile(e.target.files);
-          }}
-        />
+        <DropZoneComponent setFiles={setFile} />
+        Selected files {file.length}
+        <div></div>
         <Formik
           initialValues={{
             photoDate: '',
@@ -207,8 +251,28 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
         >
           {() => (
             <Form>
-              <Input label="photoDate" type="date" name="photoDate" />
-              <Input label="Description" name="description" type="text" />
+              <div>
+                <label>Photo date</label>
+                <Field
+                  name="photoDate"
+                  type="date"
+                  className="shadow appearance-none border rounded-lg w-full h-10 px-3 mt-2 mb-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  // disable selecting date from future in calendar pop-up
+                  max={new Date().toISOString().split('T')[0]}
+                />
+
+                <br />
+              </div>
+              <div>
+                <label>Description</label>
+                <Field
+                  name="description"
+                  type="text"
+                  className="shadow appearance-none border rounded-lg w-full h-10 px-3 mt-2 mb-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+
+                <br />
+              </div>
               <label>hashtags</label>
               <input
                 className="shadow appearance-none border rounded-lg w-full h-10 px-3 mt-2 mb-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -217,32 +281,12 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
               />
-
               <SubmitButton isLoading={isLoading} text="submit" />
             </Form>
           )}
         </Formik>
       </div>
     </Layout>
-  );
-};
-
-const Input: FC<{
-  type: string;
-  name: string;
-  label: string;
-}> = ({ type, name, label }) => {
-  return (
-    <div>
-      <label htmlFor={name}>{label}</label>
-      <Field
-        type={type}
-        className="shadow appearance-none border rounded-lg w-full h-10 px-3 mt-2 mb-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        name={name}
-      />
-      <ErrorMessage name={name} />
-      <br />
-    </div>
   );
 };
 

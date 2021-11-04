@@ -42,6 +42,7 @@ import { GraphQLUpload } from 'graphql-upload';
 import { UploadPhoto } from '../s3/';
 import Report from '../mutations/Create/Report';
 import LastPost from '../mutations/lastPost';
+import { PhotographIcon } from '@heroicons/react/solid';
 
 type contextType = {
   decoded: { id: number };
@@ -393,6 +394,8 @@ const resolvers = {
         10000
       )
         throw new Error('you can create post every 10sec');
+
+      if (input.photo.length === 0) throw new Error('No photo');
 
       const urls: Array<string> = await Promise.all(
         input.photo.map(async (photo: any) => await UploadPhoto(photo))
