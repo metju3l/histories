@@ -126,7 +126,7 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
       // @ts-ignore
       zoom: parseFloat(router.query?.zoom ?? 14),
       // @ts-ignore
-      transitionDuration: 5000,
+      transitionDuration: 500,
       transitionInterpolator: new FlyToInterpolator(),
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -175,6 +175,8 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
     options: { radius: 75, maxZoom: 20 },
   });
 
+  const [openPlace, setOpenPlace] = useState<any>(null);
+
   if (paths.loading) return <div>loading</div>;
   if (paths.error) return <div>error...</div>;
 
@@ -211,132 +213,161 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
 
   return (
     <>
-      <ReactMapGL
-        {...viewport}
-        width="100%"
-        height="100%"
-        onViewportChange={setViewport}
-        mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-        mapStyle="mapbox://styles/leighhalliday/ckhjaksxg0x2v19s1ovps41ef"
-        dragRotate={false}
-        ref={(instance) => (mapRef.current = instance)}
-        onLoad={(event) => {
-          if (mapRef.current) setBounds(mapRef.current.getMap().getBounds());
-        }}
-        onInteractionStateChange={async (s: any) => {
-          // when map state changes (dragging, zooming, rotating, etc.)
-          if (!s.isDragging && mapRef.current)
-            setBounds(GetBounds(mapRef.current.getMap().getBounds()));
+      <div className="w-full h-full flex">
+        {openPlace && (
+          <div className="w-full h-full">
+            <button onClick={() => setOpenPlace(null)}>close</button>
+            {console.log(openPlace)}
+            <motion.div
+              initial={{ scale: 0.4, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.4, opacity: 0 }}
+              transition={{
+                ease: 'easeOut',
+                duration: 0.2,
+              }}
+            >
+              <div className="relative w-full h-60">
+                <Image
+                  src={openPlace.posts[0].url[0]}
+                  layout="fill"
+                  alt="image"
+                  objectFit="cover"
+                />
+              </div>
+            </motion.div>
+          </div>
+        )}
+        <ReactMapGL
+          {...viewport}
+          width={openPlace ? '30%' : '100%'}
+          height="100%"
+          onViewportChange={setViewport}
+          mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+          mapStyle="mapbox://styles/leighhalliday/ckhjaksxg0x2v19s1ovps41ef"
+          dragRotate={false}
+          ref={(instance) => (mapRef.current = instance)}
+          onLoad={(event) => {
+            if (mapRef.current) setBounds(mapRef.current.getMap().getBounds());
+          }}
+          onInteractionStateChange={async (s: any) => {
+            // when map state changes (dragging, zooming, rotating, etc.)
+            if (!s.isDragging && mapRef.current)
+              setBounds(GetBounds(mapRef.current.getMap().getBounds()));
 
-          // if there is no interaction with map update lat, lng... props in url
-          if (
-            !(
-              s.isDragging ||
-              s.inTransition ||
-              s.isRotating ||
-              s.isZooming ||
-              s.isHovering ||
-              s.isPanning
+            // if there is no interaction with map update lat, lng... props in url
+            if (
+              !(
+                s.isDragging ||
+                s.inTransition ||
+                s.isRotating ||
+                s.isZooming ||
+                s.isHovering ||
+                s.isPanning
+              )
             )
-          )
-            UpdateUrl({ ...viewport, router });
-        }}
-      >
-        <GeolocateControl
-          style={{
-            bottom: 186,
-            right: 0,
-            padding: '10px',
+              UpdateUrl({ ...viewport, router });
           }}
-          positionOptions={{ enableHighAccuracy: true }}
-        />
-        <NavigationControl
-          style={{
-            bottom: 240,
-            right: 0,
-            padding: '10px',
-          }}
-          showCompass={false}
-        />
+        >
+          <GeolocateControl
+            style={{
+              bottom: 186,
+              right: 0,
+              padding: '10px',
+            }}
+            positionOptions={{ enableHighAccuracy: true }}
+          />
+          <NavigationControl
+            style={{
+              bottom: 240,
+              right: 0,
+              padding: '10px',
+            }}
+            showCompass={false}
+          />
 
-        {clusters.map((cluster) => {
-          const [longitude, latitude] = cluster.geometry.coordinates;
-          const { cluster: isCluster, point_count: pointCount } =
-            cluster.properties;
+          {clusters.map((cluster) => {
+            const [longitude, latitude] = cluster.geometry.coordinates;
+            const { cluster: isCluster, point_count: pointCount } =
+              cluster.properties;
 
-          if (isCluster) {
-            return (
-              <Marker
-                key={`cluster-${cluster.id}`}
-                latitude={latitude}
-                longitude={longitude}
-              >
-                <div
-                  className="text-white bg-red-500 h-20 w-20 rounded-full py-[2em] text-center "
-                  onClick={() => {
-                    const expansionZoom = Math.min(
-                      supercluster.getClusterExpansionZoom(cluster.id),
-                      20
-                    );
-
-                    setViewport({
-                      ...viewport,
-                      latitude,
-                      longitude,
-                      zoom: expansionZoom,
-                    });
-                  }}
+            if (isCluster) {
+              return (
+                <Marker
+                  key={`cluster-${cluster.id}`}
+                  latitude={latitude}
+                  longitude={longitude}
                 >
-                  {pointCount}
-                </div>
-              </Marker>
+                  <div
+                    className="text-white bg-red-500 h-20 w-20 rounded-full py-[2em] text-center "
+                    onClick={() => {
+                      const expansionZoom = Math.min(
+                        supercluster.getClusterExpansionZoom(cluster.id),
+                        20
+                      );
+
+                      setViewport({
+                        ...viewport,
+                        latitude,
+                        longitude,
+                        zoom: expansionZoom,
+                      });
+                    }}
+                  >
+                    {pointCount}
+                  </div>
+                </Marker>
+              );
+            }
+            const place = filteredPlaces.find(
+              (place: PlaceProps) =>
+                place.latitude === latitude && place.longitude === longitude
             );
-          }
-          const place = filteredPlaces.find(
-            (place: PlaceProps) =>
-              place.latitude === latitude && place.longitude === longitude
-          );
-          return place ? <MapPlace key={cluster.id} place={place} /> : null;
-        })}
-      </ReactMapGL>
-      <div className="absolute left-[10vw] top-20 z-50 w-[80vw]">
-        <TimeLine
-          domain={[1000, new Date().getFullYear()]}
-          setTimeLimitation={setTimeLimitation}
-        />
+            return place ? (
+              <MapPlace
+                key={cluster.id}
+                place={place}
+                onClick={() => setOpenPlace(place)}
+              />
+            ) : null;
+          })}
+        </ReactMapGL>
+        {openPlace === null && (
+          <div className="absolute left-[10vw] top-20 z-50 w-[80vw]">
+            <TimeLine
+              domain={[1000, new Date().getFullYear()]}
+              setTimeLimitation={setTimeLimitation}
+            />
+          </div>
+        )}
       </div>
     </>
   );
 };
 
-const MapPlace = ({ place }: { place: any }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const MapPlace = ({ place, onClick }: { place: any; onClick: () => void }) => {
   return (
-    <>
-      <Marker latitude={place.latitude} longitude={place.longitude}>
-        {/* marker appear and disappear animation */}
-        <motion.div
-          initial={{ scale: 0.4, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.4, opacity: 0 }}
-          transition={{
-            ease: 'easeOut',
-            duration: 0.2,
-          }}
-          onClick={() => setIsOpen(true)}
-        >
-          <Image
-            src={place.posts[0].url[0]}
-            width={60}
-            height={60}
-            className="rounded-full w-12 h-12 object-cover"
-            alt="Picture on map"
-          />
-        </motion.div>
-      </Marker>
-      <PlaceModal setIsOpen={setIsOpen} isOpen={isOpen} place={place} />
-    </>
+    <Marker latitude={place.latitude} longitude={place.longitude}>
+      {/* marker appear and disappear animation */}
+      <motion.div
+        initial={{ scale: 0.4, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.4, opacity: 0 }}
+        transition={{
+          ease: 'easeOut',
+          duration: 0.2,
+        }}
+        onClick={onClick}
+      >
+        <Image
+          src={place.posts[0].url[0]}
+          width={60}
+          height={60}
+          className="rounded-full w-12 h-12 object-cover"
+          alt="Picture on map"
+        />
+      </motion.div>
+    </Marker>
   );
 };
 
