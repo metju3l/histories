@@ -37,6 +37,7 @@ import {
 } from '@graphql/relations.graphql';
 import UpdateUrl from './UpdateUrl';
 import { motion } from 'framer-motion';
+import { PostCard } from '@components/PostCard';
 
 type PlaceProps = {
   id: number;
@@ -215,28 +216,7 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
     <>
       <div className="w-full h-full flex">
         {openPlace && (
-          <div className="w-full h-full">
-            <button onClick={() => setOpenPlace(null)}>close</button>
-            {console.log(openPlace)}
-            <motion.div
-              initial={{ scale: 0.4, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.4, opacity: 0 }}
-              transition={{
-                ease: 'easeOut',
-                duration: 0.2,
-              }}
-            >
-              <div className="relative w-full h-60">
-                <Image
-                  src={openPlace.posts[0].url[0]}
-                  layout="fill"
-                  alt="image"
-                  objectFit="cover"
-                />
-              </div>
-            </motion.div>
-          </div>
+          <PlaceWindow id={openPlace.id} setOpenPlace={setOpenPlace} />
         )}
         <ReactMapGL
           {...viewport}
@@ -432,6 +412,42 @@ const PlaceModal: React.FC<PlaceModalProps> = ({
     </>
   );
 };
+
+const PlaceWindow: React.FC<{ id: number; setOpenPlace: React.Dispatch<any> }> =
+  ({ id, setOpenPlace }) => {
+    const { data, loading, error } = usePlaceQuery({ variables: { id } });
+    const isLoggedQuery = useIsLoggedQuery();
+
+    if (loading || isLoggedQuery.loading)
+      return <div className="w-full h-full"> loading </div>;
+    if (error || isLoggedQuery.error || data?.place === undefined)
+      return <div className="w-full h-full"> error </div>;
+    return (
+      <div className="w-full max-w-4xl h-full overflow-y-auto">
+        <div className="relative w-full h-60 bg-green-700"></div>
+        <motion.div
+          initial={{ scale: 0.4, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.4, opacity: 0 }}
+          transition={{
+            ease: 'easeOut',
+            duration: 0.2,
+          }}
+        >
+          {
+            // @ts-ignore
+            data.place.posts.map((post) => (
+              <PostCard
+                isLoggedQuery={isLoggedQuery}
+                id={post!.id}
+                key={post!.id}
+              />
+            ))
+          }
+        </motion.div>
+      </div>
+    );
+  };
 
 const DetailModal: React.FC<{
   onClose: () => void;
