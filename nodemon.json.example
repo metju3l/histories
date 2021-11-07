@@ -1,6 +1,7 @@
 {
   "watch": [
-    "src/"
+    "src/",
+    "shared/"
   ],
   "env": {
     "JWT_SECRET": "xxxxxxxxxxxxxxxxxxxxxxx"

@@ -1,11 +1,6 @@
-import {
-  ApolloServerPluginLandingPageLocalDefault,
-  ApolloServerPluginLandingPageProductionDefault,
-} from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import { verify } from 'jsonwebtoken';
 import schema from './schema';
-import { GraphQLUpload, graphqlUploadExpress } from 'graphql-upload';
 
 const apolloServer = new ApolloServer({
   schema,

@@ -10,7 +10,7 @@ import {
   ValidateDescription,
   ValidateDate,
   ValidateComment,
-} from '../validation';
+} from '../../shared/validation';
 import {
   CreateCollection,
   CreatePost,
@@ -37,7 +37,7 @@ import IsVerified from '../queries/IsVerified';
 import PersonalizedPostsQuery from '../queries/PersonalizedPostsQuery';
 import PlaceQuery from '../queries/PlaceQuery';
 import PostQuery from '../queries/PostQuery';
-import IsUsedEmail from '../validation/dbValidation/IsUsedEmail';
+import IsUsedEmail from '../../shared/validation/dbValidation/IsUsedEmail';
 import { GraphQLUpload } from 'graphql-upload';
 import { UploadPhoto } from '../s3/';
 import Report from '../mutations/Create/Report';

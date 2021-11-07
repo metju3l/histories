@@ -1,5 +1,5 @@
 import DbConnector from '../../database/driver';
-import { UserExists } from '../../validation';
+import { UserExists } from '../../../shared/validation';
 
 const CreateCollection = async ({
   username,

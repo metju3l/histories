@@ -1,4 +1,4 @@
-import RunCypherQuery from '@src/database/RunCypherQuery';
+import RunCypherQuery from '../../database/RunCypherQuery';
 
 // QUERY
 /*

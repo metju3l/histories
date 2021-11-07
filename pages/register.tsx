@@ -10,7 +10,7 @@ import {
   ValidateName,
   ValidatePassword,
   ValidateUsername,
-} from '@src/validation';
+} from 'shared/validation';
 import { Layout } from '@components/Layout';
 import SubmitButton from '@components/LoadingButton/SubmitButton';
 

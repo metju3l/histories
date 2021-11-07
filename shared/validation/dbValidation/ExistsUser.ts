@@ -1,4 +1,4 @@
-import DbConnector from '../../database/driver';
+import DbConnector from '../../../src/database/driver';
 
 const ExistsUser = async (id: number): Promise<boolean> => {
   const query = `MATCH (user:User)
