@@ -18,7 +18,6 @@ import TimeAgo from 'react-timeago';
 import { Comment } from '@components/Comment';
 import { DotsHorizontalIcon } from '@heroicons/react/solid';
 import {
-  HeartIcon,
   ChatIcon,
   PaperAirplaneIcon,
   BookmarkIcon,
@@ -28,7 +27,7 @@ import {
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { Modal, Menu } from '@components/Modal';
 import { toast } from 'react-hot-toast';
-import { NextRouter, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { TimeLine } from '@components/TimeLine';
 import {
   useLikeMutation,
@@ -38,6 +37,9 @@ import {
 import UpdateUrl from './UpdateUrl';
 import { motion } from 'framer-motion';
 import { PostCard } from '@components/PostCard';
+import image from 'next/image';
+import Link from 'next/link';
+import { Viewport } from '@lib/types/viewport';
 
 type PlaceProps = {
   id: number;
@@ -84,8 +86,9 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
     new Date().getTime(),
   ]);
   const paths = usePathsQuery();
+  const [openPlace, setOpenPlace] = useState<number | null>(null);
 
-  const [viewport, setViewport] = useState({
+  const [viewport, setViewport] = useState<Viewport>({
     latitude: 50,
     longitude: 15,
     zoom: 3.5,
@@ -114,9 +117,9 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
       transitionDuration: 5000,
       transitionInterpolator: new FlyToInterpolator(),
     });
-  }, [searchCoordinates]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchCoordinates]);
 
-  // on reload change map viewport coordinates according to url parameter
+  // on load change map viewport coordinates according to url parameter
   useEffect(() => {
     setViewport({
       ...viewport,
@@ -130,11 +133,20 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
       transitionDuration: 500,
       transitionInterpolator: new FlyToInterpolator(),
     });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // @ts-ignore
+    setOpenPlace(router.query?.place ? parseInt(router.query?.place) : null);
+  }, []);
+
+  // update place in url query params when changed
+  useEffect(
+    () => UpdateUrl({ ...viewport, router, place: openPlace }),
+    [openPlace]
+  );
 
   const mapRef = useRef<any>(null);
 
-  /* PLACES FILTER
+  // PLACES FILTER
+  /*
    * filters `posts` in `places` by timeline requirements
    * returns only `places` that has at least one `post`
    */
@@ -176,8 +188,6 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
     options: { radius: 75, maxZoom: 20 },
   });
 
-  const [openPlace, setOpenPlace] = useState<any>(null);
-
   if (paths.loading) return <div>loading</div>;
   if (paths.error) return <div>error...</div>;
 
@@ -216,11 +226,18 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
     <>
       <div className="w-full h-full flex">
         {openPlace && (
-          <PlaceWindow id={openPlace.id} setOpenPlace={setOpenPlace} />
+          <div className="w-[50%]">
+            <PlaceWindow
+              id={openPlace}
+              setOpenPlace={setOpenPlace}
+              setViewport={setViewport}
+              viewport={viewport}
+            />
+          </div>
         )}
         <ReactMapGL
           {...viewport}
-          width={openPlace ? '30%' : '100%'}
+          width={openPlace ? '50%' : '100%'}
           height="100%"
           onViewportChange={setViewport}
           mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
@@ -246,7 +263,7 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
                 s.isPanning
               )
             )
-              UpdateUrl({ ...viewport, router });
+              UpdateUrl({ ...viewport, router, place: openPlace });
           }}
         >
           <GeolocateControl
@@ -307,7 +324,7 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
               <MapPlace
                 key={cluster.id}
                 place={place}
-                onClick={() => setOpenPlace(place)}
+                onClick={() => setOpenPlace(place.id)}
               />
             ) : null;
           })}
@@ -374,7 +391,7 @@ const PlaceModal: React.FC<PlaceModalProps> = ({
     setCurrentImage(index);
     setDetail(true);
     setIsOpen(false);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -413,41 +430,99 @@ const PlaceModal: React.FC<PlaceModalProps> = ({
   );
 };
 
-const PlaceWindow: React.FC<{ id: number; setOpenPlace: React.Dispatch<any> }> =
-  ({ id, setOpenPlace }) => {
-    const { data, loading, error } = usePlaceQuery({ variables: { id } });
-    const isLoggedQuery = useIsLoggedQuery();
+type PlaceWindowProps = {
+  id: number;
+  setOpenPlace: React.Dispatch<number | null>;
+  setViewport: (value: React.SetStateAction<Viewport>) => void;
+  viewport: Viewport;
+};
 
-    if (loading || isLoggedQuery.loading)
-      return <div className="w-full h-full"> loading </div>;
-    if (error || isLoggedQuery.error || data?.place === undefined)
-      return <div className="w-full h-full"> error </div>;
-    return (
-      <div className="w-full max-w-4xl h-full overflow-y-auto">
-        <div className="relative w-full h-60 bg-green-700"></div>
-        <motion.div
-          initial={{ scale: 0.4, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.4, opacity: 0 }}
-          transition={{
-            ease: 'easeOut',
-            duration: 0.2,
-          }}
-        >
-          {
-            // @ts-ignore
-            data.place.posts.map((post) => (
-              <PostCard
-                isLoggedQuery={isLoggedQuery}
-                id={post!.id}
-                key={post!.id}
-              />
-            ))
-          }
-        </motion.div>
+// side window with place details
+const PlaceWindow: React.FC<PlaceWindowProps> = ({
+  id,
+  setOpenPlace,
+  setViewport,
+  viewport,
+}) => {
+  const { data, loading, error } = usePlaceQuery({ variables: { id } });
+  const isLoggedQuery = useIsLoggedQuery();
+
+  if (loading || isLoggedQuery.loading)
+    return <div className="w-full h-full"> loading </div>;
+  if (error || isLoggedQuery.error || data?.place === undefined)
+    return <div className="w-full h-full"> error </div>;
+  return (
+    <div className="w-full h-full overflow-y-auto">
+      {/* BANNER */}
+      <div className="w-full h-80 bg-green-700">
+        <div className="relative w-full h-full">
+          <Image
+            // BANNER IMAGE
+            src={
+              data.place.preview.length > 0
+                ? data.place.preview
+                : data.place.posts[0].url[0]
+            }
+            layout="fill"
+            alt="Place preview"
+            objectFit="cover"
+          />
+        </div>
       </div>
-    );
-  };
+      {/* HEADER */}
+      <h2 className="font-semibold text-3xl">
+        {data.place.name.length > 0 ? data.place.name : 'Place on map'}
+      </h2>
+      {/* DETAILS */}
+      <h3 className="">{data.place.posts.length} posts</h3>
+      {/* SHOW LOCATION ON MAP */}
+      <button
+        onClick={() => {
+          setViewport({
+            ...viewport,
+            longitude: data.place.longitude,
+            latitude: data.place.latitude,
+            zoom: 14,
+            // @ts-ignore
+            transitionDuration: 500,
+            transitionInterpolator: new FlyToInterpolator(),
+          });
+        }}
+      >
+        show location on map
+      </button>
+      <br />
+      <button onClick={() => setOpenPlace(null)}>close</button>
+      <br />
+      {/* createPost link with place coordinates in query params */}
+      <Link
+        href={{
+          pathname: 'createPost',
+          query: { lat: data.place.latitude, lng: data.place.longitude },
+        }}
+      >
+        <a className="text-blue-500">add post to this place</a>
+      </Link>
+      <p>
+        {data.place.description.length > 0
+          ? data.place.description
+          : "This place doesn't have any description yet, if you want to add description please contact admin"}
+      </p>
+      <div>
+        {
+          // @ts-ignore
+          data.place.posts.map((post) => (
+            <PostCard
+              isLoggedQuery={isLoggedQuery}
+              id={post!.id}
+              key={post!.id}
+            />
+          ))
+        }
+      </div>
+    </div>
+  );
+};
 
 const DetailModal: React.FC<{
   onClose: () => void;

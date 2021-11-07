@@ -40,8 +40,14 @@ query MapPosts(
 
 query Place($id: Int!) {
   place(id: $id) {
+    latitude
+    longitude
+    name
+    description
+    preview
     posts {
       id
+      url
     }
   }
 }

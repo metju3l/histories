@@ -206,12 +206,9 @@ const PostCard: FC<{
               {'>'}
             </button>
           )}
-          <div className="pt-2 pl-4">
-            <a className="font-semibold">{data.post.likes.length}</a>{' '}
-            {data.post.likes.length === 1 ? 'like' : 'likes'}
-          </div>
-          <div className="flex py-1 px-2 w-full justify-around">
+          <div className="flex py-1 px-[10%] mt-4 w-full justify-between">
             <div
+              className="flex"
               onClick={async () => {
                 const likedTmp = localLikeState ?? data.post.liked;
                 setLocalLikeState(!likedTmp);
@@ -245,6 +242,10 @@ const PostCard: FC<{
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                 />
               </svg>
+              <span className="flex pl-2">
+                <a className="font-semibold pr-1">{data.post.likes.length}</a>{' '}
+                {data.post.likes.length === 1 ? 'like' : 'likes'}
+              </span>
             </div>
 
             <AiOutlineComment

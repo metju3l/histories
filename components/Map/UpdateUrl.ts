@@ -4,6 +4,7 @@ type UpdateUrlProps = {
   longitude: number;
   latitude: number;
   zoom: number;
+  place: number | null;
   router: NextRouter;
 };
 
@@ -13,6 +14,7 @@ const UpdateUrl = ({
   longitude,
   latitude,
   zoom,
+  place,
 }: UpdateUrlProps): void => {
   router.replace({
     pathname: 'map',
@@ -20,6 +22,7 @@ const UpdateUrl = ({
       lat: latitude.toFixed(6),
       lng: longitude.toFixed(6),
       zoom: zoom.toFixed(2),
+      place,
     },
   });
 };

@@ -13,6 +13,7 @@ import { Search } from '@components/MainPage';
 import { Layout } from '@components/Layout';
 import SubmitButton from '@components/LoadingButton/SubmitButton';
 import Dropzone, { useDropzone } from 'react-dropzone';
+import { useRouter } from 'next/router';
 
 const DropZoneComponent = ({
   setFiles,
@@ -63,6 +64,9 @@ const DropZoneComponent = ({
 };
 
 const Login: FC = () => {
+  // for reading coordinates from query params
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
   const { data, loading, error } = useIsLoggedQuery();
   const [createPostMutation] = useCreatePostMutation();
@@ -121,7 +125,25 @@ const Login: FC = () => {
       longitude: searchCoordinates.lng,
       latitude: searchCoordinates.lat,
     });
-  }, [searchCoordinates]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchCoordinates]);
+
+  // on load read set marker & viewport coordinates by query params
+  useEffect(() => {
+    setViewport({
+      ...viewport,
+      // @ts-ignore
+      longitude: parseFloat(router.query?.lng ?? 15),
+      // @ts-ignore
+      latitude: parseFloat(router.query?.lat ?? 50),
+      zoom: 14,
+    });
+    setMarker({
+      // @ts-ignore
+      longitude: parseFloat(router.query?.lng ?? 15),
+      // @ts-ignore
+      latitude: parseFloat(router.query?.lat ?? 50),
+    });
+  }, []);
 
   useEffect(() => {
     if (newTag.slice(-1) === ' ') {
@@ -134,7 +156,7 @@ const Login: FC = () => {
       }
       setNewTag('');
     }
-  }, [newTag]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [newTag]);
 
   if (loading) return <div>loading xxx</div>;
   if (error) return <div>error</div>;
