@@ -35,8 +35,8 @@ hiStories/
 │   │   ├── schema
 │   │   └── resolvers
 │   ├── queries
-│   ├── mutations
-|   └── validation
+|   └── mutations
+├── shared (shared between frontend - validation, etc.)
 ├── dist (compiled backend)
 ├── lib (frontend)
 │   ├── graphql

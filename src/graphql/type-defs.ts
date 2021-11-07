@@ -15,7 +15,7 @@ export default gql`
     userPosts(input: UserPostsInput!): [Post]
     personalizedPosts: [PostID]!
     checkIfLogged: CheckIfLoggedInfo!
-    place(id: Int!): PlaceInfo
+    place(id: Int!): Place!
   }
 
   type Mutation {
@@ -45,11 +45,14 @@ export default gql`
     content: String!
   }
 
-  type PlaceInfo {
+  type Place {
     id: Int!
     latitude: Float!
     longitude: Float!
-    posts: [PostID]
+    description: String!
+    name: String!
+    preview: String!
+    posts: [Post!]!
   }
 
   type CheckIfLoggedInfo {

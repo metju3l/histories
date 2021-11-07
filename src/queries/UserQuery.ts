@@ -1,5 +1,5 @@
 import RunCypherQuery from '../database/RunCypherQuery';
-import { ValidateUsername } from '../validation';
+import { ValidateUsername } from '../../shared/validation';
 
 type queryResult = {
   id: number;
@@ -37,62 +37,62 @@ type queryResult = {
  * - using OPTIONAL MATCH in subqueries because when there is not match and it wouldn't be optional whole query would just return nothing
  *
  *
- * WITH 13 AS loggedID            - save logged user as loggedID (if not logged save null)
+ * WITH 13 AS loggedID            // save logged user as loggedID (if not logged save null)
  * MATCH (user:User)
- * WHERE ID(user) = 54            - match user node by ID (or by username -> WHERE user.username =~ "(?i)krystofex" (not case sensitive))
- * CALL {                                                   - subquery
- *     WITH user                                            - define subquery variables
+ * WHERE ID(user) = 54            // match user node by ID (or by username -> WHERE user.username =~ "(?i)krystofex" (not case sensitive))
+ * CALL {                                                   // subquery
+ *     WITH user                                            // define subquery variables
  *     OPTIONAL MATCH (user)-[created:CREATED]->(post:Post)-[:IS_LOCATED]->(place:Place)
  *     RETURN post, place
- *     ORDER BY post.createdAt DESC                         - order by time when post was created
- *     LIMIT 100                                            -
+ *     ORDER BY post.createdAt DESC                         // order by time when post was created
+ *     LIMIT 100
  * }
- * CALL {                                                   - subquery
- *     WITH user                                            - define subquery variables
+ * CALL {                                                   // subquery
+ *     WITH user                                            // define subquery variables
  *     OPTIONAL MATCH (user)-[:FOLLOW]->(following:User)
  *     RETURN following
  *     LIMIT 100
  * }
- * CALL {                                                   - subquery
- *     WITH user                                            - define subqeury variables
+ * CALL {                                                   // subquery
+ *     WITH user                                            // define subqeury variables
  *     OPTIONAL MATCH (follower:User)-[:FOLLOW]->(user)
  *     RETURN follower
  *     LIMIT 100
  * }
- * CALL {                                                   - subquery
- *     WITH user                                            - define subquery variables
+ * CALL {                                                   // subquery
+ *     WITH user                                            // define subquery variables
  *     OPTIONAL MATCH (user)-[:CREATED]->(collection:Collection)
  *     RETURN DISTINCT collection
  *     LIMIT 100
  * }
- * CALL {                                                   - subquery
- *     WITH user, loggedID                                  - define subquery variables
+ * CALL {                                                   // subquery
+ *     WITH user, loggedID                                  // define subquery variables
  *     OPTIONAL MATCH (logged:User)-[r:FOLLOW]->(user)
  *     WHERE ID(logged) = loggedID
- *     RETURN r AS isFollowing                              - returns all relations (should be only one)
+ *     RETURN r AS isFollowing                              // returns all relations (should be only one)
  * }
  *
  * RETURN user{.*,                    - all user properties
  *     id: ID(user),                  - user ID
- *     posts: COLLECT(DISTINCT post{.*,                 - return posts as an array (every post just once)
- *                                id: ID(post),         - post ID
- *                                place:place{.*,       - return place post is assigned to as an post property
- *                                  id: ID(place)}      - place ID
+ *     posts: COLLECT(DISTINCT post{.*,                 // return posts as an array (every post just once)
+ *                                id: ID(post),         // post ID
+ *                                place:place{.*,       // return place post is assigned to as an post property
+ *                                  id: ID(place)}      // place ID
  *                                }
  *     ),
- *     followers: COLLECT(DISTINCT follower{.*,         - return followers as an array (every follower just once)
- *                                    id: ID(follower)  - follower ID
+ *     followers: COLLECT(DISTINCT follower{.*,         // return followers as an array (every follower just once)
+ *                                    id: ID(follower)  // follower ID
  *                                 }
  *     ),
- *     following: COLLECT(DISTINCT following{.*,        - return users followed by user as an array (every follower just once)
- *                                    id: ID(following) - followings ID
+ *     following: COLLECT(DISTINCT following{.*,        // return users followed by user as an array (every follower just once)
+ *                                    id: ID(following) // followings ID
  *                                 }
  *     ),
  *     collections: COLLECT(DISTINCT collection{.*,
  *                                      id: ID(collection)
  *                                   }
  *     ),
- *     isFollowing: COUNT(DISTINCT isFollowing) > 0     - number of FOLLOW relations between logged user and user, returns boolean
+ *     isFollowing: COUNT(DISTINCT isFollowing) > 0     // number of FOLLOW relations between logged user and user, returns boolean
  * } AS user
  */
 
