@@ -40,6 +40,7 @@ import { PostCard } from '@components/PostCard';
 import image from 'next/image';
 import Link from 'next/link';
 import { Viewport } from '@lib/types/viewport';
+import { StringValueNode } from 'graphql';
 
 type PlaceProps = {
   id: number;
@@ -241,7 +242,7 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
           height="100%"
           onViewportChange={setViewport}
           mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-          mapStyle="mapbox://styles/leighhalliday/ckhjaksxg0x2v19s1ovps41ef"
+          mapStyle="mapbox://styles/mapbox/streets-v11"
           dragRotate={false}
           ref={(instance) => (mapRef.current = instance)}
           onLoad={(event) => {
@@ -451,23 +452,29 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
     return <div className="w-full h-full"> loading </div>;
   if (error || isLoggedQuery.error || data?.place === undefined)
     return <div className="w-full h-full"> error </div>;
+
+  console.log(data);
+
   return (
     <div className="w-full h-full overflow-y-auto">
       {/* BANNER */}
       <div className="w-full h-80 bg-green-700">
-        <div className="relative w-full h-full">
-          <Image
-            // BANNER IMAGE
-            src={
-              data.place.preview.length > 0
-                ? data.place.preview
-                : data.place.posts[0].url[0]
-            }
-            layout="fill"
-            alt="Place preview"
-            objectFit="cover"
-          />
-        </div>
+        {/* @ts-ignore */}
+        {data.place.posts[0]?.url[0] && (
+          <div className="relative w-full h-full">
+            <Image
+              // BANNER IMAGE
+              src={
+                data.place.preview.length > 0
+                  ? data.place.preview
+                  : data.place.posts[0].url[0]
+              }
+              layout="fill"
+              alt="Place preview"
+              objectFit="cover"
+            />
+          </div>
+        )}
       </div>
       {/* HEADER */}
       <h2 className="font-semibold text-3xl">
@@ -508,6 +515,13 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
           ? data.place.description
           : "This place doesn't have any description yet, if you want to add description please contact admin"}
       </p>
+
+      <Carousel
+        items={data.place.nearbyPlaces.map((place) => ({
+          ...place,
+          onClick: () => setOpenPlace(place.id),
+        }))}
+      />
       <div>
         {
           // @ts-ignore
@@ -519,6 +533,40 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
             />
           ))
         }
+      </div>
+    </div>
+  );
+};
+
+type CarouselProps = {
+  items: Array<{
+    preview: string;
+    distance: number;
+    url: string;
+    name: string;
+    description: string;
+    onClick: () => void;
+  }>;
+};
+const Carousel: React.FC<CarouselProps> = ({ items }) => {
+  const [itemNumber, setItemNumber] = useState(0);
+
+  return (
+    <div className="relative w-full h-80">
+      <div className="w-full h-72 flex overflow-x-auto relative">
+        {items.map((item, index) => (
+          <img
+            onClick={item.onClick}
+            key={index}
+            src={
+              item.preview.length > 0
+                ? item.preview
+                : 'https://histories-bucket.s3.amazonaws.com/1636047765258-2098dad2.jpg'
+            }
+            className="block w-[14rem] h-auto object-cover p-1 rounded-2xl"
+            alt="Place preview"
+          />
+        ))}
       </div>
     </div>
   );
