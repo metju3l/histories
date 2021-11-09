@@ -73,12 +73,50 @@ import DbConnector from '../database/driver';
  */
 
 const PlaceQuery = async ({ id }: { id: number }) => {
-  const query = `MATCH (place:Place) WHERE ID(place) = ${id}
-CALL {WITH place OPTIONAL MATCH (author:User)-[:CREATED]->(post:Post)-[:IS_LOCATED]->(place) RETURN author, post LIMIT 100}
-CALL {WITH place MATCH (:Post)-[:IS_LOCATED]->(nearby:Place) WHERE NOT place = nearby RETURN nearby,round((distance(place.location, nearby.location)/1000), 3) 
-AS distance ORDER BY distance(place.location, nearby.location) ASC LIMIT 10}
-RETURN place{.*, id:ID(place), latitude: place.location.y, longitude: place.location.x, posts: COLLECT(DISTINCT post{.*, id:ID(post),
-author: author{.*, id: ID(author)}}), nearbyPlaces: COLLECT(DISTINCT nearby{.*, id: ID(nearby), distance})} AS place`;
+  const query = `  MATCH (place:Place)        // Find place by id
+  WHERE ID(place) = ${id}
+  CALL {                                                                          
+     WITH place
+     OPTIONAL MATCH (author:User)-[:CREATED]->(post:Post)-[:IS_LOCATED]->(place)  
+     RETURN author, post
+     LIMIT 100
+  }
+ CALL {
+     WITH place
+     MATCH (nearbyPost:Post)-[:IS_LOCATED]->(nearby:Place)                                             
+     WHERE NOT place = nearby                                                               
+     RETURN nearby, nearbyPost, round((distance(place.location, nearby.location)/1000), 3) AS distance  
+     ORDER BY distance(place.location, nearby.location) ASC                                 
+     LIMIT 10                                                                               
+ }
+ 
+CALL {
+    WITH nearbyPost
+    MATCH (n)-[r]->(nearbyPost)
+    WHERE NOT(r:REPORT)
+    RETURN COLLECT(n) AS numberOfN, COLLECT(nearbyPost) AS automaticPreview
+    ORDER BY SIZE(numberOfN) DESC
+    LIMIT 3
+}
+
+  RETURN place{.*,     
+     id:ID(place),                         
+     latitude: place.location.y,           
+     longitude: place.location.x,          
+     posts: COLLECT(DISTINCT post{.*,      
+           id:ID(post),                    
+           author: author{.*,              
+               id: ID(author)              
+           }
+         }),
+     nearbyPlaces: COLLECT(DISTINCT nearby{.*,  
+           id:ID(nearby),  
+     preview: CASE WHEN SIZE(nearby.preview) > 0 THEN nearby.preview ELSE automaticPreview[0].url[0] END,                    
+           distance                             
+           }
+         )
+     }
+   AS place`;
 
   const driver = DbConnector();
   const session = driver.session();

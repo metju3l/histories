@@ -480,6 +480,7 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
       <h2 className="font-semibold text-3xl">
         {data.place.name.length > 0 ? data.place.name : 'Place on map'}
       </h2>
+      {data.place.preview}
       {/* DETAILS */}
       <h3 className="">{data.place.posts.length} posts</h3>
       {/* SHOW LOCATION ON MAP */}
@@ -515,13 +516,16 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
           ? data.place.description
           : "This place doesn't have any description yet, if you want to add description please contact admin"}
       </p>
-
+      adssadas
       <Carousel
+        // @ts-ignore
         items={data.place.nearbyPlaces.map((place) => ({
           ...place,
+          // @ts-ignore
           onClick: () => setOpenPlace(place.id),
         }))}
       />
+      adssadas
       <div>
         {
           // @ts-ignore
@@ -558,11 +562,7 @@ const Carousel: React.FC<CarouselProps> = ({ items }) => {
           <img
             onClick={item.onClick}
             key={index}
-            src={
-              item.preview.length > 0
-                ? item.preview
-                : 'https://histories-bucket.s3.amazonaws.com/1636047765258-2098dad2.jpg'
-            }
+            src={item.preview}
             className="block w-[14rem] h-auto object-cover p-1 rounded-2xl"
             alt="Place preview"
           />
