@@ -1,17 +1,17 @@
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxList,
+  ComboboxOption,
+  ComboboxOptionText,
+  ComboboxPopover,
+} from '@reach/combobox';
 import React, { useEffect } from 'react';
+import { BiSearchAlt2 } from 'react-icons/bi';
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from 'use-places-autocomplete';
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-  ComboboxOptionText,
-} from '@reach/combobox';
-import { BiSearchAlt2 } from 'react-icons/bi';
 
 const PlacesAutocomplete = ({ setSearchCoordinates }: any) => {
   const {
@@ -43,7 +43,7 @@ const PlacesAutocomplete = ({ setSearchCoordinates }: any) => {
       onSelect={handleSelect}
       aria-labelledby="demo"
       openOnFocus={true}
-      className="w-[300px] bg-white py-2 px-2 rounded-lg h-auto border shadow appearance-none text-gray-700 leading-tight  focus:outline-none focus:shadow-outline"
+      className="h-auto px-2 py-2 leading-tight text-gray-700 bg-white border rounded-lg shadow appearance-none w-[300px] focus:outline-none focus:shadow-outline"
     >
       <div className="flex w-full">
         <BiSearchAlt2 size={24} />
@@ -52,7 +52,7 @@ const PlacesAutocomplete = ({ setSearchCoordinates }: any) => {
           onChange={handleInput}
           disabled={!ready}
           placeholder="search place"
-          className="w-full px-2 rounded-lg outline-none border-none inline-block text-light-text"
+          className="inline-block w-full px-2 border-none rounded-lg outline-none text-light-text"
         />
         {value.length > 0 && (
           <button
@@ -69,7 +69,7 @@ const PlacesAutocomplete = ({ setSearchCoordinates }: any) => {
           {status === 'OK' &&
             data.map(({ place_id, description }) => (
               <ComboboxOption
-                className="cursor-pointer py-1 px-2 hover:bg-[#242526] hover:text-white rounded-lg"
+                className="px-2 py-1 rounded-lg cursor-pointer hover:bg-[#242526] hover:text-white"
                 key={place_id}
                 value={description}
                 draggable={false}

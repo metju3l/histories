@@ -1,16 +1,16 @@
-import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
-import React, { useRef, useState } from 'react';
-import Image from 'next/image';
-import TimeAgo from 'react-timeago';
-import { DotsHorizontalIcon } from '@heroicons/react/solid';
 import { Menu } from '@components/Modal';
 import { useDeleteMutation } from '@graphql/post.graphql';
-import { toast } from 'react-hot-toast';
 import {
   useLikeMutation,
   useReportMutation,
   useUnlikeMutation,
 } from '@graphql/relations.graphql';
+import { DotsHorizontalIcon } from '@heroicons/react/solid';
+import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
+import Image from 'next/image';
+import React, { useRef, useState } from 'react';
+import { toast } from 'react-hot-toast';
+import TimeAgo from 'react-timeago';
 
 type CommentProps = {
   content: string;
@@ -58,11 +58,11 @@ const Comment: React.FC<CommentProps> = ({
 
   return (
     <span
-      className="w-full flex gap-2 pl-3"
+      className="flex w-full pl-3 gap-2"
       onMouseOver={() => setMouseOverComment(true)}
       onMouseLeave={() => setMouseOverComment(false)}
     >
-      <div id="userProfile" className="relative rounded-full w-8 h-8">
+      <div id="userProfile" className="relative w-8 h-8 rounded-full">
         <Image
           src={GeneratedProfileUrl(author.firstName, author.lastName)}
           layout="fill"
@@ -77,7 +77,7 @@ const Comment: React.FC<CommentProps> = ({
         <div className="flex items-center gap-2">
           <div
             id="comment"
-            className="bg-[#F1F2F4] p-2 rounded-2xl max-w-[210px]"
+            className="p-2 bg-[#F1F2F4] rounded-2xl max-w-[210px]"
             style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
           >
             <strong className="font-semibold">
@@ -154,7 +154,7 @@ const Comment: React.FC<CommentProps> = ({
               {mouseOverComment && (
                 <DotsHorizontalIcon
                   id="options"
-                  className="w-6 h-6 rounded-full hover:bg-[#F1F2F4] p-1"
+                  className="w-6 h-6 p-1 rounded-full hover:bg-[#F1F2F4]"
                 />
               )}
             </button>
@@ -191,7 +191,7 @@ const Comment: React.FC<CommentProps> = ({
         {showReplyInput && (
           <form>
             <textarea
-              className="border-2 border-gray-300 rounded-xl bg-gray-100 p-2 ml-6 w-full"
+              className="w-full p-2 ml-6 bg-gray-100 border-2 border-gray-300 rounded-xl"
               onChange={(e: any) => setCommentContent(e.target.value)}
               value={commentContent}
               // @ts-ignore

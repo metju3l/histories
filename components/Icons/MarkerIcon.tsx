@@ -1,3 +1,5 @@
+import React from 'react';
+
 const MarkerIcon: React.FC<{
   stroke?: string;
   fill?: string;

@@ -1,10 +1,13 @@
 {
-  "deepscan.enable": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
   "javascript.preferences.importModuleSpecifier": "non-relative",
   "workbench.colorCustomizations": {
     "titleBar.activeBackground": "#00ff95",
     "titleBar.activeForeground": "#000000"
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

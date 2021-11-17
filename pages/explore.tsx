@@ -1,9 +1,9 @@
-import React from 'react';
-import { useCheckIfLoggedQuery, useIsLoggedQuery } from '@graphql/user.graphql';
+import { Layout } from '@components/Layout';
 import Suggestions from '@components/MainPage/RightColumn/Suggestions';
 import { usePersonalizedPostsQuery, usePostQuery } from '@graphql/post.graphql';
-import { Layout } from '@components/Layout';
+import { useCheckIfLoggedQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 import Image from 'next/image';
+import React from 'react';
 
 const Explore: React.FC = () => {
   const { data, loading, error, refetch } = usePersonalizedPostsQuery();
@@ -15,7 +15,7 @@ const Explore: React.FC = () => {
 
   return (
     <Layout title="hiStories">
-      <div className="grid grid-cols-3 gap-2 max-w-screen-xl m-auto mt-4">
+      <div className="m-auto mt-4 grid grid-cols-3 gap-2 max-w-screen-xl">
         {data?.personalizedPosts.map((post, index) => (
           <PostCard key={post!.id} id={post!.id} index={index} />
         ))}

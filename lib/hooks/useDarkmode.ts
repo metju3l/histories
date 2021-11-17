@@ -1,6 +1,5 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-// @ts-ignore
 import Cookie from 'js-cookie';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 const useDarkMode = (): {
   theme: string;

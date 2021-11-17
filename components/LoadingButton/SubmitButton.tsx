@@ -1,3 +1,5 @@
+import React from 'react';
+
 const SubmitButton: React.FC<{
   isLoading: boolean;
   text: string;
@@ -6,7 +8,7 @@ const SubmitButton: React.FC<{
   <button
     type={isLoading ? 'button' : 'submit'}
     onClick={onClick !== undefined ? onClick : () => {}}
-    className="inline-flex items-center justify-center h-10 w-52 font-medium tracking-wide text-white transition duration-200 bg-gray-900 rounded-lg hover:bg-gray-800"
+    className="inline-flex items-center justify-center h-10 font-medium tracking-wide text-white bg-gray-900 rounded-lg w-52 transition duration-200 hover:bg-gray-800"
   >
     {isLoading ? (
       <svg

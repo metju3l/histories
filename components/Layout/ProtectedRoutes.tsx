@@ -1,5 +1,6 @@
 import { Redirect } from '@components/Router';
 import { useCheckIfLoggedQuery } from '@graphql/user.graphql';
+import React from 'react';
 
 const ProtectedRoutes: React.FC<{
   dontRedirectUnverified?: boolean;

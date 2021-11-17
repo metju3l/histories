@@ -1,9 +1,9 @@
-import React from 'react';
-import { useCheckIfLoggedQuery, useIsLoggedQuery } from '@graphql/user.graphql';
-import Suggestions from '@components/MainPage/RightColumn/Suggestions';
-import { usePersonalizedPostsQuery } from '@graphql/post.graphql';
-import { PostCard } from '@components/PostCard';
 import { Layout } from '@components/Layout';
+import Suggestions from '@components/MainPage/RightColumn/Suggestions';
+import { PostCard } from '@components/PostCard';
+import { usePersonalizedPostsQuery } from '@graphql/post.graphql';
+import { useCheckIfLoggedQuery, useIsLoggedQuery } from '@graphql/user.graphql';
+import React from 'react';
 
 const Index: React.FC = () => {
   const logged = useIsLoggedQuery();
@@ -16,17 +16,17 @@ const Index: React.FC = () => {
 
   return (
     <Layout title="hiStories">
-      <div className="flex max-w-screen-xl m-auto">
-        <div className="w-[30%] p-[1em] hidden xl:block">
+      <div className="flex m-auto max-w-screen-xl">
+        <div className="hidden w-[30%] p-[1em] xl:block">
           <div className="sticky top-20"></div>
         </div>
-        <div className="xl:w-[40%] md:w-[60%] w-full p-[1em] mt-2">
+        <div className="w-full mt-2 xl:w-[40%] md:w-[60%] p-[1em]">
           <PersonalizedPosts logged={logged} />
         </div>
         {/* RIGHT COLUMN */}
-        <div className="w-[40%] xl:w-[30%] p-[1em] hidden md:block">
+        <div className="hidden w-[40%] xl:w-[30%] p-[1em] md:block">
           <div className="sticky top-20">
-            <div className="w-full p-[1em] rounded-lg text-text-light mb-8 ">
+            <div className="w-full mb-8 rounded-lg p-[1em] text-text-light">
               <Suggestions logged={logged.data} />
             </div>
           </div>

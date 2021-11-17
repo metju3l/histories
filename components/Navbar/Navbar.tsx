@@ -1,30 +1,30 @@
-import React, { useState } from 'react';
-import Link from 'next/link';
-import useDarkMode from '@lib/hooks/useDarkmode';
-import LogOut from '@lib/functions/LogOut';
+import BackIcon from '@components/Icons/BackIcon';
+import BellIcon from '@components/Icons/BellIcon';
+import ExploreIcon from '@components/Icons/ExploreIcon';
+import HomeIcon from '@components/Icons/HomeIcon';
+import LoginIcon from '@components/Icons/LoginIcon';
+import LogOutIcon from '@components/Icons/LogOutIcon';
+import MapIcon from '@components/Icons/MapIcon';
+import MenuIcon from '@components/Icons/MenuIcon';
+import MoonIcon from '@components/Icons/MoonIcon';
+import NextIcon from '@components/Icons/NextIcon';
+import PlusIcon from '@components/Icons/PlusIcon';
+import SettingsIcon from '@components/Icons/SettingsIcon';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
-import Image from 'next/image';
-import styles from './Navbar.module.scss';
-import transition from './transitions/primary.module.scss';
-import transitionSecondary from './transitions/secondary.module.scss';
-import { CSSTransition } from 'react-transition-group';
-
+import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
+import LogOut from '@lib/functions/LogOut';
+import useDarkMode from '@lib/hooks/useDarkmode';
 // IMAGES
 import FullSizeLogo from '@public/logo/FullSizeLogo.svg';
 import MinimalLogo from '@public/logo/MinimalLogo.svg';
-import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
-import PlusIcon from '@components/Icons/PlusIcon';
-import BellIcon from '@components/Icons/BellIcon';
-import MenuIcon from '@components/Icons/MenuIcon';
-import SettingsIcon from '@components/Icons/SettingsIcon';
-import MoonIcon from '@components/Icons/MoonIcon';
-import BackIcon from '@components/Icons/BackIcon';
-import LoginIcon from '@components/Icons/LoginIcon';
-import LogOutIcon from '@components/Icons/LogOutIcon';
-import NextIcon from '@components/Icons/NextIcon';
-import ExploreIcon from '@components/Icons/ExploreIcon';
-import HomeIcon from '@components/Icons/HomeIcon';
-import MapIcon from '@components/Icons/MapIcon';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useState } from 'react';
+import { CSSTransition } from 'react-transition-group';
+
+import styles from './Navbar.module.scss';
+import transition from './transitions/primary.module.scss';
+import transitionSecondary from './transitions/secondary.module.scss';
 
 const Navbar: React.FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
@@ -225,13 +225,13 @@ const DropdownMenu: React.FC<{ data: any; setTheme: any; theme: string }> = ({
             Dark mode
           </a>
           <DropdownItem onClick={() => setTheme('dark')}>
-            <div className="w-full flex justify-between ml-8 items-center cursor-pointer">
+            <div className="flex items-center justify-between w-full ml-8 cursor-pointer">
               On
               <input type="radio" checked={theme === 'dark'} />
             </div>
           </DropdownItem>{' '}
           <DropdownItem onClick={() => setTheme('light')}>
-            <div className="w-full flex justify-between ml-8 items-center cursor-pointer">
+            <div className="flex items-center justify-between w-full ml-8 cursor-pointer">
               Off
               <input type="radio" checked={theme === 'light'} />
             </div>

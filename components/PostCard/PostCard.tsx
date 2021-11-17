@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import React, { FC, useEffect, useRef, useState } from 'react';
+import { Comment } from '@components/Comment';
 import {
   useCreateCommentMutation,
   useDeleteMutation,
@@ -10,14 +9,15 @@ import {
   useUnfollowMutation,
   useUnlikeMutation,
 } from '@graphql/relations.graphql';
-import { FiSend } from 'react-icons/fi';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import { Avatar, Button, Modal } from '@nextui-org/react';
-import { toast } from 'react-hot-toast';
-import { MdPhotoCamera } from 'react-icons/md';
-import { AiFillLike, AiOutlineComment, AiOutlineMore } from 'react-icons/ai';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Comment } from '@components/Comment';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { AiFillLike, AiOutlineComment, AiOutlineMore } from 'react-icons/ai';
+import { FiSend } from 'react-icons/fi';
+import { MdPhotoCamera } from 'react-icons/md';
 import TimeAgo from 'react-timeago';
 
 const PostCard: FC<{
@@ -141,10 +141,10 @@ const PostCard: FC<{
         </Modal>
       ) : modalScreen === 'report' ? (
         <Modal aria-labelledby="modal-title" {...modalProps}>
-          <div className="w-full py-4 relative border-b border-[#DADBDA]">
+          <div className="relative w-full py-4 border-b border-[#DADBDA]">
             <a className="text-center">Report</a>
             <button
-              className="absolute top-1 right-4 text-3xl font-semibold"
+              className="absolute text-3xl font-semibold top-1 right-4"
               onClick={modalProps.onClose}
             >
               x
@@ -159,9 +159,9 @@ const PostCard: FC<{
         <></>
       )}
 
-      <div className="w-full m-auto bg-white dark:bg-[#343233] border-gray-[#DADBDA] border rounded-lg text-text-light dark:text-white mb-8">
-        <div className="w-full flex space-between p-[1em]">
-          <a className="w-full gap-[10px] h-18 flex items-center">
+      <div className="w-full m-auto mb-8 bg-white border rounded-lg dark:bg-[#343233] border-gray-[#DADBDA] text-text-light dark:text-white">
+        <div className="flex w-full space-between p-[1em]">
+          <a className="flex items-center w-full gap-[10px] h-18">
             <Link href={`/${data!.post.author.username}`}>
               <>
                 <Avatar
@@ -172,7 +172,7 @@ const PostCard: FC<{
                   )}
                 />
                 <div>
-                  <a className="font-semibold text-lg">
+                  <a className="text-lg font-semibold">
                     {data!.post.author.firstName} {data!.post.author.lastName}
                   </a>
                   <a className="flex gap-[10px]">
@@ -190,7 +190,7 @@ const PostCard: FC<{
         <div className="w-full">
           <p className="p-3">
             {data.post.description}
-            <a className="flex gap-[10px] mt-2">
+            <a className="flex mt-2 gap-[10px]">
               <MdPhotoCamera size={24} />
               {postDate}
             </a>
@@ -206,7 +206,7 @@ const PostCard: FC<{
               {'>'}
             </button>
           )}
-          <div className="flex py-1 px-[10%] mt-4 w-full justify-between">
+          <div className="flex justify-between w-full py-1 mt-4 px-[10%]">
             <div
               className="flex"
               onClick={async () => {
@@ -230,7 +230,7 @@ const PostCard: FC<{
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
+                className="w-6 h-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke={localLikeState ?? data.post.liked ? '#FF0000' : '#000'}
@@ -243,7 +243,7 @@ const PostCard: FC<{
                 />
               </svg>
               <span className="flex pl-2">
-                <a className="font-semibold pr-1">{data.post.likes.length}</a>{' '}
+                <a className="pr-1 font-semibold">{data.post.likes.length}</a>{' '}
                 {data.post.likes.length === 1 ? 'like' : 'likes'}
               </span>
             </div>
@@ -264,11 +264,11 @@ const PostCard: FC<{
                 {data!.post.hashtags.map((hashtag: any) => ` ${hashtag.name} `)}
               </div>
             )}
-            <div className="border-t border-gray-300 mt-2 pt-2">
+            <div className="pt-2 mt-2 border-t border-gray-300">
               {isLoggedQuery?.data?.isLogged && (
                 <>
                   <textarea
-                    className="border-2 border-gray-300 rounded-xl bg-gray-100 p-2"
+                    className="p-2 bg-gray-100 border-2 border-gray-300 rounded-xl"
                     onChange={(e: any) => setCommentContent(e.target.value)}
                     value={commentContent}
                     // @ts-ignore

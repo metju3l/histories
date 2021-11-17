@@ -1,20 +1,19 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
-import { useIsLoggedQuery } from '@graphql/user.graphql';
-import { useCreatePostMutation } from '@graphql/post.graphql';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-import MapGL, {
-  Marker,
-  NavigationControl,
-  GeolocateControl,
-} from 'react-map-gl';
-import router from 'next/router';
-import { toast } from 'react-hot-toast';
-import { Search } from '@components/MainPage';
 import { Layout } from '@components/Layout';
 import SubmitButton from '@components/LoadingButton/SubmitButton';
- 
-import Dropzone, { useDropzone } from 'react-dropzone';
+import { Search } from '@components/MainPage';
+import { useCreatePostMutation } from '@graphql/post.graphql';
+import { useIsLoggedQuery } from '@graphql/user.graphql';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import router from 'next/router';
 import { useRouter } from 'next/router';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import Dropzone, { useDropzone } from 'react-dropzone';
+import { toast } from 'react-hot-toast';
+import MapGL, {
+  GeolocateControl,
+  Marker,
+  NavigationControl,
+} from 'react-map-gl';
 
 const DropZoneComponent = ({
   setFiles,
@@ -165,7 +164,7 @@ const Login: FC = () => {
   if (!data!.isLogged) router.replace('/');
   return (
     <Layout title="Create post | hiStories">
-      <div className="max-w-[27rem] m-auto p-10">
+      <div className="p-10 m-auto max-w-[27rem]">
         <div className="absolute z-10 p-[10px]">
           <Search setSearchCoordinates={setSearchCoordinates} />
         </div>
@@ -226,12 +225,12 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
           {tags.map((tag, index) => {
             return (
               <div
-                className="bg-indigo-500 text-white p-2 rounded-xl"
+                className="p-2 text-white bg-indigo-500 rounded-xl"
                 key={index}
               >
                 #{tag}
                 <button
-                  className="text-red-300 ml-4"
+                  className="ml-4 text-red-300"
                   onClick={() => {
                     const newTags = tags.filter((x) => x !== tag);
                     setTags(newTags);
@@ -279,7 +278,7 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
                 <Field
                   name="photoDate"
                   type="date"
-                  className="shadow appearance-none border rounded-lg w-full h-10 px-3 mt-2 mb-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full h-10 px-3 mt-2 mb-1 leading-tight text-gray-700 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
                   // disable selecting date from future in calendar pop-up
                   max={new Date().toISOString().split('T')[0]}
                 />
@@ -291,14 +290,14 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
                 <Field
                   name="description"
                   type="text"
-                  className="shadow appearance-none border rounded-lg w-full h-10 px-3 mt-2 mb-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="w-full h-10 px-3 mt-2 mb-1 leading-tight text-gray-700 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
                 />
 
                 <br />
               </div>
               <label>hashtags</label>
               <input
-                className="shadow appearance-none border rounded-lg w-full h-10 px-3 mt-2 mb-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="w-full h-10 px-3 mt-2 mb-1 leading-tight text-gray-700 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
                 name="hashtags"
                 type="text"
                 value={newTag}

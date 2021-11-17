@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-
+import { Layout } from '@components/Layout';
+import { useMapPostsQuery } from '@graphql/geo.graphql';
+import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { Search } from 'components/MainPage';
 import { MapGL } from 'components/Map';
-import { useIsLoggedQuery } from '@graphql/user.graphql';
-import { useMapPostsQuery } from '@graphql/geo.graphql';
-import { Layout } from '@components/Layout';
+import React, { useEffect, useState } from 'react';
 
 const MapPage: React.FC = () => {
   const { data, loading, error } = useIsLoggedQuery();

@@ -1,3 +1,5 @@
+import React from 'react';
+
 const CameraIcon: React.FC<{ stroke?: string; className?: string }> = ({
   stroke,
   className,

@@ -1,3 +1,5 @@
+import React from 'react';
+
 const ChevronIcon: React.FC<{
   stroke?: string;
   fill?: string;

@@ -1,47 +1,48 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import ReactMapGL, {
-  Marker,
-  NavigationControl,
-  GeolocateControl,
-  Source,
-  FlyToInterpolator,
-  Layer,
-} from 'react-map-gl';
-import { usePathsQuery, usePlaceQuery } from '@graphql/geo.graphql';
-import Image from 'next/image';
-import useSuperCluster from 'use-supercluster';
-import Gallery from 'react-photo-gallery';
-import { Avatar, Button } from '@nextui-org/react';
-import { useCreateCommentMutation, usePostQuery } from '@graphql/post.graphql';
-import TimeAgo from 'react-timeago';
 import { Comment } from '@components/Comment';
-import { DotsHorizontalIcon } from '@heroicons/react/solid';
-import { useIsLoggedQuery } from '@graphql/user.graphql';
+import CameraIcon from '@components/Icons/CameraIcon';
+import ChevronIcon from '@components/Icons/Chevron';
+import MarkerIcon from '@components/Icons/MarkerIcon';
+import ShareIcon from '@components/Icons/ShareIcon';
 import { Menu, Modal } from '@components/Modal';
-import { toast } from 'react-hot-toast';
+import { PostCard } from '@components/PostCard';
+import { TimeLine } from '@components/TimeLine';
+import { usePathsQuery, usePlaceQuery } from '@graphql/geo.graphql';
+import { useCreateCommentMutation, usePostQuery } from '@graphql/post.graphql';
+import { useDeleteMutation } from '@graphql/post.graphql';
 import {
   useLikeMutation,
   useReportMutation,
   useUnfollowMutation,
   useUnlikeMutation,
 } from '@graphql/relations.graphql';
-import UpdateUrl from './UpdateUrl';
-import { PostCard } from '@components/PostCard';
+import { useIsLoggedQuery } from '@graphql/user.graphql';
+import { DotsHorizontalIcon } from '@heroicons/react/solid';
+import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
+import { Viewport } from '@lib/types/viewport';
+import { Avatar, Button } from '@nextui-org/react';
+import { StringValueNode } from 'graphql';
+import Image from 'next/image';
 import image from 'next/image';
 import Link from 'next/link';
-import { Viewport } from '@lib/types/viewport';
-import { StringValueNode } from 'graphql';
-import CameraIcon from '@components/Icons/CameraIcon';
-import ShareIcon from '@components/Icons/ShareIcon';
-import MarkerIcon from '@components/Icons/MarkerIcon';
-import ChevronIcon from '@components/Icons/Chevron';
-import { useDeleteMutation } from '@graphql/post.graphql';
+import { useRouter } from 'next/router';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { AiFillLike, AiOutlineComment, AiOutlineMore } from 'react-icons/ai';
 import { FiSend } from 'react-icons/fi';
 import { MdPhotoCamera } from 'react-icons/md';
-import { AiFillLike, AiOutlineComment, AiOutlineMore } from 'react-icons/ai';
-import { useRouter } from 'next/router';
-import { TimeLine } from '@components/TimeLine';
-import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
+import ReactMapGL, {
+  FlyToInterpolator,
+  GeolocateControl,
+  Layer,
+  Marker,
+  NavigationControl,
+  Source,
+} from 'react-map-gl';
+import Gallery from 'react-photo-gallery';
+import TimeAgo from 'react-timeago';
+import useSuperCluster from 'use-supercluster';
+
+import UpdateUrl from './UpdateUrl';
 
 type PlaceProps = {
   id: number;
@@ -226,7 +227,7 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
 
   return (
     <>
-      <div className="w-full h-full flex">
+      <div className="flex w-full h-full">
         {openPlace && (
           <div className={`relative ${placeMinimized ? 'w-0' : 'w-[50%]'}`}>
             <PlaceWindow
@@ -236,7 +237,7 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
               viewport={viewport}
             />
             <button
-              className="absolute -right-6 top-1/2 -translate-y-1/2 z-20 py-4 pl-2 bg-white rounded-l rounded-xl shadow-custom"
+              className="absolute z-20 py-4 pl-2 bg-white rounded-l -right-6 top-1/2 -translate-y-1/2 rounded-xl shadow-custom"
               onClick={() => setPlaceMinimized(!placeMinimized)}
             >
               <ChevronIcon
@@ -309,7 +310,7 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
                   longitude={longitude}
                 >
                   <div
-                    className="text-white bg-red-500 h-20 w-20 rounded-full py-[2em] text-center "
+                    className="w-20 h-20 text-center text-white bg-red-500 rounded-full py-[2em]"
                     onClick={() => {
                       const expansionZoom = Math.min(
                         supercluster.getClusterExpansionZoom(cluster.id),
@@ -346,7 +347,7 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
           })}
         </ReactMapGL>
         {openPlace === null && (
-          <div className="absolute left-[10vw] top-20 z-50 w-[80vw]">
+          <div className="absolute z-50 left-[10vw] top-20 w-[80vw]">
             <TimeLine
               domain={[1000, new Date().getFullYear()]}
               setTimeLimitation={setTimeLimitation}
@@ -363,13 +364,13 @@ const MapPlace = ({ place, onClick }: { place: any; onClick: () => void }) => {
     <Marker latitude={place.latitude} longitude={place.longitude}>
       <div
         onClick={onClick}
-        className="-translate-y-1/2 -translate-x-1/2 cursor-pointer"
+        className="cursor-pointer -translate-y-1/2 -translate-x-1/2"
       >
         <Image
           src={place.icon ?? place.posts[0].url[0]}
           width={60}
           height={60}
-          className="rounded-full object-cover"
+          className="object-cover rounded-full"
           alt="Picture on map"
         />
       </div>
@@ -396,7 +397,7 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
 
   if (loading || isLoggedQuery.loading)
     return (
-      <div className="w-full h-full bg-white relative z-30"> loading </div>
+      <div className="relative z-30 w-full h-full bg-white"> loading </div>
     );
   if (error || isLoggedQuery.error || data?.place === undefined)
     return <div className="w-full h-full"> error </div>;
@@ -405,9 +406,9 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
 
   return (
     <>
-      <div className="relative bg-white z-30 w-full h-full overflow-y-auto">
+      <div className="relative z-30 w-full h-full overflow-y-auto bg-white">
         {/* BANNER */}
-        <div className="w-full h-80 bg-green-700">
+        <div className="w-full bg-green-700 h-80">
           {/* @ts-ignore */}
           {data.place.posts[0]?.url[0] && (
             <>
@@ -428,13 +429,13 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
             </>
           )}
         </div>
-        <h2 id="PLACE_NAME" className="font-semibold text-2xl px-2 pt-1">
+        <h2 id="PLACE_NAME" className="px-2 pt-1 text-2xl font-semibold">
           {data.place.name.length > 0 ? data.place.name : 'Place on map'}
         </h2>
-        <div className="border-b border-[#E6EAEC] px-2 pb-2 pt-1 mb-2">
+        <div className="px-2 pt-1 pb-2 mb-2 border-b border-[#E6EAEC]">
           <span
             id="SHOW_ON_MAP"
-            className="text-sm text-[#1872E9] flex items-center cursor-pointer"
+            className="flex items-center text-sm cursor-pointer text-[#1872E9]"
             onClick={() => {
               setViewport({
                 ...viewport,
@@ -447,10 +448,10 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
               });
             }}
           >
-            <MarkerIcon className="h-6 w-6" fill="#1872E9" />
+            <MarkerIcon className="w-6 h-6" fill="#1872E9" />
             Show place on map
           </span>
-          <h3 id="NUMBER_OF_POSTS" className="text-[#1872E9] px-2">
+          <h3 id="NUMBER_OF_POSTS" className="px-2 text-[#1872E9]">
             {data.place.posts.length} posts
           </h3>
         </div>
@@ -460,7 +461,7 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
             ? data.place.description
             : "This place doesn't have any description yet, if you want to add description please contact admin"}
         </p>
-        <div className="w-full flex my-2">
+        <div className="flex w-full my-2">
           {/* createPost link with place coordinates in query params */}
           <Link
             href={{
@@ -468,8 +469,8 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
               query: { lat: data.place.latitude, lng: data.place.longitude },
             }}
           >
-            <a className="m-auto py-1 px-3 rounded-full flex border border-[#DADDE1] text-[#3C4043] font-semibold">
-              <CameraIcon className="h-6 w-6 mr-1" stroke="#1872E9" />
+            <a className="flex px-3 py-1 m-auto font-semibold border rounded-full border-[#DADDE1] text-[#3C4043]">
+              <CameraIcon className="w-6 h-6 mr-1" stroke="#1872E9" />
               Add photo of this place
             </a>
           </Link>
@@ -482,7 +483,7 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
             onClick: () => setOpenPlace(place.id),
           }))}
         />
-        <div className="grid grid-cols-2 gap-2 w-full p-2">
+        <div className="w-full p-2 grid grid-cols-2 gap-2">
           {
             // @ts-ignore
             data.place.posts.map((post) => (
@@ -514,13 +515,13 @@ const Carousel: React.FC<CarouselProps> = ({ items }) => {
 
   return (
     <div className="relative w-full h-80">
-      <div className="w-full h-72 flex overflow-x-auto relative">
+      <div className="relative flex w-full overflow-x-auto h-72">
         {items.map((item, index) => (
           <img
             onClick={item.onClick}
             key={index}
             src={item.preview}
-            className="block w-[14rem] h-auto object-cover p-1 rounded-2xl"
+            className="block object-cover h-auto p-1 w-[14rem] rounded-2xl"
             alt="Place preview"
           />
         ))}
@@ -640,10 +641,10 @@ const MinimalPostCard: FC<{
         </Modal>
       ) : modalScreen === 'report' ? (
         <Modal aria-labelledby="modal-title" {...modalProps}>
-          <div className="w-full py-4 relative border-b border-[#DADBDA]">
+          <div className="relative w-full py-4 border-b border-[#DADBDA]">
             <a className="text-center">Report</a>
             <button
-              className="absolute top-1 right-4 text-3xl font-semibold"
+              className="absolute text-3xl font-semibold top-1 right-4"
               onClick={modalProps.onClose}
             >
               x
@@ -658,9 +659,9 @@ const MinimalPostCard: FC<{
         <></>
       )}
 
-      <div className="w-full m-auto bg-white dark:bg-[#343233] border-gray-[#DADBDA] border rounded-lg text-text-light dark:text-white mb-8">
-        <div className="w-full flex space-between p-[1em]">
-          <a className="w-full gap-[10px] h-18 flex items-center">
+      <div className="w-full m-auto mb-8 bg-white border rounded-lg dark:bg-[#343233] border-gray-[#DADBDA] text-text-light dark:text-white">
+        <div className="flex w-full space-between p-[1em]">
+          <a className="flex items-center w-full gap-[10px] h-18">
             <Link href={`/${data!.post.author.username}`}>
               <>
                 <Avatar
@@ -671,7 +672,7 @@ const MinimalPostCard: FC<{
                   )}
                 />
                 <div>
-                  <a className="font-semibold text-lg">
+                  <a className="text-lg font-semibold">
                     {data!.post.author.firstName} {data!.post.author.lastName}
                   </a>
                   <a className="flex gap-[10px]">
@@ -682,7 +683,7 @@ const MinimalPostCard: FC<{
             </Link>
           </a>
           <p className="p-3 w-[200px]">
-            <a className="flex gap-[10px] mt-2">
+            <a className="flex mt-2 gap-[10px]">
               <MdPhotoCamera size={24} />
               {postDate}
             </a>

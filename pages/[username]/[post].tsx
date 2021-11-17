@@ -1,5 +1,5 @@
-import Head from 'next/head';
 import { NextPageContext } from 'next';
+import Head from 'next/head';
 import React, { FC } from 'react';
 
 const user: FC<{ post: string }> = ({ post }) => {

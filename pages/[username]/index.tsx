@@ -1,25 +1,23 @@
-import React, { FC, useState } from 'react';
-import { NextPageContext } from 'next';
-import Router from 'next/router';
-import Head from 'next/head';
-import Image from 'next/image';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-
+import { Layout } from '@components/Layout';
+import { LoadingButton } from '@components/LoadingButton';
+import SubmitButton from '@components/LoadingButton/SubmitButton';
+import { AccountCreatedCard, PostCard } from '@components/PostCard';
 import {
   useFollowMutation,
   useUnfollowMutation,
 } from '@graphql/relations.graphql';
 import { useUpdateProfileMutation } from '@graphql/user.graphql';
 import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
-
-import { Navbar } from 'components/Navbar';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import { Button } from '@nextui-org/react';
+import { Navbar } from 'components/Navbar';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { NextPageContext } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import Router from 'next/router';
+import React, { FC, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { AccountCreatedCard, PostCard } from '@components/PostCard';
-import { LoadingButton } from '@components/LoadingButton';
-import { Layout } from '@components/Layout';
-import SubmitButton from '@components/LoadingButton/SubmitButton';
 
 const User: FC<{ username: string }> = ({ username }) => {
   const { data, loading, error, refetch } = useGetUserInfoQuery({
@@ -48,9 +46,9 @@ const User: FC<{ username: string }> = ({ username }) => {
   return (
     <Layout title={`${data.user.username} | hiStories`}>
       <div className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
-        <main className="flex max-w-screen-xl m-auto">
+        <main className="flex m-auto max-w-screen-xl">
           <div className="w-full">
-            <div className="relative rounded-full w-36 h-36 m-auto">
+            <div className="relative m-auto rounded-full w-36 h-36">
               <Image
                 src={GeneratedProfileUrl(
                   data.user.firstName,
@@ -64,7 +62,7 @@ const User: FC<{ username: string }> = ({ username }) => {
               />
             </div>
 
-            <h2 className="text-center text-2xl py-4">
+            <h2 className="py-4 text-2xl text-center">
               {`${data.user.firstName} ${data.user.lastName}`}
               {new Date().getTime() - data.user.createdAt < 129600000 && (
                 <Button auto flat color="#ff4ecd">
@@ -75,7 +73,7 @@ const User: FC<{ username: string }> = ({ username }) => {
             {isLogged && logged.data?.isLogged!.id !== data.user.id && (
               <FollowButton data={data} refetch={refetch} />
             )}
-            <div className="text-center text-md py-4 w-[60%] m-auto">
+            <div className="py-4 m-auto text-center text-md w-[60%]">
               {isLogged && logged.data?.isLogged!.id === data.user.id ? (
                 <>
                   {!editMode ? (
@@ -212,7 +210,7 @@ const Input: FC<{
       <label htmlFor={name}>{label}</label>
       <Field
         type={type}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+        className="w-full px-3 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
         name={name}
         autoComplete={autoComplete}
       />

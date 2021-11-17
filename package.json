@@ -50,8 +50,8 @@
     "aws-sdk": "^2.1029.0",
     "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
-    "concurrently": "^6.4.0",
     "blurhash": "^1.1.4",
+    "concurrently": "^6.4.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "formik": "^2.2.9",
@@ -93,9 +93,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
- 
     "@babel/preset-env": "^7.16.4",
- 
     "@graphql-codegen/cli": "^2.3.0",
     "@graphql-codegen/import-types-preset": "^2.1.7",
     "@graphql-codegen/typescript": "^2.4.0",
@@ -122,6 +120,8 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.27.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint-plugin-tailwind": "^0.2.1",
     "jest": "^27.3.1",
     "jest-expect-message": "^1.0.2",
     "jest-extended": "^1.1.0",

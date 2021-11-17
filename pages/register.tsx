@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import { Layout } from '@components/Layout';
+import SubmitButton from '@components/LoadingButton/SubmitButton';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
-import router from 'next/router';
-import Link from 'next/link';
 import { useCreateUserMutation } from '@graphql/user.graphql';
-import { useTranslation } from 'react-i18next';
+import Link from 'next/link';
+import router from 'next/router';
+import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import {
   ValidateEmail,
   ValidateName,
   ValidatePassword,
   ValidateUsername,
 } from 'shared/validation';
-import { Layout } from '@components/Layout';
-import SubmitButton from '@components/LoadingButton/SubmitButton';
 
 const Register: React.FC = () => {
   const [createUser] = useCreateUserMutation();
@@ -39,7 +39,7 @@ const Register: React.FC = () => {
 
   return (
     <Layout redirectLogged title={'sign up | hiStories'}>
-      <div className="max-w-[27rem] m-auto p-10">
+      <div className="p-10 m-auto max-w-[27rem]">
         <form
           onSubmit={async (event) => {
             event.preventDefault();
@@ -156,7 +156,7 @@ const Register: React.FC = () => {
           <label className="inline-flex items-center mt-3">
             <input
               type="checkbox"
-              className="form-checkbox h-5 w-5 text-orange-600 rounded-lg"
+              className="w-5 h-5 text-orange-600 rounded-lg form-checkbox"
               checked={formValues.emailSubscription}
               onClick={() =>
                 setFormValues({
@@ -172,7 +172,7 @@ const Register: React.FC = () => {
             <SubmitButton isLoading={isLoading} text="Sign up" />
           </div>
           <Link href="/login">
-            <a className="underline pl-2">login to an existing account</a>
+            <a className="pl-2 underline">login to an existing account</a>
           </Link>
         </form>
       </div>
@@ -182,10 +182,10 @@ const Register: React.FC = () => {
 
 const FormInput = (props: any) => {
   return (
-    <div className="w-full mb-6 h-12">
+    <div className="w-full h-12 mb-6">
       <input
         {...props}
-        className="shadow appearance-none border rounded-lg w-full h-10 px-3 mt-2 mb-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        className="w-full h-10 px-3 mt-2 mb-1 leading-tight text-gray-700 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
         required={true}
         type={props.type ?? 'text'}
       />

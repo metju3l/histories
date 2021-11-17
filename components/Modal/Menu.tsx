@@ -1,6 +1,6 @@
-import React from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import Link from 'next/link';
+import React from 'react';
 
 type MenuProps = {
   items: { title: string; onClick?: () => void; href?: string }[];
@@ -19,17 +19,17 @@ const MenuComponent: React.FC<MenuProps> = ({ items, children }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute z-[100] right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-xl shadow-2xl  focus:outline-none p-2">
+        <Menu.Items className="absolute right-0 w-56 p-2 mt-2 bg-white shadow-2xl z-[100] origin-top-right divide-y divide-gray-100 rounded-xl focus:outline-none">
           {items.map((item, index) => (
             <Menu.Item as="div" key={index} onClick={item.onClick}>
               {item.href ? (
                 <Link href={item.href} passHref>
-                  <button className="p-2 cursor-pointer hover:bg-[#EEF3F5] rounded-xl w-full">
+                  <button className="w-full p-2 cursor-pointer hover:bg-[#EEF3F5] rounded-xl">
                     {item.title}
                   </button>
                 </Link>
               ) : (
-                <button className="p-2 cursor-pointer hover:bg-[#EEF3F5] rounded-xl w-full">
+                <button className="w-full p-2 cursor-pointer hover:bg-[#EEF3F5] rounded-xl">
                   <a className="w-full">{item.title}</a>
                 </button>
               )}

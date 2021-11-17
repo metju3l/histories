@@ -1,7 +1,9 @@
-import { Slider, Rail, Handles, Tracks, Ticks } from 'react-compound-slider';
+import React from 'react';
+import { Handles, Rail, Slider, Ticks, Tracks } from 'react-compound-slider';
+
 import Handle from './Handle';
-import Track from './Track';
 import Tick from './Tick';
+import Track from './Track';
 
 type TimelineProps = {
   domain: [number, number];

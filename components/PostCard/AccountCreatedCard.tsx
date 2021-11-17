@@ -11,7 +11,7 @@ const AccountCreatedCard = ({
   const time = new Date(date).toLocaleDateString('cs-cz');
 
   return (
-    <div className="w-full p-4 rounded-2xl text-black text-center shadow-sm border border-indigo-600">
+    <div className="w-full p-4 text-center text-black border border-indigo-600 rounded-2xl shadow-sm">
       <FaConnectdevelop size={64} className="m-auto" />
       {firstName} joined hiStories
       <br />

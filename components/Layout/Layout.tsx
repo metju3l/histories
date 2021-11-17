@@ -1,6 +1,7 @@
-import React from 'react';
 import { Navbar } from '@components/Navbar';
 import Head from 'next/head';
+import React from 'react';
+
 import ProtectedRoutes from './ProtectedRoutes';
 
 type LayoutProps = {

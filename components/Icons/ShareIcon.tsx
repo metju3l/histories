@@ -1,3 +1,5 @@
+import React from 'react';
+
 const ShareIcon: React.FC<{ stroke?: string; className?: string }> = ({
   stroke,
   className,

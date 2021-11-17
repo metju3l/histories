@@ -1,12 +1,12 @@
-import Head from 'next/head';
-import React, { FC } from 'react';
-import Image from 'next/image';
+import { Menu } from '@headlessui/react';
 import worldMap from '@public/worldMap.png';
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { FC } from 'react';
+import { AiFillGithub } from 'react-icons/ai';
 import { FaLanguage } from 'react-icons/fa';
 import { IoLogoWordpress } from 'react-icons/io';
-import { AiFillGithub } from 'react-icons/ai';
-import Link from 'next/link';
-import { Menu } from '@headlessui/react';
 
 const Home: FC = () => {
   return (
@@ -19,9 +19,9 @@ const Home: FC = () => {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
       </Head>
       <body className="font-inter ">
-        <ul className="bg-opacity-50 backdrop-filter text-white backdrop-blur-md bg-black w-full fixed top-0 z-20">
+        <ul className="fixed top-0 z-20 w-full text-white bg-black bg-opacity-50 backdrop-filter backdrop-blur-md">
           <Link href="/" passHref>
-            <li className="active py-1.5 px-4 ml-8 float-left">
+            <li className="float-left px-4 ml-8 active py-1.5">
               <a className="text-center display-block">
                 <IoLogoWordpress size={42} />{' '}
                 {/* hope that oonce here will be some normal logo xdd :(*/}
@@ -29,42 +29,42 @@ const Home: FC = () => {
             </li>
           </Link>
           <Link href="/" passHref>
-            <li className="active py-4 px-4 float-left">
+            <li className="float-left px-4 py-4 active">
               <a className="text-center display-block">About</a>
             </li>
           </Link>
           <Link href="/" passHref>
-            <li className="active py-4 px-4 float-left">
+            <li className="float-left px-4 py-4 active">
               <a className="text-center display-block">Idea behind this</a>
             </li>
           </Link>
           <Link href="/" passHref>
-            <li className="active py-4 px-4 float-left">
+            <li className="float-left px-4 py-4 active">
               <a className="text-center">Explore map</a>
             </li>
           </Link>{' '}
           <Link href="/" passHref>
-            <li className="active py-4 px-4 float-left">
+            <li className="float-left px-4 py-4 active">
               <a className="text-center">Development</a>
             </li>
           </Link>
-          <li className="active py-1 mr-8 float-right">
+          <li className="float-right py-1 mr-8 active">
             <a className="text-center">
               <Menu>
                 <Menu.Button>
                   <FaLanguage size={42} />
                 </Menu.Button>
-                <Menu.Items className="shadow-custom absolute bg-white text-blue-500 rounded-xl px-4 py-2 right-8 top-18 mt-2 display-flex flex-col">
-                  <div className="py-1.5 hover:text-green-400 cursor-pointer">
+                <Menu.Items className="absolute flex-col px-4 py-2 mt-2 text-blue-500 bg-white shadow-custom rounded-xl right-8 top-18 display-flex">
+                  <div className="cursor-pointer py-1.5 hover:text-green-400">
                     Česky
                   </div>
-                  <div className="py-1.5 hover:text-green-400 cursor-pointer">
+                  <div className="cursor-pointer py-1.5 hover:text-green-400">
                     Slovensky
                   </div>
-                  <div className="py-1.5 hover:text-green-400 cursor-pointer">
+                  <div className="cursor-pointer py-1.5 hover:text-green-400">
                     English
                   </div>
-                  <div className="py-1.5 hover:text-green-400 cursor-pointer">
+                  <div className="cursor-pointer py-1.5 hover:text-green-400">
                     Español
                   </div>
                 </Menu.Items>
@@ -73,34 +73,34 @@ const Home: FC = () => {
           </li>
         </ul>
         <div>
-          <section className="h-screen bg-darkGray pt-64">
-            <h1 className="text-center font-bold text-white text-9xl m-auto w-2/3">
+          <section className="h-screen pt-64 bg-darkGray">
+            <h1 className="w-2/3 m-auto font-bold text-center text-white text-9xl">
               hiStories
             </h1>
-            <h2 className="text-center text-lightGray text-4xl w-2/3 m-auto ">
+            <h2 className="w-2/3 m-auto text-4xl text-center text-lightGray">
               share history with the whole world idk just placeholder
             </h2>
           </section>{' '}
-          <section className="min-h-screen bg-white pt-64">
-            <h1 className="text-center font-bold text-black text-9xl m-auto w-2/3">
+          <section className="min-h-screen pt-64 bg-white">
+            <h1 className="w-2/3 m-auto font-bold text-center text-black text-9xl">
               A New Kind of Social site
             </h1>
-            <h2 className="text-center text-lightGray font-bold text-4xl font w-2/3 m-auto ">
+            <h2 className="w-2/3 m-auto text-4xl font-bold text-center text-lightGray font">
               Lorem ipsum, dolor sit amet consectetur adipisicing elit.
               Consequatur nulla, fuga
             </h2>
-            <p className="text-center text-lightGray text-xl w-2/3 m-auto">
+            <p className="w-2/3 m-auto text-xl text-center text-lightGray">
               More Lorem ipsum, dolor sit amet consectetur adipisicing elit.
               Totam, obcaecati aut sunt sequi tempora provident iste accusantium
               ea vitae ipsam quas veritatis voluptates molestias aperiam, ab
               deleniti tempore eos minima adipisci! Quod quaerat labore odio
               quibusdam accusamus, in earum assumenda error, explicabo ullam
               <br />
-              <button className="text-white bg-blue-500 rounded-xl text-xl px-6 py-2 mt-12">
+              <button className="px-6 py-2 mt-12 text-xl text-white bg-blue-500 rounded-xl">
                 Browse photos
               </button>
             </p>
-            <div className="text-white text-center z-10 w-3/4 m-auto rounded-2xl text-xl py-48 mt-12 relative top-32">
+            <div className="relative z-10 w-3/4 py-48 m-auto mt-12 text-xl text-center text-white rounded-2xl top-32">
               <Link href="/" passHref>
                 <Image
                   src={worldMap}
@@ -112,17 +112,17 @@ const Home: FC = () => {
               </Link>
             </div>
           </section>
-          <section className="bg-black text-white pt-64 w-full pb-10 display-block">
-            <h1 className="text-center font-bold text-9xl m-auto w-2/3">
+          <section className="w-full pt-64 pb-10 text-white bg-black display-block">
+            <h1 className="w-2/3 m-auto font-bold text-center text-9xl">
               I already do not know what to write here
             </h1>
           </section>
         </div>
         <footer
-          className="text-white py-14 pl-12"
+          className="pl-12 text-white py-14"
           style={{ backgroundColor: '#141617' }}
         >
-          <div className="display-flex w-full">
+          <div className="w-full display-flex">
             <a className="mr-8">
               <Link href="/">Privacy Policy</Link>
             </a>

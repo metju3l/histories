@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import { useSuggestedUsersQuery } from '@graphql/user.graphql';
+import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { FC } from 'react';
 
 const Suggestions: FC<{ logged: any }> = ({ logged }) => {
   const { data, loading, error } = useSuggestedUsersQuery();
@@ -10,7 +10,7 @@ const Suggestions: FC<{ logged: any }> = ({ logged }) => {
   if (error)
     return (
       <>
-        <h2 className="font-semibold text-md text-gray-600">
+        <h2 className="font-semibold text-gray-600 text-md">
           {logged.isLogged ? 'Suggestions for You' : 'Popular users'}
         </h2>
         <div className="w-full pl-[20%] mt-[2rem]">something went wrong</div>
@@ -20,7 +20,7 @@ const Suggestions: FC<{ logged: any }> = ({ logged }) => {
   if (loading)
     return (
       <>
-        <h2 className="font-semibold text-md text-gray-600">
+        <h2 className="font-semibold text-gray-600 text-md">
           {logged.isLogged ? 'Suggestions for You' : 'Popular users'}
         </h2>
         <div className="w-full mt-[4rem]">
@@ -68,20 +68,20 @@ const Suggestions: FC<{ logged: any }> = ({ logged }) => {
 
   return (
     <>
-      <h2 className="font-semibold text-md text-gray-600">
+      <h2 className="font-semibold text-gray-600 text-md">
         {logged.isLogged ? 'Suggestions for You' : 'Popular users'}
       </h2>
-      <div className="flex flex-col ml-2 mt-6">
+      <div className="flex flex-col mt-6 ml-2">
         {data!.suggestedUsers &&
           data!.suggestedUsers.map((user: any) => {
             {
               console.log(user);
             }
             return (
-              <div className="flex mb-2 justify-between w-full" key={user.id}>
+              <div className="flex justify-between w-full mb-2" key={user.id}>
                 <Link href={`/${user!.username}`} passHref>
                   <a className="flex cursor-pointer">
-                    <a className="relative rounded-full w-8 h-8 mr-2 mt-2">
+                    <a className="relative w-8 h-8 mt-2 mr-2 rounded-full">
                       <Image
                         src={GeneratedProfileUrl(
                           user!.firstName,
@@ -95,11 +95,11 @@ const Suggestions: FC<{ logged: any }> = ({ logged }) => {
                       />
                     </a>
                     <div className="flex flex-col">
-                      <a className="font-semibold text-md text-black">
+                      <a className="font-semibold text-black text-md">
                         {' '}
                         {`${user!.firstName} ${user!.lastName}`}
                       </a>
-                      <a className="text-gray-600 text-sm">@{user!.username}</a>
+                      <a className="text-sm text-gray-600">@{user!.username}</a>
                     </div>
                   </a>
                 </Link>
