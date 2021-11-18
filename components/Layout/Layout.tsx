@@ -55,6 +55,7 @@ const Layout: React.FC<LayoutProps> = ({
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.jpg"></link>
         <meta name="theme-color" content="#17A6FA" />
       </Head>
+      <div className="absolute w-full bg-gray-900 h-[3.8rem]"> </div>
       <div className="sticky top-0 z-50 backdrop-filter backdrop-blur">
         <Navbar />
       </div>
