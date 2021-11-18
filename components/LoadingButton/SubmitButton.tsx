@@ -4,11 +4,15 @@ const SubmitButton: React.FC<{
   isLoading: boolean;
   text: string;
   onClick?: () => void;
-}> = ({ isLoading, text, onClick }) => (
+  colorClassname?: string;
+  backgroundClassname?: string;
+}> = ({ isLoading, text, onClick, backgroundClassname }) => (
   <button
     type={isLoading ? 'button' : 'submit'}
     onClick={onClick !== undefined ? onClick : () => {}}
-    className="inline-flex items-center justify-center h-10 font-medium tracking-wide text-white bg-gray-900 rounded-lg w-52 transition duration-200 hover:bg-gray-800"
+    className={`inline-flex items-center justify-center h-10 font-medium tracking-wide text-white  rounded-lg w-52 transition duration-200 ${
+      backgroundClassname ?? `bg-gray-900 hover:bg-gray-800`
+    }`}
   >
     {isLoading ? (
       <svg
