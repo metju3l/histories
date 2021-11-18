@@ -45,7 +45,7 @@ const User: FC<{ username: string }> = ({ username }) => {
       leftColumn={
         <div className="sticky top-40">
           {/* PROFILE PICTURE */}
-          <div className="absolute w-[10rem] h-[10rem] rounded-full shadow-2xl mt-[-40px] bg-gray-700">
+          <div className="absolute bg-gray-700 rounded-full shadow-2xl w-[10rem] h-[10rem] mt-[-40px]">
             <Image
               src={GeneratedProfileUrl(data.user.firstName, data.user.lastName)}
               layout="fill"
@@ -58,7 +58,7 @@ const User: FC<{ username: string }> = ({ username }) => {
           {/* PROFILE INFO */}
           <div className="pt-[9rem]">
             {/* NAME */}
-            <h1 className="flex items-center text-3xl text-white font-semibold">
+            <h1 className="flex items-center text-3xl font-semibold text-white">
               {data.user.firstName} {data.user.lastName}
               {/* NEW USER BADGE */}
               {new Date().getTime() - data.user.createdAt < 129600000 && (

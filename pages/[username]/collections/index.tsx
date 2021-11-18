@@ -1,3 +1,5 @@
+import 'react-dropdown/style.css';
+
 import { ProfileLayout } from '@components/Layout';
 import SubmitButton from '@components/LoadingButton/SubmitButton';
 import {
@@ -11,11 +13,10 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { NextPageContext } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import Dropdown from 'react-dropdown';
-import React, { FC, useState } from 'react';
-import { toast } from 'react-hot-toast';
-import 'react-dropdown/style.css';
 import { useRouter } from 'next/router';
+import React, { FC, useState } from 'react';
+import Dropdown from 'react-dropdown';
+import { toast } from 'react-hot-toast';
 
 const Collections: FC<{ username: string }> = ({ username }) => {
   const router = useRouter();
@@ -43,7 +44,7 @@ const Collections: FC<{ username: string }> = ({ username }) => {
         leftColumn={
           <div className="sticky top-40">
             {/* PROFILE PICTURE */}
-            <div className="absolute w-48 h-48 rounded-full shadow-2xl mt-[-40px] bg-gray-600" />
+            <div className="absolute w-48 h-48 bg-gray-600 rounded-full shadow-2xl mt-[-40px]" />
             {/* PROFILE INFO */}
             <div className="pt-[11rem]">
               {/* NAME */}
@@ -66,7 +67,7 @@ const Collections: FC<{ username: string }> = ({ username }) => {
                   <span className="text-xl opacity-70">Following</span>
                 </h2>
               </p>
-              /* EDIT BUTTON */
+              {/* EDIT BUTTON */}
               <button
                 type="button"
                 onClick={() => {}}
@@ -81,11 +82,11 @@ const Collections: FC<{ username: string }> = ({ username }) => {
         }
         rightColumn={
           <div>
-            <div className="flex px-4 pb-4 w-full justify-between items-center">
+            <div className="flex items-center justify-between w-full px-4 pb-4">
               <div className="">
                 <PlusIcon className="w-6 h-6 text-white" />
               </div>
-              <span className="text-white flex items-center">
+              <span className="flex items-center text-white">
                 <div className="mr-2"> sort by</div>
                 <Dropdown
                   options={sortOptions}
@@ -131,7 +132,7 @@ const Collections: FC<{ username: string }> = ({ username }) => {
       leftColumn={
         <div className="sticky top-40">
           {/* PROFILE PICTURE */}
-          <div className="absolute w-[10rem] h-[10rem] rounded-full shadow-2xl mt-[-40px] bg-gray-700">
+          <div className="absolute bg-gray-700 rounded-full shadow-2xl w-[10rem] h-[10rem] mt-[-40px]">
             <Image
               src={GeneratedProfileUrl(data.user.firstName, data.user.lastName)}
               layout="fill"
@@ -144,7 +145,7 @@ const Collections: FC<{ username: string }> = ({ username }) => {
           {/* PROFILE INFO */}
           <div className="pt-[9rem]">
             {/* NAME */}
-            <h1 className="flex items-center text-3xl text-white font-semibold">
+            <h1 className="flex items-center text-3xl font-semibold text-white">
               {data.user.firstName} {data.user.lastName}
               {/* NEW USER BADGE */}
               {new Date().getTime() - data.user.createdAt < 129600000 && (
@@ -200,11 +201,11 @@ const Collections: FC<{ username: string }> = ({ username }) => {
       }
       rightColumn={
         <div>
-          <div className="flex px-4 pb-4 w-full justify-between items-center">
+          <div className="flex items-center justify-between w-full px-4 pb-4">
             <div className="">
               <PlusIcon className="w-6 h-6 text-white" />
             </div>
-            <span className="text-white flex items-center">
+            <span className="flex items-center text-white">
               <div className="mr-2"> sort by</div>
               <Dropdown
                 options={sortOptions}
@@ -356,7 +357,7 @@ const CollectionCard: React.FC<{ preview: string; title: string }> = ({
         className="rounded-xl"
         alt="Profile picture"
       />
-      <div className="absolute bottom-0 backdrop-filter backdrop-blur-xl rounded-b-xl w-full">
+      <div className="absolute bottom-0 w-full backdrop-filter backdrop-blur-xl rounded-b-xl">
         <p className="w-full p-2 text-white bg-black border-t border-gray-400 rounded-b-xl opacity-70">
           {title}
         </p>
@@ -367,7 +368,7 @@ const CollectionCard: React.FC<{ preview: string; title: string }> = ({
 const CollectionCardLoading: React.FC = () => {
   return (
     <div className="relative w-[18rem] h-96 bg-[#242427] rounded-xl">
-      <div className="absolute bottom-0 backdrop-filter backdrop-blur-xl rounded-b-xl w-full">
+      <div className="absolute bottom-0 w-full backdrop-filter backdrop-blur-xl rounded-b-xl">
         <p className="w-full p-2 text-white bg-black border-t border-gray-400 rounded-b-xl opacity-70">
           Loading
         </p>
