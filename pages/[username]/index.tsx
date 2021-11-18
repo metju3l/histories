@@ -45,7 +45,7 @@ const User: FC<{ username: string }> = ({ username }) => {
       leftColumn={
         <div className="sticky top-40">
           {/* PROFILE PICTURE */}
-          <div className="absolute w-48 h-48 rounded-full shadow-2xl mt-[-40px]">
+          <div className="absolute w-[10rem] h-[10rem] rounded-full shadow-2xl mt-[-40px] bg-gray-700">
             <Image
               src={GeneratedProfileUrl(data.user.firstName, data.user.lastName)}
               layout="fill"
@@ -56,9 +56,9 @@ const User: FC<{ username: string }> = ({ username }) => {
             />
           </div>
           {/* PROFILE INFO */}
-          <div className="pt-[11rem]">
+          <div className="pt-[9rem]">
             {/* NAME */}
-            <h1 className="flex items-center text-4xl text-white">
+            <h1 className="flex items-center text-3xl text-white font-semibold">
               {data.user.firstName} {data.user.lastName}
               {/* NEW USER BADGE */}
               {new Date().getTime() - data.user.createdAt < 129600000 && (
@@ -69,7 +69,7 @@ const User: FC<{ username: string }> = ({ username }) => {
             </h1>
             {/* USERNAME */}
             <Link href={'/' + data.user.username} passHref>
-              <h2 className="pt-2 text-3xl cursor-pointer text-[#0ACF83]">
+              <h2 className="pt-2 text-2xl cursor-pointer text-[#ffffff9a]">
                 @{data.user.username}
               </h2>
             </Link>
@@ -78,13 +78,17 @@ const User: FC<{ username: string }> = ({ username }) => {
               <h2 className="cursor-pointer">
                 {data.user.followers?.length}
                 <br />
-                <span className="text-xl opacity-70">Followers</span>
+                <span className="text-xl text-[#ffffff9a] opacity-70">
+                  Followers
+                </span>
               </h2>
               {/* FOLLOWING */}
               <h2 className="cursor-pointer">
                 {data.user.following?.length}
                 <br />
-                <span className="text-xl opacity-70">Following</span>
+                <span className="text-xl text-[#ffffff9a] opacity-70">
+                  Following
+                </span>
               </h2>
             </p>
             {isLogged &&

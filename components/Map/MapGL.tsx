@@ -1,34 +1,21 @@
-import { Comment } from '@components/Comment';
 import CameraIcon from '@components/Icons/CameraIcon';
 import ChevronIcon from '@components/Icons/Chevron';
 import MarkerIcon from '@components/Icons/MarkerIcon';
-import ShareIcon from '@components/Icons/ShareIcon';
-import { Menu, Modal } from '@components/Modal';
-import { PostCard } from '@components/PostCard';
+import { Modal } from '@components/Modal';
 import { TimeLine } from '@components/TimeLine';
 import { usePathsQuery, usePlaceQuery } from '@graphql/geo.graphql';
-import { useCreateCommentMutation, usePostQuery } from '@graphql/post.graphql';
+import { usePostQuery } from '@graphql/post.graphql';
 import { useDeleteMutation } from '@graphql/post.graphql';
-import {
-  useLikeMutation,
-  useReportMutation,
-  useUnfollowMutation,
-  useUnlikeMutation,
-} from '@graphql/relations.graphql';
+import { useUnfollowMutation } from '@graphql/relations.graphql';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
-import { DotsHorizontalIcon } from '@heroicons/react/solid';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import { Viewport } from '@lib/types/viewport';
-import { Avatar, Button } from '@nextui-org/react';
-import { StringValueNode } from 'graphql';
+import { Avatar } from '@nextui-org/react';
 import Image from 'next/image';
-import image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { AiFillLike, AiOutlineComment, AiOutlineMore } from 'react-icons/ai';
-import { FiSend } from 'react-icons/fi';
 import { MdPhotoCamera } from 'react-icons/md';
 import ReactMapGL, {
   FlyToInterpolator,
@@ -38,7 +25,6 @@ import ReactMapGL, {
   NavigationControl,
   Source,
 } from 'react-map-gl';
-import Gallery from 'react-photo-gallery';
 import TimeAgo from 'react-timeago';
 import useSuperCluster from 'use-supercluster';
 

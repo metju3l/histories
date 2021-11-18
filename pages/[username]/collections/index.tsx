@@ -1,21 +1,24 @@
 import { ProfileLayout } from '@components/Layout';
 import SubmitButton from '@components/LoadingButton/SubmitButton';
-import { AccountCreatedCard, PostCard } from '@components/PostCard';
 import {
   useFollowMutation,
   useUnfollowMutation,
 } from '@graphql/relations.graphql';
-import { useUpdateProfileMutation } from '@graphql/user.graphql';
 import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
+import { PlusIcon } from '@heroicons/react/solid';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { NextPageContext } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import Dropdown from 'react-dropdown';
 import React, { FC, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import 'react-dropdown/style.css';
+import { useRouter } from 'next/router';
 
 const Collections: FC<{ username: string }> = ({ username }) => {
+  const router = useRouter();
   const { data, loading, error, refetch } = useGetUserInfoQuery({
     variables: { username: username },
   });
@@ -23,14 +26,97 @@ const Collections: FC<{ username: string }> = ({ username }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [editProfileMutation] = useUpdateProfileMutation();
+  const sortOptions = [
+    { value: 'hot', label: 'Hot' },
+    { value: 'mostliked', label: 'Most liked' },
+    { value: 'newest', label: 'Newest' },
+    { value: 'oldest', label: 'Oldest' },
+  ];
 
   if (error) {
-    console.log(error);
     return <div>error...</div>;
   }
-  if (loading) return <div>loading</div>;
-  if (logged.loading) return <div>loading</div>;
+  if (loading || logged.loading)
+    return (
+      <ProfileLayout
+        title={`loading collections | hiStories`}
+        leftColumn={
+          <div className="sticky top-40">
+            {/* PROFILE PICTURE */}
+            <div className="absolute w-48 h-48 rounded-full shadow-2xl mt-[-40px] bg-gray-600" />
+            {/* PROFILE INFO */}
+            <div className="pt-[11rem]">
+              {/* NAME */}
+              <h1 className="flex items-center text-4xl text-white">Loading</h1>
+              {/* USERNAME */}
+              <h2 className="pt-2 text-3xl cursor-pointer text-[#0ACF83]">
+                @loading
+              </h2>
+              <p className="flex pt-4 text-2xl text-white gap-8">
+                {/* FOLLOWERS */}
+                <h2 className="cursor-pointer">
+                  Loading
+                  <br />
+                  <span className="text-xl opacity-70">Followers</span>
+                </h2>
+                {/* FOLLOWING */}
+                <h2 className="cursor-pointer">
+                  Loading
+                  <br />
+                  <span className="text-xl opacity-70">Following</span>
+                </h2>
+              </p>
+              /* EDIT BUTTON */
+              <button
+                type="button"
+                onClick={() => {}}
+                className="inline-flex items-center justify-center h-10 mt-6 font-medium tracking-wide text-white rounded-lg bg-[#0ACF83] w-52 transition duration-200 hover:opacity-90"
+              >
+                Loading{' '}
+              </button>
+              {/* BIO */}
+              <p className="mt-4 text-white">loading</p>
+            </div>
+          </div>
+        }
+        rightColumn={
+          <div>
+            <div className="flex px-4 pb-4 w-full justify-between items-center">
+              <div className="">
+                <PlusIcon className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-white flex items-center">
+                <div className="mr-2"> sort by</div>
+                <Dropdown
+                  options={sortOptions}
+                  value={sortOptions[0]}
+                  placeholder="Select an option"
+                  className="w-36"
+                />
+              </span>
+            </div>
+            <div className="flex gap-10">
+              <CollectionCardLoading />
+              <CollectionCardLoading />
+              <CollectionCardLoading />
+            </div>
+          </div>
+        }
+        menu={
+          <>
+            <button className="px-6 py-2 text-gray-200 hover:bg-[#484A4D] rounded-xl">
+              Posts
+            </button>
+            <button className="px-6 py-2 text-gray-200 bg-[#484A4D] rounded-xl">
+              Collections
+            </button>
+            <button className="px-6 py-2 text-gray-200 hover:bg-[#484A4D] rounded-xl">
+              Map
+            </button>
+          </>
+        }
+      />
+    );
   if (logged.error) {
     console.log(logged.error);
     return <div>error</div>;
@@ -41,11 +127,11 @@ const Collections: FC<{ username: string }> = ({ username }) => {
 
   return (
     <ProfileLayout
-      title={`${data.user.username} | hiStories`}
+      title={`${data.user.firstName}'s collections | hiStories`}
       leftColumn={
         <div className="sticky top-40">
           {/* PROFILE PICTURE */}
-          <div className="absolute w-48 h-48 rounded-full shadow-2xl mt-[-40px]">
+          <div className="absolute w-[10rem] h-[10rem] rounded-full shadow-2xl mt-[-40px] bg-gray-700">
             <Image
               src={GeneratedProfileUrl(data.user.firstName, data.user.lastName)}
               layout="fill"
@@ -56,9 +142,9 @@ const Collections: FC<{ username: string }> = ({ username }) => {
             />
           </div>
           {/* PROFILE INFO */}
-          <div className="pt-[11rem]">
+          <div className="pt-[9rem]">
             {/* NAME */}
-            <h1 className="flex items-center text-4xl text-white">
+            <h1 className="flex items-center text-3xl text-white font-semibold">
               {data.user.firstName} {data.user.lastName}
               {/* NEW USER BADGE */}
               {new Date().getTime() - data.user.createdAt < 129600000 && (
@@ -69,7 +155,7 @@ const Collections: FC<{ username: string }> = ({ username }) => {
             </h1>
             {/* USERNAME */}
             <Link href={'/' + data.user.username} passHref>
-              <h2 className="pt-2 text-3xl cursor-pointer text-[#0ACF83]">
+              <h2 className="pt-2 text-2xl cursor-pointer text-[#ffffff9a]">
                 @{data.user.username}
               </h2>
             </Link>
@@ -78,13 +164,17 @@ const Collections: FC<{ username: string }> = ({ username }) => {
               <h2 className="cursor-pointer">
                 {data.user.followers?.length}
                 <br />
-                <span className="text-xl opacity-70">Followers</span>
+                <span className="text-xl text-[#ffffff9a] opacity-70">
+                  Followers
+                </span>
               </h2>
               {/* FOLLOWING */}
               <h2 className="cursor-pointer">
                 {data.user.following?.length}
                 <br />
-                <span className="text-xl opacity-70">Following</span>
+                <span className="text-xl text-[#ffffff9a] opacity-70">
+                  Following
+                </span>
               </h2>
             </p>
             {isLogged &&
@@ -109,19 +199,44 @@ const Collections: FC<{ username: string }> = ({ username }) => {
         </div>
       }
       rightColumn={
-        <div className="flex gap-10">
-          <CollectionCard
-            preview="https://histories-bucket.s3.eu-central-1.amazonaws.com/1636471330157-3398b12b.jpg"
-            title="Lorem ipsum"
-          />
-          <CollectionCard
-            preview="https://histories-bucket.s3.eu-central-1.amazonaws.com/1636471330157-3398b12b.jpg"
-            title="Lorem ipsum"
-          />
-          <CollectionCard
-            preview="https://histories-bucket.s3.eu-central-1.amazonaws.com/1636471330157-3398b12b.jpg"
-            title="Lorem ipsum"
-          />
+        <div>
+          <div className="flex px-4 pb-4 w-full justify-between items-center">
+            <div className="">
+              <PlusIcon className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-white flex items-center">
+              <div className="mr-2"> sort by</div>
+              <Dropdown
+                options={sortOptions}
+                onChange={(e) => {
+                  // save the sort option in url query
+                  router.replace({
+                    pathname: `/${data.user.username}/collections`,
+                    query: {
+                      sortBy: e.value,
+                    },
+                  });
+                }}
+                value={sortOptions[0]}
+                placeholder="Select an option"
+                className="w-36"
+              />
+            </span>
+          </div>
+          <div className="flex gap-10">
+            <CollectionCard
+              preview="https://histories-bucket.s3.eu-central-1.amazonaws.com/1636471330157-3398b12b.jpg"
+              title="Lorem ipsum"
+            />
+            <CollectionCard
+              preview="https://histories-bucket.s3.eu-central-1.amazonaws.com/1636471330157-3398b12b.jpg"
+              title="Lorem ipsum"
+            />
+            <CollectionCard
+              preview="https://histories-bucket.s3.eu-central-1.amazonaws.com/1636471330157-3398b12b.jpg"
+              title="Lorem ipsum"
+            />
+          </div>
         </div>
       }
       menu={
@@ -244,6 +359,17 @@ const CollectionCard: React.FC<{ preview: string; title: string }> = ({
       <div className="absolute bottom-0 backdrop-filter backdrop-blur-xl rounded-b-xl w-full">
         <p className="w-full p-2 text-white bg-black border-t border-gray-400 rounded-b-xl opacity-70">
           {title}
+        </p>
+      </div>
+    </div>
+  );
+};
+const CollectionCardLoading: React.FC = () => {
+  return (
+    <div className="relative w-[18rem] h-96 bg-[#242427] rounded-xl">
+      <div className="absolute bottom-0 backdrop-filter backdrop-blur-xl rounded-b-xl w-full">
+        <p className="w-full p-2 text-white bg-black border-t border-gray-400 rounded-b-xl opacity-70">
+          Loading
         </p>
       </div>
     </div>
