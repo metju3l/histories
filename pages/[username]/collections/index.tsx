@@ -1,10 +1,10 @@
-// eslint-disable-next-line simple-import-sort/imports
 import 'react-dropdown/style.css';
 
 import { ApolloQueryResult } from '@apollo/client';
 import { Button } from '@components/Button/';
-import { ProfileLayout } from '@components/Layout';
+import { Input } from '@components/Input';
 import { Modal } from '@components/Modal';
+import { ProfilePage } from '@components/ProfilePage';
 import {
   useFollowMutation,
   useUnfollowMutation,
@@ -16,7 +16,6 @@ import {
   useIsLoggedQuery,
 } from '@graphql/user.graphql';
 import { PlusIcon } from '@heroicons/react/solid';
-import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import { NextPageContext } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -25,7 +24,6 @@ import React, { FC, useState } from 'react';
 import Dropdown from 'react-dropdown';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { Input } from '@components/Input';
 
 const Collections: FC<{ username: string }> = ({ username }) => {
   const router = useRouter();
@@ -46,87 +44,7 @@ const Collections: FC<{ username: string }> = ({ username }) => {
   if (error) {
     return <div>error...</div>;
   }
-  if (loading || logged.loading)
-    return (
-      <ProfileLayout
-        title={`loading collections | hiStories`}
-        leftColumn={
-          <div className="sticky top-40">
-            {/* PROFILE PICTURE */}
-            <div className="absolute w-48 h-48 bg-gray-600 rounded-full shadow-2xl mt-[-40px]" />
-            {/* PROFILE INFO */}
-            <div className="pt-[11rem]">
-              {/* NAME */}
-              <h1 className="flex items-center text-4xl text-white">Loading</h1>
-              {/* USERNAME */}
-              <h2 className="pt-2 text-3xl cursor-pointer text-[#0ACF83]">
-                @loading
-              </h2>
-              <p className="flex pt-4 text-2xl text-white gap-8">
-                {/* FOLLOWERS */}
-                <h2 className="cursor-pointer">
-                  Loading
-                  <br />
-                  <span className="text-xl opacity-70">Followers</span>
-                </h2>
-                {/* FOLLOWING */}
-                <h2 className="cursor-pointer">
-                  Loading
-                  <br />
-                  <span className="text-xl opacity-70">Following</span>
-                </h2>
-              </p>
-              {/* EDIT BUTTON */}
-              <button
-                type="button"
-                onClick={() => {}}
-                className="inline-flex items-center justify-center h-10 mt-6 font-medium tracking-wide text-white rounded-lg bg-[#0ACF83] w-52 transition duration-200 hover:opacity-90"
-              >
-                Loading{' '}
-              </button>
-              {/* BIO */}
-              <p className="mt-4 text-white">loading</p>
-            </div>
-          </div>
-        }
-        rightColumn={
-          <div>
-            <div className="flex items-center justify-between w-full px-4 pb-4">
-              <div className="">
-                <PlusIcon className="w-6 h-6 text-white" />
-              </div>
-              <span className="flex items-center text-white">
-                <div className="mr-2"> sort by</div>
-                <Dropdown
-                  options={sortOptions}
-                  value={sortOptions[0]}
-                  placeholder="Select an option"
-                  className="w-36"
-                />
-              </span>
-            </div>
-            <div className="flex gap-10">
-              <CollectionCardLoading />
-              <CollectionCardLoading />
-              <CollectionCardLoading />
-            </div>
-          </div>
-        }
-        menu={
-          <>
-            <button className="px-6 py-2 text-gray-200 hover:bg-[#484A4D] rounded-xl">
-              Posts
-            </button>
-            <button className="px-6 py-2 text-gray-200 bg-[#484A4D] rounded-xl">
-              Collections
-            </button>
-            <button className="px-6 py-2 text-gray-200 hover:bg-[#484A4D] rounded-xl">
-              Map
-            </button>
-          </>
-        }
-      />
-    );
+  if (loading || logged.loading) return <div>loading</div>;
   if (logged.error) {
     console.log(logged.error);
     return <div>error</div>;
@@ -145,81 +63,9 @@ const Collections: FC<{ username: string }> = ({ username }) => {
           />
         </Modal>
       )}
-      <ProfileLayout
+      <ProfilePage
         title={`${data.user.firstName}'s collections | hiStories`}
-        leftColumn={
-          <div className="sticky top-40">
-            {/* PROFILE PICTURE */}
-            <div className="absolute bg-gray-700 rounded-full shadow-2xl w-[10rem] h-[10rem] mt-[-40px]">
-              <Image
-                src={GeneratedProfileUrl(
-                  data.user.firstName,
-                  data.user.lastName
-                )}
-                layout="fill"
-                objectFit="contain"
-                objectPosition="center"
-                className="rounded-full"
-                alt="Profile picture"
-              />
-            </div>
-            {/* PROFILE INFO */}
-            <div className="pt-[9rem]">
-              {/* NAME */}
-              <h1 className="flex items-center text-3xl font-semibold text-white">
-                {data.user.firstName} {data.user.lastName}
-                {/* NEW USER BADGE */}
-                {new Date().getTime() - data.user.createdAt < 129600000 && (
-                  <div className="px-4 py-2 ml-4 text-xl bg-[#a535fa96] rounded-2xl">
-                    new user
-                  </div>
-                )}
-              </h1>
-              {/* USERNAME */}
-              <Link href={'/' + data.user.username} passHref>
-                <h2 className="pt-2 text-2xl cursor-pointer text-[#ffffff9a]">
-                  @{data.user.username}
-                </h2>
-              </Link>
-              <p className="flex pt-4 text-2xl text-white gap-8">
-                {/* FOLLOWERS */}
-                <h2 className="cursor-pointer">
-                  {data.user.followers?.length}
-                  <br />
-                  <span className="text-xl text-[#ffffff9a] opacity-70">
-                    Followers
-                  </span>
-                </h2>
-                {/* FOLLOWING */}
-                <h2 className="cursor-pointer">
-                  {data.user.following?.length}
-                  <br />
-                  <span className="text-xl text-[#ffffff9a] opacity-70">
-                    Following
-                  </span>
-                </h2>
-              </p>
-              {isLogged &&
-                /* FOLLOW BUTTON */
-                (logged.data?.isLogged!.id !== data.user.id ? (
-                  <div className="pt-6">
-                    <FollowButton data={data} refetch={refetch} />
-                  </div>
-                ) : (
-                  /* EDIT BUTTON */
-                  <button
-                    type={isLoading ? 'button' : 'submit'}
-                    onClick={() => setEditMode(!editMode)}
-                    className="inline-flex items-center justify-center h-10 mt-6 font-medium tracking-wide text-white rounded-lg bg-[#0ACF83] w-52 transition duration-200 hover:opacity-90"
-                  >
-                    {editMode ? 'Save' : 'Edit profile'}
-                  </button>
-                ))}
-              {/* BIO */}
-              <p className="mt-4 text-white">{data.user.bio}</p>
-            </div>
-          </div>
-        }
+        username={data.user.username}
         rightColumn={
           <div>
             <div className="flex items-center justify-between w-full px-4 pb-4">

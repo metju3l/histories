@@ -1,28 +1,15 @@
-import { Button } from '@components/Button';
-import { ProfileLayout } from '@components/Layout';
 import { AccountCreatedCard, PostCard } from '@components/PostCard';
-import {
-  useFollowMutation,
-  useUnfollowMutation,
-} from '@graphql/relations.graphql';
-import { useUpdateProfileMutation } from '@graphql/user.graphql';
+import { ProfilePage } from '@components/ProfilePage';
 import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
-import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import { NextPageContext } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
-import React, { FC, useState } from 'react';
-import { toast } from 'react-hot-toast';
+import React from 'react';
 
-const User: FC<{ username: string }> = ({ username }) => {
+const User: React.FC<{ username: string }> = ({ username }) => {
   const { data, loading, error, refetch } = useGetUserInfoQuery({
     variables: { username: username },
   });
   const logged = useIsLoggedQuery();
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [editProfileMutation] = useUpdateProfileMutation();
 
   if (error) {
     console.log(error);
@@ -36,81 +23,11 @@ const User: FC<{ username: string }> = ({ username }) => {
   }
   if (data === null || data === undefined)
     return <div>user does not exist</div>;
-  const isLogged = logged.data!.isLogged;
 
   return (
-    <ProfileLayout
+    <ProfilePage
       title={`${data.user.username} | hiStories`}
-      leftColumn={
-        <div className="sticky top-40">
-          {/* PROFILE PICTURE */}
-          <div className="absolute bg-gray-700 rounded-full shadow-2xl w-[10rem] h-[10rem] mt-[-40px]">
-            <Image
-              src={GeneratedProfileUrl(data.user.firstName, data.user.lastName)}
-              layout="fill"
-              objectFit="contain"
-              objectPosition="center"
-              className="rounded-full"
-              alt="Profile picture"
-            />
-          </div>
-          {/* PROFILE INFO */}
-          <div className="pt-[9rem]">
-            {/* NAME */}
-            <h1 className="flex items-center text-3xl font-semibold text-white">
-              {data.user.firstName} {data.user.lastName}
-              {/* NEW USER BADGE */}
-              {new Date().getTime() - data.user.createdAt < 129600000 && (
-                <div className="px-4 py-2 ml-4 text-xl bg-[#a535fa96] rounded-2xl">
-                  new user
-                </div>
-              )}
-            </h1>
-            {/* USERNAME */}
-            <Link href={'/' + data.user.username} passHref>
-              <h2 className="pt-2 text-2xl cursor-pointer text-[#ffffff9a]">
-                @{data.user.username}
-              </h2>
-            </Link>
-            <p className="flex pt-4 text-2xl text-white gap-8">
-              {/* FOLLOWERS */}
-              <h2 className="cursor-pointer">
-                {data.user.followers?.length}
-                <br />
-                <span className="text-xl text-[#ffffff9a] opacity-70">
-                  Followers
-                </span>
-              </h2>
-              {/* FOLLOWING */}
-              <h2 className="cursor-pointer">
-                {data.user.following?.length}
-                <br />
-                <span className="text-xl text-[#ffffff9a] opacity-70">
-                  Following
-                </span>
-              </h2>
-            </p>
-            {isLogged &&
-              /* FOLLOW BUTTON */
-              (logged.data?.isLogged!.id !== data.user.id ? (
-                <div className="pt-6">
-                  <FollowButton data={data} refetch={refetch} />
-                </div>
-              ) : (
-                /* EDIT BUTTON */
-                <button
-                  type={isLoading ? 'button' : 'submit'}
-                  onClick={() => setEditMode(!editMode)}
-                  className="inline-flex items-center justify-center h-10 mt-6 font-medium tracking-wide text-white rounded-lg bg-[#0ACF83] w-52 transition duration-200 hover:opacity-90"
-                >
-                  {editMode ? 'Save' : 'Edit profile'}
-                </button>
-              ))}
-            {/* BIO */}
-            <p className="mt-4 text-white">{data.user.bio}</p>
-          </div>
-        </div>
-      }
+      username={data.user.username}
       rightColumn={
         <>
           {data.user.posts &&
@@ -167,43 +84,6 @@ export const getServerSideProps = async (
       username: context.query.username.toString(),
     },
   };
-};
-
-const FollowButton = ({ data, refetch }: any) => {
-  const [followMutation] = useFollowMutation();
-  const [unfollowMutation] = useUnfollowMutation();
-  const [isLoading, setIsLoading] = useState(false);
-
-  return (
-    <Button
-      text={data.user.isFollowing ? 'Unfollow' : 'Follow'}
-      backgroundClassname={
-        data.user.isFollowing
-          ? 'bg-[#0ACF83] hover:opacity-90'
-          : 'bg-[#474DFE] hover:opacity-90'
-      }
-      isLoading={isLoading}
-      onClick={async () => {
-        setIsLoading(true);
-        try {
-          if (data.user.isFollowing) {
-            await unfollowMutation({
-              variables: { userID: data.user.id },
-            });
-          } else {
-            await followMutation({
-              variables: { userID: data.user.id },
-            });
-          }
-          await refetch();
-        } catch (error) {
-          // @ts-ignore
-          toast.error(error.message);
-        }
-        setIsLoading(false);
-      }}
-    />
-  );
 };
 
 export default User;
