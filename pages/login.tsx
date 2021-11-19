@@ -1,5 +1,6 @@
+import { Button } from '@components/Button/';
+import { Input } from '@components/Input';
 import { Layout } from '@components/Layout';
-import SubmitButton from '@components/LoadingButton/SubmitButton';
 import { useLoginMutation } from '@graphql/user.graphql';
 import Cookie from 'js-cookie';
 import Link from 'next/link';
@@ -45,7 +46,7 @@ const Login: FC = () => {
             setIsLoading(false);
           }}
         >
-          <FormInput
+          <Input
             placeholder="username or email"
             type="text"
             value={formValues.username}
@@ -54,7 +55,7 @@ const Login: FC = () => {
             }}
           />
 
-          <FormInput
+          <Input
             placeholder="password"
             type="password"
             value={formValues.password}
@@ -64,7 +65,7 @@ const Login: FC = () => {
           />
 
           <div className="pt-2 mb-2">
-            <SubmitButton isLoading={isLoading} text="Log in" />
+            <Button isLoading={isLoading} text="Log in" />
           </div>
           <Link href="/register">
             <a className="pl-2 underline">create new account</a>
@@ -72,19 +73,6 @@ const Login: FC = () => {
         </form>
       </div>
     </Layout>
-  );
-};
-
-const FormInput = (props: any) => {
-  return (
-    <div className="w-full mb-2">
-      <input
-        {...props}
-        className="w-full h-10 px-3 mt-2 mb-1 leading-tight text-gray-700 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
-        required={true}
-        type={props.type ?? 'text'}
-      />
-    </div>
   );
 };
 

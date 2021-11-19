@@ -3,10 +3,9 @@ import {
   ComboboxInput,
   ComboboxList,
   ComboboxOption,
-  ComboboxOptionText,
   ComboboxPopover,
 } from '@reach/combobox';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BiSearchAlt2 } from 'react-icons/bi';
 import usePlacesAutocomplete, {
   getGeocode,

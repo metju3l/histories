@@ -1,5 +1,5 @@
+import { Button } from '@components/Button';
 import { ProfileLayout } from '@components/Layout';
-import SubmitButton from '@components/LoadingButton/SubmitButton';
 import { AccountCreatedCard, PostCard } from '@components/PostCard';
 import {
   useFollowMutation,
@@ -8,7 +8,6 @@ import {
 import { useUpdateProfileMutation } from '@graphql/user.graphql';
 import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { NextPageContext } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -169,26 +168,6 @@ export const getServerSideProps = async (
     },
   };
 };
-const Input: FC<{
-  type: string;
-  name: string;
-  autoComplete: string;
-  label: string;
-}> = ({ type, name, autoComplete, label }) => {
-  return (
-    <div>
-      <label htmlFor={name}>{label}</label>
-      <Field
-        type={type}
-        className="w-full px-3 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-        name={name}
-        autoComplete={autoComplete}
-      />
-      <ErrorMessage name={name} />
-      <br />
-    </div>
-  );
-};
 
 const FollowButton = ({ data, refetch }: any) => {
   const [followMutation] = useFollowMutation();
@@ -196,7 +175,7 @@ const FollowButton = ({ data, refetch }: any) => {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <SubmitButton
+    <Button
       text={data.user.isFollowing ? 'Unfollow' : 'Follow'}
       backgroundClassname={
         data.user.isFollowing

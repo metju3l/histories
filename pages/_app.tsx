@@ -4,7 +4,6 @@ import './app.scss';
 
 import { ApolloProvider } from '@apollo/client';
 import type { AppProps } from 'next/app';
-import Script from 'next/script';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 

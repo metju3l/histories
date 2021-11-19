@@ -1,7 +1,5 @@
 import { Layout } from '@components/Layout';
-import Suggestions from '@components/MainPage/RightColumn/Suggestions';
 import { usePersonalizedPostsQuery, usePostQuery } from '@graphql/post.graphql';
-import { useCheckIfLoggedQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 import Image from 'next/image';
 import React from 'react';
 

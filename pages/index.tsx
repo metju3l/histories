@@ -2,7 +2,7 @@ import { Layout } from '@components/Layout';
 import Suggestions from '@components/MainPage/RightColumn/Suggestions';
 import { PostCard } from '@components/PostCard';
 import { usePersonalizedPostsQuery } from '@graphql/post.graphql';
-import { useCheckIfLoggedQuery, useIsLoggedQuery } from '@graphql/user.graphql';
+import { useIsLoggedQuery } from '@graphql/user.graphql';
 import React from 'react';
 
 const Index: React.FC = () => {

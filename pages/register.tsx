@@ -1,5 +1,6 @@
+import { Button } from '@components/Button/';
+import { Input } from '@components/Input';
 import { Layout } from '@components/Layout';
-import SubmitButton from '@components/LoadingButton/SubmitButton';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { useCreateUserMutation } from '@graphql/user.graphql';
 import Link from 'next/link';
@@ -62,7 +63,7 @@ const Register: React.FC = () => {
           }}
         >
           <div className="flex gap-4">
-            <FormInput
+            <Input
               placeholder="First name"
               autoComplete="given-name"
               helperText={errors.firstName && 'First name ' + errors.firstName}
@@ -76,7 +77,7 @@ const Register: React.FC = () => {
               }}
             />
 
-            <FormInput
+            <Input
               placeholder="Last name"
               autoComplete="family-name"
               helperText={errors.lastName && 'Last name ' + errors.lastName}
@@ -90,7 +91,7 @@ const Register: React.FC = () => {
               }}
             />
           </div>
-          <FormInput
+          <Input
             placeholder="Username"
             autoComplete="username"
             helperText={errors.username}
@@ -104,7 +105,7 @@ const Register: React.FC = () => {
             }}
           />
 
-          <FormInput
+          <Input
             placeholder="Email"
             type="email"
             autoComplete="email"
@@ -119,7 +120,7 @@ const Register: React.FC = () => {
             }}
           />
 
-          <FormInput
+          <Input
             placeholder="Password"
             type="password"
             autoComplete="new-password"
@@ -134,7 +135,7 @@ const Register: React.FC = () => {
             }}
           />
 
-          <FormInput
+          <Input
             placeholder="Repeat password"
             type="password"
             autoComplete="new-password"
@@ -169,7 +170,7 @@ const Register: React.FC = () => {
           </label>
 
           <div className="mt-2 mb-2">
-            <SubmitButton isLoading={isLoading} text="Sign up" />
+            <Button isLoading={isLoading} text="Sign up" />
           </div>
           <Link href="/login">
             <a className="pl-2 underline">login to an existing account</a>
@@ -177,20 +178,6 @@ const Register: React.FC = () => {
         </form>
       </div>
     </Layout>
-  );
-};
-
-const FormInput = (props: any) => {
-  return (
-    <div className="w-full h-12 mb-6">
-      <input
-        {...props}
-        className="w-full h-10 px-3 mt-2 mb-1 leading-tight text-gray-700 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
-        required={true}
-        type={props.type ?? 'text'}
-      />
-      <p className="text-red-500">{props.helperText}</p>
-    </div>
   );
 };
 

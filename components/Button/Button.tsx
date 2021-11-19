@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SubmitButton: React.FC<{
+const Button: React.FC<{
   isLoading: boolean;
   text: string;
   onClick?: () => void;
@@ -53,4 +53,4 @@ const SubmitButton: React.FC<{
   </button>
 );
 
-export default SubmitButton;
+export default Button;

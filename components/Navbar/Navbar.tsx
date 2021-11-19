@@ -14,9 +14,6 @@ import { useIsLoggedQuery } from '@graphql/user.graphql';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import LogOut from '@lib/functions/LogOut';
 import useDarkMode from '@lib/hooks/useDarkmode';
-// IMAGES
-import FullSizeLogo from '@public/logo/FullSizeLogo.svg';
-import MinimalLogo from '@public/logo/MinimalLogo.svg';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';

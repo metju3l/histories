@@ -1,8 +1,9 @@
+// eslint-disable-next-line simple-import-sort/imports
 import 'react-dropdown/style.css';
 
 import { ApolloQueryResult } from '@apollo/client';
+import { Button } from '@components/Button/';
 import { ProfileLayout } from '@components/Layout';
-import SubmitButton from '@components/LoadingButton/SubmitButton';
 import { Modal } from '@components/Modal';
 import {
   useFollowMutation,
@@ -16,7 +17,6 @@ import {
 } from '@graphql/user.graphql';
 import { PlusIcon } from '@heroicons/react/solid';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { NextPageContext } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -25,6 +25,7 @@ import React, { FC, useState } from 'react';
 import Dropdown from 'react-dropdown';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
+import { Input } from '@components/Input';
 
 const Collections: FC<{ username: string }> = ({ username }) => {
   const router = useRouter();
@@ -313,26 +314,6 @@ export const getServerSideProps = async (
     },
   };
 };
-const Input: FC<{
-  type: string;
-  name: string;
-  autoComplete: string;
-  label: string;
-}> = ({ type, name, autoComplete, label }) => {
-  return (
-    <div>
-      <label htmlFor={name}>{label}</label>
-      <Field
-        type={type}
-        className="w-full px-3 py-2 mb-3 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-        name={name}
-        autoComplete={autoComplete}
-      />
-      <ErrorMessage name={name} />
-      <br />
-    </div>
-  );
-};
 
 const FollowButton = ({ data, refetch }: any) => {
   const [followMutation] = useFollowMutation();
@@ -340,7 +321,7 @@ const FollowButton = ({ data, refetch }: any) => {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <SubmitButton
+    <Button
       text={data.user.isFollowing ? 'Unfollow' : 'Follow'}
       backgroundClassname={
         data.user.isFollowing
@@ -465,19 +446,14 @@ const CreateCollectionModal: React.FC<{
     <div className="absolute z-50 w-1/2 p-8 bg-gray-900 rounded-xl h-1/2 top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2">
       <h2 className="text-white">create collection</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          className="w-full h-10 px-3 mt-2 mb-1 leading-tight text-gray-700 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
-          placeholder="name"
-          {...register('name', { required: true })}
-        />
-        <input
-          className="w-full h-10 px-3 mt-2 mb-1 leading-tight text-gray-700 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
+        <Input placeholder="name" {...register('name', { required: true })} />
+        <Input
           placeholder="description"
           {...register('description', { required: true })}
         />
         {errors.description && <span>This field is required</span>}
 
-        <SubmitButton
+        <Button
           isLoading={isLoading}
           text="Submit"
           backgroundClassname="bg-[#0a70cf] hover:opacity-90"

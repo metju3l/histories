@@ -1,13 +1,12 @@
+import { Button } from '@components/Button';
 import { Layout } from '@components/Layout';
-import SubmitButton from '@components/LoadingButton/SubmitButton';
 import { Search } from '@components/MainPage';
 import { useCreatePostMutation } from '@graphql/post.graphql';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-import router from 'next/router';
+import { Field, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import Dropzone, { useDropzone } from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-hot-toast';
 import MapGL, {
   GeolocateControl,
@@ -61,7 +60,7 @@ const DropZoneComponent = ({
       </div>
     </div>
   );
-}; 
+};
 
 const Login: FC = () => {
   // for reading coordinates from query params
@@ -302,8 +301,8 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
                 type="text"
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
-              /> 
-              <SubmitButton isLoading={isLoading} text="submit" />
+              />
+              <Button isLoading={isLoading} text="submit" />
             </Form>
           )}
         </Formik>
@@ -311,5 +310,5 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
     </Layout>
   );
 };
- 
+
 export default Login;

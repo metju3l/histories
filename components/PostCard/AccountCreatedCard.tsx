@@ -1,5 +1,4 @@
 import React from 'react';
-import { FaConnectdevelop } from 'react-icons/fa';
 
 const AccountCreatedCard = ({
   firstName,
