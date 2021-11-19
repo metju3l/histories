@@ -46,9 +46,10 @@ query getUserInfo($username: String, $id: Int) {
       lastName
     }
     collections {
-      collectionName
+      name
       createdAt
       description
+      id
     }
     posts {
       id
@@ -80,10 +81,8 @@ mutation updateProfile(
   )
 }
 
-mutation createCollection($collectionName: String!, $description: String) {
-  createCollection(
-    input: { collectionName: $collectionName, description: $description }
-  )
+mutation createCollection($name: String!, $description: String!) {
+  createCollection(input: { name: $name, description: $description })
 }
 
 query IsLogged {

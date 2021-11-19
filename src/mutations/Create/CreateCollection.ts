@@ -1,32 +1,28 @@
 import RunCypherQuery from '../../database/RunCypherQuery';
 
 const CreateCollection = async ({
-  username,
-  collectionName,
+  userId,
+  name,
   description,
+  preview,
 }: {
-  username: string;
-  collectionName: string;
+  userId: number;
+  name: string;
   description: string;
+  preview: String;
 }): Promise<number> => {
-  const query = `MATCH 
-  (author:User)
-    WHERE author.username =~ "(?i)${username}"
-    CREATE (collection:Collection {
-    collectionName: $collectionName,
-    description: $description,
-    createdAt: $createdAt
-    })
-    CREATE (author)-[r:CREATED]->(collection)
-  `;
+  const query = `MATCH (user:User) 
+  WHERE ID(user) = $userId
+  CREATE (user)-[:CREATED]->(collection:Collection {createdAt: $createdAt, name: $name, description: $description, preview: $preview})
+  RETURN collection{.*, id: ID(collection)} as collection`;
 
   await RunCypherQuery(query, {
     createdAt: new Date().getTime(),
     description,
-    collectionName,
-    username,
+    name,
+    userId,
+    preview,
   });
-
   return 0;
 };
 

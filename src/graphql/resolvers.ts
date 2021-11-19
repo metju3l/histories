@@ -347,13 +347,19 @@ const resolvers = {
         input,
       }: {
         input: {
-          username: string;
-          collectionName: string;
+          name: string;
           description: string;
         };
-      }
+      },
+      context: any
     ) => {
-      return CreateCollection(input);
+      if (context.validToken)
+        return CreateCollection({
+          ...input,
+          preview: '',
+          userId: context.decoded.id,
+        });
+      else throw new Error('User is not logged in');
     },
 
     createPost: async (

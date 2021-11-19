@@ -146,8 +146,8 @@ export default gql`
   }
 
   input CreateCollectionInput {
-    collectionName: String!
-    description: String
+    name: String!
+    description: String!
   }
 
   type IsLoggedInfo {
@@ -195,9 +195,11 @@ export default gql`
   }
 
   type Collection {
+    id: Float!
     createdAt: String!
-    description: String
-    collectionName: String!
+    description: String!
+    name: String!
+    preview: String!
   }
 
   type TagInfo {
