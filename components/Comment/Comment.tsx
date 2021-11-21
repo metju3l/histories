@@ -6,6 +6,7 @@ import {
   useUnlikeMutation,
 } from '@graphql/relations.graphql';
 import { DotsHorizontalIcon } from '@heroicons/react/solid';
+import hoverHandler from '@hooks/hoverHandler';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import Image from 'next/image';
 import React, { useRef, useState } from 'react';
@@ -59,8 +60,7 @@ const Comment: React.FC<CommentProps> = ({
   return (
     <span
       className="flex w-full pl-3 gap-2"
-      onMouseOver={() => setMouseOverComment(true)}
-      onMouseLeave={() => setMouseOverComment(false)}
+      {...hoverHandler(setMouseOverComment)}
     >
       <div id="userProfile" className="relative w-8 h-8 rounded-full">
         <Image

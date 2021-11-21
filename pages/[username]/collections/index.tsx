@@ -16,6 +16,7 @@ import {
   useIsLoggedQuery,
 } from '@graphql/user.graphql';
 import { PlusIcon } from '@heroicons/react/solid';
+import hoverHandler from '@hooks/hoverHandler';
 import { NextPageContext } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -98,7 +99,7 @@ const Collections: FC<{ username: string }> = ({ username }) => {
                 />
               </span>
             </div>
-            <div className="flex gap-10">
+            <div className="grid grid-cols-3 gap-10">
               {data.user?.collections &&
                 data.user.collections.map((collection) => (
                   <CollectionCard
@@ -210,8 +211,7 @@ const CollectionCard: React.FC<{
     <Link href={address} passHref>
       <div
         className="relative cursor-pointer w-[18rem] h-96 bg-[#242427] rounded-xl"
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
+        {...hoverHandler(setHover)}
       >
         <Image
           src={preview}

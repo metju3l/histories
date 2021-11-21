@@ -194,7 +194,7 @@ const DropdownMenu: React.FC<{ data: any; setTheme: any; theme: string }> = ({
               Log out
             </DropdownItem>
           ) : (
-            <DropdownItem link="login" leftIcon={<LoginIcon />}>
+            <DropdownItem link="/login" leftIcon={<LoginIcon />}>
               Log in
             </DropdownItem>
           )}
