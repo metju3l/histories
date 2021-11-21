@@ -16,6 +16,7 @@ export default gql`
     personalizedPosts: [PostID]!
     checkIfLogged: CheckIfLoggedInfo!
     place(id: Int!): Place!
+    collection(id: Int!): Collection!
   }
 
   type Mutation {
@@ -196,10 +197,12 @@ export default gql`
 
   type Collection {
     id: Float!
-    createdAt: String!
-    description: String!
+    createdAt: Float!
+    description: String
     name: String!
-    preview: String!
+    preview: String
+    postCount: Int!
+    author: UserInfoMinimal!
   }
 
   type TagInfo {

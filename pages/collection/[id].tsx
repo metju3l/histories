@@ -1,13 +1,14 @@
 import 'react-dropdown/style.css';
 
 import { ProfilePage } from '@components/ProfilePage';
-import { useIsLoggedQuery } from '@graphql/user.graphql';
+import { useCollectionQuery } from '@graphql/collection.graphql';
 import { NextPageContext } from 'next';
 import React, { FC } from 'react';
 import Dropdown from 'react-dropdown';
 
-const Collections: FC<{ collection: number }> = ({ collection }) => {
-  const logged = useIsLoggedQuery();
+const Collections: FC<{ id: number }> = ({ id }) => {
+  const { data, loading, error } = useCollectionQuery({ variables: { id } });
+
   const sortOptions = [
     { value: 'hot', label: 'Hot' },
     { value: 'mostliked', label: 'Most liked' },
@@ -15,19 +16,14 @@ const Collections: FC<{ collection: number }> = ({ collection }) => {
     { value: 'oldest', label: 'Oldest' },
   ];
 
-  if (logged.loading) return <div>loading</div>;
-
-  if (logged.error) {
-    console.log(logged.error);
-    return <div>error</div>;
-  }
-  const isLogged = logged.data!.isLogged;
+  if (loading) return <div>loading</div>;
+  if (error || data === undefined) return <div>error</div>;
 
   return (
     <>
       <ProfilePage
-        title={`${collection} | hiStories`}
-        username={'username'}
+        title={`${data.collection?.name} | hiStories`}
+        username={data.collection.author.username}
         rightColumn={
           <div>
             <div className="flex items-center justify-between w-full px-4 pb-4">
@@ -47,7 +43,6 @@ const Collections: FC<{ collection: number }> = ({ collection }) => {
             <div className="grid grid-cols-3 gap-10"></div>
           </div>
         }
-        menu={<></>}
       />
     </>
   );
@@ -57,13 +52,13 @@ export const getServerSideProps = async (
   context: NextPageContext
 ): Promise<{
   props: {
-    collection: number;
+    id: number;
   };
 }> => {
   return {
     props: {
       // @ts-ignore
-      collection: parseInt(context.query.username),
+      id: parseInt(context.query.id),
     },
   };
 };

@@ -1,18 +1,20 @@
+import { GraphQLUpload } from 'graphql-upload';
+
 import {
   IsUsedUsername,
-  ExistsUser,
+  ValidateComment,
+  ValidateCoordinates,
+  ValidateDate,
+  ValidateDescription,
   ValidateEmail,
-  ValidateUsername,
   ValidateName,
   ValidatePassword,
-  FollowsUser,
-  ValidateCoordinates,
-  ValidateDescription,
-  ValidateDate,
-  ValidateComment,
+  ValidateUsername,
 } from '../../shared/validation';
+import IsUsedEmail from '../../shared/validation/dbValidation/IsUsedEmail';
 import {
   CreateCollection,
+  CreateComment,
   CreatePost,
   CreateUser,
   Delete,
@@ -20,29 +22,26 @@ import {
   EditProfile,
   Follow,
   Like,
-  CreateComment,
   Unfollow,
   Unlike,
 } from '../mutations';
+import Report from '../mutations/Create/Report';
+import LastPost from '../mutations/lastPost';
+import VerifyToken from '../mutations/VerifyToken';
 import {
+  CollectionQuery,
   GetPaths,
   GetTagInfo,
   Login,
   SuggestedUsersQuery,
   UserQuery,
 } from '../queries';
-import VerifyToken from '../mutations/VerifyToken';
 import FilterPlaces from '../queries/FilterPlaces';
 import IsVerified from '../queries/IsVerified';
 import PersonalizedPostsQuery from '../queries/PersonalizedPostsQuery';
 import PlaceQuery from '../queries/PlaceQuery';
 import PostQuery from '../queries/PostQuery';
-import IsUsedEmail from '../../shared/validation/dbValidation/IsUsedEmail';
-import { GraphQLUpload } from 'graphql-upload';
 import { UploadPhoto } from '../s3/';
-import Report from '../mutations/Create/Report';
-import LastPost from '../mutations/lastPost';
-import { PhotographIcon } from '@heroicons/react/solid';
 
 type contextType = {
   decoded: { id: number };
@@ -151,6 +150,16 @@ const resolvers = {
         ...input,
       });
     },
+
+    collection: async (
+      _parent: undefined,
+      { id }: { id: number },
+      context: contextType
+    ) =>
+      await CollectionQuery({
+        id,
+        logged: context.validToken ? context.decoded.id : null,
+      }),
   },
   Mutation: {
     like: async (

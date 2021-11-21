@@ -5,10 +5,7 @@ import { Button } from '@components/Button/';
 import { Input } from '@components/Input';
 import { Modal } from '@components/Modal';
 import { ProfilePage } from '@components/ProfilePage';
-import {
-  useFollowMutation,
-  useUnfollowMutation,
-} from '@graphql/relations.graphql';
+import { useCollectionQuery } from '@graphql/collection.graphql';
 import {
   GetUserInfoQuery,
   useCreateCollectionMutation,
@@ -102,45 +99,10 @@ const Collections: FC<{ username: string }> = ({ username }) => {
             <div className="grid grid-cols-3 gap-10">
               {data.user?.collections &&
                 data.user.collections.map((collection) => (
-                  <CollectionCard
-                    preview="https://histories-bucket.s3.eu-central-1.amazonaws.com/1636471330157-3398b12b.jpg"
-                    title={collection?.name ?? ''}
-                    description={collection?.description ?? ''}
-                    address={`/${data.user.username}/collections/${
-                      collection!.id
-                    }`}
-                    key={collection!.id}
-                  />
+                  <CollectionCard id={collection!.id} key={collection!.id} />
                 ))}
             </div>
           </div>
-        }
-        menu={
-          <>
-            {' '}
-            <Link href={'/' + data.user.username} passHref>
-              <button className="px-6 py-2 text-gray-200 hover:bg-[#484A4D] rounded-xl">
-                Posts
-              </button>
-            </Link>
-            <Link href={'/' + data.user.username + '/collections'} passHref>
-              <button className="px-6 py-2 text-gray-200 bg-[#484A4D] rounded-xl">
-                Collections
-              </button>
-            </Link>
-            <Link href={'/' + data.user.username + '/map'} passHref>
-              <button className="px-6 py-2 text-gray-200 hover:bg-[#484A4D] rounded-xl">
-                Map
-              </button>
-            </Link>
-            {logged.data?.isLogged?.id === data.user.id && (
-              <Link href={'/settings'} passHref>
-                <button className="px-6 py-2 text-gray-200 hover:bg-[#484A4D] rounded-xl">
-                  Settings
-                </button>
-              </Link>
-            )}
-          </>
         }
       />
     </>
@@ -162,59 +124,40 @@ export const getServerSideProps = async (
   };
 };
 
-const FollowButton = ({ data, refetch }: any) => {
-  const [followMutation] = useFollowMutation();
-  const [unfollowMutation] = useUnfollowMutation();
-  const [isLoading, setIsLoading] = useState(false);
+const CollectionCard: React.FC<{ id: number }> = ({ id }) => {
+  // get collection data
+  const { data, loading, error } = useCollectionQuery({ variables: { id } });
 
-  return (
-    <Button
-      text={data.user.isFollowing ? 'Unfollow' : 'Follow'}
-      backgroundClassname={
-        data.user.isFollowing
-          ? 'bg-[#0ACF83] hover:opacity-90'
-          : 'bg-[#474DFE] hover:opacity-90'
-      }
-      isLoading={isLoading}
-      onClick={async () => {
-        setIsLoading(true);
-        try {
-          if (data.user.isFollowing) {
-            await unfollowMutation({
-              variables: { userID: data.user.id },
-            });
-          } else {
-            await followMutation({
-              variables: { userID: data.user.id },
-            });
-          }
-          await refetch();
-        } catch (error) {
-          // @ts-ignore
-          toast.error(error.message);
-        }
-        setIsLoading(false);
-      }}
-    />
-  );
-};
-
-const CollectionCard: React.FC<{
-  preview: string;
-  description: string;
-  title: string;
-  address: string;
-}> = ({ preview, title, description, address }) => {
   const [hover, setHover] = useState(false);
 
+  if (loading) return <div>loading</div>;
+  if (data?.collection === undefined || error)
+    // loading placeholder
+    return (
+      <a
+        className="relative cursor-pointer w-[18rem] h-96 bg-[#242427] rounded-xl"
+        {...hoverHandler(setHover)}
+      >
+        <div
+          className={`absolute bottom-0 w-full backdrop-filter backdrop-blur-xl rounded-xl ${
+            hover ? 'h-full' : ''
+          }`}
+        >
+          <p className="w-full h-10 p-2 text-white bg-black border-t border-gray-400 opacity-70 rounded-b-xl"></p>
+        </div>
+      </a>
+    );
+
   return (
-    <Link href={address} passHref>
-      <div
+    <Link href={`/collection/${id}`}>
+      <a
         className="relative cursor-pointer w-[18rem] h-96 bg-[#242427] rounded-xl"
         {...hoverHandler(setHover)}
       >
         <Image
-          src={preview}
+          src={
+            'https://histories-bucket.s3.eu-central-1.amazonaws.com/1636471330157-3398b12b.jpg'
+          }
           layout="fill"
           objectFit="cover"
           objectPosition="center"
@@ -236,28 +179,17 @@ const CollectionCard: React.FC<{
             {/* on hover show description */}
             {hover ? (
               <>
-                <a className="font-semibold">{title}</a>
+                <a className="font-semibold">{data.collection.name}</a>
                 <br />
-                <p className="pt-4">{description}</p>
+                <p className="pt-4">{data.collection.description}</p>
               </>
             ) : (
-              title
+              data.collection.name
             )}
           </p>
         </div>
-      </div>
+      </a>
     </Link>
-  );
-};
-const CollectionCardLoading: React.FC = () => {
-  return (
-    <div className="relative w-[18rem] h-96 bg-[#242427] rounded-xl">
-      <div className="absolute bottom-0 w-full backdrop-filter backdrop-blur-xl rounded-b-xl">
-        <p className="w-full p-2 text-white bg-black border-t border-gray-400 rounded-b-xl opacity-70">
-          Loading
-        </p>
-      </div>
-    </div>
   );
 };
 

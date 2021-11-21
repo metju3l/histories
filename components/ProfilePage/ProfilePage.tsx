@@ -3,20 +3,21 @@ import React, { ReactNode } from 'react';
 
 import Layout from '../Layout/Layout';
 import LeftPanel from './LeftPanel';
+import ProfileNavigation from './ProfileNavigation';
 
 const ProfilePage: React.FC<{
   rightColumn: ReactNode;
-  menu: ReactNode;
   title: string;
   username: string;
-}> = ({ menu, rightColumn, title, username }) => {
+}> = ({ rightColumn, title, username }) => {
   const loggedQuery = useIsLoggedQuery();
   const userQuery = useGetUserInfoQuery({
     variables: { username: username },
   });
 
   if (loggedQuery.loading || userQuery.loading) return <div>loading</div>;
-  if (loggedQuery.error || userQuery.error) return <div>loading</div>;
+  if (loggedQuery.error || userQuery.error || userQuery.data === undefined)
+    return <div>loading</div>;
 
   return (
     <Layout title={title}>
@@ -29,7 +30,10 @@ const ProfilePage: React.FC<{
             <LeftPanel username={username} />
           </div>
           <div className="w-full" style={{ gridColumnStart: 2 }}>
-            <div className="flex w-full h-auto pt-4 pb-8 gap-4">{menu}</div>
+            <ProfileNavigation
+              loggedQuery={loggedQuery}
+              userQuery={userQuery}
+            />
             {rightColumn}
           </div>
         </main>

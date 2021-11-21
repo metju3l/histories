@@ -31,14 +31,16 @@ const LeftPanel: React.FC<{
       {/* PROFILE PICTURE */}
       <div className="absolute bg-gray-700 rounded-full shadow-2xl w-[10rem] h-[10rem] mt-[-40px]">
         {userQuery.data && (
-          <Image
-            src={GeneratedProfileUrl(user.firstName, user.lastName)}
-            layout="fill"
-            objectFit="contain"
-            objectPosition="center"
-            className="rounded-full"
-            alt="Profile picture"
-          />
+          <Link href={'/' + username} passHref>
+            <Image
+              src={GeneratedProfileUrl(user.firstName, user.lastName)}
+              layout="fill"
+              objectFit="contain"
+              objectPosition="center"
+              className="rounded-full"
+              alt="Profile picture"
+            />
+          </Link>
         )}
       </div>
       {/* PROFILE INFO */}

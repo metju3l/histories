@@ -2,11 +2,10 @@ import { AccountCreatedCard, PostCard } from '@components/PostCard';
 import { ProfilePage } from '@components/ProfilePage';
 import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 import { NextPageContext } from 'next';
-import Link from 'next/link';
 import React from 'react';
 
 const User: React.FC<{ username: string }> = ({ username }) => {
-  const { data, loading, error, refetch } = useGetUserInfoQuery({
+  const { data, loading, error } = useGetUserInfoQuery({
     variables: { username: username },
   });
   const logged = useIsLoggedQuery();
@@ -38,33 +37,6 @@ const User: React.FC<{ username: string }> = ({ username }) => {
             date={data.user.createdAt}
             firstName={data.user.firstName}
           />
-        </>
-      }
-      menu={
-        <>
-          {' '}
-          <Link href={'/' + data.user.username} passHref>
-            <button className="px-6 py-2 text-gray-200 bg-[#484A4D] rounded-xl">
-              Posts
-            </button>
-          </Link>
-          <Link href={'/' + data.user.username + '/collections'} passHref>
-            <button className="px-6 py-2 text-gray-200 hover:bg-[#484A4D] rounded-xl">
-              Collections
-            </button>
-          </Link>
-          <Link href={'/' + data.user.username + '/map'} passHref>
-            <button className="px-6 py-2 text-gray-200 hover:bg-[#484A4D] rounded-xl">
-              Map
-            </button>
-          </Link>
-          {logged.data?.isLogged?.id === data.user.id && (
-            <Link href={'/settings'} passHref>
-              <button className="px-6 py-2 text-gray-200 hover:bg-[#484A4D] rounded-xl">
-                Settings
-              </button>
-            </Link>
-          )}
         </>
       }
     />
