@@ -17,7 +17,6 @@ import React, { FC, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { AiOutlineComment, AiOutlineMore } from 'react-icons/ai';
 import { FiSend } from 'react-icons/fi';
-import { MdPhotoCamera } from 'react-icons/md';
 import TimeAgo from 'react-timeago';
 
 const PostCard: FC<{
@@ -61,14 +60,33 @@ const PostCard: FC<{
     return <div>{JSON.stringify(error)}</div>;
   }
 
-  const postDate = new Date(data!.post.postDate).toLocaleDateString('cs-cz', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
+  const postDateMonth = new Date(data!.post.postDate).toLocaleDateString(
+    'en-us',
+    {
+      month: 'short',
+    }
+  );
+  const postDateDay = new Date(data!.post.postDate).toLocaleDateString(
+    'en-us',
+    {
+      day: '2-digit',
+    }
+  );
+  const postDateYear = new Date(data!.post.postDate).toLocaleDateString(
+    'en-us',
+    {
+      year: 'numeric',
+    }
+  );
 
   return (
-    <>
+    <div className="flex items-center w-full pl-16 border-l border-gray-500 border-dashed">
+      <div className="flex items-center w-28 ml-[-4.5em] text-primary">
+        <div className="w-4 h-4 mr-2 border-2 border-gray-500 rounded-full bg-primary" />
+        {postDateDay}. {postDateMonth}.
+        <br />
+        {postDateYear}
+      </div>
       {modalScreen === 'main' ? (
         <Modal {...modalProps} aria-labelledby="modal-title">
           {isLoggedQuery?.data?.isLogged?.id === data!.post.author.id ? (
@@ -188,13 +206,6 @@ const PostCard: FC<{
         </div>
 
         <div className="w-full">
-          <p className="p-3">
-            {data.post.description}
-            <a className="flex mt-2 gap-[10px]">
-              <MdPhotoCamera size={24} />
-              {postDate}
-            </a>
-          </p>
           <img src={data.post.url[currentImage]} alt="Post" />
           {currentImage > 0 && (
             <button onClick={() => setCurrentImage(currentImage - 1)}>
@@ -309,7 +320,7 @@ const PostCard: FC<{
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
