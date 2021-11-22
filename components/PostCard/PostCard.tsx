@@ -58,7 +58,7 @@ const PostCard: FC<{
   if (error || data?.post.liked === undefined) {
     console.log(error);
 
-    return <div>error</div>;
+    return <div>{JSON.stringify(error)}</div>;
   }
 
   const postDate = new Date(data!.post.postDate).toLocaleDateString('cs-cz', {
@@ -159,7 +159,7 @@ const PostCard: FC<{
         <></>
       )}
 
-      <div className="w-full m-auto mb-8 bg-white border rounded-lg dark:bg-[#343233] border-gray-[#DADBDA] text-text-light dark:text-white">
+      <div className="w-full m-auto mb-8 rounded-lg bg-primary text-primary">
         <div className="flex w-full space-between p-[1em]">
           <a className="flex items-center w-full gap-[10px] h-18">
             <Link href={`/${data!.post.author.username}`}>

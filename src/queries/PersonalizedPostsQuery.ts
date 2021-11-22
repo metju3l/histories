@@ -32,7 +32,7 @@ const PersonalizedPostsQuery = async (logged: number | null) => {
   const query =
     logged === null
       ? `CALL {
-        MATCH (author:User)-[:CREATED]->(post)
+        OPTIONAL MATCH (author:User)-[:CREATED]->(post:Post)
         RETURN author, post
         ORDER BY post.createdAt DESC
         SKIP 0

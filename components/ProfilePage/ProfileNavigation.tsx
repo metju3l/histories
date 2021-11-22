@@ -49,10 +49,10 @@ const MenuOption: React.FC<{
   return (
     <Link href={href} passHref>
       <button
-        className={`px-6 py-2 text-gray-200 rounded-xl ${
+        className={`px-6 py-2 text-primary rounded-xl ${
           pathname.split('/')[pathname.split('/').length - 1] == path
-            ? 'bg-[#484A4D]'
-            : 'hover:bg-[#484A4D]'
+            ? 'bg-primary'
+            : 'hover:bg-light-background-primary dark:hover:bg-dark-background-primary'
         }`}
       >
         {title}

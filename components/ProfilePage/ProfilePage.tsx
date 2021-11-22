@@ -22,9 +22,9 @@ const ProfilePage: React.FC<{
   return (
     <Layout title={title}>
       {/* HEADER */}
-      <main className="w-full h-32 shadow-2xl bg-[#242427]"></main>
+      <main className="w-full h-32 shadow-2xl bg-tertiary"></main>
       {/* MAIN CONTENT */}
-      <div className="w-full h-auto min-h-screen bg-[#19191B]">
+      <div className="w-full h-auto min-h-screen bg-secondary">
         <main className="flex w-full m-auto max-w-7xl">
           <div className="w-[38rem]">
             <LeftPanel username={username} />
