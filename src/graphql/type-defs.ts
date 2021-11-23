@@ -35,6 +35,13 @@ export default gql`
     verifyToken(token: String!): String!
     createComment(input: CreateCommentInput!): String!
     report(input: ReportInput!): String!
+    addToCollection(input: AddToCollectionInput!): String!
+    removeFromCollection(input: AddToCollectionInput!): String!
+  }
+
+  input AddToCollectionInput {
+    postId: Int!
+    collectionId: Int!
   }
 
   input ReportInput {
@@ -203,6 +210,7 @@ export default gql`
     preview: String
     postCount: Int!
     author: UserInfoMinimal!
+    posts: [PostInfoNew]!
   }
 
   type TagInfo {

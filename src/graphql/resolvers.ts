@@ -25,7 +25,9 @@ import {
   Unfollow,
   Unlike,
 } from '../mutations';
+import AddPostToCollection from '../mutations/Create/AddPostToCollection';
 import Report from '../mutations/Create/Report';
+import RemovePostFromCollection from '../mutations/Delete/RemovePostFromCollection';
 import LastPost from '../mutations/lastPost';
 import VerifyToken from '../mutations/VerifyToken';
 import {
@@ -186,6 +188,34 @@ const resolvers = {
           loggedID: context.decoded.id,
           id,
         });
+      } else throw new Error('User is not logged');
+    },
+
+    addToCollection: async (
+      _parent: undefined,
+      { input }: { input: { collectionId: number; postId: number } },
+      context: contextType
+    ) => {
+      if (context.validToken) {
+        await AddPostToCollection({
+          ...input,
+          userId: context.decoded.id,
+        });
+        return 0;
+      } else throw new Error('User is not logged');
+    },
+
+    removeFromCollection: async (
+      _parent: undefined,
+      { input }: { input: { collectionId: number; postId: number } },
+      context: contextType
+    ) => {
+      if (context.validToken) {
+        await RemovePostFromCollection({
+          ...input,
+          userId: context.decoded.id,
+        });
+        return 0;
       } else throw new Error('User is not logged');
     },
 

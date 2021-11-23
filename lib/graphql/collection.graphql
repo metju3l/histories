@@ -12,5 +12,8 @@ query Collection($id: Int!) {
       firstName
       lastName
     }
+    posts {
+      id
+    }
   }
 }

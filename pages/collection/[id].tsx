@@ -1,5 +1,6 @@
 import 'react-dropdown/style.css';
 
+import { PostCard } from '@components/PostCard';
 import { ProfilePage } from '@components/ProfilePage';
 import { useCollectionQuery } from '@graphql/collection.graphql';
 import { NextPageContext } from 'next';
@@ -40,7 +41,11 @@ const Collections: FC<{ id: number }> = ({ id }) => {
                 />
               </span>
             </div>
-            <div className="grid grid-cols-3 gap-10"></div>
+            <div className="">
+              {data.collection.posts.map((post) => (
+                <PostCard key={post!.id} id={post!.id} isLoggedQuery={null} />
+              ))}
+            </div>
           </div>
         }
       />
