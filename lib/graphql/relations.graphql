@@ -15,5 +15,5 @@ mutation unlike($id: Int!) {
 }
 
 mutation report($id: Int!) {
-  report(input: { id: $id })
+  report(id: $id)
 }

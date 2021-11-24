@@ -221,11 +221,11 @@ const resolvers = {
 
     report: async (
       _parent: undefined,
-      { input }: { input: { id: number } },
+      { id }: { id: number },
       context: any
     ) => {
       if (context.validToken) {
-        await Report({ logged: context.decoded.id, target: input.id });
+        await Report({ logged: context.decoded.id, target: id });
         return 0;
       } else throw new Error('User is not logged');
     },

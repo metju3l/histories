@@ -352,13 +352,23 @@ const MapPlace = ({ place, onClick }: { place: any; onClick: () => void }) => {
         onClick={onClick}
         className="cursor-pointer -translate-y-1/2 -translate-x-1/2"
       >
-        <Image
-          src={place.icon ?? place.posts[0].url[0]}
-          width={60}
-          height={60}
-          className="object-cover rounded-full"
-          alt="Picture on map"
-        />
+        {place.icon ? (
+          <Image
+            src={place.icon}
+            width={90}
+            height={90}
+            objectFit="contain"
+            alt="Picture on map"
+          />
+        ) : (
+          <Image
+            src={place.posts[0].url[0]}
+            width={60}
+            height={60}
+            className="object-cover rounded-full"
+            alt="Picture on map"
+          />
+        )}
       </div>
     </Marker>
   );

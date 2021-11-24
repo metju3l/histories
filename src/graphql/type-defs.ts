@@ -22,6 +22,7 @@ export default gql`
   type Mutation {
     deleteUser(input: DeleteUserInput!): String!
     delete(id: Int!): String
+    report(id: Int!): String
     like(input: LikeInput!): String
     unlike(id: Int!): String
     follow(userID: Int!): String
@@ -34,7 +35,6 @@ export default gql`
     createUser(input: CreateUserInput!): String!
     verifyToken(token: String!): String!
     createComment(input: CreateCommentInput!): String!
-    report(input: ReportInput!): String!
     addToCollection(input: AddToCollectionInput!): String!
     removeFromCollection(input: AddToCollectionInput!): String!
   }
@@ -42,10 +42,6 @@ export default gql`
   input AddToCollectionInput {
     postId: Int!
     collectionId: Int!
-  }
-
-  input ReportInput {
-    id: Int!
   }
 
   input CreateCommentInput {

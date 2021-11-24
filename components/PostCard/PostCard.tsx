@@ -1,3 +1,4 @@
+import { Button } from '@components/Button';
 import { Comment } from '@components/Comment';
 import {
   useCreateCommentMutation,
@@ -6,11 +7,13 @@ import {
 } from '@graphql/post.graphql';
 import {
   useLikeMutation,
+  useReportMutation,
   useUnfollowMutation,
   useUnlikeMutation,
 } from '@graphql/relations.graphql';
+import { Menu, Transition } from '@headlessui/react';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
-import { Avatar, Button, Modal } from '@nextui-org/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FC, useRef, useState } from 'react';
@@ -26,8 +29,9 @@ const PostCard: FC<{
   const router = useRouter();
 
   const { data, loading, error, refetch } = usePostQuery({ variables: { id } });
-  const [unfollowMutation] = useUnfollowMutation();
 
+  const [reportMutation] = useReportMutation();
+  const [unfollowMutation] = useUnfollowMutation();
   const [deleteMutation] = useDeleteMutation();
   const [likeMutation] = useLikeMutation();
   const [unlikeMutation] = useUnlikeMutation();
@@ -79,6 +83,18 @@ const PostCard: FC<{
     }
   );
 
+  const DeletePost = async () => {
+    try {
+      await deleteMutation({
+        variables: { id },
+      });
+      toast.success('Post deleted successfully');
+    } catch (error) {
+      // @ts-ignore
+      toast.error(error.message);
+    }
+  };
+
   return (
     <div className="flex items-center w-full pl-16 border-l border-gray-500 border-dashed">
       <div className="flex items-center w-28 ml-[-4.5em] text-primary">
@@ -87,108 +103,25 @@ const PostCard: FC<{
         <br />
         {postDateYear}
       </div>
-      {modalScreen === 'main' ? (
-        <Modal {...modalProps} aria-labelledby="modal-title">
-          {isLoggedQuery?.data?.isLogged?.id === data!.post.author.id ? (
-            <>
-              <ModalOption
-                onClick={async () => {
-                  try {
-                    await deleteMutation({
-                      variables: { id },
-                    });
-                  } catch (error) {
-                    // @ts-ignore
-                    toast.error(error.message);
-                  }
-                }}
-                text="Delete post"
-                warning
-              />
-              <ModalOption
-                onClick={() => {
-                  setEditMode(true);
-                  setModalScreen('report');
-                }}
-                text="Edit"
-              />
-            </>
-          ) : (
-            isLoggedQuery?.data?.isLogged?.id && (
-              <>
-                <ModalOption
-                  onClick={() => setModalScreen('report')}
-                  text="Report"
-                  warning
-                />
-
-                <ModalOption
-                  onClick={async () => {
-                    try {
-                      await unfollowMutation({
-                        variables: { userID: data!.post.author.id },
-                      });
-                    } catch (error) {
-                      // @ts-ignore
-                      toast.error(error.message);
-                    }
-                  }}
-                  text="Unfollow"
-                  warning
-                />
-              </>
-            )
-          )}
-          <ModalOption onClick={() => setModal(false)} text="Share" />
-          <ModalOption
-            onClick={() =>
-              router.push(`https://www.histories.cc/post/${data?.post.id}`)
-            }
-            text="Go to post"
-          />
-          <ModalOption
-            onClick={async () => {
-              await navigator.clipboard.writeText(
-                `https://www.histories.cc/post/${data?.post.id}`
-              );
-              modalProps.onClose();
-            }}
-            text="Copy link"
-          />
-          <ModalOption onClick={() => setModal(false)} text="Cancel" />
-        </Modal>
-      ) : modalScreen === 'report' ? (
-        <Modal aria-labelledby="modal-title" {...modalProps}>
-          <div className="relative w-full py-4 border-b border-[#DADBDA]">
-            <a className="text-center">Report</a>
-            <button
-              className="absolute text-3xl font-semibold top-1 right-4"
-              onClick={modalProps.onClose}
-            >
-              x
-            </button>
-          </div>
-          <ModalOption onClick={() => setModal(false)} text="Reason 1" />
-          <ModalOption onClick={() => setModal(false)} text="Reason 2" />
-          <ModalOption onClick={() => setModal(false)} text="Reason 3" />
-          <ModalOption onClick={() => setModal(false)} text="Reason 4" />
-        </Modal>
-      ) : (
-        <></>
-      )}
 
       <div className="w-full m-auto mb-8 rounded-lg bg-primary text-primary">
         <div className="flex w-full space-between p-[1em]">
           <a className="flex items-center w-full gap-[10px] h-18">
             <Link href={`/${data!.post.author.username}`}>
-              <>
-                <Avatar
-                  size="medium"
-                  src={GeneratedProfileUrl(
-                    data!.post.author.firstName,
-                    data!.post.author.lastName
-                  )}
-                />
+              <a className="flex gap-4">
+                <div className="relative w-10 h-10 rounded-full shadow-md bg-secondary">
+                  <Image
+                    src={GeneratedProfileUrl(
+                      data!.post.author.firstName,
+                      data!.post.author.lastName
+                    )}
+                    layout="fill"
+                    objectFit="contain"
+                    objectPosition="center"
+                    className="rounded-full"
+                    alt="Profile picture"
+                  />
+                </div>
                 <div>
                   <a className="text-lg font-semibold">
                     {data!.post.author.firstName} {data!.post.author.lastName}
@@ -197,12 +130,116 @@ const PostCard: FC<{
                     <TimeAgo date={data.post.createdAt} />
                   </a>
                 </div>
-              </>
+              </a>
             </Link>
           </a>
-          <button onClick={() => setModal(true)}>
-            <AiOutlineMore size={24} />
-          </button>
+
+          <Menu as="div" className="relative inline-block text-left">
+            <div>
+              <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-whiterounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                <AiOutlineMore size={24} />
+              </Menu.Button>
+            </div>
+            <Transition
+              as={React.Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="absolute right-0 w-56 mt-2 bg-white shadow-lg origin-top-right divide-y divide-gray-100 rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="px-1 py-1 ">
+                  {isLoggedQuery?.data?.isLogged?.id ===
+                    data!.post.author.id && (
+                    <Menu.Item>
+                      <button className="flex items-center w-full px-2 py-2 text-sm text-black group rounded-md">
+                        Edit
+                      </button>
+                    </Menu.Item>
+                  )}
+                  {isLoggedQuery?.data?.isLogged?.id &&
+                    isLoggedQuery?.data?.isLogged?.id !==
+                      data!.post.author.id && (
+                      <>
+                        <Menu.Item>
+                          <button
+                            className="flex items-center w-full px-2 py-2 text-sm text-black group rounded-md"
+                            onClick={async () => {
+                              try {
+                                await reportMutation({
+                                  variables: { id: data!.post.id },
+                                });
+                                toast.success('Post reported');
+                              } catch (error) {
+                                // @ts-ignore
+                                toast.error(error.message);
+                              }
+                            }}
+                          >
+                            Report
+                          </button>
+                        </Menu.Item>
+
+                        <Menu.Item>
+                          <button
+                            className="flex items-center w-full px-2 py-2 text-sm text-black group rounded-md"
+                            onClick={async () => {
+                              try {
+                                await unfollowMutation({
+                                  variables: { userID: data!.post.author.id },
+                                });
+                                toast.success('User unfollowed');
+                              } catch (error) {
+                                // @ts-ignore
+                                toast.error(error.message);
+                              }
+                            }}
+                          >
+                            Unfollow
+                          </button>
+                        </Menu.Item>
+                      </>
+                    )}
+                  <Menu.Item>
+                    <button
+                      className="flex items-center w-full px-2 py-2 text-sm text-black group rounded-md"
+                      onClick={async () => {
+                        await navigator.clipboard.writeText(
+                          `https://www.histories.cc/post/${data?.post.id}`
+                        );
+                        toast.success('Link copied to clipboard');
+                      }}
+                    >
+                      Copy link
+                    </button>
+                  </Menu.Item>
+                </div>
+                {isLoggedQuery?.data?.isLogged?.id && (
+                  <div className="px-1 py-1">
+                    <Menu.Item>
+                      <button className="flex items-center w-full px-2 py-2 text-sm text-black group rounded-md">
+                        Add to collection
+                      </button>
+                    </Menu.Item>
+                  </div>
+                )}
+                {isLoggedQuery?.data?.isLogged?.id === data!.post.author.id && (
+                  <div className="px-1 py-1">
+                    <Menu.Item>
+                      <button
+                        className="flex items-center w-full px-2 py-2 text-sm text-black group rounded-md"
+                        onClick={DeletePost}
+                      >
+                        Delete post
+                      </button>
+                    </Menu.Item>
+                  </div>
+                )}
+              </Menu.Items>
+            </Transition>
+          </Menu>
         </div>
 
         <div className="w-full">
@@ -298,9 +335,9 @@ const PostCard: FC<{
                         toast.error(error.message);
                       }
                     }}
-                  >
-                    Comment
-                  </Button>
+                    isLoading={false}
+                    text="Comment"
+                  />
                 </>
               )}
               <div>
@@ -321,29 +358,6 @@ const PostCard: FC<{
         </div>
       </div>
     </div>
-  );
-};
-
-const ModalOption = ({
-  text,
-  onClick,
-  warning,
-}: {
-  text: string;
-  onClick: () => void;
-  warning?: boolean;
-}) => {
-  const [loading, setLoading] = useState(false);
-
-  return (
-    <button
-      onClick={onClick}
-      className={`${
-        warning ? 'text-red-500 font-semibold' : ''
-      } w-full border-b border-gray-[#DADBDA] py-4`}
-    >
-      {loading ? 'loading...' : text}
-    </button>
   );
 };
 
