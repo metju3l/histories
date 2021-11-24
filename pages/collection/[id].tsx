@@ -3,12 +3,14 @@ import 'react-dropdown/style.css';
 import { PostCard } from '@components/PostCard';
 import { ProfilePage } from '@components/ProfilePage';
 import { useCollectionQuery } from '@graphql/collection.graphql';
+import { useIsLoggedQuery } from '@graphql/user.graphql';
 import { NextPageContext } from 'next';
 import React, { FC } from 'react';
 import Dropdown from 'react-dropdown';
 
 const Collections: FC<{ id: number }> = ({ id }) => {
   const { data, loading, error } = useCollectionQuery({ variables: { id } });
+  const logged = useIsLoggedQuery();
 
   const sortOptions = [
     { value: 'hot', label: 'Hot' },
@@ -17,7 +19,7 @@ const Collections: FC<{ id: number }> = ({ id }) => {
     { value: 'oldest', label: 'Oldest' },
   ];
 
-  if (loading) return <div>loading</div>;
+  if (loading || logged.loading) return <div>loading</div>;
   if (error || data === undefined) return <div>error</div>;
 
   return (
@@ -43,7 +45,7 @@ const Collections: FC<{ id: number }> = ({ id }) => {
             </div>
             <div className="">
               {data.collection.posts.map((post) => (
-                <PostCard key={post!.id} id={post!.id} isLoggedQuery={null} />
+                <PostCard key={post!.id} id={post!.id} currentCollection={id} />
               ))}
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { Button } from '@components/Button';
 import { Comment } from '@components/Comment';
+import { LoginContext } from '@components/Layout/Layout';
 import {
   useCreateCommentMutation,
   useDeleteMutation,
@@ -7,6 +8,7 @@ import {
 } from '@graphql/post.graphql';
 import {
   useLikeMutation,
+  useRemoveFromCollectionMutation,
   useReportMutation,
   useUnfollowMutation,
   useUnlikeMutation,
@@ -23,10 +25,12 @@ import { FiSend } from 'react-icons/fi';
 import TimeAgo from 'react-timeago';
 
 const PostCard: FC<{
-  isLoggedQuery: any;
   id: number;
-}> = ({ id, isLoggedQuery }) => {
+  currentCollection?: number;
+}> = ({ id, currentCollection }) => {
   const router = useRouter();
+
+  const loginContext = React.useContext(LoginContext);
 
   const { data, loading, error, refetch } = usePostQuery({ variables: { id } });
 
@@ -35,6 +39,7 @@ const PostCard: FC<{
   const [deleteMutation] = useDeleteMutation();
   const [likeMutation] = useLikeMutation();
   const [unlikeMutation] = useUnlikeMutation();
+  const [removeFromCollection] = useRemoveFromCollectionMutation();
 
   // local like state tracking for real time changes
   const [localLikeState, setLocalLikeState] = useState<boolean | null>(null);
@@ -151,16 +156,38 @@ const PostCard: FC<{
             >
               <Menu.Items className="absolute right-0 w-56 mt-2 bg-white shadow-lg origin-top-right divide-y divide-gray-100 rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
-                  {isLoggedQuery?.data?.isLogged?.id ===
-                    data!.post.author.id && (
+                  {loginContext?.data.isLogged?.id === data!.post.author.id && (
                     <Menu.Item>
                       <button className="flex items-center w-full px-2 py-2 text-sm text-black group rounded-md">
                         Edit
                       </button>
                     </Menu.Item>
                   )}
-                  {isLoggedQuery?.data?.isLogged?.id &&
-                    isLoggedQuery?.data?.isLogged?.id !==
+                  {loginContext?.data.isLogged?.id === data!.post.author.id &&
+                    currentCollection !== undefined && (
+                      <Menu.Item>
+                        <button
+                          className="flex items-center w-full px-2 py-2 text-sm text-black group rounded-md"
+                          onClick={async () => {
+                            try {
+                              await removeFromCollection({
+                                variables: {
+                                  collectionId: currentCollection,
+                                  postId: id,
+                                },
+                              });
+                              toast.success('Post was removed from collection');
+                            } catch (error: any) {
+                              toast.error(error.message);
+                            }
+                          }}
+                        >
+                          Remove from collection
+                        </button>
+                      </Menu.Item>
+                    )}
+                  {loginContext?.data.isLogged?.id &&
+                    loginContext?.data.isLogged?.id !==
                       data!.post.author.id && (
                       <>
                         <Menu.Item>
@@ -216,7 +243,7 @@ const PostCard: FC<{
                     </button>
                   </Menu.Item>
                 </div>
-                {isLoggedQuery?.data?.isLogged?.id && (
+                {loginContext?.data.isLogged?.id && (
                   <div className="px-1 py-1">
                     <Menu.Item>
                       <button className="flex items-center w-full px-2 py-2 text-sm text-black group rounded-md">
@@ -225,7 +252,7 @@ const PostCard: FC<{
                     </Menu.Item>
                   </div>
                 )}
-                {isLoggedQuery?.data?.isLogged?.id === data!.post.author.id && (
+                {loginContext?.data.isLogged?.id === data!.post.author.id && (
                   <div className="px-1 py-1">
                     <Menu.Item>
                       <button
@@ -313,7 +340,7 @@ const PostCard: FC<{
               </div>
             )}
             <div className="pt-2 mt-2 border-t border-gray-300">
-              {isLoggedQuery?.data?.isLogged && (
+              {loginContext?.data.isLogged?.id && (
                 <>
                   <textarea
                     className="p-2 bg-gray-100 border-2 border-gray-300 rounded-xl"
@@ -348,7 +375,6 @@ const PostCard: FC<{
                     {...comment}
                     refetch={refetch}
                     author={comment.author}
-                    logged={isLoggedQuery?.data?.isLogged}
                     liked={comment.liked}
                   />
                 ))}

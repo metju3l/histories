@@ -1,3 +1,4 @@
+import { LoginContext } from '@components/Layout/Layout';
 import { Menu } from '@components/Modal';
 import { useDeleteMutation } from '@graphql/post.graphql';
 import {
@@ -18,13 +19,6 @@ type CommentProps = {
   createdAt: number;
   author: { firstName: string; lastName: string; id: number; username: string };
   id: number;
-  logged: null | {
-    email: string;
-    firstName: string;
-    lastName: string;
-    id: number;
-    username: string;
-  };
   liked: boolean;
   refetch: any;
 };
@@ -35,9 +29,10 @@ const Comment: React.FC<CommentProps> = ({
   liked,
   author,
   createdAt,
-  logged,
   refetch,
 }) => {
+  const loginContext = React.useContext(LoginContext);
+
   const [deleteMutation] = useDeleteMutation();
   const [reportMutation] = useReportMutation();
   const [likeMutation] = useLikeMutation();
@@ -55,7 +50,7 @@ const Comment: React.FC<CommentProps> = ({
   // local like state tracking for real time changes
   const [localLikeState, setLocalLikeState] = useState<boolean | null>(null);
 
-  const isCommentAuthor = author.id === logged?.id;
+  const isCommentAuthor = author.id === loginContext?.data?.isLogged?.id;
 
   return (
     <span
@@ -164,22 +159,24 @@ const Comment: React.FC<CommentProps> = ({
         <span className="pl-2">
           <button
             onClick={async () => {
-              const likedTmp = localLikeState ?? liked;
-              setLocalLikeState(!likedTmp);
-              try {
-                if (likedTmp)
-                  await unlikeMutation({
-                    variables: { id },
-                  });
-                else
-                  await likeMutation({
-                    variables: { id, type: 'like' },
-                  });
-                await refetch();
-              } catch (error) {
-                // @ts-ignore
-                toast.error(error.message);
-              }
+              if (loginContext?.data?.isLogged) {
+                const likedTmp = localLikeState ?? liked;
+                setLocalLikeState(!likedTmp);
+                try {
+                  if (likedTmp)
+                    await unlikeMutation({
+                      variables: { id },
+                    });
+                  else
+                    await likeMutation({
+                      variables: { id, type: 'like' },
+                    });
+                  await refetch();
+                } catch (error) {
+                  // @ts-ignore
+                  toast.error(error.message);
+                }
+              } else toast.error('You must be logged to like a comment');
             }}
           >
             {localLikeState ?? liked ? 'Unlike' : 'Like'}

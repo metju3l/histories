@@ -3,9 +3,9 @@ import 'tailwindcss/tailwind.css';
 import './app.scss';
 
 import { ApolloProvider } from '@apollo/client';
+import { useIsLoggedQuery } from '@graphql/user.graphql';
 import type { AppProps } from 'next/app';
-import React from 'react';
-import { Toaster } from 'react-hot-toast';
+import React, { createContext } from 'react';
 
 import { useApollo } from '../lib/apollo';
 
@@ -14,14 +14,25 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 
   return (
     <ApolloProvider client={apolloClient}>
-      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-      <script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
-      />
-      <Toaster position="top-center" reverseOrder={true} />
+      <LoginProvider>
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
+        />
 
-      <Component {...pageProps} />
+        <Component {...pageProps} />
+      </LoginProvider>
     </ApolloProvider>
   );
 }
+
+const LoginProvider: React.FC = ({ children }) => {
+  const logged = useIsLoggedQuery();
+  const LoginContext = createContext(logged);
+
+  return (
+    <LoginContext.Provider value={logged}>{children}</LoginContext.Provider>
+  );
+};
+
 export default MyApp;

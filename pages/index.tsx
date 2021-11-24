@@ -21,7 +21,7 @@ const Index: React.FC = () => {
           <div className="sticky top-20"></div>
         </div>
         <div className="w-full mt-2 xl:w-[40%] md:w-[60%] p-[1em]">
-          <PersonalizedPosts logged={logged} />
+          <PersonalizedPosts />
         </div>
         {/* RIGHT COLUMN */}
         <div className="hidden w-[40%] xl:w-[30%] p-[1em] md:block">
@@ -36,7 +36,7 @@ const Index: React.FC = () => {
   );
 };
 
-const PersonalizedPosts = ({ logged }: { logged: any }) => {
+const PersonalizedPosts = () => {
   const { data, loading, error, refetch } = usePersonalizedPostsQuery();
 
   if (loading) return <div>post loading</div>;
@@ -45,7 +45,7 @@ const PersonalizedPosts = ({ logged }: { logged: any }) => {
   return (
     <div>
       {data?.personalizedPosts.map((post: any) => (
-        <PostCard key={post.id} id={post.id} isLoggedQuery={logged} />
+        <PostCard key={post.id} id={post.id} />
       ))}
     </div>
   );

@@ -31,7 +31,7 @@ const User: React.FC<{ username: string }> = ({ username }) => {
         <>
           {data.user.posts &&
             data.user.posts.map((post: any) => (
-              <PostCard key={post!.id} id={post!.id} isLoggedQuery={logged} />
+              <PostCard key={post!.id} id={post!.id} />
             ))}
           <AccountCreatedCard
             date={data.user.createdAt}

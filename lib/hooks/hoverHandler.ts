@@ -1,8 +1,8 @@
 import React from 'react';
 
-type hoverHandlerProps = (value: React.SetStateAction<boolean>) => void;
+type setHoverType = React.Dispatch<React.SetStateAction<boolean>>;
 
-const hoverHandler = (setHover: hoverHandlerProps) => {
+const hoverHandler = (setHover: setHoverType) => {
   return {
     onMouseEnter: () => setHover(true),
     onMouseLeave: () => setHover(false),
