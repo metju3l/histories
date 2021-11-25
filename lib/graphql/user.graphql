@@ -92,6 +92,12 @@ query IsLogged {
     lastName
     username
     email
+    collections {
+      id
+      name
+      description
+      createdAt
+    }
   }
 }
 

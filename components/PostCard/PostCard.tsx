@@ -1,3 +1,4 @@
+import { AddToCollectionModal } from '@components/AddToCollectionModal';
 import { Button } from '@components/Button';
 import { Comment } from '@components/Comment';
 import { LoginContext } from '@components/Layout/Layout';
@@ -17,7 +18,6 @@ import { Menu, Transition } from '@headlessui/react';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { FC, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { AiOutlineComment, AiOutlineMore } from 'react-icons/ai';
@@ -28,8 +28,6 @@ const PostCard: FC<{
   id: number;
   currentCollection?: number;
 }> = ({ id, currentCollection }) => {
-  const router = useRouter();
-
   const loginContext = React.useContext(LoginContext);
 
   const { data, loading, error, refetch } = usePostQuery({ variables: { id } });
@@ -41,6 +39,8 @@ const PostCard: FC<{
   const [unlikeMutation] = useUnlikeMutation();
   const [removeFromCollection] = useRemoveFromCollectionMutation();
 
+  const [collectionSelectModal, setCollectionSelectModal] = useState(false);
+
   // local like state tracking for real time changes
   const [localLikeState, setLocalLikeState] = useState<boolean | null>(null);
   // save comment input to ref for focus on button click
@@ -49,21 +49,15 @@ const PostCard: FC<{
   const [createCommentMutation] = useCreateCommentMutation();
   const [commentContent, setCommentContent] = useState('');
 
-  const [modal, setModal] = useState(false);
-  const [modalScreen, setModalScreen] = useState('main');
-  const modalProps = {
-    open: modal,
-    onClose: () => {
-      setModal(false);
-      setModalScreen('main');
-    },
-  };
-
   const [currentImage, setCurrentImage] = useState(0);
-  const [editMode, setEditMode] = useState(false);
 
-  if (loading) return <div>loading</div>;
-  if (error || data?.post.liked === undefined) {
+  if (loading || loginContext.loading) return <div>loading</div>;
+  if (
+    error ||
+    data?.post.liked === undefined ||
+    loginContext.error ||
+    !loginContext.data
+  ) {
     console.log(error);
 
     return <div>{JSON.stringify(error)}</div>;
@@ -138,6 +132,32 @@ const PostCard: FC<{
               </a>
             </Link>
           </a>
+          {loginContext?.data.isLogged?.id && (
+            <div
+              className="pt-2"
+              onClick={() => setCollectionSelectModal(true)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-6 h-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                />
+              </svg>
+            </div>
+          )}
+          <AddToCollectionModal
+            openState={collectionSelectModal}
+            setOpenState={setCollectionSelectModal}
+            postId={data.post.id}
+          />
 
           <Menu as="div" className="relative inline-block text-left">
             <div>
@@ -156,14 +176,14 @@ const PostCard: FC<{
             >
               <Menu.Items className="absolute right-0 w-56 mt-2 bg-white shadow-lg origin-top-right divide-y divide-gray-100 rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
-                  {loginContext?.data.isLogged?.id === data!.post.author.id && (
+                  {loginContext.data.isLogged?.id === data!.post.author.id && (
                     <Menu.Item>
                       <button className="flex items-center w-full px-2 py-2 text-sm text-black group rounded-md">
                         Edit
                       </button>
                     </Menu.Item>
                   )}
-                  {loginContext?.data.isLogged?.id === data!.post.author.id &&
+                  {loginContext.data.isLogged?.id === data!.post.author.id &&
                     currentCollection !== undefined && (
                       <Menu.Item>
                         <button
@@ -243,15 +263,7 @@ const PostCard: FC<{
                     </button>
                   </Menu.Item>
                 </div>
-                {loginContext?.data.isLogged?.id && (
-                  <div className="px-1 py-1">
-                    <Menu.Item>
-                      <button className="flex items-center w-full px-2 py-2 text-sm text-black group rounded-md">
-                        Add to collection
-                      </button>
-                    </Menu.Item>
-                  </div>
-                )}
+
                 {loginContext?.data.isLogged?.id === data!.post.author.id && (
                   <div className="px-1 py-1">
                     <Menu.Item>

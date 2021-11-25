@@ -1,6 +1,7 @@
-import DbConnector from '../database/driver';
 import { compareSync } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+
+import DbConnector from '../database/driver';
 
 const Login = async (input: {
   username: string;

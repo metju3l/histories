@@ -11,10 +11,18 @@ const CreateCollection = async ({
   description: string;
   preview: String;
 }): Promise<number> => {
-  const query = `MATCH (user:User) 
-  WHERE ID(user) = $userId
-  CREATE (user)-[:CREATED]->(collection:Collection {createdAt: $createdAt, name: $name, description: $description, preview: $preview})
-  RETURN collection{.*, id: ID(collection)} as collection`;
+  // limit to max 50 collections
+  const query = `MATCH (user:User)
+WHERE ID(user) = $userId
+CALL { 
+    WITH user
+    OPTIONAL MATCH (user:User)-[:CREATED]->(collection:Collection)
+    WITH SIZE(COLLECT(DISTINCT collection)) AS collectionCount, user
+    WHERE SIZE(COLLECT(DISTINCT collection)) < 5O
+    CREATE (user)-[:CREATED]->(newCollection:Collection {createdAt: $createdAt, name: $name, description: $description, preview: $preview})
+    RETURN newCollection
+}
+RETURN newCollection{.*, id: ID(newCollection)} AS collection`;
 
   await RunCypherQuery(query, {
     createdAt: new Date().getTime(),

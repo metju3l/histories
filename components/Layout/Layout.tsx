@@ -1,5 +1,6 @@
+import { ApolloError, ApolloQueryResult } from '@apollo/client';
 import { Navbar } from '@components/Navbar';
-import { useIsLoggedQuery } from '@graphql/user.graphql';
+import { IsLoggedQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 import Head from 'next/head';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
@@ -14,7 +15,17 @@ type LayoutProps = {
   children: React.ReactNode;
 };
 
-export const LoginContext = React.createContext<any>(undefined);
+export const LoginContext = React.createContext<{
+  data: IsLoggedQuery | undefined;
+  loading: boolean;
+  error: ApolloError | undefined;
+  refetch: (() => Promise<ApolloQueryResult<IsLoggedQuery>>) | undefined;
+}>({
+  data: undefined,
+  loading: true,
+  error: undefined,
+  refetch: undefined,
+});
 
 const Layout: React.FC<LayoutProps> = ({
   title,
@@ -23,10 +34,10 @@ const Layout: React.FC<LayoutProps> = ({
   redirectNotLogged,
   children,
 }) => {
-  const logged = useIsLoggedQuery();
+  const { data, loading, error, refetch } = useIsLoggedQuery();
 
   return (
-    <LoginContext.Provider value={logged}>
+    <LoginContext.Provider value={{ data, loading, error, refetch }}>
       <div>
         {(dontRedirectUnverified !== true ||
           redirectLogged ||

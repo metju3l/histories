@@ -1,9 +1,10 @@
 import { Button } from '@components/Button';
+import { LoginContext } from '@components/Layout/Layout';
 import {
   useFollowMutation,
   useUnfollowMutation,
 } from '@graphql/relations.graphql';
-import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
+import { useGetUserInfoQuery } from '@graphql/user.graphql';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,19 +13,20 @@ import React, { useState } from 'react';
 const LeftPanel: React.FC<{
   username: string;
 }> = ({ username }) => {
+  const loginContext = React.useContext(LoginContext);
+
   const [editMode, setEditMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const loggedQuery = useIsLoggedQuery();
   const userQuery = useGetUserInfoQuery({
     variables: { username: username },
   });
 
-  if (loggedQuery.loading || userQuery.loading) return <div>loading</div>;
-  if (loggedQuery.error || userQuery.error) return <div>loading</div>;
+  if (loginContext.loading || userQuery.loading) return <div>loading</div>;
+  if (loginContext.error || userQuery.error) return <div>loading</div>;
 
   const user = userQuery.data!.user;
-  const isLogged = loggedQuery.data!.isLogged;
+  const isLogged = loginContext.data!.isLogged;
 
   return (
     <div className="sticky top-40">
@@ -77,7 +79,7 @@ const LeftPanel: React.FC<{
         </p>
         {isLogged &&
           /* FOLLOW BUTTON */
-          (loggedQuery.data?.isLogged!.id !== user.id ? (
+          (loginContext.data?.isLogged!.id !== user.id ? (
             <div className="pt-6">
               <FollowButton
                 isFollowing={user.isFollowing}

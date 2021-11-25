@@ -20,7 +20,7 @@ const ProfileNavigation: React.FC<{
         pathname={router.pathname}
         title="Collections"
         href={'/' + userQuery.data.user.username + '/collections'}
-        path="collections"
+        path="[id]"
       />{' '}
       <MenuOption
         pathname={router.pathname}

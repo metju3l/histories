@@ -123,8 +123,9 @@ const resolvers = {
       context: contextType
     ) => {
       // return user data
-      if (!context.validToken || context.decoded.id === undefined) return null;
-      else return await UserQuery({ id: context.decoded.id });
+      if (context.validToken)
+        return await UserQuery({ id: context.decoded.id });
+      else return null;
     },
 
     post: async (

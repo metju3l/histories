@@ -11,7 +11,7 @@ export default gql`
     suggestedUsers: [User]!
     tag(label: String!): TagInfo
     paths: [Path]
-    isLogged: UserInfoMinimal
+    isLogged: User
     userPosts(input: UserPostsInput!): [Post]
     personalizedPosts: [PostID]!
     checkIfLogged: CheckIfLoggedInfo!
