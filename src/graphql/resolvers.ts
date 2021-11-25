@@ -389,6 +389,7 @@ const resolvers = {
         input: {
           name: string;
           description: string;
+          isPrivate: boolean;
         };
       },
       context: any

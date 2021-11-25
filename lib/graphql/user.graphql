@@ -81,8 +81,14 @@ mutation updateProfile(
   )
 }
 
-mutation createCollection($name: String!, $description: String!) {
-  createCollection(input: { name: $name, description: $description })
+mutation createCollection(
+  $name: String!
+  $description: String!
+  $isPrivate: Boolean!
+) {
+  createCollection(
+    input: { name: $name, description: $description, isPrivate: $isPrivate }
+  )
 }
 
 query IsLogged {

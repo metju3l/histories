@@ -152,6 +152,7 @@ export default gql`
   input CreateCollectionInput {
     name: String!
     description: String!
+    isPrivate: Boolean!
   }
 
   type IsLoggedInfo {
