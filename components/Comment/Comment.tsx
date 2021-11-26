@@ -72,8 +72,7 @@ const Comment: React.FC<CommentProps> = ({
         <div className="flex items-center gap-2">
           <div
             id="comment"
-            className="p-2 bg-[#F1F2F4] rounded-2xl max-w-[210px]"
-            style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
+            className="p-2 break-words whitespace-pre-wrap bg-[#F1F2F4] rounded-2xl max-w-[210px]"
           >
             <strong className="font-semibold">
               {author.firstName} {author.lastName}

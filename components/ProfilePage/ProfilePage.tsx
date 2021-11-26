@@ -2,14 +2,16 @@ import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 import React, { ReactNode } from 'react';
 
 import Layout from '../Layout/Layout';
+import CollectionPanel from './CollectionPanel';
 import LeftPanel from './LeftPanel';
 import ProfileNavigation from './ProfileNavigation';
 
 const ProfilePage: React.FC<{
   rightColumn: ReactNode;
   title: string;
-  username: string;
-}> = ({ rightColumn, title, username }) => {
+  username?: string;
+  collectionId?: number;
+}> = ({ rightColumn, title, username, collectionId }) => {
   const loggedQuery = useIsLoggedQuery();
   const userQuery = useGetUserInfoQuery({
     variables: { username: username },
@@ -27,7 +29,11 @@ const ProfilePage: React.FC<{
       <div className="w-full h-auto min-h-screen bg-secondary">
         <main className="flex w-full m-auto max-w-7xl">
           <div className="w-[38rem]">
-            <LeftPanel username={username} />
+            {collectionId !== undefined ? (
+              <CollectionPanel id={collectionId} />
+            ) : (
+              username !== undefined && <LeftPanel username={username} />
+            )}
           </div>
           <div className="w-full" style={{ gridColumnStart: 2 }}>
             <ProfileNavigation

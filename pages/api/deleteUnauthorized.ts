@@ -1,4 +1,4 @@
-import DeleteUnauthorized from '@src/mutations/Delete/DeleteUnauthorized';
+import DeleteUnauthorized from '@src/mutations/User/DeleteUnauthorized';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const Handler = async (req: NextApiRequest, res: NextApiResponse) => {

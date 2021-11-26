@@ -1,5 +1,5 @@
-import { NSFWCheck } from '../../functions';
 import DbConnector from '../../database/driver';
+import { NSFWCheck } from '../../functions';
 
 const CreatePost = async ({
   userID,

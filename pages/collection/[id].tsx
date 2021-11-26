@@ -27,6 +27,7 @@ const Collections: FC<{ id: number }> = ({ id }) => {
       <ProfilePage
         title={`${data.collection?.name} | hiStories`}
         username={data.collection.author.username}
+        collectionId={data.collection.id}
         rightColumn={
           <div>
             <div className="flex items-center justify-between w-full px-4 pb-4">

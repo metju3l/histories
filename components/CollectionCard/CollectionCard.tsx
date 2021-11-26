@@ -61,7 +61,9 @@ const CollectionCard: React.FC<{ id: number }> = ({ id }) => {
               <>
                 <a className="font-semibold">{data.collection.name}</a>
                 <br />
-                <p className="pt-4">{data.collection.description}</p>
+                <p className="pt-4 break-words whitespace-pre-wrap">
+                  {data.collection.description}
+                </p>
               </>
             ) : (
               data.collection.name

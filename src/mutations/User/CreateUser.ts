@@ -1,6 +1,7 @@
 import { hash } from 'bcryptjs';
-import SendEmail from '../../email/SendEmail';
+
 import RunCypherQuery from '../../database/RunCypherQuery';
+import SendEmail from '../../email/SendEmail';
 
 // QUERY
 /*

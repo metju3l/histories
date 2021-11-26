@@ -20,6 +20,7 @@ export default gql`
   }
 
   type Mutation {
+    login(input: LoginInput!): String!
     deleteUser(input: DeleteUserInput!): String!
     delete(id: Int!): String
     report(id: Int!): String
@@ -27,10 +28,10 @@ export default gql`
     unlike(id: Int!): String
     follow(userID: Int!): String
     unfollow(userID: Int!): String
-    createCollection(input: CreateCollectionInput!): String!
+    createCollection(input: CreateCollectionInput!): String
+    editCollection(input: EditCollectionInput!): String
     updateProfile(input: UpdateProfileInput!): String!
     createPost(input: CreatePostInput!): String!
-    login(input: LoginInput!): String!
     searchUser(input: SearchUserInput!): String!
     createUser(input: CreateUserInput!): String!
     verifyToken(token: String!): String!
@@ -153,6 +154,13 @@ export default gql`
     name: String!
     description: String!
     isPrivate: Boolean!
+  }
+
+  input EditCollectionInput {
+    name: String!
+    description: String!
+    isPrivate: Boolean!
+    collectionId: Int!
   }
 
   type IsLoggedInfo {

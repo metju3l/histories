@@ -1,6 +1,6 @@
-import { DeleteFile } from '../../s3';
 import DbConnector from '../../database/driver';
 import RunCypherQuery from '../../database/RunCypherQuery';
+import { DeleteFile } from '../../s3';
 
 const Delete = async ({
   logged,

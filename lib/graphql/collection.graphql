@@ -17,3 +17,29 @@ query Collection($id: Int!) {
     }
   }
 }
+
+mutation editCollection(
+  $name: String!
+  $description: String!
+  $isPrivate: Boolean!
+  $collectionId: Int!
+) {
+  editCollection(
+    input: {
+      name: $name
+      description: $description
+      isPrivate: $isPrivate
+      collectionId: $collectionId
+    }
+  )
+}
+
+mutation createCollection(
+  $name: String!
+  $description: String!
+  $isPrivate: Boolean!
+) {
+  createCollection(
+    input: { name: $name, description: $description, isPrivate: $isPrivate }
+  )
+}

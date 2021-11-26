@@ -13,21 +13,22 @@ import {
 } from '../../shared/validation';
 import IsUsedEmail from '../../shared/validation/dbValidation/IsUsedEmail';
 import {
+  AddPostToCollection,
   CreateCollection,
   CreateComment,
   CreatePost,
   CreateUser,
   Delete,
   DeleteUser,
-  EditProfile,
+  EditCollection,
+  EditUser,
   Follow,
   Like,
+  RemovePostFromCollection,
+  Report,
   Unfollow,
   Unlike,
 } from '../mutations';
-import AddPostToCollection from '../mutations/Create/AddPostToCollection';
-import Report from '../mutations/Create/Report';
-import RemovePostFromCollection from '../mutations/Delete/RemovePostFromCollection';
 import LastPost from '../mutations/lastPost';
 import VerifyToken from '../mutations/VerifyToken';
 import {
@@ -57,6 +58,7 @@ const resolvers = {
     hello: () => {
       return 'Hello';
     },
+
     place: async (_parent: undefined, { id }: { id: number }) => {
       return await PlaceQuery({ id });
     },
@@ -165,6 +167,26 @@ const resolvers = {
       }),
   },
   Mutation: {
+    login: async (
+      _parent: undefined,
+      { input }: { input: { username: string; password: string } }
+    ) => {
+      // check username
+      if (
+        ValidateUsername(input.username).error &&
+        ValidateEmail(input.username).error
+      )
+        throw new Error('Wrong credentials');
+
+      // check password
+      if (ValidatePassword(input.password).error)
+        throw new Error('Wrong credentials');
+
+      // if credentials are wrong returns null
+      const login = await Login(input);
+      if (login !== null) return login;
+      else throw new Error('Wrong credentials');
+    },
     like: async (
       _parent: undefined,
       { input }: { input: { type: string; id: number } },
@@ -286,7 +308,7 @@ const resolvers = {
         if (validateBio) throw new Error(validateBio);
       }
 
-      return EditProfile({ ...input, id: context.decoded.id });
+      return EditUser({ ...input, id: context.decoded.id });
     },
 
     createComment: async (
@@ -313,27 +335,6 @@ const resolvers = {
 
     searchUser: async () => {
       // search for username like this
-    },
-
-    login: async (
-      _parent: undefined,
-      { input }: { input: { username: string; password: string } }
-    ) => {
-      // check username
-      if (
-        ValidateUsername(input.username).error &&
-        ValidateEmail(input.username).error
-      )
-        throw new Error('Wrong credentials');
-
-      // check password
-      if (ValidatePassword(input.password).error)
-        throw new Error('Wrong credentials');
-
-      // if credentials are wrong returns null
-      const login = await Login(input);
-      if (login !== null) return login;
-      else throw new Error('Wrong credentials');
     },
 
     createUser: async (
@@ -396,6 +397,29 @@ const resolvers = {
     ) => {
       if (context.validToken)
         return CreateCollection({
+          ...input,
+          preview: '',
+          userId: context.decoded.id,
+        });
+      else throw new Error('User is not logged in');
+    },
+
+    editCollection: async (
+      _parent: undefined,
+      {
+        input,
+      }: {
+        input: {
+          name: string;
+          description: string;
+          isPrivate: boolean;
+          collectionId: number;
+        };
+      },
+      context: any
+    ) => {
+      if (context.validToken)
+        return EditCollection({
           ...input,
           preview: '',
           userId: context.decoded.id,

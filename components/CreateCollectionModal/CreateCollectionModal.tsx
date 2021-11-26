@@ -1,6 +1,6 @@
 import { Button } from '@components/Button';
 import { LoginContext } from '@components/Layout';
-import { useCreateCollectionMutation } from '@graphql/user.graphql';
+import { useCreateCollectionMutation } from '@graphql/collection.graphql';
 import { Dialog, Switch, Transition } from '@headlessui/react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';

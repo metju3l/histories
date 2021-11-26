@@ -12,7 +12,7 @@ import RunCypherQuery from '../../database/RunCypherQuery';
  * ${password !== undefined ? `SET user.password = "${password}" ` : ''}    - only add this line to query if variable isn't undefined
  */
 
-const EditProfile = async ({
+const EditUser = async ({
   id,
   username,
   bio,
@@ -51,4 +51,4 @@ ${username !== undefined ? `SET user.username = $username\n` : ''}${
   return 'Info edited succesfully';
 };
 
-export default EditProfile;
+export default EditUser;
