@@ -13,7 +13,7 @@ export default gql`
     paths: [Path]
     isLogged: User
     userPosts(input: UserPostsInput!): [Post]
-    personalizedPosts: [PostID]!
+    personalizedPosts: [PersonalizedPost]!
     checkIfLogged: CheckIfLoggedInfo!
     place(id: Int!): Place!
     collection(id: Int!): Collection!
@@ -38,6 +38,12 @@ export default gql`
     createComment(input: CreateCommentInput!): String!
     addToCollection(input: AddToCollectionInput!): String!
     removeFromCollection(input: AddToCollectionInput!): String!
+  }
+
+  type PersonalizedPost {
+    id: Int!
+    description: String
+    url: [String]!
   }
 
   input AddToCollectionInput {

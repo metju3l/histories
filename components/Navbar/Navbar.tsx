@@ -13,9 +13,9 @@ import SettingsIcon from '@components/Icons/SettingsIcon';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import LogOut from '@lib/functions/LogOut';
-import useDarkMode from '@lib/hooks/useDarkmode';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
 import React, { useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
@@ -25,7 +25,7 @@ import transitionSecondary from './transitions/secondary.module.scss';
 
 const Navbar: React.FC = () => {
   const { data, loading, error } = useIsLoggedQuery();
-  const { theme, setTheme } = useDarkMode();
+  const { theme, setTheme } = useTheme();
 
   if (loading) return <div>navbar loading</div>;
   if (error) return <div>navbar error</div>;
@@ -69,7 +69,11 @@ const Navbar: React.FC = () => {
             </a>
           </Link>
           <NavbarItem icon={<MenuIcon />}>
-            <DropdownMenu data={data} setTheme={setTheme} theme={theme} />
+            <DropdownMenu
+              data={data}
+              setTheme={setTheme}
+              theme={theme ?? 'light'}
+            />
           </NavbarItem>
         </div>
       </div>
@@ -180,6 +184,12 @@ const DropdownMenu: React.FC<{ data: any; setTheme: any; theme: string }> = ({
           )}
           <DropdownItem link="#" leftIcon={<SettingsIcon />}>
             Settings & Privacy
+          </DropdownItem>{' '}
+          <DropdownItem leftIcon={<SettingsIcon />}>
+            <div onClick={() => setTheme('light')}>light mode</div>
+          </DropdownItem>{' '}
+          <DropdownItem leftIcon={<SettingsIcon />}>
+            <div onClick={() => setTheme('dark')}>dark mode</div>
           </DropdownItem>
           <DropdownItem
             link="#"
@@ -209,7 +219,6 @@ const DropdownMenu: React.FC<{ data: any; setTheme: any; theme: string }> = ({
       >
         <div className={styles.menu}>
           <DropdownItem
-            link="#"
             leftIcon={<BackIcon />}
             onClick={() => setActiveMenu('main')}
           >

@@ -27,8 +27,8 @@ module.exports = {
             highlight: '#0066F9',
           },
           background: {
-            primary: '#FFFFFF',
-            secondary: '#F6F6FB',
+            primary: '#F1F2F4',
+            secondary: '#FFFFFF',
             tertiary: '#F0F2F5',
           },
         },

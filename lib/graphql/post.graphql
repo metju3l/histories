@@ -29,6 +29,8 @@ mutation createPost(
 query personalizedPosts {
   personalizedPosts {
     id
+    description
+    url
   }
 }
 
