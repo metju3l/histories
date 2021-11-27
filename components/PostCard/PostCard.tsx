@@ -1,6 +1,6 @@
 import { AddToCollectionModal } from '@components/AddToCollectionModal';
 import { Button } from '@components/Button';
-import { Comment } from '@components/Comment';
+import { CommentHandler } from '@components/Comment';
 import { LoginContext } from '@components/Layout/Layout';
 import {
   useCreateCommentMutation,
@@ -395,13 +395,15 @@ const PostCard: FC<{
               <div>
                 comments:
                 {data.post.comments.map((comment: any) => (
-                  <Comment
-                    key={comment.id}
-                    {...comment}
-                    refetch={refetch}
-                    author={comment.author}
-                    liked={comment.liked}
-                  />
+                  <div key={comment.id}>
+                    {JSON.stringify(comment)}
+                    <CommentHandler
+                      key={comment.id}
+                      {...comment}
+                      author={comment.author}
+                      liked={comment.liked}
+                    />
+                  </div>
                 ))}
               </div>
             </div>

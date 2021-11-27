@@ -5,7 +5,6 @@ import { useLoginMutation } from '@graphql/user.graphql';
 import Cookie from 'js-cookie';
 import Link from 'next/link';
 import Router from 'next/router';
-import { useTheme } from 'next-themes';
 import React, { FC, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +13,6 @@ const Login: FC = () => {
   const [login] = useLoginMutation();
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
-  const { theme, setTheme } = useTheme();
 
   const formInputs = {
     username: '',
@@ -72,11 +70,6 @@ const Login: FC = () => {
             <a className="pl-2 underline">create new account</a>
           </Link>
         </form>
-        <button onClick={() => setTheme('light')}>Light Mode</button>
-        <br />
-        <button onClick={() => setTheme('dark')}>Dark Mode</button>
-        <br />
-        {theme} ok
       </div>
     </Layout>
   );

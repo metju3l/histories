@@ -1,5 +1,5 @@
-import RunCypherQuery from '../database/RunCypherQuery';
 import { ValidateCoordinates, ValidateDate } from '../../shared/validation';
+import RunCypherQuery from '../database/RunCypherQuery';
 
 type queryInput = {
   maxLatitude: number;

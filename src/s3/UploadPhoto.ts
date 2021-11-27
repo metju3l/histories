@@ -1,8 +1,6 @@
 import AWS from 'aws-sdk';
 import sharp from 'sharp';
 import streamToPromise from 'stream-to-promise';
-import crypto from 'crypto';
-import { encode } from 'blurhash';
 
 const UploadPhoto = async (
   photo: any

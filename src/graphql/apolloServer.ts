@@ -1,5 +1,6 @@
 import { ApolloServer } from 'apollo-server-express';
 import { verify } from 'jsonwebtoken';
+
 import schema from './schema';
 
 const apolloServer = new ApolloServer({

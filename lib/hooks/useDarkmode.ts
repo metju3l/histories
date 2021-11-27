@@ -5,7 +5,7 @@ const useDarkMode = (): {
   theme: string;
   setTheme: Dispatch<SetStateAction<string>>;
 } => {
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
     setTheme(Cookie.get('theme') === 'dark' ? 'dark' : 'light');

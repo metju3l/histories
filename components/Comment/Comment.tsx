@@ -1,44 +1,33 @@
 import { DotsHorizontalIcon } from '@heroicons/react/solid';
 import Image from 'next/image';
 import React, { useRef, useState } from 'react';
-import { toast } from 'react-hot-toast';
 import TimeAgo from 'react-timeago';
 
 import GeneratedProfileUrl from '../../lib/functions/GeneratedProfileUrl';
-import { useDeleteMutation } from '../../lib/graphql/post.graphql';
-import {
-  useLikeMutation,
-  useReportMutation,
-  useUnlikeMutation,
-} from '../../lib/graphql/relations.graphql';
 import hoverHandler from '../../lib/hooks/hoverHandler';
-import { LoginContext } from '../Layout/Layout';
 import { Menu } from '../Modal';
 
 export type CommentProps = {
   content: string;
   createdAt: number;
-  author: { firstName: string; lastName: string; id: number; username: string };
-  id: number;
+  author: { firstName: string; lastName: string; username: string };
   liked: boolean;
-  refetch: any;
+  owner: boolean;
+  isLogged: boolean;
+  onLike: any;
+  deleteComment: any;
 };
 
 const Comment: React.FC<CommentProps> = ({
   content,
-  id,
   liked,
+  onLike,
   author,
   createdAt,
-  refetch,
+  owner,
+  isLogged,
+  deleteComment,
 }) => {
-  const loginContext = React.useContext(LoginContext);
-
-  const [deleteMutation] = useDeleteMutation();
-  const [reportMutation] = useReportMutation();
-  const [likeMutation] = useLikeMutation();
-  const [unlikeMutation] = useUnlikeMutation();
-
   const [mouseOverComment, setMouseOverComment] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [showLikeOptions, setShowLikeOptions] = useState(false);
@@ -47,11 +36,6 @@ const Comment: React.FC<CommentProps> = ({
 
   // save comment input to ref for focus on button click
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // local like state tracking for real time changes
-  const [localLikeState, setLocalLikeState] = useState<boolean | null>(null);
-
-  const isCommentAuthor = author.id === loginContext?.data?.isLogged?.id;
 
   return (
     <span
@@ -112,37 +96,15 @@ const Comment: React.FC<CommentProps> = ({
 
           <Menu
             items={
-              isCommentAuthor
+              owner
                 ? [
                     { title: 'Edit', onClick: () => {} },
                     {
                       title: 'Delete',
-                      onClick: async () => {
-                        try {
-                          await deleteMutation({
-                            variables: { id },
-                          });
-                          await refetch();
-                        } catch (error: any) {
-                          toast.error(error.message);
-                        }
-                      },
+                      onClick: async () => await deleteComment(),
                     },
                   ]
-                : [
-                    { title: 'Show profile', onClick: () => {} },
-                    {
-                      title: 'Report',
-                      onClick: async () => {
-                        try {
-                          await reportMutation({ variables: { id } });
-                          toast.success('Comment reported');
-                        } catch (error: any) {
-                          toast.error(error.message);
-                        }
-                      },
-                    },
-                  ]
+                : [{ title: 'Show profile', onClick: () => {} }]
             }
           >
             <button className="w-6 h-6 pr-2">
@@ -157,29 +119,8 @@ const Comment: React.FC<CommentProps> = ({
         </div>
 
         <span className="pl-2">
-          <button
-            onClick={async () => {
-              if (loginContext?.data?.isLogged) {
-                const likedTmp = localLikeState ?? liked;
-                setLocalLikeState(!likedTmp);
-                try {
-                  if (likedTmp)
-                    await unlikeMutation({
-                      variables: { id },
-                    });
-                  else
-                    await likeMutation({
-                      variables: { id, type: 'like' },
-                    });
-                  await refetch();
-                } catch (error) {
-                  // @ts-ignore
-                  toast.error(error.message);
-                }
-              } else toast.error('You must be logged to like a comment');
-            }}
-          >
-            {localLikeState ?? liked ? 'Unlike' : 'Like'}
+          <button onClick={async () => await onLike()}>
+            {liked ? 'Unlike' : 'Like'}
           </button>{' '}
           · <button onClick={() => setShowReplyInput(true)}>Reply</button> ·{' '}
           <TimeAgo date={createdAt} />

@@ -1,10 +1,10 @@
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
-import { Navbar } from '@components/Navbar';
 import { IsLoggedQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 import Head from 'next/head';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 
+import { Navbar } from '../Navbar';
 import ProtectedRoutes from './ProtectedRoutes';
 
 type LayoutProps = {
