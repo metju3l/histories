@@ -21,7 +21,9 @@
     "type-check": "tsc --pretty --noEmit",
     "test": "jest",
     "test-all": "yarn test && yarn lint && yarn type-check",
-    "migration": "node ./lib/database/Constraints/migration.js"
+    "sb": "start-storybook -p 6006 --no-manager-cache ",
+    "sb-build": "build-storybook -o ./lib/stories-static",
+    "sb-start": "start-storybook"
   },
   "dependencies": {
     "@apollo/client": "^3.4.17",
@@ -103,6 +105,11 @@
     "@graphql-codegen/typescript": "^2.4.0",
     "@graphql-codegen/typescript-operations": "^2.2.0",
     "@graphql-codegen/typescript-react-apollo": "^3.2.1",
+    "@storybook/addon-actions": "^6.4.0",
+    "@storybook/addon-essentials": "^6.4.0",
+    "@storybook/addon-links": "^6.4.0",
+    "@storybook/addon-postcss": "^2.0.0",
+    "@storybook/react": "^6.4.0",
     "@types/googlemaps": "^3.43.3",
     "@types/graphql-upload": "^8.0.7",
     "@types/nodemailer": "^6.4.4",
@@ -117,6 +124,7 @@
     "@typescript-eslint/parser": "^4.32.0",
     "autoprefixer": "^10.4.0",
     "babel-jest": "^27.3.1",
+    "babel-loader": "^8.2.3",
     "eslint": "^7.27.0",
     "eslint-config-airbnb": "^19.0.0",
     "eslint-config-next": "^12.0.3",

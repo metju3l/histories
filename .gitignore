@@ -47,3 +47,6 @@ workbox*.js.map
 
 dist
 nodemon.json
+
+# STORYBOOK
+*/stories-static

@@ -1,12 +1,19 @@
 import React from 'react';
 
-const Button: React.FC<{
+export type ButtonProps = {
   isLoading: boolean;
   text: string;
   onClick?: () => void;
   colorClassname?: string;
   backgroundClassname?: string;
-}> = ({ isLoading, text, onClick, backgroundClassname }) => (
+};
+
+const Button: React.FC<ButtonProps> = ({
+  isLoading,
+  text,
+  onClick,
+  backgroundClassname,
+}) => (
   <button
     type={isLoading ? 'button' : 'submit'}
     onClick={onClick !== undefined ? onClick : () => {}}

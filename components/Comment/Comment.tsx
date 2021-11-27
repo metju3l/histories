@@ -1,20 +1,21 @@
-import { LoginContext } from '@components/Layout/Layout';
-import { Menu } from '@components/Modal';
-import { useDeleteMutation } from '@graphql/post.graphql';
-import {
-  useLikeMutation,
-  useReportMutation,
-  useUnlikeMutation,
-} from '@graphql/relations.graphql';
 import { DotsHorizontalIcon } from '@heroicons/react/solid';
-import hoverHandler from '@hooks/hoverHandler';
-import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
 import Image from 'next/image';
 import React, { useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import TimeAgo from 'react-timeago';
 
-type CommentProps = {
+import GeneratedProfileUrl from '../../lib/functions/GeneratedProfileUrl';
+import { useDeleteMutation } from '../../lib/graphql/post.graphql';
+import {
+  useLikeMutation,
+  useReportMutation,
+  useUnlikeMutation,
+} from '../../lib/graphql/relations.graphql';
+import hoverHandler from '../../lib/hooks/hoverHandler';
+import { LoginContext } from '../Layout/Layout';
+import { Menu } from '../Modal';
+
+export type CommentProps = {
   content: string;
   createdAt: number;
   author: { firstName: string; lastName: string; id: number; username: string };
