@@ -1,23 +1,32 @@
-import { LoginContext } from '@components/Layout/Layout';
-import { useAddToCollectionMutation } from '@graphql/relations.graphql';
 import { Dialog, Transition } from '@headlessui/react';
 import React from 'react';
 import { toast } from 'react-hot-toast';
 
-const AddToCollectionModal: React.FC<{
+export type AddToCollectionModalProps = {
   postId: number;
-  openState: boolean;
+  isOpen: boolean;
   setOpenState: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ postId, openState, setOpenState }) => {
-  const loginContext = React.useContext(LoginContext);
+  loading?: boolean;
+  userCollections: Array<{ name: string; id: number }>;
+  addToCollection: ({
+    postId,
+    collectionId,
+  }: {
+    postId: number;
+    collectionId: number;
+  }) => void;
+};
 
-  const [addToCollection] = useAddToCollectionMutation();
-
-  if (loginContext.loading) return <div>loading</div>;
-  if (loginContext.error) return <div>error</div>;
-
+const AddToCollectionModal: React.FC<AddToCollectionModalProps> = ({
+  postId,
+  isOpen,
+  setOpenState,
+  loading,
+  userCollections,
+  addToCollection,
+}) => {
   return (
-    <Transition appear show={openState} as={React.Fragment}>
+    <Transition appear show={isOpen} as={React.Fragment}>
       <Dialog
         as="div"
         className="fixed inset-0 z-10 overflow-y-auto"
@@ -60,21 +69,19 @@ const AddToCollectionModal: React.FC<{
                 Save to
               </Dialog.Title>
               <div className="mt-2">
-                {loginContext.data?.isLogged?.collections?.map((collection) => (
+                {userCollections.map((collection) => (
                   <button
                     className="w-full px-3 py-2 my-1 bg-gray-300 hover:bg-gray-400 rounded-xl"
-                    key={collection?.name}
+                    key={collection.name}
                     onClick={async () => {
                       try {
-                        await addToCollection({
-                          variables: {
-                            collectionId: collection!.id,
-                            postId,
-                          },
-                        });
                         toast.success(
                           'Post saved to ' + collection?.name ?? 'collection'
                         );
+                        await addToCollection({
+                          postId,
+                          collectionId: collection.id,
+                        });
                         setOpenState(false);
                       } catch (error: any) {
                         toast.error(error.message);

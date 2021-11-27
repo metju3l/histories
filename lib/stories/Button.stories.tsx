@@ -2,6 +2,7 @@ import 'tailwindcss/tailwind.css';
 
 import { Story } from '@storybook/react';
 import React from 'react';
+import { Toaster } from 'react-hot-toast';
 
 import { Button, ButtonProps } from '../../components/Button';
 
@@ -12,17 +13,25 @@ const Component = {
 };
 export default Component;
 
-// Template
-const Template: Story<ButtonProps> = (args) => <Button {...args} />;
+const Page = (args: ButtonProps) => {
+  return (
+    <div>
+      <Toaster position="top-center" reverseOrder={true} />
+      <Button {...args} />
+    </div>
+  );
+};
 
-// Primary button
+// Template
+const Template: Story<ButtonProps> = (args) => <Page {...args} />;
+
+// Examples
 export const Primary = Template.bind({});
 Primary.args = {
   text: 'Submit',
   isLoading: false,
 };
 
-// Loading button
 export const Loading = Template.bind({});
 Loading.args = {
   text: 'Submit',

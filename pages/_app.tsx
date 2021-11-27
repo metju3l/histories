@@ -5,6 +5,7 @@ import './app.scss';
 import { ApolloProvider } from '@apollo/client';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import type { AppProps } from 'next/app';
+import { ThemeProvider } from 'next-themes';
 import React, { createContext } from 'react';
 
 import { useApollo } from '../lib/apollo';
@@ -14,14 +15,16 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 
   return (
     <ApolloProvider client={apolloClient}>
-      <LoginProvider>
-        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        <script
-          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
-        />
+      <ThemeProvider>
+        <LoginProvider>
+          {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+          <script
+            src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
+          />
 
-        <Component {...pageProps} />
-      </LoginProvider>
+          <Component {...pageProps} />
+        </LoginProvider>
+      </ThemeProvider>
     </ApolloProvider>
   );
 }

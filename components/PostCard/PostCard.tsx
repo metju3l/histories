@@ -8,6 +8,7 @@ import {
   usePostQuery,
 } from '@graphql/post.graphql';
 import {
+  useAddToCollectionMutation,
   useLikeMutation,
   useRemoveFromCollectionMutation,
   useReportMutation,
@@ -48,7 +49,7 @@ const PostCard: FC<{
 
   const [createCommentMutation] = useCreateCommentMutation();
   const [commentContent, setCommentContent] = useState('');
-
+  const [addToCollection] = useAddToCollectionMutation();
   const [currentImage, setCurrentImage] = useState(0);
 
   if (loading || loginContext.loading) return <div>loading</div>;
@@ -153,12 +154,24 @@ const PostCard: FC<{
               </svg>
             </div>
           )}
-          <AddToCollectionModal
-            openState={collectionSelectModal}
-            setOpenState={setCollectionSelectModal}
-            postId={data.post.id}
-          />
-
+          {loginContext?.data.isLogged?.id && (
+            <AddToCollectionModal
+              isOpen={collectionSelectModal}
+              setOpenState={setCollectionSelectModal}
+              postId={data.post.id}
+              addToCollection={({ collectionId }: { collectionId: number }) => {
+                addToCollection({
+                  variables: { postId: id, collectionId },
+                });
+              }}
+              userCollections={
+                loginContext.data.isLogged.collections?.map((collection) => ({
+                  name: collection!.name,
+                  id: collection!.id,
+                })) ?? []
+              }
+            />
+          )}
           <Menu as="div" className="relative inline-block text-left">
             <div>
               <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-whiterounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
