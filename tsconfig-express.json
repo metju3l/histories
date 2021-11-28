@@ -6,7 +6,8 @@
     "strict": true,
     "target": "es2017",
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "removeComments": true
   },
   "compileOnSave": true,
   "include": ["src", "shared"],

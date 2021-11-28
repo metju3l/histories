@@ -65,12 +65,13 @@ const resolvers = {
 
     personalizedPosts: async (
       _parent: undefined,
-      _input: undefined,
+      { input }: { input: { skip: number; take: number } },
       context: any
     ) => {
-      return await PersonalizedPostsQuery(
-        context.validToken ? context.decoded.id : null
-      );
+      return await PersonalizedPostsQuery({
+        ...input,
+        logged: context.validToken ? context.decoded.id : null,
+      });
     },
 
     paths: async () => {

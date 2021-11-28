@@ -1,3 +1,4 @@
+/*
 import 'tailwindcss/tailwind.css';
 
 import { Story } from '@storybook/react';
@@ -5,8 +6,6 @@ import React from 'react';
 import { Toaster } from 'react-hot-toast';
 
 import { Comment, CommentProps } from '../../components/Comment';
-
-/*
 
 // Component
 const Component = {
@@ -49,5 +48,4 @@ Default.args = {
   onLike: () => {},
   deleteComment: () => {},
 };
-
 */

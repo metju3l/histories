@@ -1,58 +1,194 @@
+import neo4j from 'neo4j-driver';
+
 import RunCypherQuery from '../database/RunCypherQuery';
 
-// QUERY - users prosnalized posts
-/*
- * MATCH (user:User)       // match logged user
- * WHERE ID(user) = 92
- * CALL {
- *    WITH user                                               // get user
- *    OPTIONAL MATCH (author:User)-[:CREATED]->(post:Post)    // get posts created by followed users or by user
- *    WHERE ((user)-[:FOLLOW]->(author)) OR (user = author)
- *    RETURN post, author                                     // return posts and author
- *    ORDER BY post.createdAt DESC                            // order posts by date
- *    SKIP                                                    // skip because of infinite scroll
- *    LIMIT 100                                               // limit posts
- * }
- * RETURN COLLECT(DISTINCT post{.*, id: ID(post)}) AS posts   // return posts as object
- */
-
-// QUERY - all posts sorted (for anonymous users)
-/*
- * CALL {
- * MATCH (author:User)-[:CREATED]->(post)    // get all posts
- *    RETURN author, post                    // return author and post
- *    ORDER BY post.createdAt DESC           // order posts by created date
- *    LIMIT 100                              // limit posts
- *    SKIP 0                                 // skip because of infinite scroll
- * }
- * RETURN COLLECT(DISTINCT post{.*, id: ID(post), author:author{.*, id: ID(author)} }) as posts   // return posts as object
- */
-
-const PersonalizedPostsQuery = async (logged: number | null) => {
+const PersonalizedPostsQuery = async ({
+  logged,
+  skip,
+  take,
+}: {
+  logged: number | null;
+  skip: number;
+  take: number;
+}) => {
   const query =
     logged === null
-      ? `CALL {
-        OPTIONAL MATCH (author:User)-[:CREATED]->(post:Post)
-        RETURN author, post
-        ORDER BY post.createdAt DESC
-        SKIP 0
-        LIMIT 100
-    }
-    RETURN COLLECT(DISTINCT post{.*, id: ID(post), author:author{.*, id: ID(author)} }) as posts`
-      : `MATCH (user:User)
-      WHERE ID(user) = $loggedId
+      ? `MATCH (user:User)      
       CALL {
           WITH user
           OPTIONAL MATCH (author:User)-[:CREATED]->(post:Post)
-          WHERE ((user)-[:FOLLOW]->(author)) OR (user = author)
           RETURN post, author
           ORDER BY post.createdAt DESC
+          SKIP $skip
+          LIMIT $limit
+      }
+      
+      CALL {
+          WITH post
+          OPTIONAL MATCH (commentAuthor:User)-[:CREATED]->(comment:Comment)-[:BELONGS_TO]->(post)
+          RETURN commentAuthor, comment
+          ORDER BY comment.createdAt DESC
           SKIP 0
           LIMIT 100
       }
-      RETURN COLLECT(DISTINCT post{.*, id: ID(post)}) AS posts`;
+      
+      CALL {
+          WITH post
+          OPTIONAL MATCH (like:User)-[:LIKE]->(post)
+          RETURN COUNT(like) AS likeCount
+      }
+      
+      CALL {
+          WITH post
+          OPTIONAL MATCH (comment:Comment)-[:BELONGS_TO]->(post)
+          RETURN COUNT(comment) AS commentCount
+      }
+      
+      WITH COLLECT(DISTINCT comment{.*,
+              id: ID(comment),
+              author: commentAuthor{.*,
+                  id: ID(commentAuthor),
+                  profileUrl: "https://avatars.dicebear.com/api/initials/" + commentAuthor.firstName + "%20" + commentAuthor.lastName + ".svg"
+              },
+              liked: false
+          }) AS comments,
+          ID(post) AS postId,
+          likeCount,
+          commentCount, 
+          ID(author) AS authorId,
+          author,
+          post,
+          user
+      
+      RETURN COLLECT(DISTINCT post{.*,
+          id: postId,
+          likeCount,
+          commentCount,
+          comments,
+          author: author{.*,
+              id: authorId,
+              profileUrl: "https://avatars.dicebear.com/api/initials/" + author.firstName + "%20" + author.lastName + ".svg"
+          },
+          liked: false
+      }) AS posts`
+      : `MATCH (user:User)
+      WHERE ID(user) = $loggedId  // id of logged user as parameter
+      
+      // post, author and place
+      CALL {
+          WITH user
+          OPTIONAL MATCH (author:User)-[:CREATED]->(post:Post)-[:IS_LOCATED]->(place:Place)
+          WHERE ((user)-[:FOLLOW]->(author)) OR (user = author)
+          RETURN post, author, place
+          ORDER BY post.createdAt DESC    // sort by newest
+          // skip and limit for infinite scroll as parameters
+          SKIP $skip 
+          LIMIT $limit
+      }
+      
+      // number of posts in place
+      CALL {
+          WITH place
+          MATCH (post:Post)-[:IS_LOCATED]->(place)
+          RETURN COUNT(DISTINCT post) AS placePostsCount  // return count
+      }
+      
+      // number of likes in place
+      CALL {
+          WITH place
+          OPTIONAL MATCH (:User)-[like:LIKE]->(:Post)-[:IS_LOCATED]->(place)
+          RETURN COUNT(DISTINCT like) AS placeLikeCount   // return count
+      }
+      
+      // post comments and comment authors
+      CALL {
+          WITH post
+          OPTIONAL MATCH (commentAuthor:User)-[:CREATED]->(comment:Comment)-[:BELONGS_TO]->(post)
+          RETURN commentAuthor, comment
+          ORDER BY comment.createdAt DESC // sort by newest
+          SKIP 0
+          LIMIT 100
+      }
+      
+      // total number of post likes
+      CALL {
+          WITH post
+          OPTIONAL MATCH (like:User)-[:LIKE]->(post)
+          RETURN COUNT(like) AS likeCount // return count
+      }
+      
+      // total number of post comments
+      CALL {
+          WITH post
+          OPTIONAL MATCH (comment:Comment)-[:BELONGS_TO]->(post)
+          RETURN COUNT(comment) AS commentCount   // return count
+      }
+      
+      // user like type
+      // return type of like when user liked, otherwise return null
+      CALL {
+          WITH user, post
+          OPTIONAL MATCH (user)-[like:LIKE]->(post)
+          RETURN like.type AS liked    // return like type such as 👍, ❤, etc.
+      }
+      
+      // same as post like, but with post comment
+      CALL {
+          WITH user, comment
+          OPTIONAL MATCH (user)-[like:LIKE]->(comment)
+          RETURN like.type AS likedComment    // return like type such as 👍, ❤, etc.
+      }
+      
+      // post properties
+      WITH
+          commentCount, 
+          post,
+          liked,
+          likeCount,
+      
+          // post comments as an array of objects
+          COLLECT(DISTINCT comment{.*,
+              id: ID(comment),
+              author: commentAuthor{.*,
+                  id: ID(commentAuthor),
+                  profileUrl: "https://avatars.dicebear.com/api/initials/" + commentAuthor.firstName + "%20" + commentAuthor.lastName + ".svg"
+              },
+              liked: likedComment
+          }) AS comments,
+      
+          // author as an object
+          author{.*,
+              id: ID(author),
+              profileUrl: "https://avatars.dicebear.com/api/initials/" + author.firstName + "%20" + author.lastName + ".svg"
+          } AS author,
+      
+          // place post is located in as an object
+          place{.*,
+              id: ID(place),
+              postCount: placePostsCount,
+              latitude: place.location.x,
+              longitude: place.location.y,
+              likeCount: placeLikeCount
+          } AS place
+          
+      
+      // return posts as an array of post objects 
+      RETURN COLLECT(DISTINCT post{.*,    // all properties of post node
+          id: ID(post),   // post id
+          likeCount,  // total number of post likes
+          commentCount,   // total number of post comments
+          comments,   // post comments
+          author, // post author
+          place,  // place post is located in
+          liked   // type of liked if user is logged in
+      }) AS posts`;
 
-  const result = await RunCypherQuery(query, { loggedId: logged });
+  const result = await RunCypherQuery(query, {
+    loggedId: logged,
+    // neo4j.int must be used for integer values
+    skip: neo4j.int(skip),
+    limit: neo4j.int(take > 100 ? 100 : take), // disable fetching more than 100 posts at once
+  });
 
   return result.records[0].get('posts');
 };

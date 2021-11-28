@@ -5,7 +5,6 @@ import './app.scss';
 import { ApolloProvider } from '@apollo/client';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import type { AppProps } from 'next/app';
-import Script from 'next/script';
 import { ThemeProvider } from 'next-themes';
 import React, { createContext } from 'react';
 

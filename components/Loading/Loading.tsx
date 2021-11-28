@@ -6,6 +6,7 @@ export type LoadingProps = {
 };
 
 const Loading: React.FC<LoadingProps> = ({ color, size }) => {
+  // this sucks but enum was now working with eslint
   const actualSize =
     size == 'sm'
       ? 14

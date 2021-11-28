@@ -2,14 +2,8 @@ import 'tailwindcss/tailwind.css';
 
 import { Story } from '@storybook/react';
 import React from 'react';
-import { Loading, LoadingProps } from '../../components/Loading';
 
-enum sizes {
-  'sm' = 14,
-  'base' = 16,
-  'lg' = 20,
-  'xl' = 24,
-}
+import { Loading, LoadingProps } from '../../components/Loading';
 
 // Component
 const Component = {
@@ -17,8 +11,7 @@ const Component = {
   component: Loading,
   argTypes: {
     size: {
-      // get enum options
-      options: Object.keys(sizes).filter((x) => isNaN(Number(x))),
+      options: ['sm', 'base', 'lg', 'xl'],
       control: { type: 'radio' },
     },
     color: {

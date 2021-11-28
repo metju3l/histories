@@ -26,11 +26,23 @@ mutation createPost(
   )
 }
 
-query personalizedPosts {
-  personalizedPosts {
+query personalizedPosts($skip: Int!, $take: Int!) {
+  personalizedPosts(input: { skip: $skip, take: $take }) {
     id
     description
+    author {
+      id
+      firstName
+      lastName
+      username
+      profileUrl
+    }
     url
+    createdAt
+    postDate
+    likeCount
+    commentCount
+    liked
   }
 }
 

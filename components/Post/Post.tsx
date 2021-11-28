@@ -66,7 +66,7 @@ export type PostProps = {
   postDate: number;
   onLike: (type: string) => void;
   onUnlike: () => void;
-  liked?: string;
+  liked: string | null;
   loginContext: any;
 };
 
@@ -120,9 +120,6 @@ const Post: React.FC<PostProps> = ({
                   setReactionMenu(true);
                 }, 400);
               }}
-              onClick={async () => {
-                if (liked) await onUnlike();
-              }}
             >
               {reactionMenu && (
                 <div className="absolute top-0 px-4 py-2 ml-4 text-2xl bg-white border rounded-full shadow-lg -translate-x-1/2 border-light-background-tertiary">
@@ -133,7 +130,16 @@ const Post: React.FC<PostProps> = ({
                   <Reaction text="😠" onClick={onLike} />
                 </div>
               )}
-              {liked ?? <LikeIcon />}
+              {liked ?? (
+                <button
+                  onClick={async () => {
+                    if (liked) await onUnlike();
+                    else await onLike('👍');
+                  }}
+                >
+                  <LikeIcon />
+                </button>
+              )}
             </button>
             <CommentIcon />
             <ShareIcon />
