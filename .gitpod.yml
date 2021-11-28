@@ -1,33 +1,31 @@
 # Commands to start on workspace startup
 tasks:
-  - init: >
-      yarn install
-      docker-compose up -d;
+  - name: Setup
+    init: >
+      yarn;
       cp .env.local.example .env.local;
       cp nodemon.json.example nodemon.json;
-    command:  yarn dev
+    command: echo "Setup done"
+  - name: Seed the database
+    init: >
+      gp sync-await setup;
+      yarn prisma:seed;
+  - name: Dev Server
+    init: gp sync-await setup
+    command: yarn dev
+  - name: Storybook dev
+    init: gp sync-await setup
+    command: yarn sb
 
 # Ports to expose on workspace startup
 ports:
   - port: 3000
     onOpen: ignore
     visibility: public
-  - port: 7687
-    onOpen: ignore
-    visibility: public
-  - port: 7474
-    onOpen: notify
-    visibility: public
-  - port: 27018
-    onOpen: ignore
-    visibility: public
-  - port: 9001
-    onOpen: ignore
-    visibility: public
-  - port: 9002
+  - port: 6006
     onOpen: ignore
     visibility: public
 
 vscode:
   extensions:
-    - "pkief.material-icon-theme"
+    - 'pkief.material-icon-theme'
