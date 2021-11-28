@@ -119,9 +119,10 @@ const CreateCollectionModal: React.FC<{
                   </p>
                   <Button
                     isLoading={isLoading}
-                    text="Submit"
                     backgroundClassname="bg-[#0a70cf] hover:opacity-90"
-                  />
+                  >
+                    Submit
+                  </Button>
                 </form>
               </div>
             </div>

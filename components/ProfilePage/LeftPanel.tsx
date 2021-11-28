@@ -111,7 +111,6 @@ const FollowButton = ({ isFollowing, id, refetch }: any) => {
 
   return (
     <Button
-      text={isFollowing ? 'Unfollow' : 'Follow'}
       backgroundClassname={
         isFollowing
           ? 'bg-[#0ACF83] hover:opacity-90'
@@ -137,7 +136,9 @@ const FollowButton = ({ isFollowing, id, refetch }: any) => {
         }
         setIsLoading(false);
       }}
-    />
+    >
+      {isFollowing ? 'Unfollow' : 'Follow'}
+    </Button>
   );
 };
 

@@ -46,7 +46,6 @@ const CreateStory = () => {
             <div className="flex " key={index}>
               <TimeLineComponent {...event} />
               <Button
-                text="x"
                 isLoading={false}
                 onClick={() => {
                   // create temporary variable for the new events
@@ -54,7 +53,9 @@ const CreateStory = () => {
                   // set events to the new events without the event
                   setEvents(tmp.filter((e) => e !== event));
                 }}
-              />
+              >
+                x
+              </Button>
             </div>
           ))}
           <div className="flex items-center w-full py-4 pl-16 border-l border-gray-500 border-dashed">
@@ -76,12 +77,12 @@ const CreateStory = () => {
                   />
                 </div>
 
-                <Button isLoading={false} text="submit" />
+                <Button isLoading={false}>submit</Button>
               </form>
             </div>
           </div>
         </div>
-        <Button isLoading={false} text="submit" />
+        <Button isLoading={false}>submit</Button>
       </div>
     </Layout>
   );

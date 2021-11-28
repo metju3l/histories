@@ -1,5 +1,6 @@
-import 'tailwindcss/tailwind.css';
+/*import 'tailwindcss/tailwind.css';
 
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { Story } from '@storybook/react';
 import React from 'react';
 
@@ -22,11 +23,20 @@ const Component = {
 export default Component;
 
 // Template
-const Template: Story<PostProps> = (args) => (
-  <div className="w-full h-screen">
-    <Post {...args} />
-  </div>
-);
+const Template: Story<PostProps> = (args) => {
+  const client = new ApolloClient({
+    uri: 'http://localhost:3000/api/graphql',
+    cache: new InMemoryCache(),
+  });
+
+  return (
+    <ApolloProvider client={client}>
+      <div className="w-full h-screen">
+        <Post {...args} />
+      </div>
+    </ApolloProvider>
+  );
+};
 
 export const Default = Template.bind({});
 Default.args = {
@@ -90,3 +100,4 @@ Liked.args = {
   commentCount: 18,
   liked: '❤',
 };
+*/

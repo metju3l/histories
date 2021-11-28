@@ -388,8 +388,9 @@ const PostCard: FC<{
                       }
                     }}
                     isLoading={false}
-                    text="Comment"
-                  />
+                  >
+                    Comment
+                  </Button>
                 </>
               )}
               <div>

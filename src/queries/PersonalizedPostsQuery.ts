@@ -11,74 +11,20 @@ const PersonalizedPostsQuery = async ({
   skip: number;
   take: number;
 }) => {
-  const query =
-    logged === null
-      ? `MATCH (user:User)      
-      CALL {
-          WITH user
-          OPTIONAL MATCH (author:User)-[:CREATED]->(post:Post)
-          RETURN post, author
-          ORDER BY post.createdAt DESC
-          SKIP $skip
-          LIMIT $limit
-      }
-      
-      CALL {
-          WITH post
-          OPTIONAL MATCH (commentAuthor:User)-[:CREATED]->(comment:Comment)-[:BELONGS_TO]->(post)
-          RETURN commentAuthor, comment
-          ORDER BY comment.createdAt DESC
-          SKIP 0
-          LIMIT 100
-      }
-      
-      CALL {
-          WITH post
-          OPTIONAL MATCH (like:User)-[:LIKE]->(post)
-          RETURN COUNT(like) AS likeCount
-      }
-      
-      CALL {
-          WITH post
-          OPTIONAL MATCH (comment:Comment)-[:BELONGS_TO]->(post)
-          RETURN COUNT(comment) AS commentCount
-      }
-      
-      WITH COLLECT(DISTINCT comment{.*,
-              id: ID(comment),
-              author: commentAuthor{.*,
-                  id: ID(commentAuthor),
-                  profileUrl: "https://avatars.dicebear.com/api/initials/" + commentAuthor.firstName + "%20" + commentAuthor.lastName + ".svg"
-              },
-              liked: false
-          }) AS comments,
-          ID(post) AS postId,
-          likeCount,
-          commentCount, 
-          ID(author) AS authorId,
-          author,
-          post,
-          user
-      
-      RETURN COLLECT(DISTINCT post{.*,
-          id: postId,
-          likeCount,
-          commentCount,
-          comments,
-          author: author{.*,
-              id: authorId,
-              profileUrl: "https://avatars.dicebear.com/api/initials/" + author.firstName + "%20" + author.lastName + ".svg"
-          },
-          liked: false
-      }) AS posts`
-      : `MATCH (user:User)
-      WHERE ID(user) = $loggedId  // id of logged user as parameter
+  const query = `MATCH (user:User)
+        ${
+          logged !== null ? 'WHERE ID(user) = $loggedId ' : ''
+        } // id of logged user as parameter
       
       // post, author and place
       CALL {
           WITH user
           OPTIONAL MATCH (author:User)-[:CREATED]->(post:Post)-[:IS_LOCATED]->(place:Place)
-          WHERE ((user)-[:FOLLOW]->(author)) OR (user = author)
+          ${
+            logged !== null
+              ? 'WHERE ((user)-[:FOLLOW]->(author)) OR (user = author)'
+              : ''
+          }
           RETURN post, author, place
           ORDER BY post.createdAt DESC    // sort by newest
           // skip and limit for infinite scroll as parameters

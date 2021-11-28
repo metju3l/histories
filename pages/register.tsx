@@ -170,7 +170,7 @@ const Register: React.FC = () => {
           </label>
 
           <div className="mt-2 mb-2">
-            <Button isLoading={isLoading} text="Sign up" />
+            <Button isLoading={isLoading}>Sign up</Button>
           </div>
           <Link href="/login">
             <a className="pl-2 underline">login to an existing account</a>

@@ -64,7 +64,7 @@ const Login: FC = () => {
           />
 
           <div className="pt-2 mb-2">
-            <Button isLoading={isLoading} text="Log in" />
+            <Button isLoading={isLoading}>Log in</Button>
           </div>
           <Link href="/register">
             <a className="pl-2 underline">create new account</a>

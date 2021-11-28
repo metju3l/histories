@@ -302,7 +302,7 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
               />
-              <Button isLoading={isLoading} text="submit" />
+              <Button isLoading={isLoading}>submit</Button>
             </Form>
           )}
         </Formik>
