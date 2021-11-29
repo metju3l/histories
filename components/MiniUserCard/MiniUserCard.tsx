@@ -23,9 +23,11 @@ const Post: React.FC<MiniUserCardProps> = ({
 }) => {
   const [nameHover, setNameHover] = useState(false);
 
+  let timer: any;
+
   return (
-    <Link href={'/' + username}>
-      <a className="flex items-center gap-3">
+    <div className="flex items-center gap-3">
+      <Link href={'/' + username} passHref>
         <div className="relative w-10 h-10 rounded-full cursor-pointer bg-secondary">
           <Image
             src={GeneratedProfileUrl(firstName, lastName)}
@@ -36,38 +38,47 @@ const Post: React.FC<MiniUserCardProps> = ({
             alt="Profile picture"
           />
         </div>
-        <div className="relative flex flex-col">
-          <AnimatePresence>
-            {nameHover && (
-              <ProfilePopup
-                setNameHover={setNameHover}
-                firstName={firstName}
-                lastName={lastName}
-                username={username}
-              />
-            )}
-          </AnimatePresence>
+      </Link>
+      <div
+        className="relative flex flex-col"
+        onMouseLeave={() => setNameHover(false)}
+      >
+        <AnimatePresence>
+          {nameHover && (
+            <ProfilePopup
+              setNameHover={setNameHover}
+              firstName={firstName}
+              lastName={lastName}
+              username={username}
+            />
+          )}
+        </AnimatePresence>
 
-          <motion.a
-            {...hoverHandler(setNameHover)}
-            whileHover={{ textDecoration: 'underline' }}
-            className="text-lg font-semibold"
-          >
-            {firstName} {lastName}
-          </motion.a>
+        <motion.a
+          onMouseEnter={() => {
+            timer = setTimeout(() => setNameHover(true), 1000);
+          }}
+          onMouseLeave={() => {
+            clearTimeout(timer);
+            setNameHover(false);
+          }}
+          whileHover={{ textDecoration: 'underline' }}
+          className="text-lg font-semibold cursor-pointer"
+        >
+          {firstName} {lastName}
+        </motion.a>
 
-          <a className="cursor-pointer opacity-80">
-            @{username}
-            {time && (
-              <>
-                {' · '}
-                <TimeAgo date={time} />
-              </>
-            )}
-          </a>
-        </div>
-      </a>
-    </Link>
+        <a className="cursor-pointer opacity-80">
+          @{username}
+          {time && (
+            <>
+              {' · '}
+              <TimeAgo date={time} />
+            </>
+          )}
+        </a>
+      </div>
+    </div>
   );
 };
 

@@ -17,7 +17,8 @@ const Page = (args: ButtonProps) => {
   return (
     <div>
       <Toaster position="top-center" reverseOrder={true} />
-      <Button {...args} />
+      {/* @ts-ignore */}
+      <Button {...args}>{args.text}</Button>
     </div>
   );
 };

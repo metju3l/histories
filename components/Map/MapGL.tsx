@@ -1,7 +1,6 @@
 import CameraIcon from '@components/Icons/CameraIcon';
 import ChevronIcon from '@components/Icons/Chevron';
 import MarkerIcon from '@components/Icons/MarkerIcon';
-import { Modal } from '@components/Modal';
 import { TimeLine } from '@components/TimeLine';
 import { usePathsQuery, usePlaceQuery } from '@graphql/geo.graphql';
 import { usePostQuery } from '@graphql/post.graphql';
@@ -15,7 +14,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { toast } from 'react-hot-toast';
 import { MdPhotoCamera } from 'react-icons/md';
 import ReactMapGL, {
   FlyToInterpolator,
@@ -565,96 +563,6 @@ const MinimalPostCard: FC<{
 
   return (
     <>
-      {modalScreen === 'main' ? (
-        <Modal {...modalProps} aria-labelledby="modal-title">
-          {isLoggedQuery?.data?.isLogged?.id === data!.post.author.id ? (
-            <>
-              <ModalOption
-                onClick={async () => {
-                  try {
-                    await deleteMutation({
-                      variables: { id },
-                    });
-                  } catch (error) {
-                    // @ts-ignore
-                    toast.error(error.message);
-                  }
-                }}
-                text="Delete post"
-                warning
-              />
-              <ModalOption
-                onClick={() => {
-                  setEditMode(true);
-                  setModalScreen('report');
-                }}
-                text="Edit"
-              />
-            </>
-          ) : (
-            isLoggedQuery?.data?.isLogged?.id && (
-              <>
-                <ModalOption
-                  onClick={() => setModalScreen('report')}
-                  text="Report"
-                  warning
-                />
-
-                <ModalOption
-                  onClick={async () => {
-                    try {
-                      await unfollowMutation({
-                        variables: { userID: data!.post.author.id },
-                      });
-                    } catch (error) {
-                      // @ts-ignore
-                      toast.error(error.message);
-                    }
-                  }}
-                  text="Unfollow"
-                  warning
-                />
-              </>
-            )
-          )}
-          <ModalOption onClick={() => setModal(false)} text="Share" />
-          <ModalOption
-            onClick={() =>
-              router.push(`https://www.histories.cc/post/${data?.post.id}`)
-            }
-            text="Go to post"
-          />
-          <ModalOption
-            onClick={async () => {
-              await navigator.clipboard.writeText(
-                `https://www.histories.cc/post/${data?.post.id}`
-              );
-              modalProps.onClose();
-            }}
-            text="Copy link"
-          />
-          <ModalOption onClick={() => setModal(false)} text="Cancel" />
-        </Modal>
-      ) : modalScreen === 'report' ? (
-        <Modal aria-labelledby="modal-title" {...modalProps}>
-          <div className="relative w-full py-4 border-b border-[#DADBDA]">
-            <a className="text-center">Report</a>
-            <button
-              className="absolute text-3xl font-semibold top-1 right-4"
-              onClick={modalProps.onClose}
-            >
-              x
-            </button>
-          </div>
-          <ModalOption onClick={() => setModal(false)} text="Reason 1" />
-          <ModalOption onClick={() => setModal(false)} text="Reason 2" />
-          <ModalOption onClick={() => setModal(false)} text="Reason 3" />
-          <ModalOption onClick={() => setModal(false)} text="Reason 4" />
-        </Modal>
-      ) : (
-        <></>
-      )}
-
       <div className="w-full m-auto mb-8 bg-white border rounded-lg dark:bg-[#343233] border-gray-[#DADBDA] text-text-light dark:text-white">
         <div className="flex w-full space-between p-[1em]">
           <a className="flex items-center w-full gap-[10px] h-18">
@@ -692,29 +600,6 @@ const MinimalPostCard: FC<{
         </div>
       </div>
     </>
-  );
-};
-
-const ModalOption = ({
-  text,
-  onClick,
-  warning,
-}: {
-  text: string;
-  onClick: () => void;
-  warning?: boolean;
-}) => {
-  const [loading, setLoading] = useState(false);
-
-  return (
-    <button
-      onClick={onClick}
-      className={`${
-        warning ? 'text-red-500 font-semibold' : ''
-      } w-full border-b border-gray-[#DADBDA] py-4`}
-    >
-      {loading ? 'loading...' : text}
-    </button>
   );
 };
 

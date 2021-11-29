@@ -1,4 +1,3 @@
-import { AddToCollectionModal } from '@components/AddToCollectionModal';
 import { Button } from '@components/Button';
 import { CommentHandler } from '@components/Comment';
 import { LoginContext } from '@components/Layout/Layout';
@@ -154,24 +153,7 @@ const PostCard: FC<{
               </svg>
             </div>
           )}
-          {loginContext?.data.isLogged?.id && (
-            <AddToCollectionModal
-              isOpen={collectionSelectModal}
-              setOpenState={setCollectionSelectModal}
-              postId={data.post.id}
-              addToCollection={({ collectionId }: { collectionId: number }) => {
-                addToCollection({
-                  variables: { postId: id, collectionId },
-                });
-              }}
-              userCollections={
-                loginContext.data.isLogged.collections?.map((collection) => ({
-                  name: collection!.name,
-                  id: collection!.id,
-                })) ?? []
-              }
-            />
-          )}
+
           <Menu as="div" className="relative inline-block text-left">
             <div>
               <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-whiterounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">

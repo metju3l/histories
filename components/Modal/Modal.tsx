@@ -1,39 +1,56 @@
-import { Dialog } from '@headlessui/react';
+import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 
-type ModalProps = {
-  open: boolean;
-  onClose: () => void;
-  blur?: boolean;
-  blurSize?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
-  additionalClassName?: string;
+import { Loading } from '../Loading';
+
+export type ModalProps = {
+  isOpen: boolean;
+  title: string;
+  setOpenState: React.Dispatch<React.SetStateAction<boolean>>;
+  loading?: boolean;
 };
 
-const ModalComponent: React.FC<ModalProps> = ({
-  open,
-  onClose,
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  setOpenState,
   children,
-  blurSize,
-  blur,
-  additionalClassName,
+  title,
+  loading,
 }) => {
-  const blurClassName = blur
-    ? `backdrop-filter ${
-        blurSize ? `backdrop-blur-${blurSize}` : 'backdrop-blur'
-      }`
-    : '';
-
   return (
-    <Dialog open={open} onClose={onClose}>
-      <section
-        id="overlay"
-        className={`absolute top-0 left-0 w-full h-full ${blurClassName} ${
-          additionalClassName ?? ''
-        }`}
-        onClick={onClose}
-      />
-      {children}
-    </Dialog>
+    <AnimatePresence>
+      {isOpen ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ ease: 'easeOut', duration: 0.2 }}
+          className="fixed inset-0 z-10 flex items-center overflow-y-hidden bg-black bg-opacity-10"
+          onClick={() => setOpenState(false)}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: '100%' }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: '100%' }}
+            transition={{ ease: 'easeInOut', duration: 0.2 }}
+            className="absolute bottom-0 z-40 flex flex-col w-full overflow-hidden bg-white border shadow-2xl lg:m-auto lg:relative lg:max-w-4xl rounded-t-[2rem] lg:rounded-[2rem] max-h-[65vh] border-light-background-tertiary"
+          >
+            <div className="flex items-center justify-between p-6">
+              <div className="text-lg font-semibold">{title}</div>
+              <button onClick={() => setOpenState(false)}>close</button>
+            </div>
+            {loading ? (
+              <div className="flex flex-col justify-center h-64 m-auto">
+                <Loading color="#000000" size="xl" />
+              </div>
+            ) : (
+              <> {children}</>
+            )}
+          </motion.div>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
   );
 };
-export default ModalComponent;
+
+export default Modal;

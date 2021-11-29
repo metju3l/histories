@@ -19,11 +19,11 @@ const Index: React.FC = () => {
         <div className="hidden w-[30%] p-[1em] xl:block">
           <div className="sticky top-20"></div>
         </div>
-        <div className="w-full mt-2 xl:w-[40%] md:w-[60%] p-[1em]">
+        <div className="w-full mt-2 xl:w-[40%] lg:w-[60%] p-[1em]">
           <PersonalizedPosts />
         </div>
         {/* RIGHT COLUMN */}
-        <div className="hidden w-[40%] xl:w-[30%] p-[1em] md:block">
+        <div className="hidden w-[40%] xl:w-[30%] p-[1em] lg:block">
           <div className="sticky top-20">
             <div className="w-full mb-8 rounded-lg p-[1em] text-text-light">
               <Suggestions logged={logged.data} />
