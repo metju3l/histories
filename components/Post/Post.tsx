@@ -1,9 +1,14 @@
+import { AddToCollectionModal } from '@components/AddToCollectionModal';
 import { LoginContext } from '@components/Layout';
 import hoverHandler from '@hooks/hoverHandler';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import React, { useContext, useEffect, useState } from 'react';
+import FlipNumbers from 'react-flip-numbers';
 import { toast } from 'react-hot-toast';
+import { BiLike } from 'react-icons/bi';
+import { FiBookmark, FiShare } from 'react-icons/fi';
+import { IoIosMore } from 'react-icons/io';
 
 import {
   useLikeMutation,
@@ -16,22 +21,6 @@ import Love from '../../public/reactions/love.gif';
 import Wow from '../../public/reactions/wow.gif';
 import { MiniUserCard } from '../MiniUserCard';
 import PostTimeline from './PostTimeline';
-const LikeIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-10 h-10"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
-    />
-  </svg>
-);
 
 const CommentIcon = () => (
   <svg
@@ -46,23 +35,6 @@ const CommentIcon = () => (
       strokeLinejoin="round"
       strokeWidth={2}
       d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-    />
-  </svg>
-);
-
-const ShareIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-10 h-10"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
     />
   </svg>
 );
@@ -174,95 +146,118 @@ const Post: React.FC<PostProps> = ({
   };
 
   return (
-    <PostTimeline time={postDate} show={timeline}>
-      <div
-        onMouseLeave={() => setReactionMenu(false)}
-        className="w-full mb-4 border shadow-lg bg-light-background-secondary dark:bg-dark-background-secondary text-light-text-primary dark:text-dark-text-primary sm:rounded-2xl max-w-[600px] border-light-background-tertiary"
-      >
-        <div className="flex items-center justify-between px-4 pt-6">
-          <MiniUserCard {...author} time={createdAt} />
-        </div>
-        <p className="px-4 pt-2 font-medium">{description}</p>
-        {photos && (
-          <div className="relative w-full my-4 bg-white cursor-pointer dark:bg-black h-[360px] bg-secondary">
-            <Image
-              src={photos[0].url}
-              layout="fill"
-              objectFit="contain"
-              objectPosition="center"
-              alt="Profile picture"
-            />
-          </div>
-        )}
-        <div className={`px-4 pb-12 relative ${photos ? '' : 'pt-4 '}`}>
-          <div className="flex justify-between w-full pb-2 opacity-70">
-            <span>{localLikeCount} likes</span>
-            <span>{commentCount} comments</span>
-          </div>
-          <div className="flex justify-around w-full py-2 text-3xl border-t border-b border-gray-300">
-            <div onMouseEnter={() => setReactionMenu(true)}>
-              <AnimatePresence>
-                {reactionMenu && (
-                  <motion.div
-                    initial={{ opacity: 0.1 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ ease: 'easeOut', duration: 0.1 }}
-                    className="absolute px-4 ml-4 text-4xl bg-white border rounded-full shadow-lg -top-8  -left-8 border-light-background-tertiary"
-                  >
-                    <Reaction text="👍" tooltip="like" onClick={onLike}>
-                      <Image src={Like} height={60} width={60} alt="haha" />
-                    </Reaction>
-                    <Reaction text="❤" tooltip="love" onClick={onLike}>
-                      <Image src={Love} height={60} width={60} alt="haha" />
-                    </Reaction>
-                    <Reaction text="😆" tooltip="haha" onClick={onLike}>
-                      <Image src={Haha} height={60} width={60} alt="haha" />
-                    </Reaction>
-                    <Reaction text="😲" tooltip="wow" onClick={onLike}>
-                      <Image src={Wow} height={60} width={60} alt="haha" />
-                    </Reaction>
-                    <Reaction text="😠" tooltip="angry" onClick={onLike}>
-                      <Image src={Angry} height={60} width={60} alt="haha" />
-                    </Reaction>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={async () => {
-                  if (localLikeState) await onUnlike();
-                  else await onLike('👍');
-                }}
-              >
-                {localLikeState ? (
-                  <Image
-                    src={
-                      localLikeState == '👍'
-                        ? Like
-                        : localLikeState == '❤'
-                        ? Love
-                        : localLikeState == '😆'
-                        ? Haha
-                        : localLikeState == '😲'
-                        ? Wow
-                        : Angry
-                    }
-                    height={40}
-                    width={40}
-                    alt="haha"
-                  />
-                ) : (
-                  <LikeIcon />
-                )}
-              </motion.button>
+    <>
+      <AddToCollectionModal
+        isOpen={collectionSelectModal}
+        postId={id}
+        setOpenState={setCollectionSelectModal}
+      />
+
+      <PostTimeline time={postDate} show={timeline}>
+        <div
+          onMouseLeave={() => setReactionMenu(false)}
+          className="w-full mb-4 border shadow-lg bg-light-background-secondary dark:bg-dark-background-secondary text-light-text-primary dark:text-dark-text-primary sm:rounded-2xl max-w-[600px] border-light-background-tertiary"
+        >
+          <div className="flex items-center justify-between px-4 pt-6">
+            <MiniUserCard {...author} time={createdAt} />
+            <div className="flex items-center gap-2">
+              <FiBookmark
+                className="text-2xl"
+                onClick={() => setCollectionSelectModal(true)}
+              />
+              <IoIosMore className="text-2xl" />
             </div>
-            <CommentIcon />
-            <ShareIcon />
+          </div>
+          <p className="px-4 pt-2 font-medium">{description}</p>
+          {photos && (
+            <div className="relative w-full my-4 bg-white cursor-pointer dark:bg-black h-[360px] bg-secondary">
+              <Image
+                src={photos[0].url}
+                layout="fill"
+                objectFit="contain"
+                objectPosition="center"
+                alt="Profile picture"
+              />
+            </div>
+          )}
+          <div className={`px-4 pb-12 relative ${photos ? '' : 'pt-4 '}`}>
+            <div className="flex justify-between w-full pb-2 opacity-70">
+              <span>
+                <FlipNumbers
+                  height={14}
+                  width={14}
+                  play
+                  perspective={100}
+                  numbers={localLikeCount + 'likes'}
+                />
+              </span>
+              <span>{commentCount} comments</span>
+            </div>
+            <div className="flex justify-around w-full py-2 text-3xl border-t border-b border-gray-300">
+              <div onMouseEnter={() => setReactionMenu(true)}>
+                <AnimatePresence>
+                  {reactionMenu && (
+                    <motion.div
+                      initial={{ opacity: 0.1 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ ease: 'easeOut', duration: 0.1 }}
+                      className="absolute px-4 ml-4 text-4xl bg-white border rounded-full shadow-lg -top-8  left-8 border-light-background-tertiary"
+                    >
+                      <Reaction text="👍" tooltip="like" onClick={onLike}>
+                        <Image src={Like} height={60} width={60} alt="haha" />
+                      </Reaction>
+                      <Reaction text="❤" tooltip="love" onClick={onLike}>
+                        <Image src={Love} height={60} width={60} alt="haha" />
+                      </Reaction>
+                      <Reaction text="😆" tooltip="haha" onClick={onLike}>
+                        <Image src={Haha} height={60} width={60} alt="haha" />
+                      </Reaction>
+                      <Reaction text="😲" tooltip="wow" onClick={onLike}>
+                        <Image src={Wow} height={60} width={60} alt="haha" />
+                      </Reaction>
+                      <Reaction text="😠" tooltip="angry" onClick={onLike}>
+                        <Image src={Angry} height={60} width={60} alt="haha" />
+                      </Reaction>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={async () => {
+                    if (localLikeState) await onUnlike();
+                    else await onLike('👍');
+                  }}
+                >
+                  {localLikeState ? (
+                    <Image
+                      src={
+                        localLikeState == '👍'
+                          ? Like
+                          : localLikeState == '❤'
+                          ? Love
+                          : localLikeState == '😆'
+                          ? Haha
+                          : localLikeState == '😲'
+                          ? Wow
+                          : Angry
+                      }
+                      height={40}
+                      width={40}
+                      alt="haha"
+                    />
+                  ) : (
+                    <BiLike />
+                  )}
+                </motion.button>
+              </div>
+              <CommentIcon />
+              <FiShare />
+            </div>
           </div>
         </div>
-      </div>
-    </PostTimeline>
+      </PostTimeline>
+    </>
   );
 };
 

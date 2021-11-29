@@ -1,3 +1,4 @@
+/*
 import 'tailwindcss/tailwind.css';
 
 import { Story } from '@storybook/react';
@@ -46,3 +47,4 @@ Modal.args = {
   addToCollection: () => {},
   setOpenState: () => {},
 };
+*/
