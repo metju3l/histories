@@ -1,11 +1,12 @@
-import { AccountCreatedCard, PostCard } from '@components/PostCard';
+import { Post } from '@components/Post';
+import { AccountCreatedCard } from '@components/PostCard';
 import { ProfilePage } from '@components/ProfilePage';
 import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 import { NextPageContext } from 'next';
 import React from 'react';
 
 const User: React.FC<{ username: string }> = ({ username }) => {
-  const { data, loading, error } = useGetUserInfoQuery({
+  const { data, loading, error, refetch } = useGetUserInfoQuery({
     variables: { username: username },
   });
   const logged = useIsLoggedQuery();
@@ -31,7 +32,13 @@ const User: React.FC<{ username: string }> = ({ username }) => {
         <>
           {data.user.posts &&
             data.user.posts.map((post: any) => (
-              <PostCard key={post!.id} id={post!.id} />
+              <Post
+                key={post.id}
+                {...post}
+                refetch={refetch}
+                timeline
+                photos={post.url.map((x: string) => ({ url: x }))}
+              />
             ))}
           <AccountCreatedCard
             date={data.user.createdAt}

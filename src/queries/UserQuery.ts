@@ -124,43 +124,89 @@ ${
     ? ` WHERE ID(user) = ${id} `
     : ` WHERE user.username =~ "(?i)${username}" `
 }
+
 CALL {
-    WITH user
-    OPTIONAL MATCH (user)-[created:CREATED]->(post:Post)-[:IS_LOCATED]->(place:Place)
-    RETURN DISTINCT post, place
-    ORDER BY post.createdAt DESC
-    LIMIT 100
+  WITH user
+  OPTIONAL MATCH (user)-[created:CREATED]->(postTmp:Post)-[:IS_LOCATED]->(place:Place)
+  RETURN DISTINCT postTmp, place
+  ORDER BY postTmp.createdAt DESC
 }
+
 CALL {
-    WITH user
-    OPTIONAL MATCH (user)-[:FOLLOW]->(following:User)
-    RETURN DISTINCT following
-    LIMIT 100
+  WITH postTmp
+  RETURN COUNT(DISTINCT postTmp) AS postCount
 }
+
 CALL {
-    WITH user
-    OPTIONAL MATCH (follower:User)-[:FOLLOW]->(user)
-    RETURN DISTINCT follower
-    LIMIT 100
+  WITH postTmp
+  RETURN postTmp as post
+  SKIP 0
+  LIMIT 50
 }
+
 CALL {
-    WITH user
-    OPTIONAL MATCH (user)-[:CREATED]->(collection:Collection)
-    RETURN DISTINCT collection
-    LIMIT 100
+  WITH user
+  OPTIONAL MATCH (user)-[:FOLLOW]->(following:User)
+  RETURN DISTINCT following
+  LIMIT 5000
 }
+
 CALL {
-    WITH user, loggedID
-    OPTIONAL MATCH (logged:User)-[r:FOLLOW]->(user)
-    WHERE ID(logged) = loggedID
-    RETURN r AS isFollowing
+  WITH user
+  OPTIONAL MATCH (user)-[:FOLLOW]->(following:User)
+  RETURN COUNT(DISTINCT following) AS followingCount
 }
+
+CALL {
+  WITH user
+  OPTIONAL MATCH (follower:User)-[:FOLLOW]->(user)
+  RETURN DISTINCT follower
+  LIMIT 5000
+}
+
+CALL {
+  WITH user
+  OPTIONAL MATCH (follower:User)-[:FOLLOW]->(user)
+  RETURN COUNT(DISTINCT follower) AS followerCount 
+}
+
+CALL {
+  WITH user
+  OPTIONAL MATCH (user)-[:CREATED]->(collection:Collection)
+  RETURN DISTINCT collection
+}
+
+CALL {
+  WITH user, loggedID
+  OPTIONAL MATCH (logged:User)-[r:FOLLOW]->(user)
+  WHERE ID(logged) = loggedID
+  RETURN r AS isFollowing
+}
+
 RETURN user{.*, id: ID(user),
-    posts: COLLECT(DISTINCT post{.*, id: ID(post), place:place{.*, latitude: place.location.latitude, longitude: place.location.longitude, id: ID(place)}}),
-    followers: COLLECT(DISTINCT follower{.*, id: ID(follower)}), 
-    following: COLLECT(DISTINCT following{.*, id: ID(following)}),
-    collections: COLLECT(DISTINCT collection{.*, id: ID(collection)}),
-    isFollowing: COUNT(DISTINCT isFollowing) > 0
+  posts: COLLECT(DISTINCT post{.*,
+      id: ID(post),
+      author: user{.*,
+          id: ID(user)
+      },
+      place:place{.*,
+          latitude: place.location.latitude,
+          longitude: place.location.longitude,
+          id: ID(place)}
+      }),
+  followingCount,
+  followerCount,
+  postCount,
+  followers: COLLECT(DISTINCT follower{.*,
+                                  id: ID(follower)
+                              }), 
+  following: COLLECT(DISTINCT following{.*,
+                                  id: ID(following)
+                              }),
+  collections: COLLECT(DISTINCT collection{.*,
+                                  id: ID(collection)
+                              }),
+  isFollowing: COUNT(DISTINCT isFollowing) > 0
 } AS user`;
 
   const result = await RunCypherQuery(query);

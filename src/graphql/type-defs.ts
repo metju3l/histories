@@ -236,11 +236,14 @@ export default gql`
     verified: String!
     createdAt: Float!
     isFollowing: Boolean!
+    followerCount: Int!
+    followingCount: Int!
+    postCount: Int!
     id: Float!
     following: [UserInfoMinimal]
     followers: [UserInfoMinimal]
     collections: [Collection]
-    posts: [PostInfoNew]
+    posts: [Post!]!
   }
 
   type PostInfoNew {

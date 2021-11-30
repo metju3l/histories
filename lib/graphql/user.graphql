@@ -24,35 +24,37 @@ query suggestedUsers {
 
 query getUserInfo($username: String, $id: Int) {
   user(input: { username: $username, id: $id }) {
-    username
     email
+    username
     firstName
-    lastName
     bio
+    lastName
     verified
     createdAt
-    id
     isFollowing
+    id
     following {
-      email
-      username
-      firstName
-      lastName
+      id
     }
     followers {
-      email
-      username
-      firstName
-      lastName
-    }
-    collections {
-      name
-      createdAt
-      description
       id
     }
+    followerCount
+    followingCount
+    postCount
     posts {
       id
+      url
+      description
+      postDate
+      createdAt
+      author {
+        id
+        firstName
+        username
+        lastName
+        email
+      }
     }
   }
 }
