@@ -21,7 +21,7 @@ const Index: React.FC = () => {
         <div className="hidden w-[30%] p-[1em] xl:block">
           <div className="sticky top-20"></div>
         </div>
-        <div className="w-full mt-2 xl:w-[40%] lg:w-[60%] p-[1em]">
+        <div className="w-full mt-2 xl:w-[40%] lg:w-[60%] xl:p-[1em]">
           <PersonalizedPosts />
         </div>
         {/* RIGHT COLUMN */}
@@ -89,6 +89,7 @@ const PersonalizedPosts = () => {
     >
       {data?.personalizedPosts.map((post: any) => (
         <Post
+          timeline
           {...post}
           key={post.id}
           refetch={refetch}

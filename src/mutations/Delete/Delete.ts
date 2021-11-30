@@ -10,11 +10,13 @@ const Delete = async ({
   id: number;
 }): Promise<void> => {
   const query = `MATCH (user:User), (target)
-  WHERE ID(user) = ${logged} AND ID(target) = ${id}
+  WHERE ID(user) = ${logged}
+  AND ID(target) = ${id}
   AND ((user)-[:CREATED]->(target) OR user :Admin)
   AND labels(target) in [["Post"],["Comment"],["Collection"]]
   OPTIONAL MATCH (comment:Comment)-[:BELONGS_TO]->(target)
-  WHERE ID(user) = ${logged} AND ID(target) = ${id}
+  WHERE ID(user) = ${logged}
+  AND ID(target) = ${id}
   AND ((user)-[:CREATED]->(target) OR user :Admin)
   AND labels(target) in [["Post"],["Comment"],["Collection"]]
   DETACH DELETE comment, target`;

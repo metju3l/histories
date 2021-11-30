@@ -1,7 +1,7 @@
 import 'react-dropdown/style.css';
 
+import CreateCollectionModal from '@components/Collection/CreateCollectionModal';
 import { CollectionCard } from '@components/CollectionCard';
-import { CreateCollectionModal } from '@components/CreateCollectionModal';
 import { ProfilePage } from '@components/ProfilePage';
 import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 import { PlusIcon } from '@heroicons/react/solid';
@@ -40,10 +40,8 @@ const Collections: FC<{ username: string }> = ({ username }) => {
     <>
       <CreateCollectionModal
         openState={createModal}
-        onClose={async () => {
-          setCreateModal(false);
-          await refetch();
-        }}
+        setOpenState={setCreateModal}
+        refetch={refetch}
       />
       <ProfilePage
         title={`${data.user.firstName}'s collections | hiStories`}

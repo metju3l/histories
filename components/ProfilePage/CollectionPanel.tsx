@@ -1,3 +1,4 @@
+import EditCollectionModal from '@components/Collection/EditCollectionModal';
 import { LoginContext } from '@components/Layout/Layout';
 import {
   useCollectionQuery,
@@ -53,63 +54,41 @@ const CollectionPanel: React.FC<{
       {/* PROFILE PICTURE */}
       <div className="absolute rounded-full shadow-md bg-secondary w-[10rem] h-[10rem] mt-[-40px]"></div>
       {/* PROFILE INFO */}
-      {editMode ? (
-        <div className="px-2 pt-[9rem] text-primary">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            {/* NAME */}
-            Name:
-            <input
-              defaultValue={data?.collection.name}
-              {...register('name')}
-              className="w-full p-2 mt-1 mb-4 text-primary bg-primary rounded-xl"
-            />
-            {/* DESCRIPTION */}
-            Description:
-            <textarea
-              defaultValue={data?.collection.description ?? ''}
-              {...register('description')}
-              className="w-full h-64 p-2 mt-1 text-primary bg-primary rounded-xl"
-            />
-            {/* EDIT BUTTON */}
-            {loginContext.data?.isLogged?.id === data?.collection.author.id && (
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center h-10 mt-6 font-medium tracking-wide text-white rounded-lg bg-[#0ACF83] w-52 transition duration-200 hover:opacity-90"
-              >
-                Save changes
-              </button>
-            )}
-          </form>
-        </div>
-      ) : (
-        <div className="pt-[9rem]">
-          {/* NAME */}
-          <h1 className="flex items-center text-3xl font-semibold text-primary">
-            {data?.collection.name}
-          </h1>
-          {/* USERNAME */}
-          <Link href={'/' + data?.collection.author.username} passHref>
-            <h2 className="pt-2 text-2xl cursor-pointer text-secondary">
-              author: @{data?.collection.author.username}
-            </h2>
-          </Link>
+      <EditCollectionModal
+        setOpenState={setEditMode}
+        openState={editMode}
+        id={id}
+        refetch={refetch}
+        // @ts-ignore
+        collection={data?.collection}
+      />
+      <div className="pt-[9rem]">
+        {/* NAME */}
+        <h1 className="flex items-center text-3xl font-semibold text-primary">
+          {data?.collection.name}
+        </h1>
+        {/* USERNAME */}
+        <Link href={'/' + data?.collection.author.username} passHref>
+          <h2 className="pt-2 text-2xl cursor-pointer text-secondary">
+            author: @{data?.collection.author.username}
+          </h2>
+        </Link>
 
-          {/* DESCRIPTION */}
-          <p className="mt-4 break-words whitespace-pre-wrap text-primary">
-            {data?.collection.description}
-          </p>
+        {/* DESCRIPTION */}
+        <p className="mt-4 break-words whitespace-pre-wrap text-primary">
+          {data?.collection.description}
+        </p>
 
-          {/* EDIT BUTTON */}
-          {loginContext.data?.isLogged?.id === data?.collection.author.id && (
-            <button
-              onClick={() => setEditMode(true)}
-              className="inline-flex items-center justify-center h-10 mt-6 font-medium tracking-wide text-white rounded-lg bg-[#0ACF83] w-52 transition duration-200 hover:opacity-90"
-            >
-              Edit collection
-            </button>
-          )}
-        </div>
-      )}
+        {/* EDIT BUTTON */}
+        {loginContext.data?.isLogged?.id === data?.collection.author.id && (
+          <button
+            onClick={() => setEditMode(true)}
+            className="inline-flex items-center justify-center h-10 mt-6 font-medium tracking-wide text-white rounded-lg bg-[#0ACF83] w-52 transition duration-200 hover:opacity-90"
+          >
+            Edit collection
+          </button>
+        )}
+      </div>
     </div>
   );
 };
