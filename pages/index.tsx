@@ -4,6 +4,8 @@ import { Post } from '@components/Post';
 import { usePersonalizedPostsQuery } from '@graphql/post.graphql';
 import { useIsLoggedQuery } from '@graphql/user.graphql';
 import React from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 const Index: React.FC = () => {
   const logged = useIsLoggedQuery();
 
@@ -36,15 +38,55 @@ const Index: React.FC = () => {
 };
 
 const PersonalizedPosts = () => {
-  const { data, loading, error, refetch } = usePersonalizedPostsQuery({
-    variables: { skip: 0, take: 100 },
-  });
+  const { data, loading, error, refetch, fetchMore, updateQuery } =
+    usePersonalizedPostsQuery({
+      variables: { skip: 0, take: 20 }, // minimize number of things needed to load at start
+    });
 
   if (loading) return <div>post loading</div>;
   if (error) return <div>{JSON.stringify(error)}</div>;
 
   return (
-    <div>
+    <InfiniteScroll
+      dataLength={data!.personalizedPosts.length} //This is important field to render the next data
+      next={() => {
+        fetchMore({
+          variables: { skip: data!.personalizedPosts.length, take: 75 },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            return {
+              ...previousResult,
+              personalizedPosts: [
+                ...previousResult.personalizedPosts,
+                // @ts-ignore
+                ...fetchMoreResult.personalizedPosts,
+              ],
+            };
+          },
+        });
+      }}
+      hasMore={true}
+      loader={
+        <p style={{ textAlign: 'center' }}>
+          <b>loading</b>
+        </p>
+      }
+      endMessage={
+        <p style={{ textAlign: 'center' }}>
+          <b>Yay! You have seen it all</b>
+        </p>
+      }
+      refreshFunction={async () => {
+        await refetch();
+      }}
+      pullDownToRefresh
+      pullDownToRefreshThreshold={80}
+      pullDownToRefreshContent={
+        <h3 style={{ textAlign: 'center' }}>&#8595; Pull down to refresh</h3>
+      }
+      releaseToRefreshContent={
+        <h3 style={{ textAlign: 'center' }}>&#8593; Release to refresh</h3>
+      }
+    >
       {data?.personalizedPosts.map((post: any) => (
         <Post
           {...post}
@@ -53,7 +95,7 @@ const PersonalizedPosts = () => {
           photos={post.url.map((x: string) => ({ url: x }))}
         />
       ))}
-    </div>
+    </InfiniteScroll>
   );
 };
 

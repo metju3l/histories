@@ -31,6 +31,8 @@ const PersonalizedPostsQuery = async ({
           SKIP $skip 
           LIMIT $limit
       }
+
+   
       
       // number of posts in place
       CALL {
