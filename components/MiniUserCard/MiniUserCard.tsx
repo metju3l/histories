@@ -1,5 +1,3 @@
-import { Button } from '@components/Button';
-import hoverHandler from '@hooks/hoverHandler';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,6 +5,8 @@ import React, { useState } from 'react';
 import TimeAgo from 'react-timeago';
 
 import GeneratedProfileUrl from '../../lib/functions/GeneratedProfileUrl';
+import hoverHandler from '../../lib/hooks/hoverHandler';
+import { Button } from '../Button';
 
 export type MiniUserCardProps = {
   firstName: string;
@@ -121,8 +121,8 @@ const ProfilePopup: React.FC<{
         </div>
       </div>
       <div className="flex w-full gap-2">
-        <Button isLoading={false}>Follow</Button>
-        <Button isLoading={false} backgroundClassname="bg-gray-200 text-black">
+        <Button isLoading={false} type="primary">Follow</Button>
+        <Button isLoading={false} type="secondary">
           •••
         </Button>
       </div>

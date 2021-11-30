@@ -7,13 +7,13 @@ export default gql`
     hello: String!
     user(input: UserInput!): User!
     post(id: Int!): Post!
-    mapPosts(input: MapPostsInput!): [MapPost]!
+    mapPosts(input: MapPostsInput!): [MapPost!]!
     suggestedUsers: [User]!
     tag(label: String!): TagInfo
     paths: [Path]
     isLogged: User
-    userPosts(input: UserPostsInput!): [Post]
-    personalizedPosts(input: PersonalizedPostsInput): [PersonalizedPost]!
+    userPosts(input: UserPostsInput!): [Post!]!
+    personalizedPosts(input: PersonalizedPostsInput): [PersonalizedPost!]!
     checkIfLogged: CheckIfLoggedInfo!
     place(id: Int!): Place!
     collection(id: Int!): Collection!
@@ -141,7 +141,9 @@ export default gql`
     latitude: Float!
     longitude: Float!
     icon: String
-    posts: [Post]!
+    preview: String
+    postCount: Int!
+    likeCount: Int!
   }
 
   type Post {

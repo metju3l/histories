@@ -111,11 +111,7 @@ const FollowButton = ({ isFollowing, id, refetch }: any) => {
 
   return (
     <Button
-      backgroundClassname={
-        isFollowing
-          ? 'bg-[#0ACF83] hover:opacity-90'
-          : 'bg-[#474DFE] hover:opacity-90'
-      }
+      type="primary"
       isLoading={isLoading}
       onClick={async () => {
         setIsLoading(true);

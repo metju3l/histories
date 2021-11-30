@@ -1,4 +1,3 @@
-/*
 import 'tailwindcss/tailwind.css';
 
 import { Story } from '@storybook/react';
@@ -29,4 +28,3 @@ Default.args = {
   lastName: 'Doe',
   username: 'johndoe',
 };
-*/

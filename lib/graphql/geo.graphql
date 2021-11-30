@@ -20,22 +20,12 @@ query MapPosts(
     }
   ) {
     id
-    latitude
-    longitude
+    likeCount
+    postCount
+    preview
     icon
-    posts {
-      id
-      url
-      description
-      createdAt
-      postDate
-      author {
-        id
-        username
-        firstName
-        lastName
-      }
-    }
+    longitude
+    latitude
   }
 }
 

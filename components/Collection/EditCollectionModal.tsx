@@ -110,10 +110,7 @@ const EditCollectionModal: React.FC<{
           <br />
           <br />
           <br />
-          <Button
-            isLoading={isLoading}
-            backgroundClassname="bg-[#0a70cf] hover:opacity-90"
-          >
+          <Button isLoading={isLoading} type="primary">
             Submit
           </Button>
         </form>

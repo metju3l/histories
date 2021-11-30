@@ -40,13 +40,53 @@ const FilterPlacesQuery = async ({
     if (validateMaxDate) throw new Error(validateMaxDate);
   }
 
-  const query = `MATCH (place:Place)<-[:IS_LOCATED]-(post:Post)<-[:CREATED]-(author:User)
-WHERE place.location.latitude >= $minLatitude AND place.location.latitude <= $maxLatitude
-AND place.location.longitude >= $minLongitude AND place.location.longitude <= $maxLongitude
-${minDate ? ` AND post.postDate >= $minDate ` : ''}
-${maxDate ? ` AND post.postDate <= $maxDate ` : ''}
-WITH place{.*,latitude: place.location.latitude, longitude: place.location.longitude, id: ID(place), posts: COLLECT(post{.*, id: ID(post), author: author{.*, id: ID(author)}})} AS result
-RETURN COLLECT(result) AS places`;
+  const query = `MATCH (place:Place)
+  WHERE place.location.latitude >= $minLatitude   // min latitude
+  AND place.location.latitude <= $maxLatitude  // max latitude
+  AND place.location.longitude >= $minLongitude    // min longitude
+  AND place.location.longitude <= $maxLongitude     // max longitude
+  
+  // return most liked post from place which has photos
+  CALL {
+      WITH place
+      OPTIONAL MATCH (place:Place)<-[:IS_LOCATED]-(post:Post)<-[:CREATED]-(author:User)
+      WHERE post.url IS NOT NULL  // where post has photos
+      RETURN post
+      LIMIT 1 // only one to use as preview image
+  }
+  
+  // post count
+  CALL {
+      WITH place
+      // count posts assigned to place
+      OPTIONAL MATCH (place:Place)<-[:IS_LOCATED]-(post:Post)<-[:CREATED]-(author:User)
+      RETURN COUNT(DISTINCT post) AS postCount 
+  }
+  
+  // like count
+  CALL {
+      WITH place
+      // count likes assigned to posts assigned to place
+      OPTIONAL MATCH (place:Place)<-[:IS_LOCATED]-(:Post)<-[:LIKE]-(like:User)
+      RETURN COUNT(DISTINCT like) AS likeCount    
+  }
+  
+  // return places as an array of objects
+  RETURN COLLECT(place{.*,
+      id: ID(place),
+      latitude: place.location.latitude,  // latitude
+      longitude: place.location.longitude,    // longitude
+      icon: place.icon,
+      postCount,
+      likeCount,
+      preview: 
+          CASE
+              // if place has preview return place preview
+              WHEN (place.preview IS NOT NULL) THEN place.preview
+              // else if place has post with photos, return photos as preview otherwise return null
+              ELSE post.url
+          END
+  }) AS places`;
 
   const result = await RunCypherQuery(query, {
     minLatitude,
@@ -57,13 +97,7 @@ RETURN COLLECT(result) AS places`;
     maxDate,
   });
 
-  return result.records[0].get('places').map((x: any) => ({
-    ...x,
-    posts: x.posts.map((post: any) => ({
-      ...post,
-      url: post.url,
-    })),
-  }));
+  return result.records[0].get('places');
 };
 
 export default FilterPlacesQuery;

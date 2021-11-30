@@ -79,10 +79,7 @@ const CreateCollectionModal: React.FC<{
               ? 'Only you will see this collection'
               : 'Collection will be visible to anyone'}
           </p>
-          <Button
-            isLoading={isLoading}
-            backgroundClassname="bg-[#0a70cf] hover:opacity-90"
-          >
+          <Button isLoading={isLoading} type="primary">
             Submit
           </Button>
         </form>
