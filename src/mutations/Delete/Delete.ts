@@ -21,11 +21,13 @@ const Delete = async ({
   AND labels(target) in [["Post"],["Comment"],["Collection"]]
   DETACH DELETE comment, target`;
 
-  const labels = await RunCypherQuery(`MATCH (user:User), (target)
+  const [labels] = await RunCypherQuery({
+    query: `MATCH (user:User), (target)
 WHERE ID(user) = ${logged} AND ID(target) = ${id}
 AND ((user)-[:CREATED]->(target) OR user :Admin)
 AND labels(target) in [["Post"],["Comment"],["Collection"]]
-RETURN labels(target) AS labels`);
+RETURN labels(target) AS labels`,
+  });
 
   const driver = DbConnector();
   const session = driver.session();

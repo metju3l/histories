@@ -131,11 +131,14 @@ const PersonalizedPostsQuery = async ({
           liked   // type of liked if user is logged in
       }) AS posts`;
 
-  const result = await RunCypherQuery(query, {
-    loggedId: logged,
-    // neo4j.int must be used for integer values
-    skip: neo4j.int(skip),
-    limit: neo4j.int(take > 100 ? 100 : take), // disable fetching more than 100 posts at once
+  const [result] = await RunCypherQuery({
+    query,
+    params: {
+      loggedId: logged,
+      // neo4j.int must be used for integer values
+      skip: neo4j.int(skip),
+      limit: neo4j.int(take > 100 ? 100 : take), // disable fetching more than 100 posts at once
+    },
   });
 
   return result.records[0].get('posts');

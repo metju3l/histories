@@ -88,13 +88,16 @@ const FilterPlacesQuery = async ({
           END
   }) AS places`;
 
-  const result = await RunCypherQuery(query, {
-    minLatitude,
-    maxLatitude,
-    minLongitude,
-    maxLongitude,
-    minDate,
-    maxDate,
+  const [result] = await RunCypherQuery({
+    query,
+    params: {
+      minLatitude,
+      maxLatitude,
+      minLongitude,
+      maxLongitude,
+      minDate,
+      maxDate,
+    },
   });
 
   return result.records[0].get('places');

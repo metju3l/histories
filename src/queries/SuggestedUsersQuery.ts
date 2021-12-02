@@ -12,7 +12,7 @@ const SuggestedUsersQuery = async (logged: number | null) => {
       MATCH (user:User)
       RETURN COLLECT(user{.*, id: ID(user)}) AS suggestions LIMIT 15`;
 
-  const result = await RunCypherQuery(query);
+  const [result] = await RunCypherQuery({ query });
 
   if (result.records[0] === undefined) throw new Error('unexpected error');
   else return result.records[0].get('suggestions');

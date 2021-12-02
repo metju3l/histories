@@ -26,13 +26,16 @@ CALL {
 }
 RETURN newCollection{.*, id: ID(newCollection)} AS collection`;
 
-  await RunCypherQuery(query, {
-    createdAt: new Date().getTime(),
-    description,
-    name,
-    userId,
-    preview,
-    isPrivate,
+  await RunCypherQuery({
+    query,
+    params: {
+      createdAt: new Date().getTime(),
+      description,
+      name,
+      userId,
+      preview,
+      isPrivate,
+    },
   });
   return 0;
 };

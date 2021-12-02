@@ -19,10 +19,10 @@ test('Coordinates', () => {
   expect(ValidateCoordinates([92, 0])).toEqual({
     error: 'Invalid latitude',
   });
-  expect(ValidateCoordinates([0, 200])).toEqual({
+  expect(ValidateCoordinates([0, 480])).toEqual({
     error: 'Invalid longitude',
   });
-  expect(ValidateCoordinates([0, -200])).toEqual({
+  expect(ValidateCoordinates([0, -480])).toEqual({
     error: 'Invalid longitude',
   });
   // @ts-expect-error

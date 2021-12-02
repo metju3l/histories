@@ -12,9 +12,12 @@ WHERE ID(collection) = $collectionId
 AND ID(user) = $userId
 DETACH DELETE collection`;
 
-  await RunCypherQuery(query, {
-    userId,
-    collectionId,
+  await RunCypherQuery({
+    query,
+    params: {
+      userId,
+      collectionId,
+    },
   });
   return 0;
 };

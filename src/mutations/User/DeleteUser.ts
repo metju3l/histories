@@ -7,9 +7,12 @@ const deleteUser = async ({
   username: string;
   password: string;
 }): Promise<void> => {
-  const query = `MATCH (n:User {username: "${username}"}) DETACH DELETE n`;
+  const query = `
+  MATCH (n:User {username: $username})
+  DETACH DELETE n
+  `;
 
-  await RunCypherQuery(query);
+  await RunCypherQuery({ query, params: { username } });
 };
 
 export default deleteUser;

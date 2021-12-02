@@ -1,5 +1,4 @@
- 
-import { ValidateVerificationToken } from '../../shared/validation'; 
+import { ValidateVerificationToken } from '../../shared/validation';
 import RunCypherQuery from '../database/RunCypherQuery';
 
 const VerifyUser = async (token: string): Promise<string> => {
@@ -10,7 +9,7 @@ const VerifyUser = async (token: string): Promise<string> => {
   const query = `MATCH (user:User {authorizationToken: "${token}"}) 
   SET user.authorizationToken = NULL, user.verified = true`;
 
-  await RunCypherQuery(query);
+  await RunCypherQuery({ query });
 
   return 'success';
 };

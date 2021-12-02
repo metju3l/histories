@@ -39,14 +39,17 @@ ${username !== undefined ? `SET user.username = $username\n` : ''}${
     password !== undefined ? `SET user.password = $password\n` : ''
   }`;
 
-  await RunCypherQuery(query, {
-    username,
-    firstName,
-    lastName,
-    email,
-    password,
-    bio,
-    userId: id,
+  await RunCypherQuery({
+    query,
+    params: {
+      username,
+      firstName,
+      lastName,
+      email,
+      password,
+      bio,
+      userId: id,
+    },
   });
   return 'Info edited succesfully';
 };

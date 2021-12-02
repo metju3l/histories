@@ -21,13 +21,16 @@ SET collection.name = $name,
 collection.description = $description,
 collection.isPrivate = $isPrivate`;
 
-  await RunCypherQuery(query, {
-    createdAt: new Date().getTime(),
-    description,
-    name,
-    userId,
-    isPrivate,
-    collectionId,
+  await RunCypherQuery({
+    query,
+    params: {
+      createdAt: new Date().getTime(),
+      description,
+      name,
+      userId,
+      isPrivate,
+      collectionId,
+    },
   });
   return 0;
 };

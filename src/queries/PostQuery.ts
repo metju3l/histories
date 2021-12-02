@@ -53,7 +53,7 @@ const PostQuery = async ({
         author: commentAuthor{.*, id: ID(commentAuthor)}})    
   } AS post`;
 
-  const result = await RunCypherQuery(query, { postId: id });
+  const [result] = await RunCypherQuery({ query, params: { postId: id } });
 
   if (result.records[0] === undefined) throw new Error('Post does not exist');
   else

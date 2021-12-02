@@ -1,12 +1,5 @@
 import RunCypherQuery from '../../database/RunCypherQuery';
 
-// QUERY
-/*
- * MATCH (user:User)-[like:LIKE]->(target)  - match like relation
- * WHERE ID(user) = 1 AND ID(target) = 2    - match nodes by IDs
- * DELETE like                              - delete relation
- */
-
 const Like = async ({
   loggedID,
   id,
@@ -14,9 +7,14 @@ const Like = async ({
   loggedID: number;
   id: number;
 }): Promise<void> => {
-  await RunCypherQuery(`MATCH (user:User)-[like:LIKE]->(target)
-  WHERE ID(user) = ${loggedID} AND ID(target) = ${id}
-  DELETE like`);
+  const query = `
+  MATCH (user:User)-[like:LIKE]->(target)
+  WHERE ID(user) = $loggedID  // match user by id
+    AND ID(target) = $id  // match target by id
+  DELETE like // delete relation
+  `;
+
+  await RunCypherQuery({ query, params: { loggedID, id } });
 };
 
 export default Like;

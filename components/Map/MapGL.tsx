@@ -26,8 +26,6 @@ import ReactMapGL, {
 import TimeAgo from 'react-timeago';
 import useSuperCluster from 'use-supercluster';
 
-import UpdateUrl from './UpdateUrl';
-
 type PlaceProps = {
   id: number;
   latitude: number;
@@ -411,7 +409,9 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
               <div className="relative w-full h-full">
                 <Image
                   // BANNER IMAGE
+                  // @ts-ignore
                   src={
+                    // @ts-ignore
                     data.place.preview.length > 0
                       ? data.place.preview
                       : data.place.posts[0].url[0]

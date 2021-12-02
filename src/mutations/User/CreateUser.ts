@@ -3,11 +3,6 @@ import { hash } from 'bcryptjs';
 import RunCypherQuery from '../../database/RunCypherQuery';
 import SendEmail from '../../email/SendEmail';
 
-// QUERY
-/*
- * create user node with props
- */
-
 type CreateUserProps = {
   username: string;
   firstName: string;
@@ -34,19 +29,33 @@ const CreateUser = async ({
   // authorization token for email verifiaction
   const authorizationToken = `${new Date().getTime()}`;
 
-  const query = `CREATE (n:User {
-username : "${username}",
-firstName: "${firstName}",
-lastName: "${lastName}",
-email: "${email}",
-password: "${hashedPassword}",
-createdAt: ${new Date().getTime()},
-verified: false,
-authorizationToken: "${authorizationToken}",
-emailSubscription: ${emailSubscription}
-})`;
+  const query = `
+  CREATE (n:User {
+    username : $username,
+    firstName: $firstName,
+    lastName: $lastName,
+    email: $email,
+    password: $hashedPassword,
+    createdAt: $createdAt,
+    verified: false,
+    authorizationToken: $authorizationToken,
+    emailSubscription: $emailSubscription
+  })
+  `;
 
-  await RunCypherQuery(query);
+  await RunCypherQuery({
+    query,
+    params: {
+      username,
+      firstName,
+      lastName,
+      email,
+      hashedPassword,
+      authorizationToken,
+      emailSubscription,
+      createdAt: new Date().getTime(),
+    },
+  });
 
   // send email for verification
   await SendEmail(

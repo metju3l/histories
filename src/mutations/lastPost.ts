@@ -7,7 +7,7 @@ const LastPost = async ({ userID }: { userID: any }): Promise<any> => {
     RETURN object.createdAt ORDER BY object.createdAt DESC
     LIMIT 1`;
 
-  const output = await RunCypherQuery(query);
+  const [output] = await RunCypherQuery({ query });
 
   return output.records[0] ? output.records[0].get('object.createdAt') : null;
 };

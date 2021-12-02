@@ -59,7 +59,7 @@ const UserQuery = async ({
           }
       } AS collection`;
 
-  const result = await RunCypherQuery(query, { id });
+  const [result] = await RunCypherQuery({ query, params: { id } });
 
   // If Collection doesn't exist
   if (result.records[0] === undefined)

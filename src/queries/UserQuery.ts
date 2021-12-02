@@ -209,7 +209,7 @@ RETURN user{.*, id: ID(user),
   isFollowing: COUNT(DISTINCT isFollowing) > 0
 } AS user`;
 
-  const result = await RunCypherQuery(query);
+  const [result] = await RunCypherQuery({ query });
 
   // If user doesn't exist
   if (result.records[0] === undefined) throw new Error('User does not exist');
