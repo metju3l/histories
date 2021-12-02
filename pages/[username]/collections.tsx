@@ -79,10 +79,14 @@ const Collections: FC<{ username: string }> = ({ username }) => {
               </span>
             </div>
             <div className="grid grid-cols-3 gap-10">
-              {data.user?.collections &&
-                data.user.collections.map((collection) => (
-                  <CollectionCard id={collection!.id} key={collection!.id} />
-                ))}
+              {
+                // @ts-ignore
+                data.user?.collections &&
+                  // @ts-ignore
+                  data.user.collections.map((collection: any) => (
+                    <CollectionCard id={collection!.id} key={collection!.id} />
+                  ))
+              }
             </div>
           </div>
         }

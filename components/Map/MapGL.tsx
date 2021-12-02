@@ -67,7 +67,6 @@ type MapGLProps = {
 };
 
 const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
-  const router = useRouter();
   const [timeLimitation, setTimeLimitation] = useState<[number, number]>([
     0,
     new Date().getTime(),
@@ -110,7 +109,7 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
 
   // on load change map viewport coordinates according to url parameter
   useEffect(() => {
-    setViewport({
+    /* setViewport({
       ...viewport,
       // @ts-ignore
       longitude: parseFloat(router.query?.lng ?? 15),
@@ -124,13 +123,15 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
     });
     // @ts-ignore
     setOpenPlace(router.query?.place ? parseInt(router.query?.place) : null);
+    */
   }, []);
 
   // update place in url query params when changed
-  useEffect(
-    () => UpdateUrl({ ...viewport, router, place: openPlace }),
+  /* useEffect(
+      () => UpdateUrl({ ...viewport, router, place: openPlace }),
     [openPlace]
   );
+  */
 
   // PLACES FILTER
   /*
@@ -260,8 +261,8 @@ const MapGL: FC<MapGLProps> = ({ searchCoordinates, setBounds, oldPoints }) => {
                 s.isHovering ||
                 s.isPanning
               )
-            )
-              UpdateUrl({ ...viewport, router, place: openPlace });
+            ) {
+            } // UpdateUrl({ ...viewport, router, place: openPlace });
           }}
         >
           <GeolocateControl
