@@ -1,6 +1,6 @@
 import RunCypherQuery from '../../database/RunCypherQuery';
 
-const Unfollow = async (logged: string, userID: number): Promise<void> => {
+const Unfollow = async (logged: number, userID: number): Promise<void> => {
   const query = `
  MATCH (user:User)-[r:FOLLOW]->(target)
  WHERE ID(user) = $logged

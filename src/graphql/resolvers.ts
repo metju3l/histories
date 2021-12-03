@@ -51,14 +51,21 @@ type contextType = {
   validToken: boolean;
 };
 
+export function OnlyLogged(context: contextType) {
+  // if user is not logged throw error
+  if (!context.validToken) throw new Error('User is not logged');
+}
+
 const resolvers = {
   Upload: GraphQLUpload,
 
   Query: {
+    // TESTING HELLO QUERY
     hello: () => {
       return 'Hello';
     },
 
+    // PLACE QUERY
     place: async (_parent: undefined, { id }: { id: number }) => {
       return await PlaceQuery({ id });
     },
@@ -66,7 +73,7 @@ const resolvers = {
     personalizedPosts: async (
       _parent: undefined,
       { input }: { input: { skip: number; take: number } },
-      context: any
+      context: contextType
     ) => {
       return await PersonalizedPostsQuery({
         ...input,
@@ -74,20 +81,50 @@ const resolvers = {
       });
     },
 
-    paths: async () => {
-      return await GetPaths();
-    },
+    paths: async () => await GetPaths(),
 
     suggestedUsers: async (
       _parent: undefined,
       _input: undefined,
-      context: any
+      context: contextType
     ) => {
       return await SuggestedUsersQuery(
         context.validToken ? context.decoded.id : null
       );
     },
 
+    places: async (
+      _parent: undefined,
+      {
+        input,
+      }: {
+        input: {
+          filter: {
+            bounds?: {
+              maxLatitude: number;
+              minLatitude: number;
+              maxLongitude: number;
+              minLongitude: number;
+            };
+            minDate?: number;
+            maxDate?: number;
+            distance?: {
+              latitude: number;
+              longitude: number;
+              distance: number;
+            };
+            tags?: string[];
+            skip?: number;
+            take?: number;
+          };
+        };
+      },
+      context: contextType
+    ) => {
+      return 0;
+    },
+
+    // POSTS FILTERED BY COORDINATES
     mapPosts: async (
       _parent: undefined,
       {
@@ -102,14 +139,13 @@ const resolvers = {
           maxDate: number;
         };
       }
-    ) => {
-      return await FilterPlaces(input);
-    },
+    ) => await FilterPlaces(input),
 
+    // temporary /////////////////////////////////////////////////
     checkIfLogged: async (
       _parent: undefined,
       _input: undefined,
-      context: any
+      context: contextType
     ) => {
       // return user data
       if (context.validToken) {
@@ -119,44 +155,44 @@ const resolvers = {
         };
       } else return { logged: false, verified: undefined };
     },
+    ////////////////////////////////////////////////////////////////
 
+    // LOGGED USER QUERY
     isLogged: async (
       _parent: undefined,
       _input: undefined,
       context: contextType
-    ) => {
-      // return user data
-      if (context.validToken)
-        return await UserQuery({ id: context.decoded.id });
-      else return null;
-    },
+    ) =>
+      // if user is logged return user data, else return null
+      context.validToken ? await UserQuery({ id: context.decoded.id }) : null,
 
+    // POST QUERY
     post: async (
       _parent: undefined,
       { id }: { id: number },
       context: contextType
-    ) => {
-      return await PostQuery({
+    ) =>
+      await PostQuery({
         id,
         logged: context.decoded === null ? null : context.decoded.id,
-      });
-    },
+      }),
 
     tag: async (_parent: undefined, { label }: { label: string }) => {
       return GetTagInfo({ label });
     },
 
+    // USER QUERY
     user: async (
       _parent: undefined,
       { input }: { input: { username: string; id: number } },
       context: contextType
-    ) => {
-      return await UserQuery({
+    ) =>
+      await UserQuery({
         logged: context.validToken ? context.decoded.id : undefined,
         ...input,
-      });
-    },
+      }),
 
+    // COLLECTION QUERY
     collection: async (
       _parent: undefined,
       { id }: { id: number },
@@ -171,48 +207,30 @@ const resolvers = {
     login: async (
       _parent: undefined,
       { input }: { input: { username: string; password: string } }
-    ) => {
-      // check username
-      if (
-        ValidateUsername(input.username).error &&
-        ValidateEmail(input.username).error
-      )
-        throw new Error('Wrong credentials');
+    ) => await Login({ ...input, name: input.username }),
 
-      // check password
-      if (ValidatePassword(input.password).error)
-        throw new Error('Wrong credentials');
-
-      // if credentials are wrong returns null
-      const login = await Login(input);
-      if (login !== null) return login;
-      else throw new Error('Wrong credentials');
-    },
     like: async (
       _parent: undefined,
       { input }: { input: { type: string; id: number } },
-      context: any
+      context: contextType
     ) => {
-      if (context.validToken) {
-        await Like({
-          logged: context.decoded.id,
-          target: input.id,
-          type: input.type,
-        });
-        return 0;
-      } else throw new Error('User is not logged');
+      OnlyLogged(context);
+      return await Like({
+        logged: context.decoded.id,
+        target: input.id,
+        type: input.type,
+      });
     },
     unlike: async (
       _parent: undefined,
       { id }: { id: number },
-      context: any
+      context: contextType
     ) => {
-      if (context.validToken) {
-        return await Unlike({
-          loggedID: context.decoded.id,
-          id,
-        });
-      } else throw new Error('User is not logged');
+      OnlyLogged(context);
+      return await Unlike({
+        loggedID: context.decoded.id,
+        id,
+      });
     },
 
     addToCollection: async (
@@ -220,13 +238,12 @@ const resolvers = {
       { input }: { input: { collectionId: number; postId: number } },
       context: contextType
     ) => {
-      if (context.validToken) {
-        await AddPostToCollection({
-          ...input,
-          userId: context.decoded.id,
-        });
-        return 0;
-      } else throw new Error('User is not logged');
+      OnlyLogged(context);
+      await AddPostToCollection({
+        ...input,
+        userId: context.decoded.id,
+      });
+      return 0;
     },
 
     removeFromCollection: async (
@@ -234,24 +251,22 @@ const resolvers = {
       { input }: { input: { collectionId: number; postId: number } },
       context: contextType
     ) => {
-      if (context.validToken) {
-        await RemovePostFromCollection({
-          ...input,
-          userId: context.decoded.id,
-        });
-        return 0;
-      } else throw new Error('User is not logged');
+      OnlyLogged(context);
+      await RemovePostFromCollection({
+        ...input,
+        userId: context.decoded.id,
+      });
+      return 0;
     },
 
     report: async (
       _parent: undefined,
       { id }: { id: number },
-      context: any
+      context: contextType
     ) => {
-      if (context.validToken) {
-        await Report({ logged: context.decoded.id, target: id });
-        return 0;
-      } else throw new Error('User is not logged');
+      OnlyLogged(context);
+      await Report({ logged: context.decoded.id, target: id });
+      return 0;
     },
 
     updateProfile: async (
@@ -270,7 +285,7 @@ const resolvers = {
       },
       context: contextType
     ) => {
-      if (!context.validToken) throw new Error('User is not logged in');
+      OnlyLogged(context);
 
       const user = await UserQuery({
         id: context.decoded.id,
@@ -317,21 +332,22 @@ const resolvers = {
       {
         input: { target, content },
       }: { input: { target: number; content: string } },
-      context: any
+      context: contextType
     ) => {
+      OnlyLogged(context);
+
       const validateComment = ValidateComment(content).error;
+
       if (validateComment) {
         throw new Error(validateComment);
       }
 
-      if (context.validToken) {
-        await CreateComment({
-          targetID: target,
-          authorID: context.decoded.id,
-          content,
-        });
-        return 0;
-      } else throw new Error('User is not logged');
+      await CreateComment({
+        targetID: target,
+        authorID: context.decoded.id,
+        content,
+      });
+      return 0;
     },
 
     searchUser: async () => {
@@ -394,15 +410,14 @@ const resolvers = {
           isPrivate: boolean;
         };
       },
-      context: any
+      context: contextType
     ) => {
-      if (context.validToken)
-        return CreateCollection({
-          ...input,
-          preview: '',
-          userId: context.decoded.id,
-        });
-      else throw new Error('User is not logged in');
+      OnlyLogged(context);
+      return CreateCollection({
+        ...input,
+        preview: '',
+        userId: context.decoded.id,
+      });
     },
 
     editCollection: async (
@@ -417,15 +432,14 @@ const resolvers = {
           collectionId: number;
         };
       },
-      context: any
+      context: contextType
     ) => {
-      if (context.validToken)
-        return EditCollection({
-          ...input,
-          preview: '',
-          userId: context.decoded.id,
-        });
-      else throw new Error('User is not logged in');
+      OnlyLogged(context);
+      return EditCollection({
+        ...input,
+        preview: '',
+        userId: context.decoded.id,
+      });
     },
 
     createPost: async (
@@ -442,8 +456,9 @@ const resolvers = {
           latitude: number;
         };
       },
-      context: any
+      context: contextType
     ) => {
+      OnlyLogged(context);
       // check coordinates
       const validateCoordinates = ValidateCoordinates([
         input.latitude,
@@ -487,17 +502,18 @@ const resolvers = {
     delete: async (
       _parent: undefined,
       { id }: { id: number },
-      context: any
+      context: contextType
     ) => {
-      return context.validToken
-        ? Delete({ logged: context.decoded.id, id })
-        : null;
+      OnlyLogged(context);
+      return await Delete({ logged: context.decoded.id, id });
     },
 
     deleteUser: async (
       _parent: undefined,
-      { input }: { input: { username: string; password: string } }
+      { input }: { input: { username: string; password: string } },
+      context: contextType
     ) => {
+      OnlyLogged(context);
       return DeleteUser(input);
     },
 
@@ -508,9 +524,9 @@ const resolvers = {
     follow: async (
       _parent: undefined,
       { userID }: { userID: number },
-      context: any
+      context: contextType
     ) => {
-      // if user wants to follow himself
+      OnlyLogged(context);
       if (context.decoded.id == userID)
         throw new Error('You cannot follow yourself');
 
@@ -520,8 +536,11 @@ const resolvers = {
     unfollow: async (
       _parent: undefined,
       { userID }: { userID: number },
-      context: any
+      context: contextType
     ) => {
+      OnlyLogged(context);
+      if (context.decoded.id == userID)
+        throw new Error('You cannot unfollow yourself');
       return Unfollow(context.decoded.id, userID);
     },
   },
