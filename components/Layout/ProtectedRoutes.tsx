@@ -1,26 +1,28 @@
-import { Redirect } from '@components/Router';
-import { useCheckIfLoggedQuery } from '@graphql/user.graphql';
 import React from 'react';
+
+import { Redirect } from '../Router';
+import { LoginContext } from '.';
 
 const ProtectedRoutes: React.FC<{
   dontRedirectUnverified?: boolean;
   redirectLogged?: boolean;
   redirectNotLogged?: boolean;
 }> = ({ dontRedirectUnverified, redirectLogged, redirectNotLogged }) => {
-  const { data, loading, error } = useCheckIfLoggedQuery();
+  const loginContext = React.useContext(LoginContext);
 
-  if (loading) return null;
-  if (error) return null;
+  if (loginContext.loading) return null;
+  if (loginContext.error) return null;
 
   // dont redirect if user is not verified
-  if (dontRedirectUnverified !== true && data!.checkIfLogged.verified === false)
+  if (dontRedirectUnverified !== true && !loginContext.data?.isLogged?.verified)
     return <Redirect to="/verify" />;
 
   // redirect if user is logged
-  if (redirectLogged && data!.checkIfLogged.logged) return <Redirect to="/" />;
+  if (redirectLogged && loginContext.data?.isLogged?.id)
+    return <Redirect to="/" />;
 
   // redirect if user is not logged
-  if (redirectNotLogged && !data!.checkIfLogged.logged)
+  if (redirectNotLogged && !loginContext.data?.isLogged?.id)
     return <Redirect to="/" />;
 
   return null;

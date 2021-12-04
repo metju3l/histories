@@ -16,6 +16,7 @@ export default gql`
     personalizedPosts(input: PersonalizedPostsInput): [PersonalizedPost!]!
     checkIfLogged: CheckIfLoggedInfo!
     place(id: Int!): Place!
+    places(input: PlacesInput!): [Place]!
     collection(id: Int!): Collection!
   }
 
@@ -38,6 +39,11 @@ export default gql`
     createComment(input: CreateCommentInput!): String!
     addToCollection(input: AddToCollectionInput!): String!
     removeFromCollection(input: AddToCollectionInput!): String!
+  }
+
+  input PlacesInput {
+    skip: Int
+    take: Int
   }
 
   input PersonalizedPostsInput {

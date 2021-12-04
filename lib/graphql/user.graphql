@@ -96,6 +96,7 @@ query IsLogged {
       description
       createdAt
     }
+    verified
   }
 }
 

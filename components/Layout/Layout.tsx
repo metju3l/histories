@@ -1,9 +1,12 @@
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
-import { IsLoggedQuery, useIsLoggedQuery } from '@graphql/user.graphql';
 import Head from 'next/head';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 
+import {
+  IsLoggedQuery,
+  useIsLoggedQuery,
+} from '../../lib/graphql/user.graphql';
 import { Navbar } from '../Navbar';
 import ProtectedRoutes from './ProtectedRoutes';
 
@@ -77,14 +80,16 @@ const Layout: React.FC<LayoutProps> = ({
             rel="apple-touch-icon"
             href="/icons/apple-touch-icon.jpg"
           ></link>
+          <meta name="description" content="hiStories" />
+          <link rel="manifest" href="manifest.json" />
+          <link rel="apple-touch-icon" href="/logo.png" />
           <meta name="theme-color" content="#17A6FA" />
         </Head>
         <Toaster position="top-center" reverseOrder={true} />
 
         <div className="absolute w-full bg-gray-900 h-[3.8rem]"> </div>
-        <div className="sticky top-0 z-50 backdrop-filter backdrop-blur">
-          <Navbar />
-        </div>
+        <Navbar />
+        <div className="sticky top-0 z-50 backdrop-filter backdrop-blur"></div>
         {children}
       </div>
     </LoginContext.Provider>
