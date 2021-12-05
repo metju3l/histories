@@ -160,7 +160,7 @@ const Login: FC = () => {
   if (loading) return <div>loading xxx</div>;
   if (error) return <div>error</div>;
 
-  if (!data!.isLogged) router.replace('/');
+  if (data?.isLogged === null) router.replace('/');
   return (
     <Layout title="Create post | hiStories">
       <div className="p-10 m-auto max-w-[27rem]">

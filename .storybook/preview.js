@@ -8,6 +8,7 @@ Object.defineProperty(NextImage, 'default', {
 });
 
 export const parameters = {
+  layout: 'fullscreen', // disable default storybook canvas padding
   actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
     matchers: {

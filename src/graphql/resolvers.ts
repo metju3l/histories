@@ -40,7 +40,6 @@ import {
   UserQuery,
 } from '../queries';
 import FilterPlaces from '../queries/FilterPlaces';
-import IsVerified from '../queries/IsVerified';
 import PersonalizedPostsQuery from '../queries/PersonalizedPostsQuery';
 import PlaceQuery from '../queries/PlaceQuery';
 import PostQuery from '../queries/PostQuery';
@@ -140,22 +139,6 @@ const resolvers = {
         };
       }
     ) => await FilterPlaces(input),
-
-    // temporary /////////////////////////////////////////////////
-    checkIfLogged: async (
-      _parent: undefined,
-      _input: undefined,
-      context: contextType
-    ) => {
-      // return user data
-      if (context.validToken) {
-        return {
-          logged: true,
-          verified: await IsVerified(context.decoded.id),
-        };
-      } else return { logged: false, verified: undefined };
-    },
-    ////////////////////////////////////////////////////////////////
 
     // LOGGED USER QUERY
     isLogged: async (

@@ -2,13 +2,6 @@ mutation verifyToken($token: String!) {
   verifyToken(token: $token)
 }
 
-query checkIfLogged {
-  checkIfLogged {
-    logged
-    verified
-  }
-}
-
 mutation login($username: String!, $password: String!) {
   login(input: { username: $username, password: $password })
 }
@@ -32,6 +25,7 @@ query getUserInfo($username: String, $id: Int) {
     verified
     createdAt
     isFollowing
+    profile
     id
     following {
       id
@@ -97,6 +91,7 @@ query IsLogged {
       createdAt
     }
     verified
+    profile
   }
 }
 

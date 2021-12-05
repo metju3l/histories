@@ -18,12 +18,14 @@ type LayoutProps = {
   children: React.ReactNode;
 };
 
-export const LoginContext = React.createContext<{
+export type LoginContextType = {
   data: IsLoggedQuery | undefined;
   loading: boolean;
   error: ApolloError | undefined;
   refetch: (() => Promise<ApolloQueryResult<IsLoggedQuery>>) | undefined;
-}>({
+};
+
+export const LoginContext = React.createContext<LoginContextType>({
   data: undefined,
   loading: true,
   error: undefined,
@@ -87,9 +89,7 @@ const Layout: React.FC<LayoutProps> = ({
         </Head>
         <Toaster position="top-center" reverseOrder={true} />
 
-        <div className="absolute w-full bg-gray-900 h-[3.8rem]"> </div>
         <Navbar />
-        <div className="sticky top-0 z-50 backdrop-filter backdrop-blur"></div>
         {children}
       </div>
     </LoginContext.Provider>

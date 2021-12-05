@@ -36,7 +36,7 @@ const Register: React.FC = () => {
 
   if (loading) return <div></div>;
   if (error) return <div></div>;
-  if (data!.isLogged) router.replace('/');
+  if (data?.isLogged) router.replace('/');
 
   return (
     <Layout redirectLogged title={'sign up | hiStories'}>

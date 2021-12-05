@@ -195,6 +195,11 @@ RETURN user{.*, id: ID(user),
           id: ID(place)}
       }),
   followingCount,
+  // if user doesn't have a profile picture return link to api with generated pictures
+  profile:  CASE WHEN (user.profile IS NOT NULL) 
+              THEN user.profile
+              ELSE "https://avatars.dicebear.com/api/initials/" + user.firstName + "%20" + user.lastName + ".svg"
+            END,
   followerCount,
   postCount,
   followers: COLLECT(DISTINCT follower{.*,

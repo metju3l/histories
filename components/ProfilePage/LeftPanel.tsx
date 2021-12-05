@@ -26,7 +26,7 @@ const LeftPanel: React.FC<{
   if (loginContext.error || userQuery.error) return <div>loading</div>;
 
   const user = userQuery.data!.user;
-  const isLogged = loginContext.data!.isLogged;
+  const isLogged = loginContext.data?.isLogged === null;
 
   return (
     <div className="sticky top-40">

@@ -14,7 +14,6 @@ export default gql`
     isLogged: User
     userPosts(input: UserPostsInput!): [Post!]!
     personalizedPosts(input: PersonalizedPostsInput): [PersonalizedPost!]!
-    checkIfLogged: CheckIfLoggedInfo!
     place(id: Int!): Place!
     places(input: PlacesInput!): [Place]!
     collection(id: Int!): Collection!
@@ -128,11 +127,6 @@ export default gql`
     distance: Float!
   }
 
-  type CheckIfLoggedInfo {
-    logged: Boolean!
-    verified: Boolean
-  }
-
   input MapPostsInput {
     minLatitude: Float!
     maxLatitude: Float!
@@ -239,6 +233,7 @@ export default gql`
     firstName: String!
     lastName: String!
     bio: String
+    profile: String!
     verified: String!
     createdAt: Float!
     isFollowing: Boolean!

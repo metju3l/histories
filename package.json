@@ -1,12 +1,19 @@
 {
   "name": "histories",
   "version": "0.0.1",
+  "license": "MIT",
   "description": "",
   "author": "Kryštof Krátký",
   "repository": {
     "type": "git",
-    "url": "https://github.com/krystofex/hiStories"
+    "url": "https://github.com/histories-cc/histories"
   },
+  "bugs": {
+    "url": "https://github.com/hiStories-cc/hiStories/issues/new/choose"
+  },
+  "keywords": [
+    "hiStories"
+  ],
   "engines": {
     "node": "16.x"
   },
@@ -109,6 +116,7 @@
     "@graphql-codegen/typescript": "^2.4.0",
     "@graphql-codegen/typescript-operations": "^2.2.0",
     "@graphql-codegen/typescript-react-apollo": "^3.2.1",
+    "@storybook/addon-a11y": "^6.4.7",
     "@storybook/addon-actions": "^6.4.0",
     "@storybook/addon-essentials": "^6.4.0",
     "@storybook/addon-links": "^6.4.0",
@@ -128,6 +136,8 @@
     "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.32.0",
     "autoprefixer": "^10.4.0",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-inline-import-loader": "^1.0.1",
     "babel-jest": "^27.3.1",
     "babel-loader": "^8.2.3",
     "eslint": "^7.27.0",
@@ -146,9 +156,11 @@
     "lint-staged": "^12.0.2",
     "next-sitemap": "^1.6.203",
     "postcss": "^8.3.11",
+    "react-docgen-typescript-loader": "^3.7.2",
     "tailwindcss": "^2.2.19",
     "test-jest": "^1.0.1",
     "ts-jest": "^27.0.7",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "webpack": "^5.64.4"
   }
 }
