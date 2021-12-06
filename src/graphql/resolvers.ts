@@ -40,6 +40,7 @@ import {
   UserQuery,
 } from '../queries';
 import FilterPlaces from '../queries/FilterPlaces';
+import FilterPlaces1 from '../queries/FilterPlaces1';
 import PersonalizedPostsQuery from '../queries/PersonalizedPostsQuery';
 import PlaceQuery from '../queries/PlaceQuery';
 import PostQuery from '../queries/PostQuery';
@@ -99,29 +100,29 @@ const resolvers = {
       }: {
         input: {
           filter: {
-            bounds?: {
-              maxLatitude: number;
-              minLatitude: number;
-              maxLongitude: number;
-              minLongitude: number;
-            };
-            minDate?: number;
-            maxDate?: number;
-            distance?: {
+            maxLatitude: number | null;
+            minLatitude: number | null;
+            maxLongitude: number | null;
+            minLongitude: number | null;
+            minDate: number | null;
+            maxDate: number | null;
+            radius: {
               latitude: number;
               longitude: number;
               distance: number;
-            };
-            tags?: string[];
-            skip?: number;
-            take?: number;
+            } | null;
+            tags: string[] | null;
+            skip: number | null;
+            take: number | null;
           };
         };
       },
       context: contextType
-    ) => {
-      return 0;
-    },
+    ) =>
+      await FilterPlaces1({
+        ...input,
+        loggedId: context.validToken ? context.decoded.id : null,
+      }),
 
     // POSTS FILTERED BY COORDINATES
     mapPosts: async (
