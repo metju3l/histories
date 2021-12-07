@@ -54,8 +54,8 @@ const Map: React.FC = () => {
 
   // map viewport
   const [mapViewport, setMapViewport] = useState<Viewport>({
-    latitude: 37.7577,
-    longitude: -122.4376,
+    latitude: 50,
+    longitude: 15.1,
     zoom: 3.5,
   });
 
@@ -84,8 +84,13 @@ const Map: React.FC = () => {
 
   return (
     <Layout title="map | hiStories">
-      <section className="flex w-full h-screen">
-        <div id="map" className="w-full h-full">
+      <section className="grid grid-cols-2 w-full h-full">
+        <div className="w-full h-full bg-white text-black grid grid-cols-3 p-4 gap-4 overflow-y-auto">
+          {data?.places.map(
+            (place) => place.preview && <MapPostCard {...place} />
+          )}
+        </div>
+        <div id="map" className="w-full h-full p-2">
           <MapGL
             viewport={mapViewport}
             setViewport={setMapViewport}
@@ -95,11 +100,34 @@ const Map: React.FC = () => {
             sidebar={sidebarPlace}
           />
         </div>
-        <div id="sidebar" className="w-full h-full">
-          {JSON.stringify(data?.places.length)}
-        </div>
       </section>
     </Layout>
+  );
+};
+
+const MapPostCard: React.FC<{
+  id: number;
+  name?: string | null;
+  longitude: number;
+  latitude: number;
+  icon?: string | null;
+  preview?: string[] | null;
+}> = ({ id, preview }) => {
+  return (
+    <div className="bg-blue-500 w-full h-64 rounded-lg border-2 border-gray-600 shadow-sm">
+      {preview && (
+        <div className="relative w-full h-full cursor-pointer bg-secondary rounded-lg">
+          <Image
+            src={preview[0]}
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center"
+            className="rounded-lg"
+            alt="Profile picture"
+          />
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -140,6 +168,7 @@ const MapGL: React.FC<MapGLProps> = ({
       width="100%"
       height="100%"
       onViewportChange={(viewport: any) => setViewport(viewport)}
+      className="rounded-lg"
       mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
       mapStyle="mapbox://styles/mapbox/streets-v11" // MAPBOX STYLE
       ref={(instance) => (mapRef.current = instance)}

@@ -43,7 +43,35 @@ const Layout: React.FC<LayoutProps> = ({
 
   return (
     <LoginContext.Provider value={{ data, loading, error, refetch }}>
-      <div>
+      <Head>
+        <title>{title}</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta
+          name="keywords"
+          content="DELTA - Střední škola informatiky a ekonomie, s.r.o."
+        />
+        <link rel="icon" href="/icons/favicon.ico" />
+        <link rel="manifest" href="/manifest.json" />
+        <link
+          href="/icons/icon-72x72.png"
+          rel="icon"
+          type="image/png"
+          sizes="72x72"
+        />
+        <link
+          href="/icons/icon-512x512.png"
+          rel="icon"
+          type="image/png"
+          sizes="512x512"
+        />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.jpg"></link>
+        <meta name="description" content="hiStories" />
+        <link rel="manifest" href="manifest.json" />
+        <link rel="apple-touch-icon" href="/logo.png" />
+        <meta name="theme-color" content="#17A6FA" />
+      </Head>
+      <div className="h-screen md:pt-14 bg-white">
         {(dontRedirectUnverified !== true ||
           redirectLogged ||
           redirectNotLogged) && (
@@ -53,42 +81,8 @@ const Layout: React.FC<LayoutProps> = ({
             redirectNotLogged={redirectNotLogged}
           />
         )}
-        <Head>
-          <title>{title}</title>
-          <meta charSet="utf-8" />
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
-          <meta
-            name="keywords"
-            content="DELTA - Střední škola informatiky a ekonomie, s.r.o."
-          />
-          <link rel="icon" href="/icons/favicon.ico" />
-          <link rel="manifest" href="/manifest.json" />
-          <link
-            href="/icons/icon-72x72.png"
-            rel="icon"
-            type="image/png"
-            sizes="72x72"
-          />
-          <link
-            href="/icons/icon-512x512.png"
-            rel="icon"
-            type="image/png"
-            sizes="512x512"
-          />
-          <link
-            rel="apple-touch-icon"
-            href="/icons/apple-touch-icon.jpg"
-          ></link>
-          <meta name="description" content="hiStories" />
-          <link rel="manifest" href="manifest.json" />
-          <link rel="apple-touch-icon" href="/logo.png" />
-          <meta name="theme-color" content="#17A6FA" />
-        </Head>
-        <Toaster position="top-center" reverseOrder={true} />
 
+        <Toaster position="top-center" reverseOrder={true} />
         <Navbar />
         {children}
       </div>
