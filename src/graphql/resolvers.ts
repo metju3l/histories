@@ -114,7 +114,7 @@ const resolvers = {
             tags: string[] | null;
             skip: number | null;
             take: number | null;
-          };
+          } | null;
         };
       },
       context: contextType

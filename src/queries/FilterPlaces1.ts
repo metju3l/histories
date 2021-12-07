@@ -16,17 +16,18 @@ type queryInput = {
     tags: string[] | null;
     skip: number | null;
     take: number | null;
-  };
+  } | null;
   loggedId: number | null;
 };
 
 const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
-  const query = `MATCH (place:Place)
+  const query = `
+  MATCH (place:Place)
   WHERE (place.location.latitude >= $minLatitude OR $minLatitude IS NULL)     // min latitude
     AND (place.location.latitude <= $maxLatitude OR $maxLatitude IS NULL)     // max latitude
     AND (place.location.longitude >= $minLongitude OR $minLongitude IS NULL)  // min longitude
     AND (place.location.longitude <= $maxLongitude OR $maxLongitude IS NULL)  // max longitude 
-    
+
   // return most liked post from place which has photos
   CALL {
       WITH place
@@ -67,19 +68,23 @@ const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
               // else if place has post with photos, return photos as preview otherwise return null
               ELSE post.url
           END
-  }) AS places`;
+  })[$skip..$skip + $take] // limit array 
+  AS places
+  `;
+
+  console.log(filter?.minLatitude);
 
   const [result] = await RunCypherQuery({
     query,
     params: {
-      minLatitude: filter.minLatitude,
-      maxLatitude: filter.maxLatitude,
-      minLongitude: filter.minLongitude,
-      maxLongitude: filter.maxLongitude,
-      minDate: filter.minDate,
-      maxDate: filter.maxDate,
-      skip: filter.skip,
-      take: filter.take,
+      minLatitude: filter?.minLatitude ?? null,
+      maxLatitude: filter?.maxLatitude ?? null,
+      minLongitude: filter?.minLongitude ?? null,
+      maxLongitude: filter?.maxLongitude ?? null,
+      minDate: filter?.minDate ?? null,
+      maxDate: filter?.maxDate ?? null,
+      skip: filter?.skip ?? 0,
+      take: filter?.take ?? 5000,
       loggedId,
     },
   });

@@ -15,7 +15,7 @@ export default gql`
     userPosts(input: UserPostsInput!): [Post!]!
     personalizedPosts(input: PersonalizedPostsInput): [PersonalizedPost!]!
     place(id: Int!): Place!
-    places(input: PlacesInput!): [Place]!
+    places(input: PlacesInput): [Place]!
     collection(id: Int!): Collection!
   }
 
@@ -40,9 +40,27 @@ export default gql`
     removeFromCollection(input: AddToCollectionInput!): String!
   }
 
-  input PlacesInput {
+  input Radius {
+    latitude: Float
+    longitude: Float
+    distance: Float
+  }
+
+  input PlacesFilter {
+    maxLatitude: Float
+    minLatitude: Float
+    maxLongitude: Float
+    minLongitude: Float
+    minDate: Float
+    maxDate: Float
+    radius: Radius
+    tags: [String]
     skip: Int
     take: Int
+  }
+
+  input PlacesInput {
+    filter: PlacesFilter
   }
 
   input PersonalizedPostsInput {
