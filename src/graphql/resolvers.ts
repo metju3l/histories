@@ -124,23 +124,6 @@ const resolvers = {
         loggedId: context.validToken ? context.decoded.id : null,
       }),
 
-    // POSTS FILTERED BY COORDINATES
-    mapPosts: async (
-      _parent: undefined,
-      {
-        input,
-      }: {
-        input: {
-          maxLatitude: number;
-          minLatitude: number;
-          maxLongitude: number;
-          minLongitude: number;
-          minDate: number;
-          maxDate: number;
-        };
-      }
-    ) => await FilterPlaces(input),
-
     // LOGGED USER QUERY
     isLogged: async (
       _parent: undefined,

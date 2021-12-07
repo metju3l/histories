@@ -7,7 +7,6 @@ export default gql`
     hello: String!
     user(input: UserInput!): User!
     post(id: Int!): Post!
-    mapPosts(input: MapPostsInput!): [MapPost!]!
     suggestedUsers: [User]!
     tag(label: String!): TagInfo
     paths: [Path]
@@ -15,7 +14,7 @@ export default gql`
     userPosts(input: UserPostsInput!): [Post!]!
     personalizedPosts(input: PersonalizedPostsInput): [PersonalizedPost!]!
     place(id: Int!): Place!
-    places(input: PlacesInput): [Place]!
+    places(input: PlacesInput): [Place!]!
     collection(id: Int!): Collection!
   }
 
@@ -130,11 +129,12 @@ export default gql`
     latitude: Float!
     longitude: Float!
     description: String!
-    name: String!
+    name: String
     preview: [String!]
     icon: String
     posts: [Post]!
     nearbyPlaces: [NearbyPlaces]!
+    distance: Float
   }
 
   type NearbyPlaces {
@@ -143,25 +143,6 @@ export default gql`
     name: String!
     preview: String!
     distance: Float!
-  }
-
-  input MapPostsInput {
-    minLatitude: Float!
-    maxLatitude: Float!
-    minLongitude: Float!
-    maxLongitude: Float!
-    minDate: Float
-    maxDate: Float
-  }
-
-  type MapPost {
-    id: Int!
-    latitude: Float!
-    longitude: Float!
-    icon: String
-    preview: [String]
-    postCount: Int!
-    likeCount: Int!
   }
 
   type Post {

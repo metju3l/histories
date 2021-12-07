@@ -5,27 +5,14 @@ query Paths {
   }
 }
 
-query MapPosts(
-  $maxLatitude: Float!
-  $minLatitude: Float!
-  $maxLongitude: Float!
-  $minLongitude: Float!
-) {
-  mapPosts(
-    input: {
-      maxLatitude: $maxLatitude
-      minLatitude: $minLatitude
-      maxLongitude: $maxLongitude
-      minLongitude: $minLongitude
-    }
-  ) {
+query Places($input: PlacesInput) {
+  places(input: $input) {
     id
-    likeCount
-    postCount
-    preview
-    icon
+    name
     longitude
     latitude
+    icon
+    preview
   }
 }
 

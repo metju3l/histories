@@ -23,10 +23,11 @@ type queryInput = {
 const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
   const query = `
   MATCH (place:Place)
-  WHERE (place.location.latitude >= $minLatitude OR $minLatitude IS NULL)     // min latitude
-    AND (place.location.latitude <= $maxLatitude OR $maxLatitude IS NULL)     // max latitude
-    AND (place.location.longitude >= $minLongitude OR $minLongitude IS NULL)  // min longitude
-    AND (place.location.longitude <= $maxLongitude OR $maxLongitude IS NULL)  // max longitude 
+  WHERE (place.location.latitude >= $minLatitude OR $minLatitude IS NULL)                 // min latitude
+    AND (place.location.latitude <= $maxLatitude OR $maxLatitude IS NULL)                 // max latitude
+    AND (place.location.longitude >= $minLongitude OR $minLongitude IS NULL)              // min longitude
+    AND (place.location.longitude <= $maxLongitude OR $maxLongitude IS NULL)              // max longitude
+    AND (distance(place.location, point($radius)) <= $radius.distance OR $radius IS NULL) // radius 
 
   // return most liked post from place which has photos
   CALL {
@@ -61,6 +62,13 @@ const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
       icon: place.icon,
       postCount,
       likeCount,
+      distance:  
+          CASE
+              // if radius in input is not defined return null
+              WHEN $radius IS NULL THEN NULL
+              // when searching in radius return distance from center
+              ELSE distance(place.location, point($radius)) 
+          END,
       preview: 
           CASE
               // if place has preview return place preview
@@ -72,11 +80,10 @@ const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
   AS places
   `;
 
-  console.log(filter?.minLatitude);
-
   const [result] = await RunCypherQuery({
     query,
     params: {
+      // if parameter is undefined set it to null
       minLatitude: filter?.minLatitude ?? null,
       maxLatitude: filter?.maxLatitude ?? null,
       minLongitude: filter?.minLongitude ?? null,
@@ -85,6 +92,7 @@ const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
       maxDate: filter?.maxDate ?? null,
       skip: filter?.skip ?? 0,
       take: filter?.take ?? 5000,
+      radius: filter?.radius ?? null,
       loggedId,
     },
   });

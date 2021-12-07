@@ -35,6 +35,7 @@ yarn-error.log*
 # vercel
 .vercel
 
+# graphql-let
 *.graphql.d.ts
 *.graphqls.d.ts
 /.cache
@@ -48,5 +49,7 @@ workbox*.js.map
 dist
 nodemon.json
 
-# STORYBOOK
+# storybook
 */stories-static
+
+tsconfig.tsbuildinfo

@@ -425,7 +425,7 @@ const PlaceWindow: React.FC<PlaceWindowProps> = ({
           )}
         </div>
         <h2 id="PLACE_NAME" className="px-2 pt-1 text-2xl font-semibold">
-          {data.place.name.length > 0 ? data.place.name : 'Place on map'}
+          {data.place?.name ?? 'Place on map'}
         </h2>
         <div className="px-2 pt-1 pb-2 mb-2 border-b border-[#E6EAEC]">
           <span
