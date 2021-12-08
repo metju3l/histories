@@ -74,9 +74,6 @@ const Suggestions: FC<{ logged: any }> = ({ logged }) => {
       <div className="flex flex-col mt-6 ml-2">
         {data!.suggestedUsers &&
           data!.suggestedUsers.map((user: any) => {
-            {
-              console.log(user);
-            }
             return (
               <div className="flex justify-between w-full mb-2" key={user.id}>
                 <Link href={`/${user!.username}`} passHref>
