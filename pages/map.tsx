@@ -1,5 +1,6 @@
 import { ApolloQueryResult } from '@apollo/client';
 import { Layout } from '@components/Layout';
+import { TimeLine } from '@components/TimeLine';
 import { PlacesQuery, usePlacesQuery } from '@graphql/geo.graphql';
 import Image from 'next/image';
 import { NextRouter, useRouter } from 'next/router';
@@ -62,38 +63,15 @@ const Map: React.FC = () => {
     zoom: 3.5,
   });
 
-  // on load change map viewport coordinates according to url parameter
-  useEffect(() => {
-    /*
-    function paramToNum(parameter: any, defaultValue: any) {
-      return typeof parameter == 'string'
-        ? parseFloat(parameter.substring(0, 9))
-        : defaultValue;
-    }
-    
-    setMapViewport({
-      ...mapViewport,
-      longitude: paramToNum(router.query?.lng, 15),
-      latitude: paramToNum(router.query?.lat, 50),
-      zoom: paramToNum(router.query?.zoom, 14),
-      // @ts-ignore
-      transitionDuration: 500,
-      transitionInterpolator: new FlyToInterpolator(),
-    })
-    */
-    // @ts-ignore
-    // setSidebarPlace(paramToNum(router.query?.place, null));
-  }, []);
-
   return (
     <Layout title="map | hiStories">
       {showSidebar ? (
         <>
           <div
-            className="flex justify-between items-center w-full fixed top-14 z-20 left-0 h-12 py-4 px-24 bg-white shadow-sm border-gray-200 border-b"
+            className="flex justify-between items-center w-full fixed top-14 z-20 left-0 h-12 py-4 px-4 bg-white shadow-sm border-gray-200 border-b"
             style={{ width: 'calc(70vw - 8px)' }}
           >
-            <span />
+            <span className="w-8" />
             <div className="flex gap-2">
               <button
                 className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
@@ -146,7 +124,7 @@ const Map: React.FC = () => {
         <button onClick={() => setShowSidebar(true)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-8 w-8 py-1 border border-gray-200 hover:text-black text-gray-500 hover:border-gray-400 rounded-xl transform -rotate-180 bg-white absolute top-20 left-48 z-20"
+            className="h-8 w-8 py-1 border border-gray-200 hover:text-black text-gray-500 hover:border-gray-400 rounded-xl transform -rotate-180 bg-white absolute top-18 left-4 z-20"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -167,6 +145,16 @@ const Map: React.FC = () => {
           height: 'calc(100% - 56px)',
         }}
       >
+        {' '}
+        <div
+          className="absolute top-2 left-0 z-20 px-8 pt-2"
+          style={{ width: '30vw', height: '8vh' }}
+        >
+          <TimeLine
+            domain={[1000, new Date().getFullYear()]}
+            setTimeLimitation={setTimeLimitation}
+          />
+        </div>
         <MapGL
           viewport={mapViewport}
           setViewport={setMapViewport}

@@ -8,28 +8,20 @@ const Tick: React.FC<{ tick: SliderItem; count: number }> = ({
   return (
     <div>
       <div
-        className="absolute bg-white"
-        style={{
-          marginTop: 20,
-          marginLeft: -0.5,
-          width: 1,
-          height: 8,
-          left: `${tick.percent}%`,
-        }}
-      />
-      <div
         style={{
           position: 'absolute',
           marginTop: 5,
           fontSize: 10,
           textAlign: 'center',
-          color: 'white',
+          color: 'black',
           marginLeft: `${-(100 / count) / 2}%`,
           width: `${100 / count}%`,
           left: `${tick.percent}%`,
         }}
       >
-        {tick.value}
+        <span className="bg-white rounded-xl border border-gray-200 px-2 py-0.5">
+          {tick.value}
+        </span>
       </div>
     </div>
   );

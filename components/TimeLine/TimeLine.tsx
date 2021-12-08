@@ -27,10 +27,10 @@ const TimeLine: React.FC<TimelineProps> = ({ domain, setTimeLimitation }) => {
       <Rail>
         {({ getRailProps }) => (
           <div
-            className="absolute w-full bg-gray-600"
+            className="absolute w-full bg-white border border-gray-400"
             style={{
               height: 10,
-              marginTop: 35,
+              marginTop: 28,
               borderRadius: 5,
             }}
             {...getRailProps()}
@@ -64,7 +64,7 @@ const TimeLine: React.FC<TimelineProps> = ({ domain, setTimeLimitation }) => {
           </div>
         )}
       </Tracks>
-      <Ticks count={10}>
+      <Ticks count={6}>
         {({ ticks }) => (
           <div className="slider-ticks">
             {ticks.map((tick) => (
