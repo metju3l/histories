@@ -1,5 +1,4 @@
 import '../lib/translation/i18n';
-import 'tailwindcss/tailwind.css';
 import './app.scss';
 
 import { ApolloProvider } from '@apollo/client';

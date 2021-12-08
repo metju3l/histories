@@ -2,38 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-    --bg:  #242526;
-    --bg-accent: #484a4d;
-    --text-color: #fafafa;
-    --nav-size: 60px;
-    --border: 1px solid #474a4d;
-    --border-radius: 8px;
-    --speed: 500ms; 
-  }
-
-  .bg-primary{
-    @apply bg-light-background-primary dark:bg-dark-background-primary;
-  }
-
-  .bg-secondary{
-    @apply bg-light-background-secondary dark:bg-dark-background-secondary;
-  }
-
-  .bg-tertiary{
-    @apply bg-light-background-tertiary dark:bg-dark-background-tertiary;
-  }
-
-  .text-primary {
-    @apply text-light-text-primary dark:text-dark-text-primary;
-  }
-
-  .text-secondary {
-    @apply text-light-text-secondary dark:text-dark-text-secondary;
-  }
-  
-
-  .text-highlight {
-    @apply text-light-text-highlight dark:text-dark-text-highlight;
-  }
-  
+ 

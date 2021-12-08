@@ -35,7 +35,7 @@ const Collections: FC<{ id: number }> = ({ id }) => {
                 <div className="mr-2"> sort by</div>
                 <Dropdown
                   options={sortOptions}
-                  onChange={(e) => {
+                  onChange={() => {
                     // save the sort option in url query
                   }}
                   value={sortOptions[0]}

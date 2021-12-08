@@ -71,21 +71,19 @@ const Layout: React.FC<LayoutProps> = ({
         <link rel="apple-touch-icon" href="/logo.png" />
         <meta name="theme-color" content="#17A6FA" />
       </Head>
-      <div className="h-screen md:pt-14 bg-white">
-        {(dontRedirectUnverified !== true ||
-          redirectLogged ||
-          redirectNotLogged) && (
-          <ProtectedRoutes
-            dontRedirectUnverified={dontRedirectUnverified}
-            redirectLogged={redirectLogged}
-            redirectNotLogged={redirectNotLogged}
-          />
-        )}
+      <Toaster position="top-center" reverseOrder={true} />
+      {(dontRedirectUnverified !== true ||
+        redirectLogged ||
+        redirectNotLogged) && (
+        <ProtectedRoutes
+          dontRedirectUnverified={dontRedirectUnverified}
+          redirectLogged={redirectLogged}
+          redirectNotLogged={redirectNotLogged}
+        />
+      )}
 
-        <Toaster position="top-center" reverseOrder={true} />
-        <Navbar />
-        {children}
-      </div>
+      <Navbar />
+      <div className="h-screen bg-white md:pt-14">{children}</div>
     </LoginContext.Provider>
   );
 };

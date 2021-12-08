@@ -45,6 +45,8 @@ const Map: React.FC = () => {
     },
   });
 
+  const [whatToShow, setWhatToShow] = useState<string | null>(null);
+
   const [timeLimitation, setTimeLimitation] = useState<[number, number]>([
     1000,
     new Date().getTime(),
@@ -84,23 +86,51 @@ const Map: React.FC = () => {
 
   return (
     <Layout title="map | hiStories">
-      <section className="grid grid-cols-2 w-full h-full">
-        <div className="w-full h-full bg-white text-black grid grid-cols-3 p-4 gap-4 overflow-y-auto">
+      <div
+        className="flex justify-center w-full fixed top-14 z-20 left-0 h-12 p-2 bg-white gap-2 shadow-sm border-gray-200 border-b"
+        style={{ width: 'calc(70vw - 8px)' }}
+      >
+        <button
+          className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
+            whatToShow !== 'photos'
+              ? 'text-black border-gray-400'
+              : 'text-gray-500'
+          } rounded-xl`}
+          onClick={() => setWhatToShow('places')}
+        >
+          Places
+        </button>
+        <button
+          className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
+            whatToShow === 'photos'
+              ? 'text-black border-gray-400'
+              : 'text-gray-500'
+          } rounded-xl`}
+          onClick={() => setWhatToShow('photos')}
+        >
+          Photos
+        </button>
+      </div>
+      <section style={{ width: '70vw', paddingTop: '3rem' }}>
+        <div className="w-full h-full p-4 text-black bg-white grid grid-cols-3 gap-4">
           {data?.places.map(
             (place) => place.preview && <MapPostCard {...place} />
           )}
         </div>
-        <div id="map" className="w-full h-full p-2">
-          <MapGL
-            viewport={mapViewport}
-            setViewport={setMapViewport}
-            data={data}
-            refetch={refetch}
-            setSidebar={setSidebarPlace}
-            sidebar={sidebarPlace}
-          />
-        </div>
       </section>
+      <div
+        className="p-2 fixed top-14 right-0"
+        style={{ width: '30vw', height: 'calc(100% - 56px)' }}
+      >
+        <MapGL
+          viewport={mapViewport}
+          setViewport={setMapViewport}
+          data={data}
+          refetch={refetch}
+          setSidebar={setSidebarPlace}
+          sidebar={sidebarPlace}
+        />
+      </div>
     </Layout>
   );
 };
@@ -112,21 +142,28 @@ const MapPostCard: React.FC<{
   latitude: number;
   icon?: string | null;
   preview?: string[] | null;
-}> = ({ id, preview }) => {
+}> = ({ id, preview, name }) => {
   return (
-    <div className="bg-blue-500 w-full h-64 rounded-lg border-2 border-gray-600 shadow-sm">
+    <div className="flex flex-col w-full h-64 bg-white border border-gray-200 rounded-lg hover:shadow-sm">
       {preview && (
-        <div className="relative w-full h-full cursor-pointer bg-secondary rounded-lg">
+        <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
           <Image
             src={preview[0]}
             layout="fill"
             objectFit="cover"
             objectPosition="center"
-            className="rounded-lg"
+            className="rounded-t-lg"
             alt="Profile picture"
           />
         </div>
       )}
+      <div className="px-4 py-2">
+        <h2 className="font-medium text-lg">{name}</h2>
+        <h3 className="text-gray-600" style={{ fontSize: '12px' }}>
+          {id} Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio
+          unde
+        </h3>
+      </div>
     </div>
   );
 };

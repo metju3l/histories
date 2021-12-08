@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
 
   if (loginContext.error) console.error(loginContext.error);
   return (
-    <nav className="fixed bottom-0 z-30 flex items-center justify-between w-full px-6 text-white border-t border-gray-400 md:h-14 md:border-0 md:bottom-auto md:top-0 bg-dark-background-primary">
+    <nav className="fixed bottom-0 z-30 flex items-center justify-between w-full px-6 text-black bg-white border-t border-gray-200 shadow-sm md:h-14 md:border-b md:bottom-auto md:top-0">
       <span className="flex justify-between w-full md:justify-start md:gap-10">
         <NavbarItem
           link="/"
