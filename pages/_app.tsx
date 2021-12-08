@@ -1,5 +1,5 @@
 import '../lib/translation/i18n';
-import './app.scss';
+import 'tailwindcss/tailwind.css';
 
 import { ApolloProvider } from '@apollo/client';
 import { useIsLoggedQuery } from '@graphql/user.graphql';

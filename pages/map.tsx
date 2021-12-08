@@ -46,6 +46,7 @@ const Map: React.FC = () => {
   });
 
   const [whatToShow, setWhatToShow] = useState<string | null>(null);
+  const [showSidebar, setShowSidebar] = useState(true);
 
   const [timeLimitation, setTimeLimitation] = useState<[number, number]>([
     1000,
@@ -86,41 +87,85 @@ const Map: React.FC = () => {
 
   return (
     <Layout title="map | hiStories">
-      <div
-        className="flex justify-center w-full fixed top-14 z-20 left-0 h-12 p-2 bg-white gap-2 shadow-sm border-gray-200 border-b"
-        style={{ width: 'calc(70vw - 8px)' }}
-      >
-        <button
-          className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
-            whatToShow !== 'photos'
-              ? 'text-black border-gray-400'
-              : 'text-gray-500'
-          } rounded-xl`}
-          onClick={() => setWhatToShow('places')}
-        >
-          Places
+      {showSidebar ? (
+        <>
+          <div
+            className="flex justify-between items-center w-full fixed top-14 z-20 left-0 h-12 py-4 px-24 bg-white shadow-sm border-gray-200 border-b"
+            style={{ width: 'calc(70vw - 8px)' }}
+          >
+            <span />
+            <div className="flex gap-2">
+              <button
+                className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
+                  whatToShow !== 'photos'
+                    ? 'text-black border-gray-400'
+                    : 'text-gray-500'
+                } rounded-xl`}
+                onClick={() => setWhatToShow('places')}
+              >
+                Places
+              </button>
+              <button
+                className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
+                  whatToShow === 'photos'
+                    ? 'text-black border-gray-400'
+                    : 'text-gray-500'
+                } rounded-xl`}
+                onClick={() => setWhatToShow('photos')}
+              >
+                Photos
+              </button>
+            </div>
+            <button onClick={() => setShowSidebar(false)}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-8 w-8 py-1 border border-gray-200 hover:text-black text-gray-500 hover:border-gray-400 rounded-xl"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <section style={{ width: '70vw', paddingTop: '3rem' }}>
+            <div className="w-full h-full p-4 text-black bg-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {data?.places.map(
+                (place) => place.preview && <MapPostCard {...place} />
+              )}
+            </div>
+          </section>
+        </>
+      ) : (
+        <button onClick={() => setShowSidebar(true)}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-8 w-8 py-1 border border-gray-200 hover:text-black text-gray-500 hover:border-gray-400 rounded-xl transform -rotate-180 bg-white absolute top-20 left-48 z-20"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
         </button>
-        <button
-          className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
-            whatToShow === 'photos'
-              ? 'text-black border-gray-400'
-              : 'text-gray-500'
-          } rounded-xl`}
-          onClick={() => setWhatToShow('photos')}
-        >
-          Photos
-        </button>
-      </div>
-      <section style={{ width: '70vw', paddingTop: '3rem' }}>
-        <div className="w-full h-full p-4 text-black bg-white grid grid-cols-3 gap-4">
-          {data?.places.map(
-            (place) => place.preview && <MapPostCard {...place} />
-          )}
-        </div>
-      </section>
+      )}
       <div
-        className="p-2 fixed top-14 right-0"
-        style={{ width: '30vw', height: 'calc(100% - 56px)' }}
+        className="p-2 fixed top-14 right-0 bg-white"
+        style={{
+          width: showSidebar ? '30vw' : '100vw',
+          height: 'calc(100% - 56px)',
+        }}
       >
         <MapGL
           viewport={mapViewport}
