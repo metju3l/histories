@@ -8,7 +8,5 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "terminal.integrated.lineHeight": 1.2,
-  "terminal.integrated.letterSpacing": 2
+  }, 
 }

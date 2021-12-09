@@ -1,7 +1,6 @@
 import { GraphQLUpload } from 'graphql-upload';
 
 import {
-  IsUsedUsername,
   ValidateComment,
   ValidateCoordinates,
   ValidateDate,
@@ -11,7 +10,6 @@ import {
   ValidatePassword,
   ValidateUsername,
 } from '../../shared/validation';
-import IsUsedEmail from '../../shared/validation/dbValidation/IsUsedEmail';
 import {
   AddPostToCollection,
   CreateCollection,
@@ -33,14 +31,13 @@ import LastPost from '../mutations/lastPost';
 import VerifyToken from '../mutations/VerifyToken';
 import {
   CollectionQuery,
+  FilterPlacesQuery,
   GetPaths,
   GetTagInfo,
   Login,
   SuggestedUsersQuery,
   UserQuery,
 } from '../queries';
-import FilterPlaces from '../queries/FilterPlaces';
-import FilterPlaces1 from '../queries/FilterPlaces1';
 import PersonalizedPostsQuery from '../queries/PersonalizedPostsQuery';
 import PlaceQuery from '../queries/PlaceQuery';
 import PostQuery from '../queries/PostQuery';
@@ -119,7 +116,7 @@ const resolvers = {
       },
       context: contextType
     ) =>
-      await FilterPlaces1({
+      await FilterPlacesQuery({
         ...input,
         loggedId: context.validToken ? context.decoded.id : null,
       }),
@@ -261,17 +258,11 @@ const resolvers = {
       if (input.username !== undefined) {
         const validateUsername = ValidateUsername(input.username).error;
         if (validateUsername) throw new Error(validateUsername);
-        if (user.username != input.username)
-          if (await IsUsedUsername(input.username))
-            throw new Error('Username is already used');
       }
 
       if (input.email !== undefined) {
         const validateEmail = ValidateEmail(input.email).error;
         if (validateEmail) throw new Error(validateEmail);
-        if (user.email != input.email)
-          if (await IsUsedEmail(input.email))
-            throw new Error('Email is already used');
       }
       // check first name
       if (input.firstName !== undefined) {
@@ -340,15 +331,9 @@ const resolvers = {
       const validateEmail = ValidateEmail(input.email).error;
       if (validateEmail) throw new Error(validateEmail);
 
-      if (await IsUsedEmail(input.email))
-        throw new Error('Email is already used');
-
       // check username
       const validateUsername = ValidateUsername(input.username).error;
       if (validateUsername) throw new Error(validateUsername);
-
-      if (await IsUsedUsername(input.username))
-        throw new Error('Username is already used');
 
       // check first name
       const validateFirstName = ValidateName(input.firstName).error;

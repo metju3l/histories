@@ -13,8 +13,14 @@ export default gql`
     isLogged: User
     userPosts(input: UserPostsInput!): [Post!]!
     personalizedPosts(input: PersonalizedPostsInput): [PersonalizedPost!]!
+
+    "Returns detail informations to one place"
     place(id: Int!): Place!
+
+    "Returns places with possibility to add filters"
     places(input: PlacesInput): [Place!]!
+
+    "Returns detail informations to one collection"
     collection(id: Int!): Collection!
   }
 
@@ -43,6 +49,19 @@ export default gql`
     latitude: Float
     longitude: Float
     distance: Float
+  }
+
+  type PlacesFilter {
+    maxLatitude: Float
+    minLatitude: Float
+    maxLongitude: Float
+    minLongitude: Float
+    minDate: Float
+    maxDate: Float
+    radius: Radius
+    tags: [String]
+    skip: Int
+    take: Int
   }
 
   input PlacesFilter {
