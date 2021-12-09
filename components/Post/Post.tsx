@@ -63,7 +63,7 @@ const Post: React.FC<PostProps> = ({
 
   const onLike = async (type: string) => {
     // allow only when user is logged in
-    if (loginContext.data?.isLogged?.id)
+    if (loginContext.data?.me?.id)
       // runs like mutation and changes local states
       await LikePost({
         type,
@@ -79,7 +79,7 @@ const Post: React.FC<PostProps> = ({
 
   const onUnlike = async () => {
     // allow only when user is logged in
-    if (loginContext.data?.isLogged?.id)
+    if (loginContext.data?.me?.id)
       // runs unlike mutation and changes local states
       await UnlikePost({
         localLikeCount,

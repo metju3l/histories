@@ -26,7 +26,7 @@ const LeftPanel: React.FC<{
   if (loginContext.error || userQuery.error) return <div>loading</div>;
 
   const user = userQuery.data!.user;
-  const isLogged = loginContext.data?.isLogged === null;
+  const isLogged = loginContext.data?.me === null;
 
   return (
     <div className="sticky top-40">
@@ -79,7 +79,7 @@ const LeftPanel: React.FC<{
         </p>
         {isLogged &&
           /* FOLLOW BUTTON */
-          (loginContext.data?.isLogged!.id !== user.id ? (
+          (loginContext.data?.me!.id !== user.id ? (
             <div className="pt-6">
               <FollowButton
                 isFollowing={user.isFollowing}

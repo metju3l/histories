@@ -18,7 +18,7 @@ const Template: Story<{
   loading: boolean;
   isUserLoggedIn?: boolean;
   data: {
-    isLogged: {
+    me: {
       id: number;
       firstName: string;
       lastName: string;
@@ -39,12 +39,12 @@ const Template: Story<{
     value={{
       ...args,
       data: {
-        isLogged: args.isUserLoggedIn
+        me: args.isUserLoggedIn
           ? {
-              ...args.data.isLogged,
+              ...args.data.me,
               profile:
-                args.data.isLogged.profile ??
-                `https://avatars.dicebear.com/api/initials/${args.data.isLogged.firstName}%20${args.data.isLogged.lastName}.svg`,
+                args.data.me.profile ??
+                `https://avatars.dicebear.com/api/initials/${args.data.me.firstName}%20${args.data.me.lastName}.svg`,
             }
           : null,
       },
@@ -52,7 +52,7 @@ const Template: Story<{
       refetch: undefined,
     }}
   >
-    <Navbar />
+    <Navbar pathname="/[username]" />
   </LoginContext.Provider>
 );
 
@@ -64,7 +64,7 @@ Primary.args = {
   isUserLoggedIn: true,
   // logged context mock up
   data: {
-    isLogged: {
+    me: {
       id: 1,
       firstName: 'John',
       lastName: 'Doe',

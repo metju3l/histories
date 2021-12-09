@@ -1,7 +1,7 @@
 import { Button } from '@components/Button/';
 import { Input } from '@components/Input';
 import { Layout } from '@components/Layout';
-import { useIsLoggedQuery } from '@graphql/user.graphql';
+import { useMeQuery } from '@graphql/user.graphql';
 import { useCreateUserMutation } from '@graphql/user.graphql';
 import Link from 'next/link';
 import router from 'next/router';
@@ -18,7 +18,7 @@ import {
 const Register: React.FC = () => {
   const [createUser] = useCreateUserMutation();
   const { t } = useTranslation();
-  const { data, loading, error } = useIsLoggedQuery();
+  const { data, loading, error } = useMeQuery();
   const [isLoading, setIsLoading] = useState(false);
 
   const formInputs = {
@@ -36,7 +36,7 @@ const Register: React.FC = () => {
 
   if (loading) return <div></div>;
   if (error) return <div></div>;
-  if (data?.isLogged) router.replace('/');
+  if (data?.me) router.replace('/');
 
   return (
     <Layout redirectLogged title={'sign up | hiStories'}>

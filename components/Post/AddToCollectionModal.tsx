@@ -21,7 +21,7 @@ const AddToCollectionModal: React.FC<AddToCollectionModalProps> = ({
   return (
     <Modal title="Save to" isOpen={isOpen} setOpenState={setOpenState}>
       <div className="px-4 mb-5 overflow-x-hidden overflow-y-auto grid grid-cols-3 gap-4">
-        {loginContext.data?.isLogged?.collections?.map((collection) => (
+        {loginContext.data?.me?.collections?.map((collection) => (
           <div
             key={collection?.name}
             onClick={async () => {

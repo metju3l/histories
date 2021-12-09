@@ -1,7 +1,7 @@
 import { Post } from '@components/Post';
 import { AccountCreatedCard } from '@components/PostCard';
 import { ProfilePage } from '@components/ProfilePage';
-import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
+import { useGetUserInfoQuery, useMeQuery } from '@graphql/user.graphql';
 import { NextPageContext } from 'next';
 import React from 'react';
 
@@ -9,7 +9,7 @@ const User: React.FC<{ username: string }> = ({ username }) => {
   const { data, loading, error, refetch } = useGetUserInfoQuery({
     variables: { username: username },
   });
-  const logged = useIsLoggedQuery();
+  const logged = useMeQuery();
 
   if (error) {
     console.log(error);

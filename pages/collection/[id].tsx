@@ -3,14 +3,14 @@ import 'react-dropdown/style.css';
 import { PostCard } from '@components/PostCard';
 import { ProfilePage } from '@components/ProfilePage';
 import { useCollectionQuery } from '@graphql/collection.graphql';
-import { useIsLoggedQuery } from '@graphql/user.graphql';
+import { useMeQuery } from '@graphql/user.graphql';
 import { NextPageContext } from 'next';
 import React, { FC } from 'react';
 import Dropdown from 'react-dropdown';
 
 const Collections: FC<{ id: number }> = ({ id }) => {
   const { data, loading, error } = useCollectionQuery({ variables: { id } });
-  const logged = useIsLoggedQuery();
+  const logged = useMeQuery();
 
   const sortOptions = [
     { value: 'hot', label: 'Hot' },

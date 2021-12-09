@@ -77,8 +77,8 @@ mutation updateProfile(
   )
 }
 
-query IsLogged {
-  isLogged {
+query Me {
+  me {
     id
     firstName
     lastName

@@ -11,7 +11,7 @@ const Suggestions: FC<{ logged: any }> = ({ logged }) => {
     return (
       <>
         <h2 className="font-semibold text-gray-600 text-md">
-          {logged.isLogged ? 'Suggestions for You' : 'Popular users'}
+          {logged.me ? 'Suggestions for You' : 'Popular users'}
         </h2>
         <div className="w-full pl-[20%] mt-[2rem]">something went wrong</div>
       </>
@@ -21,7 +21,7 @@ const Suggestions: FC<{ logged: any }> = ({ logged }) => {
     return (
       <>
         <h2 className="font-semibold text-gray-600 text-md">
-          {logged.isLogged ? 'Suggestions for You' : 'Popular users'}
+          {logged.me ? 'Suggestions for You' : 'Popular users'}
         </h2>
         <div className="w-full mt-[4rem]">
           <svg
@@ -69,7 +69,7 @@ const Suggestions: FC<{ logged: any }> = ({ logged }) => {
   return (
     <>
       <h2 className="font-semibold text-gray-600 text-md">
-        {logged.isLogged ? 'Suggestions for You' : 'Popular users'}
+        {logged.me ? 'Suggestions for You' : 'Popular users'}
       </h2>
       <div className="flex flex-col mt-6 ml-2">
         {data!.suggestedUsers &&

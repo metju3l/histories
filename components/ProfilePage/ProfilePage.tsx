@@ -1,4 +1,4 @@
-import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
+import { useGetUserInfoQuery, useMeQuery } from '@graphql/user.graphql';
 import React, { ReactNode } from 'react';
 
 import Layout from '../Layout/Layout';
@@ -12,7 +12,7 @@ const ProfilePage: React.FC<{
   username?: string;
   collectionId?: number;
 }> = ({ rightColumn, title, username, collectionId }) => {
-  const loggedQuery = useIsLoggedQuery();
+  const loggedQuery = useMeQuery();
   const userQuery = useGetUserInfoQuery({
     variables: { username: username },
   });

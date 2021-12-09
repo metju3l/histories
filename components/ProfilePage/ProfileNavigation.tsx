@@ -28,7 +28,7 @@ const ProfileNavigation: React.FC<{
         href="/map"
         path="map"
       />
-      {loggedQuery.data?.isLogged?.id === userQuery.data.user.id && (
+      {loggedQuery.data?.me?.id === userQuery.data.user.id && (
         <MenuOption
           pathname={router.pathname}
           title="Settings"

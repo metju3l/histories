@@ -122,11 +122,7 @@ const resolvers = {
       }),
 
     // LOGGED USER QUERY
-    isLogged: async (
-      _parent: undefined,
-      _input: undefined,
-      context: contextType
-    ) =>
+    me: async (_parent: undefined, _input: undefined, context: contextType) =>
       // if user is logged return user data, else return null
       context.validToken ? await UserQuery({ id: context.decoded.id }) : null,
 

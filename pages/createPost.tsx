@@ -2,7 +2,7 @@ import { Button } from '@components/Button';
 import { Layout } from '@components/Layout';
 import { Search } from '@components/MainPage';
 import { useCreatePostMutation } from '@graphql/post.graphql';
-import { useIsLoggedQuery } from '@graphql/user.graphql';
+import { useMeQuery } from '@graphql/user.graphql';
 import { Field, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { FC, useCallback, useEffect, useState } from 'react';
@@ -67,7 +67,7 @@ const Login: FC = () => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
-  const { data, loading, error } = useIsLoggedQuery();
+  const { data, loading, error } = useMeQuery();
   const [createPostMutation] = useCreatePostMutation();
   const [coordinates, setCoordinates] = useState([21, 20]);
   const [marker, setMarker] = useState({
@@ -160,7 +160,7 @@ const Login: FC = () => {
   if (loading) return <div>loading xxx</div>;
   if (error) return <div>error</div>;
 
-  if (data?.isLogged === null) router.replace('/');
+  if (data?.me === null) router.replace('/');
   return (
     <Layout title="Create post | hiStories">
       <div className="p-10 m-auto max-w-[27rem]">

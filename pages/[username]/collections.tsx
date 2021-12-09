@@ -3,7 +3,7 @@ import 'react-dropdown/style.css';
 import CreateCollectionModal from '@components/Collection/CreateCollectionModal';
 import { CollectionCard } from '@components/CollectionCard';
 import { ProfilePage } from '@components/ProfilePage';
-import { useGetUserInfoQuery, useIsLoggedQuery } from '@graphql/user.graphql';
+import { useGetUserInfoQuery, useMeQuery } from '@graphql/user.graphql';
 import { PlusIcon } from '@heroicons/react/solid';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ const Collections: FC<{ username: string }> = ({ username }) => {
   const { data, loading, error, refetch } = useGetUserInfoQuery({
     variables: { username: username },
   });
-  const logged = useIsLoggedQuery();
+  const logged = useMeQuery();
   const [createModal, setCreateModal] = useState(false);
   const sortOptions = [
     { value: 'hot', label: 'Hot' },
@@ -34,7 +34,7 @@ const Collections: FC<{ username: string }> = ({ username }) => {
   }
   if (data === null || data === undefined)
     return <div>user does not exist</div>;
-  const isLogged = logged.data!.isLogged;
+  const isLogged = logged.data!.me;
 
   return (
     <>

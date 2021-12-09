@@ -16,17 +16,17 @@ const ProtectedRoutes: React.FC<{
   // dont redirect if user is not verified
   if (
     dontRedirectUnverified !== true &&
-    !loginContext.data?.isLogged?.verified &&
-    loginContext.data?.isLogged?.id
+    !loginContext.data?.me?.verified &&
+    loginContext.data?.me?.id
   )
     return <Redirect to="/verify" />;
 
   // redirect if user is logged
-  if (redirectLogged && loginContext.data?.isLogged?.id)
+  if (redirectLogged && loginContext.data?.me?.id)
     return <Redirect to="/" />;
 
   // redirect if user is not logged
-  if (redirectNotLogged && !loginContext.data?.isLogged?.id)
+  if (redirectNotLogged && !loginContext.data?.me?.id)
     return <Redirect to="/" />;
 
   return null;

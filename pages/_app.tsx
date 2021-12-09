@@ -2,7 +2,7 @@ import '../lib/translation/i18n';
 import 'tailwindcss/tailwind.css';
 
 import { ApolloProvider } from '@apollo/client';
-import { useIsLoggedQuery } from '@graphql/user.graphql';
+import { useMeQuery } from '@graphql/user.graphql';
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
 import NextNprogress from 'nextjs-progressbar';
@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 }
 
 const LoginProvider: React.FC = ({ children }) => {
-  const logged = useIsLoggedQuery();
+  const logged = useMeQuery();
   const LoginContext = createContext(logged);
 
   return (

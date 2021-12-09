@@ -7,13 +7,15 @@ import React, { useEffect } from 'react';
 import { Button } from '../Button';
 import { LoginContext } from '../Layout';
 
-const Navbar: React.FC = () => {
+export type NavbarProps = { pathname: string };
+
+const Navbar: React.FC<NavbarProps> = ({ pathname }) => {
   const router = useRouter();
 
   const loginContext = React.useContext(LoginContext);
   const { theme, setTheme } = useTheme();
 
-  const userIsLogged = loginContext.data?.isLogged !== null;
+  const userIsLogged = loginContext.data?.me !== null;
 
   useEffect(() => console.log(router), [router]);
 
@@ -25,7 +27,7 @@ const Navbar: React.FC = () => {
           link="/"
           text="Home"
           icon={
-            router.pathname === '/' ? (
+            pathname === '/' ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="mx-auto w-[1.3rem] h-[1.3rem]"
@@ -56,7 +58,7 @@ const Navbar: React.FC = () => {
           link="/explore"
           text="Explore"
           icon={
-            router.pathname === '/explore' ? (
+            pathname === '/explore' ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="mx-auto w-[1.3rem] h-[1.3rem]"
@@ -91,7 +93,7 @@ const Navbar: React.FC = () => {
           link="/map"
           text="Map"
           icon={
-            router.pathname === '/map' ? (
+            pathname === '/map' ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="mx-auto w-[1.3rem] h-[1.3rem]" // align at center
@@ -126,13 +128,13 @@ const Navbar: React.FC = () => {
         <NavbarItem
           hideOnMd // show only on mobile
           link={
-            loginContext.data?.isLogged // when user is logged in
-              ? `/${loginContext.data.isLogged.username}` // profile page
+            loginContext.data?.me // when user is logged in
+              ? `/${loginContext.data.me.username}` // profile page
               : '/login' // login page
           }
           text="Profile"
           icon={
-            router.pathname === '/[username]' ? (
+            pathname === '/[username]' ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="mx-auto w-[1.3rem] h-[1.3rem]" // align at center
@@ -169,12 +171,12 @@ const Navbar: React.FC = () => {
         // don't show this section when logged query is loading or when error occurs
         !loginContext.loading && loginContext.error === undefined && (
           <span className="hidden md:block">
-            {loginContext.data?.isLogged ? (
+            {loginContext.data?.me ? (
               // if user is logged in show his profile
-              <Link href={'/' + loginContext.data.isLogged?.username} passHref>
+              <Link href={'/' + loginContext.data.me?.username} passHref>
                 <div className="relative w-8 h-8 cursor-pointer">
                   <Image
-                    src={loginContext.data.isLogged.profile}
+                    src={loginContext.data.me.profile}
                     layout="fill"
                     objectFit="contain"
                     objectPosition="center"

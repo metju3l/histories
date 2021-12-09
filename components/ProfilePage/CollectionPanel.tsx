@@ -80,7 +80,7 @@ const CollectionPanel: React.FC<{
         </p>
 
         {/* EDIT BUTTON */}
-        {loginContext.data?.isLogged?.id === data?.collection.author.id && (
+        {loginContext.data?.me?.id === data?.collection.author.id && (
           <button
             onClick={() => setEditMode(true)}
             className="inline-flex items-center justify-center h-10 mt-6 font-medium tracking-wide text-white rounded-lg bg-[#0ACF83] w-52 transition duration-200 hover:opacity-90"

@@ -4,28 +4,37 @@ export default gql`
   scalar Upload
 
   type Query {
+    "Example query"
     hello: String!
     user(input: UserInput!): User!
+
+    "Returns post detail information"
     post(id: Int!): Post!
+
     suggestedUsers: [User]!
     tag(label: String!): TagInfo
     paths: [Path]
-    isLogged: User
+
+    "Returns info about logged user"
+    me: User
+
     userPosts(input: UserPostsInput!): [Post!]!
     personalizedPosts(input: PersonalizedPostsInput): [PersonalizedPost!]!
 
-    "Returns detail informations to one place"
+    "Returns place detail information"
     place(id: Int!): Place!
 
     "Returns places with possibility to add filters"
     places(input: PlacesInput): [Place!]!
 
-    "Returns detail informations to one collection"
+    "Returns collection detail information"
     collection(id: Int!): Collection!
   }
 
   type Mutation {
+    "Returns JWT"
     login(input: LoginInput!): String!
+
     deleteUser(input: DeleteUserInput!): String!
     delete(id: Int!): String
     report(id: Int!): String
@@ -233,11 +242,6 @@ export default gql`
     description: String!
     isPrivate: Boolean!
     collectionId: Int!
-  }
-
-  type IsLoggedInfo {
-    isLogged: Boolean!
-    userID: String
   }
 
   type Path {

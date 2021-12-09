@@ -2,12 +2,12 @@ import { Layout } from '@components/Layout';
 import Suggestions from '@components/MainPage/RightColumn/Suggestions';
 import { Post } from '@components/Post';
 import { usePersonalizedPostsQuery } from '@graphql/post.graphql';
-import { useIsLoggedQuery } from '@graphql/user.graphql';
+import { useMeQuery } from '@graphql/user.graphql';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Index: React.FC = () => {
-  const logged = useIsLoggedQuery();
+  const logged = useMeQuery();
 
   if (logged.loading) return <div>logged loading</div>;
   if (logged.error) {

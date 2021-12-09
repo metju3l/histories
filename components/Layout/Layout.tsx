@@ -1,12 +1,10 @@
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 
-import {
-  IsLoggedQuery,
-  useIsLoggedQuery,
-} from '../../lib/graphql/user.graphql';
+import { MeQuery, useMeQuery } from '../../lib/graphql/user.graphql';
 import { Navbar } from '../Navbar';
 import ProtectedRoutes from './ProtectedRoutes';
 
@@ -19,10 +17,10 @@ type LayoutProps = {
 };
 
 export type LoginContextType = {
-  data: IsLoggedQuery | undefined;
+  data: MeQuery | undefined;
   loading: boolean;
   error: ApolloError | undefined;
-  refetch: (() => Promise<ApolloQueryResult<IsLoggedQuery>>) | undefined;
+  refetch: (() => Promise<ApolloQueryResult<MeQuery>>) | undefined;
 };
 
 export const LoginContext = React.createContext<LoginContextType>({
@@ -39,7 +37,8 @@ const Layout: React.FC<LayoutProps> = ({
   redirectNotLogged,
   children,
 }) => {
-  const { data, loading, error, refetch } = useIsLoggedQuery();
+  const router = useRouter();
+  const { data, loading, error, refetch } = useMeQuery();
 
   return (
     <LoginContext.Provider value={{ data, loading, error, refetch }}>
@@ -82,7 +81,7 @@ const Layout: React.FC<LayoutProps> = ({
         />
       )}
 
-      <Navbar />
+      <Navbar pathname={router.pathname} />
       <div className="h-screen bg-white md:pt-14">{children}</div>
     </LoginContext.Provider>
   );

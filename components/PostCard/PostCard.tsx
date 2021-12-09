@@ -132,7 +132,7 @@ const PostCard: FC<{
               </a>
             </Link>
           </a>
-          {loginContext?.data.isLogged?.id && (
+          {loginContext?.data.me?.id && (
             <div
               className="pt-2"
               onClick={() => setCollectionSelectModal(true)}
@@ -171,14 +171,14 @@ const PostCard: FC<{
             >
               <Menu.Items className="absolute right-0 w-56 mt-2 bg-white shadow-lg origin-top-right divide-y divide-gray-100 rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="px-1 py-1 ">
-                  {loginContext.data.isLogged?.id === data!.post.author.id && (
+                  {loginContext.data.me?.id === data!.post.author.id && (
                     <Menu.Item>
                       <button className="flex items-center w-full px-2 py-2 text-sm text-black group rounded-md">
                         Edit
                       </button>
                     </Menu.Item>
                   )}
-                  {loginContext.data.isLogged?.id === data!.post.author.id &&
+                  {loginContext.data.me?.id === data!.post.author.id &&
                     currentCollection !== undefined && (
                       <Menu.Item>
                         <button
@@ -201,9 +201,8 @@ const PostCard: FC<{
                         </button>
                       </Menu.Item>
                     )}
-                  {loginContext?.data.isLogged?.id &&
-                    loginContext?.data.isLogged?.id !==
-                      data!.post.author.id && (
+                  {loginContext?.data.me?.id &&
+                    loginContext?.data.me?.id !== data!.post.author.id && (
                       <>
                         <Menu.Item>
                           <button
@@ -259,7 +258,7 @@ const PostCard: FC<{
                   </Menu.Item>
                 </div>
 
-                {loginContext?.data.isLogged?.id === data!.post.author.id && (
+                {loginContext?.data.me?.id === data!.post.author.id && (
                   <div className="px-1 py-1">
                     <Menu.Item>
                       <button
@@ -347,7 +346,7 @@ const PostCard: FC<{
               </div>
             )}
             <div className="pt-2 mt-2 border-t border-gray-300">
-              {loginContext?.data.isLogged?.id && (
+              {loginContext?.data.me?.id && (
                 <>
                   <textarea
                     className="p-2 bg-gray-100 border-2 border-gray-300 rounded-xl"

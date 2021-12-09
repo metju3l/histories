@@ -25,7 +25,7 @@ const CommentHandler: React.FC<{
 
   // delete comment
   const Delete = async () => {
-    if (loginContext.data?.isLogged?.id === author.id) {
+    if (loginContext.data?.me?.id === author.id) {
       try {
         await deleteMutation({
           variables: {
@@ -41,7 +41,7 @@ const CommentHandler: React.FC<{
 
   // on like press
   const Like = async () => {
-    if (loginContext.data?.isLogged?.id !== undefined) {
+    if (loginContext.data?.me?.id !== undefined) {
       try {
         // if already liked, unlike
         if (localLikeState) {
@@ -73,11 +73,11 @@ const CommentHandler: React.FC<{
       author={author}
       content={content}
       createdAt={createdAt}
-      owner={loginContext.data?.isLogged?.id === author.id}
+      owner={loginContext.data?.me?.id === author.id}
       deleteComment={Delete}
       onLike={Like}
       liked={localLikeState}
-      isLogged={loginContext.data?.isLogged?.id !== undefined}
+      isLogged={loginContext.data?.me?.id !== undefined}
     />
   );
 };

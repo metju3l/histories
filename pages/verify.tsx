@@ -1,8 +1,5 @@
 import { Layout } from '@components/Layout';
-import {
-  useIsLoggedQuery,
-  useVerifyTokenMutation,
-} from '@graphql/user.graphql';
+import { useMeQuery, useVerifyTokenMutation } from '@graphql/user.graphql';
 import { Button } from '@nextui-org/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -10,7 +7,7 @@ import { toast } from 'react-hot-toast';
 
 export default function Page() {
   const router = useRouter();
-  const isLogged = useIsLoggedQuery();
+  const isLogged = useMeQuery();
   const [verifyToken] = useVerifyTokenMutation();
   const [isLoading, setIsLoading] = useState(false);
 
