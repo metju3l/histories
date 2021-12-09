@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
   if (loginContext.error) console.error(loginContext.error);
   return (
     <nav className="fixed bottom-0 z-30 flex items-center justify-between w-full px-6 text-black bg-white border-t border-gray-200 shadow-sm md:h-14 md:border-b md:bottom-auto md:top-0">
-      <span className="flex justify-between w-full md:justify-start md:gap-10">
+      <span className="flex justify-between w-full md:justify-start md:gap-2">
         <NavbarItem
           link="/"
           text="Home"
@@ -228,7 +228,9 @@ const NavbarItem: React.FC<NavbarItemProps> = ({
         <span className="block md:hidden" /* visible only on mobile */>
           {icon}
         </span>
-        <div>{text}</div>
+        <div className="md:hover:bg-gray-200 md:text-gray-500 hover:text-black md:font-semibold py-1.5 px-3 rounded-xl">
+          {text}
+        </div>
       </a>
     </Link>
   );

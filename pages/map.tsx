@@ -48,11 +48,11 @@ const Map: React.FC = () => {
 
   const [whatToShow, setWhatToShow] = useState<string | null>(null);
   const [showSidebar, setShowSidebar] = useState(true);
-
   const [timeLimitation, setTimeLimitation] = useState<[number, number]>([
     1000,
     new Date().getTime(),
   ]);
+
 
   const [sidebarPlace, setSidebarPlace] = useState<{
     id: number;
