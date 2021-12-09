@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import { useTheme } from 'next-themes';
 import React, { useEffect } from 'react';
 
-import { Button } from '../Button';
 import { LoginContext } from '../Layout';
+import Button from '../UI/Button';
 
 export type NavbarProps = { pathname: string };
 
@@ -230,7 +230,7 @@ const NavbarItem: React.FC<NavbarItemProps> = ({
         <span className="block md:hidden" /* visible only on mobile */>
           {icon}
         </span>
-        <div className="md:hover:bg-gray-200 md:text-gray-500 hover:text-black md:font-semibold py-1.5 px-3 rounded-xl">
+        <div className="px-3 md:hover:bg-gray-200 md:text-gray-500 hover:text-black md:font-semibold py-1.5 rounded-xl">
           {text}
         </div>
       </a>

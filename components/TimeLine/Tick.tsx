@@ -19,7 +19,7 @@ const Tick: React.FC<{ tick: SliderItem; count: number }> = ({
           left: `${tick.percent}%`,
         }}
       >
-        <span className="bg-white rounded-xl border border-gray-200 px-2 py-0.5">
+        <span className="px-2 bg-white border border-gray-200 rounded-xl py-0.5">
           {tick.value}
         </span>
       </div>

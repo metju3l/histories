@@ -4,7 +4,7 @@ import { Story } from '@storybook/react';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 
-import { Button, ButtonProps } from '../../components/Button';
+import Button, { ButtonProps } from '../../components/UI/Button';
 
 // Component
 const Component = {

@@ -3,7 +3,7 @@ import 'tailwindcss/tailwind.css';
 import { Story } from '@storybook/react';
 import React from 'react';
 
-import { Banner, BannerProps } from '../../components/Banner';
+import Banner, { BannerProps } from '../../components/UI/Banner';
 
 // Component
 const Component = {

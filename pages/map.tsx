@@ -74,8 +74,8 @@ const Map: React.FC = () => {
     <Layout title="map | hiStories">
       {showSidebar ? (
         <>
-          <div className="fixed md:top-14 top-0 z-20 left-0 h-12 md:w-[70vw] w-[60vw] px-[8px]">
-            <div className="flex justify-between items-center w-full py-4 px-4 bg-white shadow-sm border-gray-200 border-b">
+          <div className="fixed top-0 left-0 z-20 h-12 md:top-14 md:w-[70vw] w-[60vw] px-[8px]">
+            <div className="flex items-center justify-between w-full px-4 py-4 bg-white border-b border-gray-200 shadow-sm">
               <span className="w-8" />
 
               <div className="flex gap-2">
@@ -84,7 +84,7 @@ const Map: React.FC = () => {
                     <button onClick={() => setSidebarPlace(null)}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8 py-1 border border-gray-200 hover:text-black text-gray-500 hover:border-gray-400 rounded-xl"
+                        className="w-8 h-8 py-1 text-gray-500 border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -131,7 +131,7 @@ const Map: React.FC = () => {
               <button onClick={() => setShowSidebar(false)}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 py-1 border border-gray-200 hover:text-black text-gray-500 hover:border-gray-400 rounded-xl"
+                  className="w-8 h-8 py-1 text-gray-500 border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -149,13 +149,13 @@ const Map: React.FC = () => {
 
           <section className="md:pt-[3rem]">
             {sidebarPlace ? (
-              <div className="w-full pt-8 md:w-[70vw] w-[60vw] h-full p-4 text-black bg-white">
-                <h1 className="font-medium text-lg w-full flex justify-center">
+              <div className="w-full h-full p-4 pt-8 text-black bg-white md:w-[70vw] w-[60vw]">
+                <h1 className="flex justify-center w-full text-lg font-medium">
                   {sidebarPlace.name}
                 </h1>
               </div>
             ) : (
-              <div className="w-full pt-8 md:w-[70vw] w-[60vw] h-full p-4 text-black bg-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="w-full h-full p-4 pt-8 text-black bg-white md:w-[70vw] w-[60vw] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {data?.places.map(
                   (place) =>
                     place.preview && (
@@ -173,7 +173,7 @@ const Map: React.FC = () => {
         <button onClick={() => setShowSidebar(true)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-8 w-8 py-1 border border-gray-200 hover:text-black text-gray-500 hover:border-gray-400 rounded-xl transform -rotate-180 bg-white absolute top-18 left-4 z-20"
+            className="absolute z-20 w-8 h-8 py-1 text-gray-500 bg-white border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl transform -rotate-180 top-18 left-4"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -240,7 +240,7 @@ const MapPostCard: React.FC<{
 }> = ({ place, setSidebarPlace }) => {
   return (
     <div
-      className="flex flex-col w-full h-64 bg-white border border-gray-200 hover:border-gray-400 rounded-lg hover:shadow-sm"
+      className="flex flex-col w-full h-64 bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-sm"
       onClick={() => setSidebarPlace(place)}
     >
       {place.preview && (
@@ -256,7 +256,7 @@ const MapPostCard: React.FC<{
         </div>
       )}
       <div className="px-4 py-2">
-        <h2 className="font-medium text-lg">{place.name}</h2>
+        <h2 className="text-lg font-medium">{place.name}</h2>
         <h3 className="text-gray-600" style={{ fontSize: '12px' }}>
           {place.id} Lorem ipsum dolor sit amet consectetur adipisicing elit.
           Odio unde

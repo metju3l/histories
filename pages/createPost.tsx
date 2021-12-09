@@ -1,6 +1,6 @@
-import { Button } from '@components/Button';
 import { Layout } from '@components/Layout';
 import { Search } from '@components/MainPage';
+import Button from '@components/UI/Button';
 import { useCreatePostMutation } from '@graphql/post.graphql';
 import { useMeQuery } from '@graphql/user.graphql';
 import { Field, Form, Formik } from 'formik';

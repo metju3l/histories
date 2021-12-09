@@ -127,7 +127,7 @@ const Post: React.FC<PostProps> = ({
             </div>
           )}
           <div className={`px-4 relative ${photos ? '' : 'pt-4 '}`}>
-            <div className="flex items-center justify-around w-full border-t pt-1 pb-2 border-gray-300">
+            <div className="flex items-center justify-around w-full pt-1 pb-2 border-t border-gray-300">
               <div
                 onMouseEnter={() => {
                   // timer = setTimeout(() => setReactionMenu(true), 500);

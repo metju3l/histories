@@ -1,5 +1,5 @@
-import { Button } from '@components/Button';
 import { LoginContext } from '@components/Layout/Layout';
+import Button from '@components/UI/Button';
 import {
   useFollowMutation,
   useUnfollowMutation,

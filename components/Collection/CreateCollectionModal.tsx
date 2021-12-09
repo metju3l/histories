@@ -1,6 +1,6 @@
-import { Button } from '@components/Button';
 import { LoginContext } from '@components/Layout';
 import { Modal } from '@components/Modal';
+import Button from '@components/UI/Button';
 import { useCreateCollectionMutation } from '@graphql/collection.graphql';
 import { Switch } from '@headlessui/react';
 import React, { useState } from 'react';
@@ -54,7 +54,7 @@ const CreateCollectionModal: React.FC<{
             {...register('name', { required: true })}
           />
           <textarea
-            className="w-full max-w-xl px-3 mt-2 mb-1 p-1 leading-tight text-gray-700 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
+            className="w-full max-w-xl p-1 px-3 mt-2 mb-1 leading-tight text-gray-700 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
             placeholder="description"
             rows={5}
             {...register('description')}

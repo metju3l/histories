@@ -1,6 +1,6 @@
 import { Layout } from '@components/Layout';
+import Button from '@components/UI/Button';
 import { useMeQuery, useVerifyTokenMutation } from '@graphql/user.graphql';
-import { Button } from '@nextui-org/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -18,10 +18,9 @@ export default function Page() {
     return (
       <Layout dontRedirectUnverified title={''}>
         {isLoading ? (
-          <Button loading loaderType="spinner" />
+          <Button isLoading />
         ) : (
           <Button
-            type="submit"
             onClick={async () => {
               setIsLoading(true);
               if (router.query.token !== undefined)

@@ -6,7 +6,7 @@ import TimeAgo from 'react-timeago';
 
 import GeneratedProfileUrl from '../../lib/functions/GeneratedProfileUrl';
 import hoverHandler from '../../lib/hooks/hoverHandler';
-import { Button } from '../Button';
+import Button from '../UI/Button';
 
 export type MiniUserCardProps = {
   firstName: string;
@@ -121,7 +121,9 @@ const ProfilePopup: React.FC<{
         </div>
       </div>
       <div className="flex w-full gap-2">
-        <Button isLoading={false} type="primary">Follow</Button>
+        <Button isLoading={false} type="primary">
+          Follow
+        </Button>
         <Button isLoading={false} type="secondary">
           •••
         </Button>

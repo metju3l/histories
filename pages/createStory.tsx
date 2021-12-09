@@ -1,5 +1,5 @@
-import { Button } from '@components/Button';
 import { Layout } from '@components/Layout';
+import Button from '@components/UI/Button';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
