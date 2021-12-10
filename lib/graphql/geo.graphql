@@ -13,6 +13,7 @@ query Places($input: PlacesInput) {
     latitude
     icon
     preview
+    description
   }
 }
 

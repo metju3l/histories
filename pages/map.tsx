@@ -7,6 +7,23 @@ import { NextRouter, useRouter } from 'next/router';
 import React, { useRef, useState } from 'react';
 import ReactMapGL, { ExtraState, MapRef, Marker } from 'react-map-gl';
 
+const ArrowIcon = (args: any) => (
+  <svg
+    {...args}
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M15 19l-7-7 7-7"
+    />
+  </svg>
+);
+
 type Viewport = {
   latitude: number;
   longitude: number;
@@ -53,7 +70,6 @@ const Map: React.FC = () => {
     new Date().getTime(),
   ]);
 
-
   const [sidebarPlace, setSidebarPlace] = useState<{
     id: number;
     name?: string | null;
@@ -61,6 +77,7 @@ const Map: React.FC = () => {
     latitude: number;
     icon?: string | null;
     preview?: string[] | null;
+    description?: string;
   } | null>(null);
 
   // map viewport
@@ -72,91 +89,32 @@ const Map: React.FC = () => {
 
   return (
     <Layout title="map | hiStories">
-      {showSidebar ? (
-        <>
-          <div className="fixed top-0 left-0 z-20 h-12 md:top-14 md:w-[70vw] w-[60vw] px-[8px]">
-            <div className="flex items-center justify-between w-full px-4 py-4 bg-white border-b border-gray-200 shadow-sm">
-              <span className="w-8" />
-
-              <div className="flex gap-2">
-                {sidebarPlace ? (
-                  <>
-                    <button onClick={() => setSidebarPlace(null)}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-8 h-8 py-1 text-gray-500 border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 19l-7-7 7-7"
-                        />
-                      </svg>
-                    </button>
-                    <div
-                      className={`py-1 min-w-24 border border-gray-200 text-gray-600 px-4 rounded-xl`}
-                    >
-                      Place detail
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
-                        whatToShow !== 'photos'
-                          ? 'text-black border-gray-400'
-                          : 'text-gray-500'
-                      } rounded-xl`}
-                      onClick={() => setWhatToShow('places')}
-                    >
-                      Places
-                    </button>
-                    <button
-                      className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
-                        whatToShow === 'photos'
-                          ? 'text-black border-gray-400'
-                          : 'text-gray-500'
-                      } rounded-xl`}
-                      onClick={() => setWhatToShow('photos')}
-                    >
-                      Photos
-                    </button>
-                  </>
-                )}
-              </div>
-              <button onClick={() => setShowSidebar(false)}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-8 h-8 py-1 text-gray-500 border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <section className="md:pt-[3rem]">
-            {sidebarPlace ? (
-              <div className="w-full h-full p-4 pt-8 text-black bg-white md:w-[70vw] w-[60vw]">
-                <h1 className="flex justify-center w-full text-lg font-medium">
-                  {sidebarPlace.name}
-                </h1>
-              </div>
-            ) : (
-              <div className="w-full h-full p-4 pt-8 text-black bg-white md:w-[70vw] w-[60vw] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {data?.places.map(
+      <div className="w-full">
+        <section
+          className="w-full grid"
+          style={{
+            gridTemplateColumns: showSidebar ? '6fr 4fr' : '0 auto',
+            height: 'calc(100vh - 56px)',
+          }}
+        >
+          <div id="leftcol" className="h-full">
+            <SubNav
+              sidebarPlace={sidebarPlace}
+              setSidebarPlace={setSidebarPlace}
+              whatToShow={whatToShow}
+              setWhatToShow={setWhatToShow}
+              setShowSidebar={setShowSidebar}
+            />
+            <div
+              className={`p-4 pt-8 overflow-y-auto text-black bg-white ${
+                sidebarPlace
+                  ? ''
+                  : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
+              }`}
+              style={{ height: 'calc(100vh - 123px)' }}
+            >
+              {sidebarPlace === null ? (
+                data?.places.map(
                   (place) =>
                     place.preview && (
                       <MapPostCard
@@ -164,57 +122,136 @@ const Map: React.FC = () => {
                         setSidebarPlace={setSidebarPlace}
                       />
                     )
-                )}
-              </div>
+                )
+              ) : (
+                <div className="w-full">
+                  <div className="text-center">
+                    <div className="relative w-full rounded-lg cursor-pointer h-[20vh] bg-secondary">
+                      {sidebarPlace.preview && (
+                        <Image
+                          src={sidebarPlace.preview[0]}
+                          layout="fill"
+                          objectFit="cover"
+                          objectPosition="center"
+                          className="rounded-lg"
+                          alt="Profile picture"
+                        />
+                      )}
+                      <div className="absolute bottom-0 left-0 z-20 w-full h-full text-left rounded-lg bg-gradient-to-t from-[#000000ee] via-transparent to-transparent">
+                        <h1 className="absolute text-white bottom-3 left-3">
+                          {sidebarPlace.name ?? 'Place detail'}
+                        </h1>
+                      </div>
+                    </div>
+                    <p className="pt-4 text-left">{sidebarPlace.description}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="relative w-full p-2 bg-white col-span-1">
+            {!showSidebar && (
+              <button
+                onClick={() => setShowSidebar(true)}
+                className="absolute z-50 top-4 left-4"
+              >
+                <ArrowIcon className="w-8 h-8 py-1 text-gray-500 bg-white border border-gray-200 rotate-180 hover:text-black hover:border-gray-400 rounded-xl" />
+              </button>
             )}
-          </section>
-        </>
-      ) : (
-        <button onClick={() => setShowSidebar(true)}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="absolute z-20 w-8 h-8 py-1 text-gray-500 bg-white border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl transform -rotate-180 top-18 left-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
+            <div className="absolute right-0 z-20 px-8 pt-2 w-[28vw]">
+              <TimeLine
+                domain={[1000, new Date().getFullYear()]}
+                setTimeLimitation={setTimeLimitation}
+              />
+            </div>
+            <MapGL
+              viewport={mapViewport}
+              setViewport={setMapViewport}
+              data={data}
+              refetch={refetch}
+              setSidebar={setSidebarPlace}
+              sidebar={sidebarPlace}
             />
-          </svg>
-        </button>
-      )}
-      <div
-        className={`p-2 fixed md:top-14 top-0 right-0 bg-white ${
-          showSidebar ? 'md:w-[30vw] w-[40vw]' : 'w-[100vw]'
-        }`}
-        style={{
-          height: 'calc(100% - 56px)',
-        }}
-      >
-        <div
-          className={`absolute top-2 w-[30vw] ${
-            showSidebar ? 'left-0' : 'right-0'
-          } z-20 px-8 pt-2`}
-        >
-          <TimeLine
-            domain={[1000, new Date().getFullYear()]}
-            setTimeLimitation={setTimeLimitation}
-          />
-        </div>
-        <MapGL
-          viewport={mapViewport}
-          setViewport={setMapViewport}
-          data={data}
-          refetch={refetch}
-          setSidebar={setSidebarPlace}
-          sidebar={sidebarPlace}
-        />
+          </div>
+        </section>
       </div>
     </Layout>
+  );
+};
+
+const SubNav: React.FC<{
+  setWhatToShow: React.Dispatch<React.SetStateAction<string | null>>;
+  setSidebarPlace: React.Dispatch<
+    React.SetStateAction<{
+      id: number;
+      name?: string | null | undefined;
+      longitude: number;
+      latitude: number;
+      icon?: string | null | undefined;
+      preview?: string[] | null | undefined;
+    } | null>
+  >;
+  sidebarPlace: {
+    id: number;
+    name?: string | null | undefined;
+    longitude: number;
+    latitude: number;
+    icon?: string | null | undefined;
+    preview?: string[] | null | undefined;
+  } | null;
+  whatToShow: string | null;
+  setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({
+  sidebarPlace,
+  setSidebarPlace,
+  whatToShow,
+  setWhatToShow,
+  setShowSidebar,
+}) => {
+  return (
+    <div className="flex items-center justify-between w-full px-4 py-4 bg-white border-b border-gray-200 shadow-sm">
+      <span className="w-8" />
+
+      <div className="flex gap-2">
+        {sidebarPlace ? (
+          <>
+            <button onClick={() => setSidebarPlace(null)}>
+              <ArrowIcon className="w-8 h-8 py-1 text-gray-500 border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl" />
+            </button>
+            <div className="px-4 py-1 text-gray-600 border border-gray-200 min-w-24 rounded-xl">
+              Place detail
+            </div>
+          </>
+        ) : (
+          <>
+            <button
+              className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
+                whatToShow !== 'photos'
+                  ? 'text-black border-gray-400'
+                  : 'text-gray-500'
+              } rounded-xl`}
+              onClick={() => setWhatToShow('places')}
+            >
+              Places
+            </button>
+            <button
+              className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
+                whatToShow === 'photos'
+                  ? 'text-black border-gray-400'
+                  : 'text-gray-500'
+              } rounded-xl`}
+              onClick={() => setWhatToShow('photos')}
+            >
+              Photos
+            </button>
+          </>
+        )}
+      </div>
+      <button onClick={() => setShowSidebar(false)}>
+        <ArrowIcon className="w-8 h-8 py-1 text-gray-500 border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl" />
+      </button>
+    </div>
   );
 };
 
@@ -265,6 +302,8 @@ const MapPostCard: React.FC<{
     </div>
   );
 };
+
+const PlaceDetail = () => {};
 
 function ConvertBounds(bounds: {
   _ne: { lat: number; lng: number };

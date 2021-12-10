@@ -156,7 +156,7 @@ export default gql`
     id: Int!
     latitude: Float!
     longitude: Float!
-    description: String!
+    description: String
     name: String
     preview: [String!]
     icon: String

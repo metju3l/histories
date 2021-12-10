@@ -1,5 +1,5 @@
 import '../lib/translation/i18n';
-import 'tailwindcss/tailwind.css';
+import '../lib/styles/main.scss';
 
 import { ApolloProvider } from '@apollo/client';
 import { useMeQuery } from '@graphql/user.graphql';
