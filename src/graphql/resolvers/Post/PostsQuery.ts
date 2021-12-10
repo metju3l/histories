@@ -1,0 +1,91 @@
+import RunCypherQuery from '../../../database/RunCypherQuery';
+
+type queryInput = {
+  filter: {
+    placeId?: number;
+    authorId?: number;
+    maxLatitude: number | null;
+    minLatitude: number | null;
+    maxLongitude: number | null;
+    minLongitude: number | null;
+    minDate: number | null;
+    maxDate: number | null;
+    radius: {
+      latitude: number;
+      longitude: number;
+      distance: number;
+    } | null;
+    tags: string[] | null;
+    skip: number | null;
+    take: number | null;
+  } | null;
+  loggedId: number | null;
+};
+
+const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
+  const query = `
+  MATCH (place:Place)<-[:IS_LOCATED]-(post:Post)<-[:CREATED]-(author:User)
+  WHERE (place.location.latitude >= $minLatitude OR $minLatitude IS NULL)                 // min latitude
+    AND (place.location.latitude <= $maxLatitude OR $maxLatitude IS NULL)                 // max latitude
+    AND (place.location.longitude >= $minLongitude OR $minLongitude IS NULL)              // min longitude
+    AND (place.location.longitude <= $maxLongitude OR $maxLongitude IS NULL)              // max longitude
+    AND (distance(place.location, point($radius)) <= $radius.distance OR $radius IS NULL) // radius 
+    AND (ID(place) = $placeId OR $placeId IS NULL)                                        // place id
+    AND (ID(author) = $authorId OR $authorId IS NULL)                                     // author id
+
+    CALL {
+        WITH post
+        OPTIONAL MATCH (:User)-[r:LIKE]->(post)  // match users who liked post
+        RETURN COUNT(r) AS likeCount  // return number
+    }
+    
+    CALL {
+        WITH post
+        OPTIONAL MATCH (:User)-[r:FOLLOW]->(author)  // match users who follow author
+        RETURN COUNT(r) AS followerCount  // return number
+    }
+    
+    CALL {
+        WITH post
+        OPTIONAL MATCH (author)-[r:FOLLOW]->(:User)  // match users who are followed by author
+        RETURN COUNT(r) AS followingCount  // return number
+    }    
+  
+    RETURN COLLECT(post{.*,
+        id: ID(post),
+        likeCount,
+        followerCount,
+        followingCount,
+        author: author{.*,id: ID(author)},
+        place: place{.*, 
+            id: ID(place),
+            latitude: place.location.latitude,  // latitude
+            longitude: place.location.longitude    // longitude
+        }
+    })[$skip..$skip + $take] // limit array 
+    AS posts 
+  `;
+
+  const [result] = await RunCypherQuery({
+    query,
+    params: {
+      // if parameter is undefined set it to null
+      minLatitude: filter?.minLatitude ?? null,
+      maxLatitude: filter?.maxLatitude ?? null,
+      minLongitude: filter?.minLongitude ?? null,
+      maxLongitude: filter?.maxLongitude ?? null,
+      minDate: filter?.minDate ?? null,
+      maxDate: filter?.maxDate ?? null,
+      skip: filter?.skip ?? 0,
+      take: filter?.take ?? 5000,
+      radius: filter?.radius ?? null,
+      loggedId,
+      authorId: filter?.authorId ?? null,
+      placeId: filter?.placeId ?? null,
+    },
+  });
+
+  return result.records[0].get('posts');
+};
+
+export default PlacesQuery;

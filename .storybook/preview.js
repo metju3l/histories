@@ -1,7 +1,8 @@
 import * as NextImage from 'next/image';
 
-const OriginalNextImage = NextImage.default;
+const OriginalNextImage = NextImage.default; // local variable for next image
 
+// replaces next image with a unoptimazed version
 Object.defineProperty(NextImage, 'default', {
   configurable: true,
   value: (props) => <OriginalNextImage {...props} unoptimized />,

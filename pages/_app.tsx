@@ -8,7 +8,7 @@ import { ThemeProvider } from 'next-themes';
 import NextNprogress from 'nextjs-progressbar';
 import React, { createContext } from 'react';
 
-import { useApollo } from '../lib/apollo';
+import { useApollo } from '../lib/utils/apollo';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const apolloClient = useApollo(null);
