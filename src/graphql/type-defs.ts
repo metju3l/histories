@@ -8,9 +8,6 @@ export default gql`
     hello: String!
     user(input: UserInput!): User!
 
-    "Returns post detail information"
-    post(id: Int!): Post!
-
     suggestedUsers: [User]!
     tag(label: String!): TagInfo
     paths: [Path]
@@ -26,6 +23,12 @@ export default gql`
 
     "Returns places with possibility to add filters"
     places(input: PlacesInput): [Place!]!
+
+    "Returns post detail information"
+    post(id: Int!): Post!
+
+    "Returns posts with possibility to add filters"
+    posts(input: PostsInput): [Post!]!
 
     "Returns collection detail information"
     collection(id: Int!): Collection!
@@ -88,6 +91,25 @@ export default gql`
 
   input PlacesInput {
     filter: PlacesFilter
+  }
+
+  input PostsFilter {
+    maxLatitude: Float
+    minLatitude: Float
+    maxLongitude: Float
+    minLongitude: Float
+    minDate: Float
+    maxDate: Float
+    radius: Radius
+    tags: [String]
+    skip: Int
+    take: Int
+    placeId: Int
+    authorId: Int
+  }
+
+  input PostsInput {
+    filter: PostsFilter
   }
 
   input PersonalizedPostsInput {
@@ -183,6 +205,7 @@ export default gql`
     author: UserInfoMinimal!
     likes: [UserInfoMinimal]!
     liked: Boolean!
+    place: Place!
     comments: [Comment]!
   }
 

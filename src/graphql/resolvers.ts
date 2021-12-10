@@ -35,6 +35,7 @@ import {
   GetPaths,
   GetTagInfo,
   Login,
+  PostsQuery,
   SuggestedUsersQuery,
   UserQuery,
 } from '../queries';
@@ -117,6 +118,39 @@ const resolvers = {
       context: contextType
     ) =>
       await FilterPlacesQuery({
+        ...input,
+        loggedId: context.validToken ? context.decoded.id : null,
+      }),
+
+    posts: async (
+      _parent: undefined,
+      {
+        input,
+      }: {
+        input: {
+          filter: {
+            placeId?: number;
+            authorId?: number;
+            maxLatitude: number | null;
+            minLatitude: number | null;
+            maxLongitude: number | null;
+            minLongitude: number | null;
+            minDate: number | null;
+            maxDate: number | null;
+            radius: {
+              latitude: number;
+              longitude: number;
+              distance: number;
+            } | null;
+            tags: string[] | null;
+            skip: number | null;
+            take: number | null;
+          } | null;
+        };
+      },
+      context: contextType
+    ) =>
+      await PostsQuery({
         ...input,
         loggedId: context.validToken ? context.decoded.id : null,
       }),

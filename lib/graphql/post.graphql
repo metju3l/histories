@@ -92,3 +92,26 @@ query post($id: Int!) {
     }
   }
 }
+
+query posts($input: PostsInput) {
+  posts(input: $input) {
+    id
+    url
+    postDate
+    description
+    createdAt
+    author {
+      id
+      username
+      firstName
+      lastName
+    }
+    place {
+      id
+      name
+      description
+      latitude
+      longitude
+    }
+  }
+}

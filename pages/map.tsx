@@ -1,61 +1,27 @@
-import { ApolloQueryResult } from '@apollo/client';
-import { Layout } from '@components/Layout';
-import { TimeLine } from '@components/TimeLine';
-import { PlacesQuery, usePlacesQuery } from '@graphql/geo.graphql';
+import { Loading } from '@components/Loading';
+import MapGL, { Viewport } from '@components/Map/MapWindow';
+import { usePlacesQuery } from '@graphql/geo.graphql';
+import { usePostsQuery } from '@graphql/post.graphql';
 import Image from 'next/image';
-import { NextRouter, useRouter } from 'next/router';
-import React, { useRef, useState } from 'react';
-import ReactMapGL, { ExtraState, MapRef, Marker } from 'react-map-gl';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
-const ArrowIcon = (args: any) => (
-  <svg
-    {...args}
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M15 19l-7-7 7-7"
-    />
-  </svg>
-);
-
-type Viewport = {
-  latitude: number;
-  longitude: number;
-  zoom: number;
-};
-
-type Bounds = {
-  maxLatitude: number;
-  minLatitude: number;
-  maxLongitude: number;
-  minLongitude: number;
-};
-
-function PropsToUrl({
-  pathname,
-  router,
-  query,
-}: {
-  pathname: string;
-  router: NextRouter;
-  query: any;
-}): void {
-  router.replace({
-    pathname,
-    query,
-  });
-}
+import ArrowIcon from '../components/Icons/ArrowIcon';
+import { Layout } from '../components/Layout';
+import SubNav from '../components/Map/SubNav';
+import { TimeLine } from '../components/TimeLine';
 
 const Map: React.FC = () => {
   const router = useRouter();
 
   const { data, loading, error, refetch } = usePlacesQuery({
+    variables: {
+      input: {
+        filter: { take: 1 },
+      },
+    },
+  });
+  const postsQuery = usePostsQuery({
     variables: {
       input: {
         filter: { take: 1 },
@@ -114,38 +80,50 @@ const Map: React.FC = () => {
               style={{ height: 'calc(100vh - 123px)' }}
             >
               {sidebarPlace === null ? (
-                data?.places.map(
-                  (place) =>
-                    place.preview && (
-                      <MapPostCard
-                        place={place}
-                        setSidebarPlace={setSidebarPlace}
-                      />
-                    )
+                whatToShow === 'photos' ? (
+                  postsQuery.data?.posts.map((post) => {
+                    return (
+                      <div
+                        key={post.id}
+                        className="flex flex-col w-full h-64 bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-sm"
+                      >
+                        {post.url && (
+                          <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
+                            <Image
+                              src={post.url[0]}
+                              layout="fill"
+                              objectFit="cover"
+                              objectPosition="center"
+                              className="rounded-t-lg"
+                              alt="Profile picture"
+                            />
+                          </div>
+                        )}
+                        <div className="px-4 py-2">
+                          <h3
+                            className="text-gray-600"
+                            style={{ fontSize: '12px' }}
+                          >
+                            {post?.description?.substring(0, 35)}...
+                          </h3>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  data?.places.map(
+                    (place) =>
+                      place.preview && (
+                        <MapPostCard
+                          // @ts-ignore
+                          place={place}
+                          setSidebarPlace={setSidebarPlace}
+                        />
+                      )
+                  )
                 )
               ) : (
-                <div className="w-full">
-                  <div className="text-center">
-                    <div className="relative w-full rounded-lg cursor-pointer h-[20vh] bg-secondary">
-                      {sidebarPlace.preview && (
-                        <Image
-                          src={sidebarPlace.preview[0]}
-                          layout="fill"
-                          objectFit="cover"
-                          objectPosition="center"
-                          className="rounded-lg"
-                          alt="Profile picture"
-                        />
-                      )}
-                      <div className="absolute bottom-0 left-0 z-20 w-full h-full text-left rounded-lg bg-gradient-to-t from-[#000000ee] via-transparent to-transparent">
-                        <h1 className="absolute text-white bottom-3 left-3">
-                          {sidebarPlace.name ?? 'Place detail'}
-                        </h1>
-                      </div>
-                    </div>
-                    <p className="pt-4 text-left">{sidebarPlace.description}</p>
-                  </div>
-                </div>
+                <PlaceDetail sidebarPlace={sidebarPlace} />
               )}
             </div>
           </div>
@@ -170,6 +148,7 @@ const Map: React.FC = () => {
               setViewport={setMapViewport}
               data={data}
               refetch={refetch}
+              postsRefetch={postsQuery.refetch}
               setSidebar={setSidebarPlace}
               sidebar={sidebarPlace}
             />
@@ -177,81 +156,6 @@ const Map: React.FC = () => {
         </section>
       </div>
     </Layout>
-  );
-};
-
-const SubNav: React.FC<{
-  setWhatToShow: React.Dispatch<React.SetStateAction<string | null>>;
-  setSidebarPlace: React.Dispatch<
-    React.SetStateAction<{
-      id: number;
-      name?: string | null | undefined;
-      longitude: number;
-      latitude: number;
-      icon?: string | null | undefined;
-      preview?: string[] | null | undefined;
-    } | null>
-  >;
-  sidebarPlace: {
-    id: number;
-    name?: string | null | undefined;
-    longitude: number;
-    latitude: number;
-    icon?: string | null | undefined;
-    preview?: string[] | null | undefined;
-  } | null;
-  whatToShow: string | null;
-  setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({
-  sidebarPlace,
-  setSidebarPlace,
-  whatToShow,
-  setWhatToShow,
-  setShowSidebar,
-}) => {
-  return (
-    <div className="flex items-center justify-between w-full px-4 py-4 bg-white border-b border-gray-200 shadow-sm">
-      <span className="w-8" />
-
-      <div className="flex gap-2">
-        {sidebarPlace ? (
-          <>
-            <button onClick={() => setSidebarPlace(null)}>
-              <ArrowIcon className="w-8 h-8 py-1 text-gray-500 border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl" />
-            </button>
-            <div className="px-4 py-1 text-gray-600 border border-gray-200 min-w-24 rounded-xl">
-              Place detail
-            </div>
-          </>
-        ) : (
-          <>
-            <button
-              className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
-                whatToShow !== 'photos'
-                  ? 'text-black border-gray-400'
-                  : 'text-gray-500'
-              } rounded-xl`}
-              onClick={() => setWhatToShow('places')}
-            >
-              Places
-            </button>
-            <button
-              className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
-                whatToShow === 'photos'
-                  ? 'text-black border-gray-400'
-                  : 'text-gray-500'
-              } rounded-xl`}
-              onClick={() => setWhatToShow('photos')}
-            >
-              Photos
-            </button>
-          </>
-        )}
-      </div>
-      <button onClick={() => setShowSidebar(false)}>
-        <ArrowIcon className="w-8 h-8 py-1 text-gray-500 border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl" />
-      </button>
-    </div>
   );
 };
 
@@ -263,6 +167,7 @@ const MapPostCard: React.FC<{
     latitude: number;
     icon?: string | null;
     preview?: string[] | null;
+    description?: string;
   };
   setSidebarPlace: React.Dispatch<
     React.SetStateAction<{
@@ -295,131 +200,100 @@ const MapPostCard: React.FC<{
       <div className="px-4 py-2">
         <h2 className="text-lg font-medium">{place.name}</h2>
         <h3 className="text-gray-600" style={{ fontSize: '12px' }}>
-          {place.id} Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Odio unde
+          {place.description?.substring(0, 35)}...
         </h3>
       </div>
     </div>
   );
 };
 
-const PlaceDetail = () => {};
-
-function ConvertBounds(bounds: {
-  _ne: { lat: number; lng: number };
-  _sw: { lat: number; lng: number };
-}): Bounds {
-  return {
-    maxLatitude: bounds._ne.lat,
-    minLatitude: bounds._sw.lat,
-    maxLongitude: bounds._ne.lng,
-    minLongitude: bounds._sw.lng,
-  };
-}
-
-type MapGLProps = {
-  viewport: Viewport;
-  setViewport: React.Dispatch<React.SetStateAction<Viewport>>;
-  setSidebar: React.Dispatch<
-    React.SetStateAction<{
-      id: number;
-      name?: string | null | undefined;
-      longitude: number;
-      latitude: number;
-      icon?: string | null | undefined;
-      preview?: string[] | null | undefined;
-    } | null>
-  >;
-  data: PlacesQuery | undefined;
-  refetch: (args: any) => Promise<ApolloQueryResult<PlacesQuery>>;
-  sidebar: {
+const PlaceDetail: React.FC<{
+  sidebarPlace: {
     id: number;
     name?: string | null | undefined;
     longitude: number;
     latitude: number;
     icon?: string | null | undefined;
     preview?: string[] | null | undefined;
-  } | null;
-};
-
-const MapGL: React.FC<MapGLProps> = ({
-  viewport,
-  setViewport,
-  data,
-  refetch,
-  setSidebar,
-  sidebar,
-}) => {
-  const mapRef = useRef<MapRef | null>(null);
+    description?: string;
+  };
+}> = ({ sidebarPlace }) => {
+  const { data, loading, error } = usePostsQuery({
+    variables: {
+      input: {
+        filter: {
+          placeId: sidebarPlace.id,
+        },
+      },
+    },
+  });
 
   return (
-    <ReactMapGL
-      {...viewport}
-      width="100%"
-      height="100%"
-      onViewportChange={(viewport: any) => setViewport(viewport)}
-      className="rounded-lg"
-      mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
-      mapStyle="mapbox://styles/mapbox/streets-v11" // MAPBOX STYLE
-      ref={(instance) => (mapRef.current = instance)}
-      onLoad={async () => {
-        // if map is rendered get bounds and refetch
-        if (mapRef.current)
-          await refetch(
-            // get bounds of map
-            ConvertBounds(mapRef.current.getMap().getBounds())
-          );
-      }}
-      onInteractionStateChange={async (state: ExtraState) => {
-        // when map state changes (dragging, zooming, rotating, etc.)
-        if (!state.isDragging && mapRef.current) {
-          // refetch data
-          await refetch({
-            input: {
-              filter:
-                // get bounds of map
-                ConvertBounds(mapRef.current.getMap().getBounds()),
-            },
-          });
-        }
-      }}
-    >
-      {data?.places
-        .filter((place) => place.preview || place.icon)
-        .map((place) => {
-          return (
-            <Marker
-              key={place.id}
-              latitude={place.latitude}
-              longitude={place.longitude}
-            >
-              <div
-                onClick={() => setSidebar(place)}
-                className="cursor-pointer -translate-y-1/2 -translate-x-1/2"
-              >
-                {place.icon ? (
-                  <Image
-                    src={place.icon}
-                    width={90}
-                    height={90}
-                    objectFit="contain"
-                    alt="Picture on map"
-                  />
-                ) : (
-                  <Image
-                    // @ts-ignore
-                    src={place.preview[0]}
-                    width={60}
-                    height={60}
-                    className="object-cover rounded-full"
-                    alt="Picture on map"
-                  />
-                )}
-              </div>
-            </Marker>
-          );
-        })}
-    </ReactMapGL>
+    <div className="w-full">
+      <div className="text-center">
+        <div className="relative w-full rounded-lg cursor-pointer h-52 md:h-72 bg-secondary">
+          {sidebarPlace.preview && (
+            <Image
+              src={sidebarPlace.preview[0]}
+              layout="fill"
+              objectFit="cover"
+              objectPosition="center"
+              className="bg-gray-100 rounded-lg"
+              alt="Profile picture"
+            />
+          )}
+
+          <div className="absolute bottom-0 left-0 z-20 w-full h-full text-left rounded-lg bg-gradient-to-t from-[#000000ee] via-transparent to-transparent">
+            <h1 className="absolute text-white bottom-3 left-3">
+              {sidebarPlace.name ?? 'Place detail'}
+            </h1>
+          </div>
+        </div>
+
+        <p className="pt-4 text-left">{sidebarPlace.description}</p>
+
+        {loading ? (
+          <div className="w-full pt-24 flex justify-around">
+            <Loading color="#000000" size="xl" />
+          </div>
+        ) : error ? (
+          <div>error</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {data?.posts.map((post) => {
+              return (
+                <div
+                  key={post.id}
+                  className="flex flex-col w-full h-64 text-left bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-sm"
+                >
+                  {post.url && (
+                    <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
+                      <Image
+                        src={post.url[0]}
+                        layout="fill"
+                        objectFit="cover"
+                        objectPosition="center"
+                        className="rounded-t-lg"
+                        alt=""
+                        quality={60}
+                      />
+                    </div>
+                  )}
+                  <div className="px-4 py-2">
+                    <h2 className="text-lg font-medium">
+                      {post.author.firstName} {post.author.lastName}
+                    </h2>
+                    <h3 className="text-gray-600" style={{ fontSize: '12px' }}>
+                      {post.description}
+                    </h3>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
