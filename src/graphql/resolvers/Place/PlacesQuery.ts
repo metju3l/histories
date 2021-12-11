@@ -55,7 +55,7 @@ const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
   }
   
   // return places as an array of objects
-  RETURN COLLECT(place{.*,
+  WITH place{.*,
       id: ID(place),
       latitude: place.location.latitude,  // latitude
       longitude: place.location.longitude,    // longitude
@@ -76,8 +76,12 @@ const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
               // else if place has post with photos, return photos as preview otherwise return null
               ELSE post.url
           END
-  })[$skip..$skip + $take] // limit array 
-  AS places
+  } AS placeObj
+  ORDER BY placeObj.id ASC
+  SKIP $skip
+  LIMIT $take
+
+  RETURN COLLECT(placeObj) AS places
   `;
 
   const [result] = await RunCypherQuery({

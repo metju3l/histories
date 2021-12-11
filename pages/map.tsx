@@ -31,6 +31,7 @@ const Map: React.FC = () => {
 
   const [whatToShow, setWhatToShow] = useState<string | null>(null);
   const [showSidebar, setShowSidebar] = useState(true);
+  const [sortBy, setSortBy] = useState('Hot');
   const [timeLimitation, setTimeLimitation] = useState<[number, number]>([
     1000,
     new Date().getTime(),
@@ -70,6 +71,8 @@ const Map: React.FC = () => {
               whatToShow={whatToShow}
               setWhatToShow={setWhatToShow}
               setShowSidebar={setShowSidebar}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
             />
             <div
               className={`p-4 pt-8 overflow-y-auto text-black bg-white ${
@@ -81,7 +84,7 @@ const Map: React.FC = () => {
             >
               {sidebarPlace === null ? (
                 whatToShow === 'photos' ? (
-                  postsQuery.data?.posts.map((post) => {
+                  postsQuery.data?.posts.map((post: any) => {
                     return (
                       <div
                         key={post.id}
