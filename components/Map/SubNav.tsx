@@ -1,7 +1,7 @@
-import { Menu } from '@headlessui/react';
-import { FireIcon, TrendingUpIcon } from '@heroicons/react/Outline';
-import { ChevronLeftIcon } from '@heroicons/react/Solid';
-import React from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import { FireIcon, TrendingUpIcon } from '@heroicons/react/outline';
+import { ChevronLeftIcon } from '@heroicons/react/solid';
+import React, { Fragment } from 'react';
 
 import ArrowIcon from '../Icons/ArrowIcon';
 
@@ -28,7 +28,6 @@ type SubNavProps = {
   sortBy: string;
   setSortBy: React.Dispatch<React.SetStateAction<string>>;
   whatToShow: string | null;
-  setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const SortByDropdown: React.FC<{
@@ -55,24 +54,34 @@ const SortByDropdown: React.FC<{
       <Menu.Button className="flex items-center px-4 py-1 text-gray-500 border border-gray-200 min-w-24 hover:text-black hover:border-gray-400 rounded-xl">
         Sort by: {sortBy}
       </Menu.Button>
-      <Menu.Items
-        as="div"
-        className="absolute left-0 z-50 flex flex-col w-full text-gray-500 bg-white border border-gray-200 shadow-md top-10 min-w-24 rounded-xl divide-y"
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
       >
-        <SortByItem
-          name="Newest"
-          icon={<ChevronLeftIcon className="w-5 h-5 mr-1 rotate-90" />}
-        />
-        <SortByItem
-          name="Oldest"
-          icon={<ChevronLeftIcon className="w-5 h-5 mr-1 -rotate-90" />}
-        />
-        <SortByItem name="Hot" icon={<FireIcon className="w-5 h-5 mr-1" />} />
-        <SortByItem
-          name="Trending"
-          icon={<TrendingUpIcon className="w-5 h-5 mr-1" />}
-        />
-      </Menu.Items>
+        <Menu.Items
+          as="div"
+          className="absolute left-0 z-50 flex flex-col w-full text-gray-500 bg-white border border-gray-200 shadow-md top-10 min-w-24 rounded-xl divide-y"
+        >
+          <SortByItem
+            name="Newest"
+            icon={<ChevronLeftIcon className="w-5 h-5 mr-1 rotate-90" />}
+          />
+          <SortByItem
+            name="Oldest"
+            icon={<ChevronLeftIcon className="w-5 h-5 mr-1 -rotate-90" />}
+          />
+          <SortByItem name="Hot" icon={<FireIcon className="w-5 h-5 mr-1" />} />
+          <SortByItem
+            name="Trending"
+            icon={<TrendingUpIcon className="w-5 h-5 mr-1" />}
+          />
+        </Menu.Items>
+      </Transition>
     </Menu>
   );
 };
@@ -82,7 +91,6 @@ const SubNav: React.FC<SubNavProps> = ({
   setSidebarPlace,
   whatToShow,
   setWhatToShow,
-  setShowSidebar,
   sortBy,
   setSortBy,
 }) => {
@@ -124,9 +132,7 @@ const SubNav: React.FC<SubNavProps> = ({
           </>
         )}
       </div>
-      <button onClick={() => setShowSidebar(false)}>
-        <ArrowIcon className="w-8 h-8 py-1 text-gray-500 border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl" />
-      </button>
+      <span />
     </div>
   );
 };

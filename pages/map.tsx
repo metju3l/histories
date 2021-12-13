@@ -2,6 +2,7 @@ import { Loading } from '@components/Loading';
 import MapGL, { Viewport } from '@components/Map/MapWindow';
 import { usePlacesQuery } from '@graphql/geo.graphql';
 import { usePostsQuery } from '@graphql/post.graphql';
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -57,106 +58,133 @@ const Map: React.FC = () => {
   return (
     <Layout title="map | hiStories">
       <div className="w-full">
-        <section
-          className="w-full grid"
-          style={{
-            gridTemplateColumns: showSidebar ? '6fr 4fr' : '0 auto',
-            height: 'calc(100vh - 56px)',
-          }}
-        >
-          <div id="leftcol" className="h-full">
-            <SubNav
-              sidebarPlace={sidebarPlace}
-              setSidebarPlace={setSidebarPlace}
-              whatToShow={whatToShow}
-              setWhatToShow={setWhatToShow}
-              setShowSidebar={setShowSidebar}
-              sortBy={sortBy}
-              setSortBy={setSortBy}
-            />
-            <div
-              className={`p-4 pt-8 overflow-y-auto text-black bg-white ${
-                sidebarPlace
-                  ? ''
-                  : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
-              }`}
-              style={{ height: 'calc(100vh - 123px)' }}
-            >
-              {sidebarPlace === null ? (
-                whatToShow === 'photos' ? (
-                  postsQuery.data?.posts.map((post: any) => {
-                    return (
-                      <div
-                        key={post.id}
-                        className="flex flex-col w-full h-64 bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-sm"
-                      >
-                        {post.url && (
-                          <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
-                            <Image
-                              src={post.url[0]}
-                              layout="fill"
-                              objectFit="cover"
-                              objectPosition="center"
-                              className="rounded-t-lg"
-                              alt="Profile picture"
-                            />
-                          </div>
-                        )}
-                        <div className="px-4 py-2">
-                          <h3
-                            className="text-gray-600"
-                            style={{ fontSize: '12px' }}
-                          >
-                            {post?.description?.substring(0, 35)}...
-                          </h3>
-                        </div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  data?.places.map(
-                    (place) =>
-                      place.preview && (
-                        <MapPostCard
-                          // @ts-ignore
-                          place={place}
-                          setSidebarPlace={setSidebarPlace}
-                        />
+        <AnimatePresence>
+          <motion.section
+            className="w-full grid"
+            initial={{
+              gridTemplateColumns: '3fr 2fr',
+            }}
+            animate={{
+              gridTemplateColumns: showSidebar ? '3fr 2fr' : '0fr 1fr',
+            }}
+            transition={{
+              delay: !showSidebar ? 0 : 0.5,
+              duration: 0.25,
+              ease: 'easeInOut',
+            }}
+            style={{
+              height: 'calc(100vh - 56px)',
+            }}
+          >
+            <div id="leftcol" className="h-full relative">
+              {showSidebar && (
+                <motion.div
+                  initial={{ opacity: 0, display: 'none' }}
+                  animate={{ opacity: 1, display: 'block' }}
+                  exit={{ opacity: 0, display: 'none' }}
+                  transition={{
+                    delay: showSidebar ? 1 : 0,
+                    duration: 0.2,
+                    ease: 'easeInOut',
+                  }}
+                >
+                  <SubNav
+                    sidebarPlace={sidebarPlace}
+                    setSidebarPlace={setSidebarPlace}
+                    whatToShow={whatToShow}
+                    setWhatToShow={setWhatToShow}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                  />
+                  <div
+                    className={`p-4 pt-8 overflow-y-auto text-black bg-white ${
+                      sidebarPlace
+                        ? ''
+                        : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
+                    }`}
+                    style={{ height: 'calc(100vh - 123px)' }}
+                  >
+                    {sidebarPlace === null ? (
+                      whatToShow === 'photos' ? (
+                        postsQuery.data?.posts.map((post: any) => {
+                          return (
+                            <div
+                              key={post.id}
+                              className="flex flex-col w-full h-64 bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-sm"
+                            >
+                              {post.url && (
+                                <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
+                                  <Image
+                                    src={post.url[0]}
+                                    layout="fill"
+                                    objectFit="cover"
+                                    objectPosition="center"
+                                    className="rounded-t-lg"
+                                    alt="Profile picture"
+                                  />
+                                </div>
+                              )}
+                              <div className="px-4 py-2">
+                                <h3
+                                  className="text-gray-600"
+                                  style={{ fontSize: '12px' }}
+                                >
+                                  {post?.description?.substring(0, 35)}...
+                                </h3>
+                              </div>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        data?.places.map(
+                          (place) =>
+                            place.preview && (
+                              <MapPostCard
+                                // @ts-ignore
+                                place={place}
+                                setSidebarPlace={setSidebarPlace}
+                              />
+                            )
+                        )
                       )
-                  )
-                )
-              ) : (
-                <PlaceDetail sidebarPlace={sidebarPlace} />
+                    ) : (
+                      <PlaceDetail sidebarPlace={sidebarPlace} />
+                    )}
+                  </div>
+                </motion.div>
               )}
             </div>
-          </div>
 
-          <div className="relative w-full p-2 bg-white col-span-1">
-            {!showSidebar && (
+            <div className="relative w-full p-2 bg-white col-span-1">
               <button
-                onClick={() => setShowSidebar(true)}
-                className="absolute z-50 top-4 left-4"
+                onClick={() => setShowSidebar(!showSidebar)}
+                className="absolute z-50 top-4 left-4 text-gray-500 bg-white border border-gray-200 py-1 hover:text-black flex items-center h-8 hover:border-gray-400 rounded-xl"
               >
-                <ArrowIcon className="w-8 h-8 py-1 text-gray-500 bg-white border border-gray-200 rotate-180 hover:text-black hover:border-gray-400 rounded-xl" />
+                <motion.span
+                  animate={{ rotate: showSidebar ? '0deg' : '180deg' }}
+                  transition={{ delay: 0.3, duration: 0.2, ease: 'easeInOut' }}
+                >
+                  <ArrowIcon className={'w-8 py-1 h-8'} />
+                </motion.span>
               </button>
-            )}
-            <div className="absolute right-0 z-20 px-8 pt-2 w-[28vw]">
-              <TimeLine
-                domain={[1000, new Date().getFullYear()]}
-                setTimeLimitation={setTimeLimitation}
+              <div className="absolute right-0 z-20 px-8 pt-2 w-[28vw]">
+                <TimeLine
+                  domain={[1000, new Date().getFullYear()]}
+                  setTimeLimitation={setTimeLimitation}
+                />
+              </div>
+              <MapGL
+                viewport={mapViewport}
+                setViewport={setMapViewport}
+                data={data}
+                refetch={refetch}
+                postsRefetch={postsQuery.refetch}
+                setSidebar={setSidebarPlace}
+                sidebar={sidebarPlace}
               />
             </div>
-            <MapGL
-              viewport={mapViewport}
-              setViewport={setMapViewport}
-              data={data}
-              refetch={refetch}
-              postsRefetch={postsQuery.refetch}
-              setSidebar={setSidebarPlace}
-              sidebar={sidebarPlace}
-            />
-          </div>
-        </section>
+          </motion.section>
+        </AnimatePresence>
       </div>
     </Layout>
   );
