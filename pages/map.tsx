@@ -62,10 +62,10 @@ const Map: React.FC = () => {
           <motion.section
             className="w-full grid"
             initial={{
-              gridTemplateColumns: '3fr 2fr',
+              gridTemplateColumns: '1fr 1fr',
             }}
             animate={{
-              gridTemplateColumns: showSidebar ? '3fr 2fr' : '0fr 1fr',
+              gridTemplateColumns: showSidebar ? '1fr 1fr' : '1fr 0fr',
             }}
             transition={{
               delay: !showSidebar ? 0 : 0.5,
@@ -76,6 +76,34 @@ const Map: React.FC = () => {
               height: 'calc(100vh - 56px)',
             }}
           >
+            <div className="relative w-full p-2 bg-white col-span-1">
+              <button
+                onClick={() => setShowSidebar(!showSidebar)}
+                className="absolute z-50 top-4 right-4 text-gray-500 bg-white border border-gray-200 py-1 hover:text-black flex items-center h-8 hover:border-gray-400 rounded-xl"
+              >
+                <motion.span
+                  animate={{ rotate: showSidebar ? '180deg' : '0deg' }}
+                  transition={{ delay: 0.3, duration: 0.2, ease: 'easeInOut' }}
+                >
+                  <ArrowIcon className={'w-8 py-1 h-8'} />
+                </motion.span>
+              </button>
+              <div className="absolute right-0 z-20 px-8 pt-2 w-[28vw]">
+                <TimeLine
+                  domain={[1000, new Date().getFullYear()]}
+                  setTimeLimitation={setTimeLimitation}
+                />
+              </div>
+              <MapGL
+                viewport={mapViewport}
+                setViewport={setMapViewport}
+                data={data}
+                refetch={refetch}
+                postsRefetch={postsQuery.refetch}
+                setSidebar={setSidebarPlace}
+                sidebar={sidebarPlace}
+              />
+            </div>
             <div id="leftcol" className="h-full relative">
               {showSidebar && (
                 <motion.div
@@ -153,35 +181,6 @@ const Map: React.FC = () => {
                   </div>
                 </motion.div>
               )}
-            </div>
-
-            <div className="relative w-full p-2 bg-white col-span-1">
-              <button
-                onClick={() => setShowSidebar(!showSidebar)}
-                className="absolute z-50 top-4 left-4 text-gray-500 bg-white border border-gray-200 py-1 hover:text-black flex items-center h-8 hover:border-gray-400 rounded-xl"
-              >
-                <motion.span
-                  animate={{ rotate: showSidebar ? '0deg' : '180deg' }}
-                  transition={{ delay: 0.3, duration: 0.2, ease: 'easeInOut' }}
-                >
-                  <ArrowIcon className={'w-8 py-1 h-8'} />
-                </motion.span>
-              </button>
-              <div className="absolute right-0 z-20 px-8 pt-2 w-[28vw]">
-                <TimeLine
-                  domain={[1000, new Date().getFullYear()]}
-                  setTimeLimitation={setTimeLimitation}
-                />
-              </div>
-              <MapGL
-                viewport={mapViewport}
-                setViewport={setMapViewport}
-                data={data}
-                refetch={refetch}
-                postsRefetch={postsQuery.refetch}
-                setSidebar={setSidebarPlace}
-                sidebar={sidebarPlace}
-              />
             </div>
           </motion.section>
         </AnimatePresence>
