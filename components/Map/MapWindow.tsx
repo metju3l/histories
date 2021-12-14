@@ -78,32 +78,32 @@ const MapGL: React.FC<MapGLProps> = ({
       ref={(instance) => (mapRef.current = instance)}
       onLoad={async () => {
         // if map is rendered get bounds and refetch
-        if (mapRef.current)
-          await refetch(
+        if (mapRef.current) {
+        }
+        /*  await refetch(
             // get bounds of map
             ConvertBounds(mapRef.current.getMap().getBounds())
-          );
+          );*/
       }}
       onInteractionStateChange={async (state: ExtraState) => {
         // when map state changes (dragging, zooming, rotating, etc.)
         if (!state.isDragging && mapRef.current) {
-          try {
-            // refetch data
-            await refetch({
+          // refetch data
+          await refetch({
+            input: {
+              filter:
+                // get bounds of map
+                ConvertBounds(mapRef.current.getMap().getBounds()),
+            },
+          });
+          /* await postsRefetch({
               input: {
                 filter:
                   // get bounds of map
                   ConvertBounds(mapRef.current.getMap().getBounds()),
               },
             });
-            await postsRefetch({
-              input: {
-                filter:
-                  // get bounds of map
-                  ConvertBounds(mapRef.current.getMap().getBounds()),
-              },
-            });
-          } catch (error) {}
+            */
         }
       }}
     >
