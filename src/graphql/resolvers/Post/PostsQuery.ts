@@ -1,4 +1,5 @@
 import RunCypherQuery from '../../../database/RunCypherQuery';
+import neo4j from 'neo4j-driver';
 
 type queryInput = {
   filter: {
@@ -76,8 +77,8 @@ const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
       maxLongitude: filter?.maxLongitude ?? null,
       minDate: filter?.minDate ?? null,
       maxDate: filter?.maxDate ?? null,
-      skip: filter?.skip ?? 0,
-      take: filter?.take ?? 5000,
+      skip: neo4j.int(filter?.skip ?? 0),
+      take: neo4j.int(filter?.take ?? 5000),
       radius: filter?.radius ?? null,
       loggedId,
       authorId: filter?.authorId ?? null,
