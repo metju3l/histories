@@ -1,27 +1,14 @@
-import RunCypherQuery from '../../../database/RunCypherQuery';
 import neo4j from 'neo4j-driver';
 
-type queryInput = {
-  filter: {
-    maxLatitude: number | null;
-    minLatitude: number | null;
-    maxLongitude: number | null;
-    minLongitude: number | null;
-    minDate: number | null;
-    maxDate: number | null;
-    radius: {
-      latitude: number;
-      longitude: number;
-      distance: number;
-    } | null;
-    tags: string[] | null;
-    skip: number | null;
-    take: number | null;
-  } | null;
-  loggedId: number | null;
+import { Maybe, PlacesFilter } from '../../../../.cache/__types__';
+import RunCypherQuery from '../../../database/RunCypherQuery';
+
+type PlacesQueryInput = {
+  filter?: Maybe<PlacesFilter>;
+  loggedId: Maybe<number>;
 };
 
-const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
+const PlacesQuery = async ({ filter, loggedId }: PlacesQueryInput) => {
   const query = `
   MATCH (place:Place)
   WHERE (place.location.latitude >= $minLatitude OR $minLatitude IS NULL)                 // min latitude
@@ -29,6 +16,7 @@ const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
     AND (place.location.longitude >= $minLongitude OR $minLongitude IS NULL)              // min longitude
     AND (place.location.longitude <= $maxLongitude OR $maxLongitude IS NULL)              // max longitude
     AND (distance(place.location, point($radius)) <= $radius.distance OR $radius IS NULL) // radius 
+    AND NOT ID(place) IN $exclude                                                         // object id is not in exclude
 
   // return most liked post from place which has photos
   CALL {
@@ -97,6 +85,7 @@ const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
       maxDate: filter?.maxDate ?? null,
       skip: neo4j.int(filter?.skip ?? 0),
       take: neo4j.int(filter?.take ?? 5000),
+      exclude: filter?.exclude ? filter.exclude.map((id) => neo4j.int(id)) : [],
       radius: filter?.radius ?? null,
       loggedId,
     },

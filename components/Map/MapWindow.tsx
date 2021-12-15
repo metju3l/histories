@@ -1,8 +1,9 @@
-import { ApolloQueryResult } from '@apollo/client';
 import { PlacesQuery } from '@graphql/geo.graphql';
 import Image from 'next/image';
 import React, { useRef } from 'react';
 import ReactMapGL, { ExtraState, MapRef, Marker } from 'react-map-gl';
+
+import { Maybe } from '../../.cache/__types__';
 
 export type Bounds = {
   maxLatitude: number;
@@ -35,34 +36,34 @@ type MapGLProps = {
   setSidebar: React.Dispatch<
     React.SetStateAction<{
       id: number;
-      name?: string | null | undefined;
+      name?: string | null;
       longitude: number;
       latitude: number;
-      icon?: string | null | undefined;
-      preview?: string[] | null | undefined;
+      icon?: string | null;
+      preview?: string[] | null;
+      description?: string;
     } | null>
   >;
   data: PlacesQuery | undefined;
-  refetch: (args: any) => Promise<ApolloQueryResult<PlacesQuery>>;
-  postsRefetch: any;
-  sidebar: {
+  sidebar: Maybe<{
     id: number;
-    name?: string | null | undefined;
+    name?: string | null;
     longitude: number;
     latitude: number;
-    icon?: string | null | undefined;
-    preview?: string[] | null | undefined;
-  } | null;
+    icon?: string | null;
+    preview?: string[] | null;
+    description?: string;
+  } | null>;
+  onMove?: (bounds: Bounds) => void;
 };
 
 const MapGL: React.FC<MapGLProps> = ({
   viewport,
   setViewport,
   data,
-  refetch,
   setSidebar,
-  postsRefetch,
   sidebar,
+  onMove,
 }) => {
   const mapRef = useRef<MapRef | null>(null);
 
@@ -78,30 +79,16 @@ const MapGL: React.FC<MapGLProps> = ({
       ref={(instance) => (mapRef.current = instance)}
       onLoad={async () => {
         // if map is rendered get bounds and refetch
-        if (mapRef.current)
-          await refetch(
-            // get bounds of map
-            ConvertBounds(mapRef.current.getMap().getBounds())
-          );
+        if (mapRef.current) {
+          const bounds = ConvertBounds(mapRef.current.getMap().getBounds());
+          if (onMove !== undefined) await onMove(bounds);
+        }
       }}
       onInteractionStateChange={async (state: ExtraState) => {
         // when map state changes (dragging, zooming, rotating, etc.)
         if (!state.isDragging && mapRef.current) {
-          // refetch data
-          await refetch({
-            input: {
-              filter:
-                // get bounds of map
-                ConvertBounds(mapRef.current.getMap().getBounds()),
-            },
-          });
-          await postsRefetch({
-            input: {
-              filter:
-                // get bounds of map
-                ConvertBounds(mapRef.current.getMap().getBounds()),
-            },
-          });
+          const bounds = ConvertBounds(mapRef.current.getMap().getBounds());
+          if (onMove !== undefined) await onMove(bounds);
         }
       }}
     >
@@ -115,6 +102,7 @@ const MapGL: React.FC<MapGLProps> = ({
               longitude={place.longitude}
             >
               <div
+                // @ts-ignore
                 onClick={() => setSidebar(place)}
                 className="cursor-pointer -translate-y-1/2 -translate-x-1/2"
               >

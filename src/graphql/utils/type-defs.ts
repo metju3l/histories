@@ -63,19 +63,6 @@ export default gql`
     distance: Float
   }
 
-  type PlacesFilter {
-    maxLatitude: Float
-    minLatitude: Float
-    maxLongitude: Float
-    minLongitude: Float
-    minDate: Float
-    maxDate: Float
-    radius: Radius
-    tags: [String]
-    skip: Int
-    take: Int
-  }
-
   input PlacesFilter {
     maxLatitude: Float
     minLatitude: Float
@@ -87,6 +74,7 @@ export default gql`
     tags: [String]
     skip: Int
     take: Int
+    exclude: [Int!]
   }
 
   input PlacesInput {

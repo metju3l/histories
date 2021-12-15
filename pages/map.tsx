@@ -14,14 +14,20 @@ import { TimeLine } from '../components/TimeLine';
 
 const Map: React.FC = () => {
   const router = useRouter();
-
-  const { data, loading, error, refetch } = usePlacesQuery({
+  const [bounds1, setBounds1] = useState({
+    minLatitude: 0,
+    maxLatitude: 0,
+    minLongitude: 0,
+    maxLongitude: 0,
+  });
+  const { data, loading, error, fetchMore } = usePlacesQuery({
     variables: {
       input: {
         filter: { take: 1 },
       },
     },
   });
+
   const postsQuery = usePostsQuery({
     variables: {
       input: {
@@ -79,7 +85,7 @@ const Map: React.FC = () => {
             <div className="relative w-full p-2 bg-white col-span-1">
               <button
                 onClick={() => setShowSidebar(!showSidebar)}
-                className="absolute z-50 top-4 right-4 text-gray-500 bg-white border border-gray-200 py-1 hover:text-black flex items-center h-8 hover:border-gray-400 rounded-xl"
+                className="absolute z-50 flex items-center h-8 py-1 text-gray-500 bg-white border border-gray-200 top-4 right-4 hover:text-black hover:border-gray-400 rounded-xl"
               >
                 <motion.span
                   animate={{ rotate: showSidebar ? '180deg' : '0deg' }}
@@ -98,13 +104,46 @@ const Map: React.FC = () => {
                 viewport={mapViewport}
                 setViewport={setMapViewport}
                 data={data}
-                refetch={refetch}
-                postsRefetch={postsQuery.refetch}
                 setSidebar={setSidebarPlace}
                 sidebar={sidebarPlace}
+                onMove={async (bounds) => {
+                  setBounds1(bounds);
+                  // fetch more data when map view changes
+                  if (whatToShow === 'photos')
+                    await postsQuery.refetch({
+                      input: {
+                        filter: {
+                          ...bounds,
+                        },
+                      },
+                    });
+                  else
+                    await fetchMore({
+                      variables: {
+                        input: {
+                          filter: {
+                            ...bounds,
+                            exclude: data?.places
+                              ? data.places.map((place) => place.id)
+                              : [],
+                          },
+                        },
+                      },
+                      updateQuery: (previousResult, { fetchMoreResult }) => {
+                        return {
+                          ...previousResult,
+                          // Add the new matches data to the end of the old matches data.
+                          places: [
+                            ...previousResult.places,
+                            ...(fetchMoreResult?.places ?? []),
+                          ],
+                        };
+                      },
+                    });
+                }}
               />
             </div>
-            <div id="leftcol" className="h-full relative">
+            <div id="leftcol" className="relative h-full">
               {showSidebar && (
                 <motion.div
                   initial={{ opacity: 0, display: 'none' }}
@@ -136,9 +175,15 @@ const Map: React.FC = () => {
                       whatToShow === 'photos' ? (
                         postsQuery.data?.posts.map((post: any) => {
                           return (
-                            <div
+                            <motion.div
                               key={post.id}
                               className="flex flex-col w-full h-64 bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-sm"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{
+                                duration: 0.5,
+                                ease: 'easeInOut',
+                              }}
                             >
                               {post.url && (
                                 <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
@@ -160,20 +205,28 @@ const Map: React.FC = () => {
                                   {post?.description?.substring(0, 35)}...
                                 </h3>
                               </div>
-                            </div>
+                            </motion.div>
                           );
                         })
                       ) : (
-                        data?.places.map(
-                          (place) =>
-                            place.preview && (
-                              <MapPostCard
-                                // @ts-ignore
-                                place={place}
-                                setSidebarPlace={setSidebarPlace}
-                              />
-                            )
-                        )
+                        data?.places
+                          .filter(
+                            (place) =>
+                              place.latitude > bounds1.minLatitude &&
+                              place.latitude < bounds1.maxLatitude &&
+                              place.longitude > bounds1.minLongitude &&
+                              place.longitude < bounds1.maxLongitude
+                          )
+                          .map(
+                            (place) =>
+                              place.preview && (
+                                <MapPostCard
+                                  // @ts-ignore
+                                  place={place}
+                                  setSidebarPlace={setSidebarPlace}
+                                />
+                              )
+                          )
                       )
                     ) : (
                       <PlaceDetail sidebarPlace={sidebarPlace} />
@@ -283,7 +336,7 @@ const PlaceDetail: React.FC<{
         <p className="pt-4 text-left">{sidebarPlace.description}</p>
 
         {loading ? (
-          <div className="w-full pt-24 flex justify-around">
+          <div className="flex justify-around w-full pt-24">
             <Loading color="#000000" size="xl" />
           </div>
         ) : error ? (

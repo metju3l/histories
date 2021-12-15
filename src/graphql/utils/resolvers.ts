@@ -1,5 +1,6 @@
 import { GraphQLUpload } from 'graphql-upload';
 
+import { PlacesInput } from '../../../.cache/__types__';
 import {
   ValidateComment,
   ValidateCoordinates,
@@ -99,24 +100,7 @@ const resolvers = {
       {
         input,
       }: {
-        input: {
-          filter: {
-            maxLatitude: number | null;
-            minLatitude: number | null;
-            maxLongitude: number | null;
-            minLongitude: number | null;
-            minDate: number | null;
-            maxDate: number | null;
-            radius: {
-              latitude: number;
-              longitude: number;
-              distance: number;
-            } | null;
-            tags: string[] | null;
-            skip: number | null;
-            take: number | null;
-          } | null;
-        };
+        input: PlacesInput;
       },
       context: contextType
     ) =>
