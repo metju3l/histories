@@ -1,11 +1,11 @@
-import { Loading } from '@components/Loading';
 import MapGL, { Viewport } from '@components/Map/MapWindow';
+import { Loading } from '@components/UI';
 import { usePlacesQuery } from '@graphql/geo.graphql';
 import { usePostsQuery } from '@graphql/post.graphql';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ArrowIcon from '../components/Icons/ArrowIcon';
 import { Layout } from '../components/Layout';
@@ -14,7 +14,7 @@ import { TimeLine } from '../components/TimeLine';
 
 const Map: React.FC = () => {
   const router = useRouter();
-  const [bounds1, setBounds1] = useState({
+  const [bounds, setBounds] = useState({
     minLatitude: 0,
     maxLatitude: 0,
     minLongitude: 0,
@@ -35,6 +35,39 @@ const Map: React.FC = () => {
       },
     },
   });
+
+  async function FetchMore() {
+    // fetch more data when map view changes
+    if (whatToShow === 'photos')
+      await postsQuery.refetch({
+        input: {
+          filter: {
+            ...bounds,
+          },
+        },
+      });
+    else
+      await fetchMore({
+        variables: {
+          input: {
+            filter: {
+              ...bounds,
+              exclude: data?.places ? data.places.map((place) => place.id) : [],
+            },
+          },
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          return {
+            ...previousResult,
+            // Add the new matches data to the end of the old matches data.
+            places: [
+              ...previousResult.places,
+              ...(fetchMoreResult?.places ?? []),
+            ],
+          };
+        },
+      });
+  }
 
   const [whatToShow, setWhatToShow] = useState<string | null>(null);
   const [showSidebar, setShowSidebar] = useState(true);
@@ -60,6 +93,10 @@ const Map: React.FC = () => {
     longitude: 15.1,
     zoom: 3.5,
   });
+
+  useEffect(() => {
+    FetchMore();
+  }, [whatToShow]);
 
   return (
     <Layout title="map | hiStories">
@@ -107,39 +144,8 @@ const Map: React.FC = () => {
                 setSidebar={setSidebarPlace}
                 sidebar={sidebarPlace}
                 onMove={async (bounds) => {
-                  setBounds1(bounds);
-                  // fetch more data when map view changes
-                  if (whatToShow === 'photos')
-                    await postsQuery.refetch({
-                      input: {
-                        filter: {
-                          ...bounds,
-                        },
-                      },
-                    });
-                  else
-                    await fetchMore({
-                      variables: {
-                        input: {
-                          filter: {
-                            ...bounds,
-                            exclude: data?.places
-                              ? data.places.map((place) => place.id)
-                              : [],
-                          },
-                        },
-                      },
-                      updateQuery: (previousResult, { fetchMoreResult }) => {
-                        return {
-                          ...previousResult,
-                          // Add the new matches data to the end of the old matches data.
-                          places: [
-                            ...previousResult.places,
-                            ...(fetchMoreResult?.places ?? []),
-                          ],
-                        };
-                      },
-                    });
+                  setBounds(bounds);
+                  FetchMore();
                 }}
               />
             </div>
@@ -212,10 +218,10 @@ const Map: React.FC = () => {
                         data?.places
                           .filter(
                             (place) =>
-                              place.latitude > bounds1.minLatitude &&
-                              place.latitude < bounds1.maxLatitude &&
-                              place.longitude > bounds1.minLongitude &&
-                              place.longitude < bounds1.maxLongitude
+                              place.latitude > bounds.minLatitude &&
+                              place.latitude < bounds.maxLatitude &&
+                              place.longitude > bounds.minLongitude &&
+                              place.longitude < bounds.maxLongitude
                           )
                           .map(
                             (place) =>

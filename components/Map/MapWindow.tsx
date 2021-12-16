@@ -18,18 +18,6 @@ export type Viewport = {
   zoom: number;
 };
 
-function ConvertBounds(bounds: {
-  _ne: { lat: number; lng: number };
-  _sw: { lat: number; lng: number };
-}): Bounds {
-  return {
-    maxLatitude: bounds._ne.lat,
-    minLatitude: bounds._sw.lat,
-    maxLongitude: bounds._ne.lng,
-    minLongitude: bounds._sw.lng,
-  };
-}
-
 type MapGLProps = {
   viewport: Viewport;
   setViewport: React.Dispatch<React.SetStateAction<Viewport>>;
@@ -57,6 +45,29 @@ type MapGLProps = {
   onMove?: (bounds: Bounds) => void;
 };
 
+function ConvertBounds(bounds: {
+  _ne: { lat: number; lng: number };
+  _sw: { lat: number; lng: number };
+}): Bounds {
+  return {
+    maxLatitude: bounds._ne.lat,
+    minLatitude: bounds._sw.lat,
+    maxLongitude: bounds._ne.lng,
+    minLongitude: bounds._sw.lng,
+  };
+}
+
+async function OnMove(
+  mapRef: React.MutableRefObject<Maybe<MapRef>>,
+  onMove?: (bounds: Bounds) => void
+) {
+  // if onMove function is not undefined
+  if (mapRef.current && onMove) {
+    const bounds = ConvertBounds(mapRef.current.getMap().getBounds());
+    await onMove(bounds);
+  }
+}
+
 const MapGL: React.FC<MapGLProps> = ({
   viewport,
   setViewport,
@@ -65,35 +76,34 @@ const MapGL: React.FC<MapGLProps> = ({
   sidebar,
   onMove,
 }) => {
-  const mapRef = useRef<MapRef | null>(null);
+  const mapRef = useRef<Maybe<MapRef>>(null);
+
+  const mapProps = {
+    width: '100%',
+    height: '100%',
+    className: 'rounded-lg',
+    mapStyle: 'mapbox://styles/mapbox/streets-v11', // MAPBOX STYLE
+    mapboxApiAccessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN, // MAPBOX API ACCESS TOKEN
+  };
+
+  const mapFunctions = {
+    onViewportChange: (viewport: any) => setViewport(viewport),
+    // OnMove triggers
+    onLoad: async () => OnMove(mapRef, onMove),
+    onInteractionStateChange: async (state: ExtraState) => {
+      if (!state.isDragging) OnMove(mapRef, onMove);
+    },
+  };
 
   return (
     <ReactMapGL
       {...viewport}
-      width="100%"
-      height="100%"
-      onViewportChange={(viewport: any) => setViewport(viewport)}
-      className="rounded-lg"
-      mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
-      mapStyle="mapbox://styles/mapbox/streets-v11" // MAPBOX STYLE
+      {...mapProps}
+      {...mapFunctions}
       ref={(instance) => (mapRef.current = instance)}
-      onLoad={async () => {
-        // if map is rendered get bounds and refetch
-        if (mapRef.current) {
-          const bounds = ConvertBounds(mapRef.current.getMap().getBounds());
-          if (onMove !== undefined) await onMove(bounds);
-        }
-      }}
-      onInteractionStateChange={async (state: ExtraState) => {
-        // when map state changes (dragging, zooming, rotating, etc.)
-        if (!state.isDragging && mapRef.current) {
-          const bounds = ConvertBounds(mapRef.current.getMap().getBounds());
-          if (onMove !== undefined) await onMove(bounds);
-        }
-      }}
     >
       {data?.places
-        .filter((place) => place.preview || place.icon)
+        .filter((place) => (place.preview || place.icon) && place)
         .map((place) => {
           return (
             <Marker
@@ -103,7 +113,7 @@ const MapGL: React.FC<MapGLProps> = ({
             >
               <div
                 // @ts-ignore
-                onClick={() => setSidebar(place)}
+                onClick={onClick}
                 className="cursor-pointer -translate-y-1/2 -translate-x-1/2"
               >
                 {place.icon ? (

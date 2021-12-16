@@ -1,6 +1,5 @@
-import { Input } from '@components/Input';
 import { Layout } from '@components/Layout';
-import Button from '@components/UI/Button';
+import { Button, Input } from '@components/UI';
 import { useMeQuery } from '@graphql/user.graphql';
 import { useCreateUserMutation } from '@graphql/user.graphql';
 import Link from 'next/link';

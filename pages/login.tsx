@@ -1,5 +1,5 @@
-import { Input } from '@components/Input';
 import { Layout } from '@components/Layout';
+import { Input } from '@components/UI';
 import Button from '@components/UI/Button';
 import { useLoginMutation } from '@graphql/user.graphql';
 import Cookie from 'js-cookie';
