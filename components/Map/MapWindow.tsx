@@ -113,7 +113,7 @@ const MapGL: React.FC<MapGLProps> = ({
             >
               <div
                 // @ts-ignore
-                onClick={onClick}
+                onClick={() => setSidebar(place)}
                 className="cursor-pointer -translate-y-1/2 -translate-x-1/2"
               >
                 {place.icon ? (

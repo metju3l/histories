@@ -37,6 +37,8 @@ const Map: React.FC = () => {
   });
 
   async function FetchMore() {
+    if (loading || postsQuery.loading) return 0;
+
     // fetch more data when map view changes
     if (whatToShow === 'photos')
       await postsQuery.refetch({
