@@ -1,33 +1,14 @@
 import { Menu, Transition } from '@headlessui/react';
 import { FireIcon, TrendingUpIcon } from '@heroicons/react/outline';
 import { ChevronLeftIcon } from '@heroicons/react/solid';
+import { MapContext } from 'pages/map';
 import React, { Fragment } from 'react';
 
 import ArrowIcon from '../Icons/ArrowIcon';
 
 type SubNavProps = {
-  setWhatToShow: React.Dispatch<React.SetStateAction<string | null>>;
-  setSidebarPlace: React.Dispatch<
-    React.SetStateAction<{
-      id: number;
-      name?: string | null | undefined;
-      longitude: number;
-      latitude: number;
-      icon?: string | null | undefined;
-      preview?: string[] | null | undefined;
-    } | null>
-  >;
-  sidebarPlace: {
-    id: number;
-    name?: string | null | undefined;
-    longitude: number;
-    latitude: number;
-    icon?: string | null | undefined;
-    preview?: string[] | null | undefined;
-  } | null;
   sortBy: string;
   setSortBy: React.Dispatch<React.SetStateAction<string>>;
-  whatToShow: string | null;
 };
 
 const SortByDropdown: React.FC<{
@@ -86,21 +67,16 @@ const SortByDropdown: React.FC<{
   );
 };
 
-const SubNav: React.FC<SubNavProps> = ({
-  sidebarPlace,
-  setSidebarPlace,
-  whatToShow,
-  setWhatToShow,
-  sortBy,
-  setSortBy,
-}) => {
+const SubNav: React.FC<SubNavProps> = ({ sortBy, setSortBy }) => {
+  const mapContext = React.useContext(MapContext);
+
   return (
     <div className="flex items-center justify-between w-full px-4 py-4 bg-white border-b border-gray-200 shadow-sm">
       <SortByDropdown sortBy={sortBy} setSortBy={setSortBy} />
       <div className="flex gap-2">
-        {sidebarPlace ? (
+        {mapContext.sidebarPlace ? (
           <>
-            <button onClick={() => setSidebarPlace(null)}>
+            <button onClick={() => mapContext.setSidebarPlace(null)}>
               <ArrowIcon className="w-8 h-8 py-1 text-gray-500 border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl" />
             </button>
             <div className="px-4 py-1 text-gray-600 border border-gray-200 min-w-24 rounded-xl">
@@ -111,21 +87,21 @@ const SubNav: React.FC<SubNavProps> = ({
           <>
             <button
               className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
-                whatToShow !== 'photos'
+                mapContext.whatToShow !== 'photos'
                   ? 'text-black border-gray-400'
                   : 'text-gray-500'
               } rounded-xl`}
-              onClick={() => setWhatToShow('places')}
+              onClick={() => mapContext.setWhatToShow('places')}
             >
               Places
             </button>
             <button
               className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
-                whatToShow === 'photos'
+                mapContext.whatToShow === 'photos'
                   ? 'text-black border-gray-400'
                   : 'text-gray-500'
               } rounded-xl`}
-              onClick={() => setWhatToShow('photos')}
+              onClick={() => mapContext.setWhatToShow('photos')}
             >
               Photos
             </button>

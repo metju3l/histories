@@ -1,25 +1,73 @@
-import MapGL, { Viewport } from '@components/Map/MapWindow';
+import MapGL from '@components/Map/MapWindow';
 import { Loading } from '@components/UI';
 import { usePlacesQuery } from '@graphql/geo.graphql';
 import { usePostsQuery } from '@graphql/post.graphql';
+import Viewport from '@lib/types/viewport';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import Bounds from 'types/Bounds';
 
+import { Maybe } from '../.cache/__types__';
 import ArrowIcon from '../components/Icons/ArrowIcon';
 import { Layout } from '../components/Layout';
 import SubNav from '../components/Map/SubNav';
 import { TimeLine } from '../components/TimeLine';
 
-const Map: React.FC = () => {
-  const router = useRouter();
-  const [bounds, setBounds] = useState({
+const defaultValues = {
+  bounds: {
     minLatitude: 0,
     maxLatitude: 0,
     minLongitude: 0,
     maxLongitude: 0,
-  });
+  },
+  viewport: {
+    latitude: 50,
+    longitude: 15.1,
+    zoom: 3.5,
+    bearing: 0,
+    pitch: 0,
+  },
+};
+
+export type SidebarPlaceType = {
+  id: number;
+  name?: string | null;
+  longitude: number;
+  latitude: number;
+  icon?: string | null;
+  preview?: string[] | null;
+  description?: Maybe<string>;
+};
+
+type MapContextType = {
+  bounds: Bounds;
+  setBounds: React.Dispatch<React.SetStateAction<Bounds>>;
+  whatToShow: Maybe<string>;
+  setWhatToShow: React.Dispatch<React.SetStateAction<Maybe<string>>>;
+  viewport: Viewport;
+  setViewport: React.Dispatch<React.SetStateAction<Viewport>>;
+  sidebarPlace: Maybe<SidebarPlaceType>;
+  setSidebarPlace: React.Dispatch<
+    React.SetStateAction<Maybe<SidebarPlaceType>>
+  >;
+};
+
+export const MapContext = React.createContext<MapContextType>({
+  bounds: defaultValues.bounds,
+  setBounds: () => {},
+  whatToShow: 'places',
+  setWhatToShow: () => {},
+  viewport: defaultValues.viewport,
+  setViewport: () => {},
+  sidebarPlace: null,
+  setSidebarPlace: () => {},
+});
+
+const Map: React.FC = () => {
+  const router = useRouter();
+  const [bounds, setBounds] = useState(defaultValues.bounds);
   const { data, loading, error, fetchMore } = usePlacesQuery({
     variables: {
       input: {
@@ -43,9 +91,7 @@ const Map: React.FC = () => {
     if (whatToShow === 'photos')
       await postsQuery.refetch({
         input: {
-          filter: {
-            ...bounds,
-          },
+          filter: bounds,
         },
       });
     else
@@ -54,7 +100,18 @@ const Map: React.FC = () => {
           input: {
             filter: {
               ...bounds,
-              exclude: data?.places ? data.places.map((place) => place.id) : [],
+              // exclude just places in bounds
+              exclude: data?.places
+                ? data.places
+                    .filter(
+                      (place) =>
+                        place.latitude > bounds.minLatitude &&
+                        place.latitude < bounds.maxLatitude &&
+                        place.longitude > bounds.minLongitude &&
+                        place.longitude < bounds.maxLongitude
+                    )
+                    .map((place) => place.id)
+                : [],
             },
           },
         },
@@ -79,22 +136,11 @@ const Map: React.FC = () => {
     new Date().getTime(),
   ]);
 
-  const [sidebarPlace, setSidebarPlace] = useState<{
-    id: number;
-    name?: string | null;
-    longitude: number;
-    latitude: number;
-    icon?: string | null;
-    preview?: string[] | null;
-    description?: string;
-  } | null>(null);
+  const [sidebarPlace, setSidebarPlace] =
+    useState<Maybe<SidebarPlaceType>>(null);
 
   // map viewport
-  const [mapViewport, setMapViewport] = useState<Viewport>({
-    latitude: 50,
-    longitude: 15.1,
-    zoom: 3.5,
-  });
+  const [viewport, setViewport] = useState<Viewport>(defaultValues.viewport);
 
   useEffect(() => {
     FetchMore();
@@ -102,150 +148,156 @@ const Map: React.FC = () => {
 
   return (
     <Layout title="map | hiStories">
-      <div className="w-full">
-        <AnimatePresence>
-          <motion.section
-            className="w-full grid"
-            initial={{
-              gridTemplateColumns: '1fr 1fr',
-            }}
-            animate={{
-              gridTemplateColumns: showSidebar ? '1fr 1fr' : '1fr 0fr',
-            }}
-            transition={{
-              delay: !showSidebar ? 0 : 0.5,
-              duration: 0.25,
-              ease: 'easeInOut',
-            }}
-            style={{
-              height: 'calc(100vh - 56px)',
-            }}
-          >
-            <div className="relative w-full p-2 bg-white col-span-1">
-              <button
-                onClick={() => setShowSidebar(!showSidebar)}
-                className="absolute z-50 flex items-center h-8 py-1 text-gray-500 bg-white border border-gray-200 top-4 right-4 hover:text-black hover:border-gray-400 rounded-xl"
-              >
-                <motion.span
-                  animate={{ rotate: showSidebar ? '180deg' : '0deg' }}
-                  transition={{ delay: 0.3, duration: 0.2, ease: 'easeInOut' }}
+      <MapContext.Provider
+        value={{
+          bounds,
+          setBounds,
+          whatToShow,
+          setWhatToShow,
+          viewport,
+          setViewport,
+          sidebarPlace,
+          setSidebarPlace,
+        }}
+      >
+        <div className="w-full">
+          <AnimatePresence>
+            <motion.section
+              className="w-full grid"
+              initial={{
+                gridTemplateColumns: '1fr 1fr',
+              }}
+              animate={{
+                gridTemplateColumns: showSidebar ? '1fr 1fr' : '1fr 0fr',
+              }}
+              transition={{
+                delay: !showSidebar ? 0 : 0.5,
+                duration: 0.25,
+                ease: 'easeInOut',
+              }}
+              style={{
+                height: 'calc(100vh - 56px)',
+              }}
+            >
+              <div className="relative w-full p-2 bg-white col-span-1">
+                <button
+                  onClick={() => setShowSidebar(!showSidebar)}
+                  className="absolute z-50 flex items-center h-8 py-1 text-gray-500 bg-white border border-gray-200 top-4 right-4 hover:text-black hover:border-gray-400 rounded-xl"
                 >
-                  <ArrowIcon className={'w-8 py-1 h-8'} />
-                </motion.span>
-              </button>
-              <div className="absolute right-0 z-20 px-8 pt-2 w-[28vw]">
-                <TimeLine
-                  domain={[1000, new Date().getFullYear()]}
-                  setTimeLimitation={setTimeLimitation}
+                  <motion.span
+                    animate={{ rotate: showSidebar ? '180deg' : '0deg' }}
+                    transition={{
+                      delay: 0.3,
+                      duration: 0.2,
+                      ease: 'easeInOut',
+                    }}
+                  >
+                    <ArrowIcon className={'w-8 py-1 h-8'} />
+                  </motion.span>
+                </button>
+                <div className="absolute right-0 z-20 px-8 pt-2 w-[28vw]">
+                  <TimeLine
+                    domain={[1000, new Date().getFullYear()]}
+                    setTimeLimitation={setTimeLimitation}
+                  />
+                </div>
+                <MapGL
+                  data={data}
+                  onMove={async (bounds) => {
+                    setBounds(bounds);
+                    FetchMore();
+                  }}
                 />
               </div>
-              <MapGL
-                viewport={mapViewport}
-                setViewport={setMapViewport}
-                data={data}
-                setSidebar={setSidebarPlace}
-                sidebar={sidebarPlace}
-                onMove={async (bounds) => {
-                  setBounds(bounds);
-                  FetchMore();
-                }}
-              />
-            </div>
-            <div id="leftcol" className="relative h-full">
-              {showSidebar && (
-                <motion.div
-                  initial={{ opacity: 0, display: 'none' }}
-                  animate={{ opacity: 1, display: 'block' }}
-                  exit={{ opacity: 0, display: 'none' }}
-                  transition={{
-                    delay: showSidebar ? 1 : 0,
-                    duration: 0.2,
-                    ease: 'easeInOut',
-                  }}
-                >
-                  <SubNav
-                    sidebarPlace={sidebarPlace}
-                    setSidebarPlace={setSidebarPlace}
-                    whatToShow={whatToShow}
-                    setWhatToShow={setWhatToShow}
-                    sortBy={sortBy}
-                    setSortBy={setSortBy}
-                  />
-                  <div
-                    className={`p-4 pt-8 overflow-y-auto text-black bg-white ${
-                      sidebarPlace
-                        ? ''
-                        : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
-                    }`}
-                    style={{ height: 'calc(100vh - 123px)' }}
+              <div id="leftcol" className="relative h-full">
+                {showSidebar && (
+                  <motion.div
+                    initial={{ opacity: 0, display: 'none' }}
+                    animate={{ opacity: 1, display: 'block' }}
+                    exit={{ opacity: 0, display: 'none' }}
+                    transition={{
+                      delay: showSidebar ? 1 : 0,
+                      duration: 0.2,
+                      ease: 'easeInOut',
+                    }}
                   >
-                    {sidebarPlace === null ? (
-                      whatToShow === 'photos' ? (
-                        postsQuery.data?.posts.map((post: any) => {
-                          return (
-                            <motion.div
-                              key={post.id}
-                              className="flex flex-col w-full h-64 bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-sm"
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              transition={{
-                                duration: 0.5,
-                                ease: 'easeInOut',
-                              }}
-                            >
-                              {post.url && (
-                                <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
-                                  <Image
-                                    src={post.url[0]}
-                                    layout="fill"
-                                    objectFit="cover"
-                                    objectPosition="center"
-                                    className="rounded-t-lg"
-                                    alt="Profile picture"
-                                  />
+                    <SubNav sortBy={sortBy} setSortBy={setSortBy} />
+                    <div
+                      className={`p-4 pt-8 overflow-y-auto text-black bg-white ${
+                        sidebarPlace
+                          ? ''
+                          : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
+                      }`}
+                      style={{ height: 'calc(100vh - 123px)' }}
+                    >
+                      {sidebarPlace === null ? (
+                        whatToShow === 'photos' ? (
+                          postsQuery.data?.posts.map((post: any) => {
+                            return (
+                              <motion.div
+                                key={post.id}
+                                className="flex flex-col w-full h-64 bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-sm"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{
+                                  duration: 0.5,
+                                  ease: 'easeInOut',
+                                }}
+                              >
+                                {post.url && (
+                                  <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
+                                    <Image
+                                      src={post.url[0]}
+                                      layout="fill"
+                                      objectFit="cover"
+                                      objectPosition="center"
+                                      className="rounded-t-lg"
+                                      alt="Profile picture"
+                                    />
+                                  </div>
+                                )}
+                                <div className="px-4 py-2">
+                                  <h3
+                                    className="text-gray-600"
+                                    style={{ fontSize: '12px' }}
+                                  >
+                                    {post?.description?.substring(0, 35)}...
+                                  </h3>
                                 </div>
-                              )}
-                              <div className="px-4 py-2">
-                                <h3
-                                  className="text-gray-600"
-                                  style={{ fontSize: '12px' }}
-                                >
-                                  {post?.description?.substring(0, 35)}...
-                                </h3>
-                              </div>
-                            </motion.div>
-                          );
-                        })
+                              </motion.div>
+                            );
+                          })
+                        ) : (
+                          data?.places
+                            .filter(
+                              (place) =>
+                                place.latitude > bounds.minLatitude &&
+                                place.latitude < bounds.maxLatitude &&
+                                place.longitude > bounds.minLongitude &&
+                                place.longitude < bounds.maxLongitude
+                            )
+                            .map(
+                              (place) =>
+                                place.preview && (
+                                  <MapPostCard
+                                    // @ts-ignore
+                                    place={place}
+                                    setSidebarPlace={setSidebarPlace}
+                                  />
+                                )
+                            )
+                        )
                       ) : (
-                        data?.places
-                          .filter(
-                            (place) =>
-                              place.latitude > bounds.minLatitude &&
-                              place.latitude < bounds.maxLatitude &&
-                              place.longitude > bounds.minLongitude &&
-                              place.longitude < bounds.maxLongitude
-                          )
-                          .map(
-                            (place) =>
-                              place.preview && (
-                                <MapPostCard
-                                  // @ts-ignore
-                                  place={place}
-                                  setSidebarPlace={setSidebarPlace}
-                                />
-                              )
-                          )
-                      )
-                    ) : (
-                      <PlaceDetail sidebarPlace={sidebarPlace} />
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </div>
-          </motion.section>
-        </AnimatePresence>
-      </div>
+                        <PlaceDetail sidebarPlace={sidebarPlace} />
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+            </motion.section>
+          </AnimatePresence>
+        </div>
+      </MapContext.Provider>
     </Layout>
   );
 };
@@ -299,15 +351,7 @@ const MapPostCard: React.FC<{
 };
 
 const PlaceDetail: React.FC<{
-  sidebarPlace: {
-    id: number;
-    name?: string | null | undefined;
-    longitude: number;
-    latitude: number;
-    icon?: string | null | undefined;
-    preview?: string[] | null | undefined;
-    description?: string;
-  };
+  sidebarPlace: SidebarPlaceType;
 }> = ({ sidebarPlace }) => {
   const { data, loading, error } = usePostsQuery({
     variables: {

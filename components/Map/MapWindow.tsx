@@ -1,47 +1,15 @@
 import { PlacesQuery } from '@graphql/geo.graphql';
+import Viewport from '@lib/types/viewport';
 import Image from 'next/image';
+import { MapContext } from 'pages/map';
 import React, { useRef } from 'react';
 import ReactMapGL, { ExtraState, MapRef, Marker } from 'react-map-gl';
+import Bounds from 'types/Bounds';
 
 import { Maybe } from '../../.cache/__types__';
 
-export type Bounds = {
-  maxLatitude: number;
-  minLatitude: number;
-  maxLongitude: number;
-  minLongitude: number;
-};
-
-export type Viewport = {
-  latitude: number;
-  longitude: number;
-  zoom: number;
-};
-
 type MapGLProps = {
-  viewport: Viewport;
-  setViewport: React.Dispatch<React.SetStateAction<Viewport>>;
-  setSidebar: React.Dispatch<
-    React.SetStateAction<{
-      id: number;
-      name?: string | null;
-      longitude: number;
-      latitude: number;
-      icon?: string | null;
-      preview?: string[] | null;
-      description?: string;
-    } | null>
-  >;
   data: PlacesQuery | undefined;
-  sidebar: Maybe<{
-    id: number;
-    name?: string | null;
-    longitude: number;
-    latitude: number;
-    icon?: string | null;
-    preview?: string[] | null;
-    description?: string;
-  } | null>;
   onMove?: (bounds: Bounds) => void;
 };
 
@@ -68,14 +36,9 @@ async function OnMove(
   }
 }
 
-const MapGL: React.FC<MapGLProps> = ({
-  viewport,
-  setViewport,
-  data,
-  setSidebar,
-  sidebar,
-  onMove,
-}) => {
+const MapGL: React.FC<MapGLProps> = ({ data, onMove }) => {
+  const mapContext = React.useContext(MapContext);
+
   const mapRef = useRef<Maybe<MapRef>>(null);
 
   const mapProps = {
@@ -87,7 +50,8 @@ const MapGL: React.FC<MapGLProps> = ({
   };
 
   const mapFunctions = {
-    onViewportChange: (viewport: any) => setViewport(viewport),
+    onViewportChange: (viewport: React.SetStateAction<Viewport>) =>
+      mapContext.setViewport(viewport),
     // OnMove triggers
     onLoad: async () => OnMove(mapRef, onMove),
     onInteractionStateChange: async (state: ExtraState) => {
@@ -97,7 +61,7 @@ const MapGL: React.FC<MapGLProps> = ({
 
   return (
     <ReactMapGL
-      {...viewport}
+      {...mapContext.viewport}
       {...mapProps}
       {...mapFunctions}
       ref={(instance) => (mapRef.current = instance)}
@@ -112,8 +76,7 @@ const MapGL: React.FC<MapGLProps> = ({
               longitude={place.longitude}
             >
               <div
-                // @ts-ignore
-                onClick={() => setSidebar(place)}
+                onClick={() => mapContext.setSidebarPlace(place)}
                 className="cursor-pointer -translate-y-1/2 -translate-x-1/2"
               >
                 {place.icon ? (

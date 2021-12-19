@@ -3,7 +3,7 @@ import 'tailwindcss/tailwind.css';
 import { Story } from '@storybook/react';
 import React from 'react';
 
-import { Loading, LoadingProps } from '../../components/Loading';
+import Loading, { LoadingProps } from '../../components/UI/Loading';
 
 // Component
 const Component = {
