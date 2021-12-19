@@ -1,11 +1,9 @@
 {
-  "log in": "přihlásit se",
-  "sign up": "zaregistrovat se",
-  "log out": "odhlásit se",
-  "first name": "křestní jméno",
-  "last name": "příjmení",
-  "username": "uživatelské jméno",
-  "password": "heslo",
-  "repeat password": "zopakujte heslo",
-  "email": "email"
+  "home": "Domů",
+  "explore": "Prozkoumat",
+  "map": "Mapa",
+  "about": "O projektu",
+  "settings": "Nastavení",
+  "create post": "Vytvořit příspěvek",
+  "logout": "Odhlásit se"
 }

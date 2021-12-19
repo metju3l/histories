@@ -47,18 +47,6 @@ const CreatePost = async ({
     location: point({longitude: ${longitude}, latitude: ${latitude}, srid: 4326})
   })
   MERGE (post)-[:IS_LOCATED]->(place)
-  CALL {
-    WITH user, post
-    OPTIONAL MATCH (follower:User)-[:FOLLOW]->(user)
-    WHERE follower IS NOT user
-    CREATE (post)-[:NOTIFICATION {createdAt: ${new Date().getTime()}}]->(follower)
-  }
-  CALL {
-    WITH user, place, post
-    OPTIONAL MATCH (follower:User)-[:FOLLOW]->(place)
-    WHERE follower IS NOT user
-    CREATE (post)-[:NOTIFICATION {createdAt: ${new Date().getTime()}}]->(follower)
-  }
 
   RETURN post{.*, id: ID(post)} as post`;
 

@@ -1,6 +1,5 @@
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 
@@ -37,7 +36,6 @@ const Layout: React.FC<LayoutProps> = ({
   redirectNotLogged,
   children,
 }) => {
-  const router = useRouter();
   const { data, loading, error, refetch } = useMeQuery();
 
   return (
@@ -81,7 +79,7 @@ const Layout: React.FC<LayoutProps> = ({
         />
       )}
 
-      <Navbar pathname={router.pathname} />
+      <Navbar />
       <div className="h-screen bg-white md:pt-14">{children}</div>
     </LoginContext.Provider>
   );

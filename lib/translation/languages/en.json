@@ -1,11 +1,9 @@
 {
-  "log in": "log in",
-  "sign up": "sign up",
-  "log out": "log out",
-  "first name": "first name",
-  "last name": "last name",
-  "username": "username",
-  "password": "password",
-  "repeat password": "repeat password",
-  "email": "email"
+  "home": "Home",
+  "explore": "Explore",
+  "map": "Map",
+  "about": "About",
+  "settings": "Settings",
+  "create post": "Create Post",
+  "logout": "Logout"
 }

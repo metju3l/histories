@@ -1,5 +1,4 @@
 import { Layout } from '@components/Layout';
-import Suggestions from '@components/MainPage/RightColumn/Suggestions';
 import { Post } from '@components/Post';
 import { usePersonalizedPostsQuery } from '@graphql/post.graphql';
 import { useMeQuery } from '@graphql/user.graphql';
@@ -27,9 +26,7 @@ const Index: React.FC = () => {
         {/* RIGHT COLUMN */}
         <div className="hidden w-[40%] xl:w-[30%] p-[1em] lg:block">
           <div className="sticky top-20">
-            <div className="w-full mb-8 rounded-lg p-[1em] text-text-light">
-              <Suggestions logged={logged.data} />
-            </div>
+            <div className="w-full mb-8 rounded-lg p-[1em] text-text-light"></div>
           </div>
         </div>
       </div>
