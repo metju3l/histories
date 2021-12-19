@@ -1,15 +1,13 @@
-import { PlacesQuery } from '@graphql/geo.graphql';
 import Viewport from '@lib/types/viewport';
 import Image from 'next/image';
-import { MapContext } from 'pages/map';
 import React, { useRef } from 'react';
 import ReactMapGL, { ExtraState, MapRef, Marker } from 'react-map-gl';
 import Bounds from 'types/Bounds';
 
 import { Maybe } from '../../.cache/__types__';
+import { MapContext } from './MapContext';
 
 type MapGLProps = {
-  data: PlacesQuery | undefined;
   onMove?: (bounds: Bounds) => void;
 };
 
@@ -36,7 +34,7 @@ async function OnMove(
   }
 }
 
-const MapGL: React.FC<MapGLProps> = ({ data, onMove }) => {
+const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
   const mapContext = React.useContext(MapContext);
 
   const mapRef = useRef<Maybe<MapRef>>(null);
@@ -66,7 +64,7 @@ const MapGL: React.FC<MapGLProps> = ({ data, onMove }) => {
       {...mapFunctions}
       ref={(instance) => (mapRef.current = instance)}
     >
-      {data?.places
+      {mapContext.placesQuery?.data?.places
         .filter((place) => (place.preview || place.icon) && place)
         .map((place) => {
           return (
@@ -76,8 +74,18 @@ const MapGL: React.FC<MapGLProps> = ({ data, onMove }) => {
               longitude={place.longitude}
             >
               <div
+                className={`cursor-pointer rounded-full relative border-2 ${
+                  place.icon ? 'w-24 h-24' : 'w-16 h-16'
+                }
+                ${
+                  mapContext.hoverPlaceId === place.id && !place.icon
+                    ? 'border-black'
+                    : 'border-transparent'
+                }
+                `}
+                onMouseEnter={() => mapContext.setHoverPlaceId(place.id)}
+                onMouseLeave={() => mapContext.setHoverPlaceId(null)}
                 onClick={() => mapContext.setSidebarPlace(place)}
-                className="cursor-pointer -translate-y-1/2 -translate-x-1/2"
               >
                 {place.icon ? (
                   <Image
@@ -92,9 +100,10 @@ const MapGL: React.FC<MapGLProps> = ({ data, onMove }) => {
                   <Image
                     // @ts-ignore
                     src={place.preview[0]}
-                    width={60}
-                    height={60}
-                    className="object-cover rounded-full"
+                    layout="fill"
+                    objectFit="cover"
+                    objectPosition="center"
+                    className="rounded-full"
                     alt="Picture on map"
                   />
                 )}

@@ -1,3 +1,4 @@
+import { MapContext } from '@components/Map/MapContext';
 import React from 'react';
 import { Handles, Rail, Slider, Ticks, Tracks } from 'react-compound-slider';
 
@@ -7,10 +8,11 @@ import Track from './Track';
 
 type TimelineProps = {
   domain: [number, number];
-  setTimeLimitation: React.Dispatch<React.SetStateAction<[number, number]>>;
 };
 
-const TimeLine: React.FC<TimelineProps> = ({ domain, setTimeLimitation }) => {
+const TimeLine: React.FC<TimelineProps> = ({ domain }) => {
+  const mapContext = React.useContext(MapContext);
+
   return (
     <Slider
       rootStyle={{
@@ -22,7 +24,9 @@ const TimeLine: React.FC<TimelineProps> = ({ domain, setTimeLimitation }) => {
       step={1}
       mode={2}
       values={domain}
-      onUpdate={(limits) => setTimeLimitation(limits as [number, number])}
+      onUpdate={(limits) =>
+        mapContext.setTimeLimitation(limits as [number, number])
+      }
     >
       <Rail>
         {({ getRailProps }) => (

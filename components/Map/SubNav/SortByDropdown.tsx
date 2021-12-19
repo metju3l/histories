@@ -1,20 +1,17 @@
 import { Menu, Transition } from '@headlessui/react';
 import { FireIcon, TrendingUpIcon } from '@heroicons/react/outline';
 import { ChevronLeftIcon } from '@heroicons/react/solid';
-import { MapContext } from 'pages/map';
 import React, { Fragment } from 'react';
 
-import ArrowIcon from '../Icons/ArrowIcon';
-
-type SubNavProps = {
+export type SortByDropdownProps = {
   sortBy: string;
   setSortBy: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const SortByDropdown: React.FC<{
-  sortBy: string;
-  setSortBy: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ sortBy, setSortBy }) => {
+const SortByDropdown: React.FC<SortByDropdownProps> = ({
+  sortBy,
+  setSortBy,
+}) => {
   const SortByItem: React.FC<{ name: string; icon: JSX.Element }> = ({
     name,
     icon,
@@ -67,50 +64,4 @@ const SortByDropdown: React.FC<{
   );
 };
 
-const SubNav: React.FC<SubNavProps> = ({ sortBy, setSortBy }) => {
-  const mapContext = React.useContext(MapContext);
-
-  return (
-    <div className="flex items-center justify-between w-full px-4 py-4 bg-white border-b border-gray-200 shadow-sm">
-      <SortByDropdown sortBy={sortBy} setSortBy={setSortBy} />
-      <div className="flex gap-2">
-        {mapContext.sidebarPlace ? (
-          <>
-            <button onClick={() => mapContext.setSidebarPlace(null)}>
-              <ArrowIcon className="w-8 h-8 py-1 text-gray-500 border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl" />
-            </button>
-            <div className="px-4 py-1 text-gray-600 border border-gray-200 min-w-24 rounded-xl">
-              Place detail
-            </div>
-          </>
-        ) : (
-          <>
-            <button
-              className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
-                mapContext.whatToShow !== 'photos'
-                  ? 'text-black border-gray-400'
-                  : 'text-gray-500'
-              } rounded-xl`}
-              onClick={() => mapContext.setWhatToShow('places')}
-            >
-              Places
-            </button>
-            <button
-              className={`py-1 w-24 border border-gray-200 hover:text-black hover:border-gray-400 ${
-                mapContext.whatToShow === 'photos'
-                  ? 'text-black border-gray-400'
-                  : 'text-gray-500'
-              } rounded-xl`}
-              onClick={() => mapContext.setWhatToShow('photos')}
-            >
-              Photos
-            </button>
-          </>
-        )}
-      </div>
-      <span />
-    </div>
-  );
-};
-
-export default SubNav;
+export default SortByDropdown;
