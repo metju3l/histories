@@ -1,7 +1,7 @@
 import React from 'react';
 
-import ArrowIcon from '../../Icons/ArrowIcon';
-import { MapContext } from './../MapContext';
+import ArrowIcon from '../../../Icons/ArrowIcon';
+import { MapContext } from '../MapContext';
 import SortByDropdown from './SortByDropdown';
 
 export type SubNavProps = {

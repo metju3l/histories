@@ -2,6 +2,8 @@
     <h1>hiStories</h1>
 </div>
 
+Cause my graphic department sucks, design is inspirated by [Gitpod.io](https://gitpod.io)
+
 ![](https://github.com/hiStories-cc/hiStories/actions/workflows/build-node.yml/badge.svg)
 ![](https://github.com/hiStories-cc/hiStories/actions/workflows/storybook-node.yml/badge.svg)
 ![](https://github.com/hiStories-cc/hiStories/actions/workflows/test-node.yml/badge.svg)

@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 import ReactMapGL, { ExtraState, MapRef, Marker } from 'react-map-gl';
 import Bounds from 'types/Bounds';
 
-import { Maybe } from '../../.cache/__types__';
+import { Maybe } from '../../../.cache/__types__';
 import { MapContext } from './MapContext';
 
 type MapGLProps = {

@@ -1,6 +1,6 @@
-import { defaultValues, MapContext } from '@components/Map/MapContext';
-import MapGL from '@components/Map/MapWindow';
-import RightPanel from '@components/Map/RightPanel/RightPanel';
+import { defaultValues, MapContext } from '@components/Screens/Map/MapContext';
+import MapGL from '@components/Screens/Map/MapWindow';
+import RightPanel from '@components/Screens/Map/RightPanel/RightPanel';
 import { usePlacesQuery } from '@graphql/geo.graphql';
 import { usePostsQuery } from '@graphql/post.graphql';
 import Viewport from '@lib/types/viewport';

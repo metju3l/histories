@@ -10,5 +10,13 @@
   "register": "Zaregistrovat se",
   "password": "Heslo",
   "username or email": "Uživatelské jméno, nebo email",
-  "create new account": "Vytvořit uživatelský účet"
+  "create new account": "Vytvořit uživatelský účet",
+  "account": "Účet",
+  "security": "Zabezpečení",
+  "notifications": "Upozornění",
+  "preferences": "Zobrazení",
+  "accessibility": "Přístupnost",
+  "delete account": "Smazat účet",
+  "manage your account settings": "Správa nastavení účtu",
+  "change password": "Změna hesla"
 }

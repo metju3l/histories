@@ -1,13 +1,12 @@
 import { Layout } from '@components/Layout';
-import Button from '@components/UI/Button';
 import { useLoginMutation } from '@graphql/user.graphql';
 import Cookie from 'js-cookie';
 import Link from 'next/link';
 import Router from 'next/router';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
+import { SubmitHandler,useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
-import { useForm, SubmitHandler } from 'react-hook-form';
 
 type Inputs = {
   login: string;
@@ -49,21 +48,21 @@ const Login: FC = () => {
       <div className="p-10 m-auto max-w-[27rem]">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
           <div>
-            <h4 className="pb-2 pt-0 text-gray-600 font-medium">
+            <h4 className="pt-0 pb-2 font-medium text-gray-600">
               {t('username or email')}
             </h4>
             <input
-              className="w-full text-gray-600 rounded-md border border-gray-300 focus:border-gray-500 outline-none py-1.5 px-2"
+              className="w-full px-2 text-gray-600 border border-gray-300 outline-none rounded-md focus:border-gray-500 py-1.5"
               type="text"
               {...register('login', { required: true })}
             />
           </div>
           <div>
-            <h4 className="pb-2 pt-0 text-gray-600 font-medium">
+            <h4 className="pt-0 pb-2 font-medium text-gray-600">
               {t('password')}
             </h4>
             <input
-              className="w-full text-gray-600 rounded-md border border-gray-300 focus:border-gray-500 outline-none py-1.5 px-2"
+              className="w-full px-2 text-gray-600 border border-gray-300 outline-none rounded-md focus:border-gray-500 py-1.5"
               type="password"
               {...register('password', { required: true })}
             />
@@ -71,7 +70,7 @@ const Login: FC = () => {
 
           <button
             type="submit"
-            className="mt-6 block py-1.5 px-4 font-medium rounded-md bg-gray-800 border border-gray-800 text-gray-50"
+            className="block px-4 mt-6 font-medium bg-gray-800 border border-gray-800 py-1.5 rounded-md text-gray-50"
           >
             {t('login')}
           </button>

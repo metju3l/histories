@@ -12,7 +12,7 @@ import {
   Maybe,
   PlacesInput,
   PostsInput,
-} from '../../.cache/__types__';
+} from '../../../.cache/__types__';
 
 export const defaultValues = {
   bounds: {
