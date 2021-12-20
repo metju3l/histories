@@ -15,7 +15,7 @@ const NavbarItem: React.FC<{ text: string; href: string; active: boolean }> = ({
       <a
         className={`cursor-pointer py-2 px-4 border-b-4 border-transparent transition ease-in-out font-semibold ${
           active
-            ? 'text-black border-black'
+            ? 'text-black border-black dark:text-gray-200 dark:border-gray-200'
             : 'text-gray-400 dark:text-gray-600 hover:border-gray-400 dark:hover:border-gray-600'
         }`}
       >

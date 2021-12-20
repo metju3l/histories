@@ -1,25 +1,29 @@
+import Link from 'next/link';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-const SubNavItem: React.FC<{
+export type SubNavItemProps = {
   title: string;
+  href: string;
   current: string;
-  setCurrent: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ title, current, setCurrent }) => {
+};
+
+const SubNavItem: React.FC<SubNavItemProps> = ({ title, href, current }) => {
   const { t } = useTranslation();
 
   return (
     <li>
-      <button
-        className={`flex py-2 px-4 rounded-md w-full ${
-          current === title
-            ? 'bg-gray-800 text-gray-50'
-            : 'hover:bg-gray-100 dark:hover:bg-gray-800'
-        }`}
-        onClick={() => setCurrent(title)}
-      >
-        {t(title)}
-      </button>
+      <Link href={href}>
+        <a
+          className={`flex py-2 px-4 rounded-md w-full font-medium ${
+            current === title
+              ? 'bg-[#45413C] text-white'
+              : 'hover:bg-gray-100 dark:hover:bg-[#45413C] text-gray-600 dark:text-gray-400'
+          }`}
+        >
+          {t(title)}
+        </a>
+      </Link>
     </li>
   );
 };

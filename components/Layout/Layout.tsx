@@ -4,7 +4,7 @@ import React from 'react';
 import { Toaster } from 'react-hot-toast';
 
 import { MeQuery, useMeQuery } from '../../lib/graphql/user.graphql';
-import { Navbar } from '../Navbar';
+import { Navbar } from './Navbar';
 import ProtectedRoutes from './ProtectedRoutes';
 
 type LayoutProps = {
@@ -80,7 +80,9 @@ const Layout: React.FC<LayoutProps> = ({
       )}
 
       <Navbar />
-      <div className="h-screen bg-white md:pt-14">{children}</div>
+      <div className="h-screen bg-white dark:bg-[#171716] pt-14">
+        {children}
+      </div>
     </LoginContext.Provider>
   );
 };

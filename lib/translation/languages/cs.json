@@ -14,9 +14,21 @@
   "account": "Účet",
   "security": "Zabezpečení",
   "notifications": "Upozornění",
-  "preferences": "Zobrazení",
+  "email notifications": "Emailové upozornění",
+  "appearance": "Vzhled",
   "accessibility": "Přístupnost",
   "delete account": "Smazat účet",
   "manage your account settings": "Správa nastavení účtu",
-  "change password": "Změna hesla"
+  "change password": "Změna hesla",
+  "language": "Jazyk",
+  "theme": "Vzhled",
+
+  "New follower notifications": "Upozornění na nové sledující",
+  "Get notification whenever someone follows you": "Upozornění pokaždé, když vás někdo začne sledovat",
+  "Post from people you follow": "Na příspěvky od lidí, které sledujete",
+  "Get notification when some of people you follow creates new post": "Upozornění pokaždé, když někdo z lidí, které sledujete, vytvoří nový příspěvek",
+  "Post in places you follow": "Na příspěvky v místech, které sledujete",
+  "Get notification when new post appends in places you follow": "Upozornění pokaždé, když nový příspěvek připojí do míst, které sledujete",
+  "HiStories newsletter": "HiStories newsletter",
+  "Get email newsletter with HiStories news": "Dostávat emailové newslettery s HiStories novinkami"
 }
