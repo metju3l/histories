@@ -16,7 +16,7 @@ const Account = () => {
       <div className="py-4">
         <input
           value="this is not your password"
-          className="w-full max-w-sm px-2 text-gray-400 border border-gray-300 dark:bg-[#45413C] outline-none rounded-md focus:border-gray-500 py-1.5"
+          className="w-full max-w-sm px-2 text-gray-400 border border-gray-300 outline-none dark:bg-[#45413C] rounded-md focus:border-gray-500 py-1.5"
           type="password"
           disabled
         />

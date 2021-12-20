@@ -3,8 +3,8 @@ import { useLoginMutation } from '@graphql/user.graphql';
 import Cookie from 'js-cookie';
 import Link from 'next/link';
 import Router from 'next/router';
-import React, { FC } from 'react';
-import { SubmitHandler,useForm } from 'react-hook-form';
+import React, { FC, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
@@ -15,6 +15,7 @@ type Inputs = {
 
 const Login: FC = () => {
   const [login] = useLoginMutation();
+  const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
   const {
     register,
@@ -22,8 +23,7 @@ const Login: FC = () => {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
-
+    setLoading(true);
     try {
       const result = await login({
         variables: {
@@ -41,6 +41,7 @@ const Login: FC = () => {
     } catch (error: any) {
       toast.error(error.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -72,7 +73,7 @@ const Login: FC = () => {
             type="submit"
             className="block px-4 mt-6 font-medium bg-gray-800 border border-gray-800 py-1.5 rounded-md text-gray-50"
           >
-            {t('login')}
+            {t(loading ? 'loading' : 'login')}
           </button>
 
           <Link href="/register">

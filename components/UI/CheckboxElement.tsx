@@ -1,6 +1,7 @@
-import FirstLetterUppercase from '@lib/functions/FirstLetterUppercase';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
+import FirstLetterUppercase from '../../lib/functions/FirstLetterUppercase';
 
 const CheckboxElement: React.FC<{
   title: string;

@@ -22,8 +22,7 @@ const ProtectedRoutes: React.FC<{
     return <Redirect to="/verify" />;
 
   // redirect if user is logged
-  if (redirectLogged && loginContext.data?.me?.id)
-    return <Redirect to="/" />;
+  if (redirectLogged && loginContext.data?.me?.id) return <Redirect to="/" />;
 
   // redirect if user is not logged
   if (redirectNotLogged && !loginContext.data?.me?.id)
