@@ -32,7 +32,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
           }}
         />
         <NextNprogress
-          color="#8B5CF6"
+          color="#000"
           height={2}
           options={{ showSpinner: false }}
           showOnShallow

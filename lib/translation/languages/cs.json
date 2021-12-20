@@ -5,5 +5,10 @@
   "about": "O projektu",
   "settings": "Nastavení",
   "create post": "Vytvořit příspěvek",
-  "logout": "Odhlásit se"
+  "login": "Přihlásit se",
+  "logout": "Odhlásit se",
+  "register": "Zaregistrovat se",
+  "password": "Heslo",
+  "username or email": "Uživatelské jméno, nebo email",
+  "create new account": "Vytvořit uživatelský účet"
 }

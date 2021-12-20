@@ -37,13 +37,13 @@ const Navbar: React.FC = () => {
         </span>
 
         {/* RIGHT SIDE */}
-        <span className="flex items-center gap-4">
+        <span className="flex items-center gap-2">
           <Link href="/about">
-            <a className="px-2 py-1 font-medium text-gray-600 rounded-lg cursor-pointer dark:text-gray-200 transition ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800">
+            <a className="px-2 mr-2 py-1 font-medium text-gray-600 rounded-lg cursor-pointer dark:text-gray-200 transition ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800">
               {FirstLetterUppercase(t('about'))}
             </a>
           </Link>
-          {userIsLogged && (
+          {userIsLogged ? (
             <Menu as="div" className="relative">
               <Menu.Button
                 as="div"
@@ -67,15 +67,28 @@ const Navbar: React.FC = () => {
                   href={`/${loginContext.data!.me!.username}`}
                   top
                 />
-                <DropdownItem text={t('Create post')} href="/createPost" />
-                <DropdownItem text={t('Settings')} href="/settings" />
+                <DropdownItem text={t('create post')} href="/createPost" />
+                <DropdownItem text={t('settings')} href="/settings" />
                 <DropdownItem
-                  text={t('Logout')}
+                  text={t('logout')}
                   onClick={() => LogOut()}
                   bottom
                 />
               </Menu.Items>
             </Menu>
+          ) : (
+            <>
+              <Link href="/login">
+                <a className="px-4 py-1 font-medium text-gray-600 rounded-md cursor-pointer border border-gray-600 dark:text-gray-200 transition ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800">
+                  {t('login')}
+                </a>
+              </Link>
+              <Link href="/register">
+                <a className="block py-1 px-4 font-medium rounded-md bg-gray-800 border border-gray-800 text-gray-50">
+                  {t('register')}
+                </a>
+              </Link>
+            </>
           )}
         </span>
       </div>
