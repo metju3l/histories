@@ -42,7 +42,7 @@ const PlacesAutocomplete = ({ setSearchCoordinates }: any) => {
       onSelect={handleSelect}
       aria-labelledby="demo"
       openOnFocus={true}
-      className="h-auto px-2 py-2 leading-tight text-gray-700 bg-white border rounded-lg shadow appearance-none w-[300px] focus:outline-none focus:shadow-outline"
+      className="h-auto px-2 py-2 leading-tight text-gray-700 bg-white border border-gray-300 appearance-none rounded-xl dark:border-gray-600 dark:text-gray-400 w-[300px] focus:outline-none"
     >
       <div className="flex w-full">
         <BiSearchAlt2 size={24} />

@@ -5,7 +5,7 @@ module.exports = withPWA({
     dest: 'public',
     disable: process.env.NODE_ENV === 'development',
   },
-  swcMinify: false,
+  swcMinify: true,
   optimizeCss: true,
   typescript: {
     ignoreBuildErrors: false,

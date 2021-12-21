@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
 
   if (loginContext.error) console.error(loginContext.error);
   return (
-    <nav className="fixed w-full bg-white border-b border-gray-200 dark:text-white dark:bg-[#171716] dark:border-gray-800">
+    <nav className="fixed z-50 w-full bg-white border-b border-gray-200 dark:text-white dark:bg-[#171716] dark:border-gray-800">
       <div className="flex items-center justify-between h-full max-w-4xl pt-4 m-auto">
         {/* LEFT SIDE */}
         <span className="flex">
