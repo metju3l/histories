@@ -13,7 +13,7 @@ export default gql`
     paths: [Path]
 
     "Returns info about logged user"
-    me: User
+    me: Me
 
     userPosts(input: UserPostsInput!): [Post!]!
     personalizedPosts(input: PersonalizedPostsInput): [PersonalizedPost!]!
@@ -55,6 +55,13 @@ export default gql`
     createComment(input: CreateCommentInput!): String!
     addToCollection(input: AddToCollectionInput!): String!
     removeFromCollection(input: AddToCollectionInput!): String!
+  }
+
+  input NotificationsSettingsInput {
+    newFollower: Boolean
+    followingUserPost: Boolean
+    followingPlacePost: Boolean
+    newsletter: Boolean
   }
 
   input Radius {
@@ -230,6 +237,7 @@ export default gql`
     lastName: String
     bio: String
     password: String
+    notificationSettings: NotificationsSettingsInput
   }
 
   input UserPostsInput {
@@ -258,6 +266,34 @@ export default gql`
   type Path {
     name: String!
     coordinates: String!
+  }
+
+  type NotificationsSettings {
+    newFollower: Boolean!
+    followingUserPost: Boolean!
+    followingPlacePost: Boolean!
+    newsletter: Boolean!
+  }
+
+  type Me {
+    username: String!
+    email: String!
+    firstName: String!
+    lastName: String!
+    bio: String
+    profile: String!
+    verified: String!
+    createdAt: Float!
+    isFollowing: Boolean!
+    followerCount: Int!
+    followingCount: Int!
+    postCount: Int!
+    id: Float!
+    following: [UserInfoMinimal]
+    followers: [UserInfoMinimal]
+    collections: [Collection]
+    posts: [Post!]!
+    notificationSettings: NotificationsSettings!
   }
 
   type User {

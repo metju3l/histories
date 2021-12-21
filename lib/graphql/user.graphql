@@ -57,24 +57,8 @@ mutation deleteUser($username: String!, $password: String!) {
   deleteUser(input: { username: $username, password: $password })
 }
 
-mutation updateProfile(
-  $username: String
-  $bio: String
-  $email: String
-  $firstName: String
-  $lastName: String
-  $password: String
-) {
-  updateProfile(
-    input: {
-      username: $username
-      bio: $bio
-      email: $email
-      firstName: $firstName
-      lastName: $lastName
-      password: $password
-    }
-  )
+mutation updateProfile($input: UpdateProfileInput!) {
+  updateProfile(input: $input)
 }
 
 query Me {
@@ -92,6 +76,12 @@ query Me {
     }
     verified
     profile
+    notificationSettings {
+      newFollower
+      followingUserPost
+      followingPlacePost
+      newsletter
+    }
   }
 }
 

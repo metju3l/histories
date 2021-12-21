@@ -1,3 +1,4 @@
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import { verify } from 'jsonwebtoken';
 
@@ -5,6 +6,12 @@ import schema from './schema';
 
 const apolloServer = new ApolloServer({
   schema,
+  plugins: [
+    // graphql playground
+    ApolloServerPluginLandingPageGraphQLPlayground({
+      endpoint: '/api/graphql',
+    }),
+  ],
   context: (context) => {
     try {
       // get JWT

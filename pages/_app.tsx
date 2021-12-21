@@ -1,12 +1,12 @@
 import '../lib/translation/i18n';
 import '../lib/styles/main.scss';
 
-import { ApolloProvider } from '@apollo/client';
-import { useMeQuery } from '@graphql/user.graphql';
+import { ApolloError, ApolloProvider, ApolloQueryResult } from '@apollo/client';
+import { MeQuery, useMeQuery } from '@graphql/user.graphql';
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
 import NextNprogress from 'nextjs-progressbar';
-import React, { createContext } from 'react';
+import React from 'react';
 
 import { useApollo } from '../lib/utils/apollo';
 
@@ -45,12 +45,27 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   );
 }
 
+export type LoginContextType = {
+  data: MeQuery | undefined;
+  loading: boolean;
+  error: ApolloError | undefined;
+  refetch: (() => Promise<ApolloQueryResult<MeQuery>>) | undefined;
+};
+
+export const LoginContext = React.createContext<LoginContextType>({
+  data: undefined,
+  loading: true,
+  error: undefined,
+  refetch: undefined,
+});
+
 const LoginProvider: React.FC = ({ children }) => {
-  const logged = useMeQuery();
-  const LoginContext = createContext(logged);
+  const { data, loading, error, refetch } = useMeQuery();
 
   return (
-    <LoginContext.Provider value={logged}>{children}</LoginContext.Provider>
+    <LoginContext.Provider value={{ data, loading, error, refetch }}>
+      {children}
+    </LoginContext.Provider>
   );
 };
 

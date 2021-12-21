@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Maybe } from '../.cache/__types__';
 import ArrowIcon from '../components/Icons/ArrowIcon';
-import { Layout } from '../components/Layout';
+import { Layout, LoginContext } from '../components/Layout';
 import { TimeLine } from '../components/TimeLine';
 
 export type SidebarPlaceType = {
@@ -24,6 +24,8 @@ export type SidebarPlaceType = {
 };
 
 const Map: React.FC = () => {
+  const loginContext = React.useContext(LoginContext);
+
   const router = useRouter();
   const [bounds, setBounds] = useState(defaultValues.bounds);
   const placesQuery = usePlacesQuery({
@@ -41,7 +43,7 @@ const Map: React.FC = () => {
       },
     },
   });
-
+  console.log(loginContext);
   async function FetchMore() {
     if (placesQuery.loading || postsQuery.loading) return;
 
