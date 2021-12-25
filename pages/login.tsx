@@ -15,7 +15,7 @@ type Inputs = {
 
 const Login: FC = () => {
   const [login] = useLoginMutation();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   const {
     register,

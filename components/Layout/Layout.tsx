@@ -80,7 +80,7 @@ const Layout: React.FC<LayoutProps> = ({
       )}
 
       <Navbar />
-      <div className="h-screen bg-white dark:bg-[#171716] pt-14">
+      <div className="h-screen bg-white dark:bg-[#171716] pt-16">
         {children}
       </div>
     </LoginContext.Provider>
