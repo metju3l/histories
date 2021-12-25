@@ -1,4 +1,4 @@
-import { UpdateProfileInput } from '../../../../.cache/__types__';
+import { LoginInput, UpdateProfileInput } from '../../../../.cache/__types__';
 import {
   ValidateComment,
   ValidateCoordinates,
@@ -34,10 +34,8 @@ import LastPost from '../../resolvers/lastPost';
 import { contextType, OnlyLogged, Validate } from './resolvers';
 
 const mutations = {
-  login: async (
-    _parent: undefined,
-    { input }: { input: { username: string; password: string } }
-  ) => await Login({ ...input, name: input.username }),
+  login: async (_parent: undefined, { input }: { input: LoginInput }) =>
+    await Login(input),
 
   like: async (
     _parent: undefined,

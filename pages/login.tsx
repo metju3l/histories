@@ -1,9 +1,14 @@
 import { Layout } from '@components/Layout';
 import { useLoginMutation } from '@graphql/user.graphql';
 import Cookie from 'js-cookie';
+import Image from 'next/image';
 import Link from 'next/link';
 import Router from 'next/router';
 import React, { FC, useState } from 'react';
+import GoogleLogin, {
+  GoogleLoginResponse,
+  GoogleLoginResponseOffline,
+} from 'react-google-login';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
@@ -27,8 +32,10 @@ const Login: FC = () => {
     try {
       const result = await login({
         variables: {
-          username: data.login,
-          password: data.password,
+          input: {
+            username: data.login,
+            password: data.password,
+          },
         },
       });
       if (result.data?.login !== 'error') {
@@ -43,6 +50,31 @@ const Login: FC = () => {
     }
     setLoading(false);
   };
+
+  async function GoogleSubmit(
+    response: GoogleLoginResponse | GoogleLoginResponseOffline
+  ) {
+    if ('tokenId' in response)
+      try {
+        const result = await login({
+          variables: {
+            input: {
+              googleJWT: response.tokenId,
+            },
+          },
+        });
+        if (result.data?.login !== 'error') {
+          // login successful
+          Cookie.set('jwt', result.data?.login as string, {
+            sameSite: 'strict',
+          });
+          Router.reload();
+        }
+      } catch (error: any) {
+        toast.error(error.message);
+      }
+    else toast.error('Google login failed');
+  }
 
   return (
     <Layout redirectLogged title={'login | hiStories'}>
@@ -68,13 +100,27 @@ const Login: FC = () => {
               {...register('password', { required: true })}
             />
           </div>
-
           <button
             type="submit"
             className="block px-4 mt-6 font-medium bg-gray-800 border border-gray-800 py-1.5 rounded-md text-gray-50"
           >
             {t(loading ? 'loading' : 'login')}
           </button>
+          {
+            // show login with google only if google client id is set
+            process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
+              <GoogleLogin
+                clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+                render={(renderProps) => (
+                  <WithGoogle renderProps={renderProps} />
+                )}
+                buttonText="Login"
+                onSuccess={GoogleSubmit}
+                onFailure={() => toast.error('Google login failed')}
+                cookiePolicy={'single_host_origin'}
+              />
+            )
+          }
 
           <Link href="/register">
             <a className="pl-2 underline">{t('create new account')}</a>
@@ -82,6 +128,33 @@ const Login: FC = () => {
         </form>
       </div>
     </Layout>
+  );
+};
+
+const WithGoogle: React.FC<{
+  renderProps: {
+    onClick: () => void;
+    disabled?: boolean | undefined;
+  };
+}> = ({ renderProps }) => {
+  const { t } = useTranslation();
+
+  return (
+    <button
+      onClick={renderProps.onClick}
+      disabled={renderProps.disabled}
+      type="submit"
+      className="flex items-center gap-1 justify-center px-4 mt-6 font-medium bg-white border border-gray-800 py-1.5 rounded-md text-black"
+    >
+      <Image
+        src="/assets/google.svg"
+        height={18}
+        width={18}
+        alt="google logo"
+      />
+
+      <a>{t('login')}</a>
+    </button>
   );
 };
 

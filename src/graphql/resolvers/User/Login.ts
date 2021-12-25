@@ -1,6 +1,8 @@
+import axios from 'axios';
 import { compareSync } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
+import { LoginInput } from '../../../../.cache/__types__';
 import {
   ValidateEmail,
   ValidatePassword,
@@ -9,19 +11,10 @@ import {
 import RunCypherQuery from '../../../database/RunCypherQuery';
 
 const Login = async ({
-  name,
+  username,
   password,
-}: {
-  name: string;
-  password: string;
-}): Promise<any | null> => {
-  // check user input
-  if (
-    (ValidateUsername(name).error && ValidateEmail(name).error) ||
-    ValidatePassword(password).error
-  )
-    throw new Error('Wrong credentials');
-
+  googleJWT,
+}: LoginInput): Promise<any | null> => {
   const query = `
   MATCH (user:User) 
   // where incasesensitive username or email matches 
@@ -30,29 +23,68 @@ const Login = async ({
   RETURN user{.*, id: ID(user)} as user
   `;
 
-  // run query
-  const [userInfo] = await RunCypherQuery({
-    query,
-    params: {
-      name: `(?i)${name}`, // (?i) = case insensitive
-    },
-  });
+  if (googleJWT) {
+    try {
+      // validate token
+      const res = await axios.get(
+        `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${googleJWT}`
+      );
 
-  // if password matches
-  if (compareSync(password, userInfo.records[0].get('user').password))
-    return sign(
-      // JWT payload
-      {
-        username: userInfo.records[0].get('user').username,
-        id: userInfo.records[0].get('user').id,
+      // get user data from neo4j
+      const [userInfo] = await RunCypherQuery({
+        query,
+        params: {
+          name: `(?i)${res.data.email}`, // (?i) = case insensitive
+        },
+      });
+
+      // create and return jwt
+      return sign(
+        // JWT payload
+        {
+          username: userInfo.records[0].get('user').username,
+          id: userInfo.records[0].get('user').id,
+        },
+        process.env.JWT_SECRET!, // JWT secret
+        {
+          expiresIn: '360min', // JWT token expiration
+        }
+      );
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  } else if (username && password) {
+    // check user input
+    if (
+      (ValidateUsername(username).error && ValidateEmail(username).error) ||
+      ValidatePassword(password).error
+    )
+      throw new Error('Wrong credentials');
+
+    // run query
+    const [userInfo] = await RunCypherQuery({
+      query,
+      params: {
+        name: `(?i)${username}`, // (?i) = case insensitive
       },
-      process.env.JWT_SECRET!, // JWT secret
-      {
-        expiresIn: '360min', // JWT token expiration
-      }
-    );
-  // else throw error
-  else throw new Error('Wrong credentials');
+    });
+
+    // if password matches
+    if (compareSync(password, userInfo.records[0].get('user').password))
+      return sign(
+        // JWT payload
+        {
+          username: userInfo.records[0].get('user').username,
+          id: userInfo.records[0].get('user').id,
+        },
+        process.env.JWT_SECRET!, // JWT secret
+        {
+          expiresIn: '360min', // JWT token expiration
+        }
+      );
+    // else throw error
+    else throw new Error('Wrong credentials');
+  } else throw new Error('Wrong credentials');
 };
 
 export default Login;

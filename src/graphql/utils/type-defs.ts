@@ -365,8 +365,9 @@ export default gql`
   }
 
   input LoginInput {
-    username: String!
-    password: String!
+    googleJWT: String
+    username: String
+    password: String
   }
 
   input CreateUserInput {

@@ -43,7 +43,7 @@ const Map: React.FC = () => {
       },
     },
   });
-  console.log(loginContext);
+
   async function FetchMore() {
     if (placesQuery.loading || postsQuery.loading) return;
 
