@@ -73,42 +73,40 @@ const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
               latitude={place.latitude}
               longitude={place.longitude}
             >
-              <div className="relative">
-                <div
-                  className={`absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 ${
-                    place.icon ? 'w-24 h-24' : 'w-16 h-16'
-                  }
+              <div
+                className={`cursor-pointer rounded-full relative border-2 ${
+                  place.icon ? 'w-24 h-24' : 'w-16 h-16'
+                }
                 ${
                   mapContext.hoverPlaceId === place.id && !place.icon
                     ? 'border-black'
                     : 'border-transparent'
                 }
                 `}
-                  onMouseEnter={() => mapContext.setHoverPlaceId(place.id)}
-                  onMouseLeave={() => mapContext.setHoverPlaceId(null)}
-                  onClick={() => mapContext.setSidebarPlace(place)}
-                >
-                  {place.icon ? (
-                    <Image
-                      src={place.icon}
-                      width={90}
-                      height={90}
-                      objectFit="contain"
-                      alt="Picture on map"
-                      quality={10}
-                    />
-                  ) : (
-                    <Image
-                      // @ts-ignore
-                      src={place.preview[0]}
-                      layout="fill"
-                      objectFit="cover"
-                      objectPosition="center"
-                      className="rounded-full"
-                      alt="Picture on map"
-                    />
-                  )}
-                </div>
+                onMouseEnter={() => mapContext.setHoverPlaceId(place.id)}
+                onMouseLeave={() => mapContext.setHoverPlaceId(null)}
+                onClick={() => mapContext.setSidebarPlace(place)}
+              >
+                {place.icon ? (
+                  <Image
+                    src={place.icon}
+                    width={90}
+                    height={90}
+                    objectFit="contain"
+                    alt="Picture on map"
+                    quality={10}
+                  />
+                ) : (
+                  <Image
+                    // @ts-ignore
+                    src={place.preview[0]}
+                    layout="fill"
+                    objectFit="cover"
+                    objectPosition="center"
+                    className="rounded-full"
+                    alt="Picture on map"
+                  />
+                )}
               </div>
             </Marker>
           );
