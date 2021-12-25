@@ -46,15 +46,6 @@ query personalizedPosts($skip: Int!, $take: Int!) {
   }
 }
 
-query tag($label: String!) {
-  tag(label: $label) {
-    label
-    posts {
-      description
-    }
-  }
-}
-
 query post($id: Int!) {
   post(id: $id) {
     id

@@ -5,8 +5,6 @@ export { default as EditCollection } from './Collection/EditCollection';
 export { default as RemovePostFromCollection } from './Collection/RemovePostFromCollection';
 export { default as CreateComment } from './Comment/CreateComment';
 export { default as Delete } from './Delete/Delete';
-export { default as GetPaths } from './getPaths';
-export { default as GetTagInfo } from './getTagInfo';
 export { default as PlaceQuery } from './Place/PlaceQuery';
 export { default as FilterPlacesQuery } from './Place/PlacesQuery';
 export { default as CreatePost } from './Post/CreatePost';

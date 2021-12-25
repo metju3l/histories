@@ -144,13 +144,14 @@ const WithGoogle: React.FC<{
       onClick={renderProps.onClick}
       disabled={renderProps.disabled}
       type="submit"
-      className="flex items-center gap-1 justify-center px-4 mt-6 font-medium bg-white border border-gray-800 py-1.5 rounded-md text-black"
+      className="flex items-center justify-center px-4 mt-6 font-medium text-black bg-white border border-gray-800 gap-1 py-1.5 rounded-md"
     >
       <Image
         src="/assets/google.svg"
         height={18}
         width={18}
         alt="google logo"
+        quality={60}
       />
 
       <a>{t('login')}</a>

@@ -9,8 +9,6 @@ export default gql`
     user(input: UserInput!): User!
 
     suggestedUsers: [User]!
-    tag(label: String!): TagInfo
-    paths: [Path]
 
     "Returns info about logged user"
     me: Me
@@ -263,11 +261,6 @@ export default gql`
     collectionId: Int!
   }
 
-  type Path {
-    name: String!
-    coordinates: String!
-  }
-
   type NotificationsSettings {
     newFollower: Boolean!
     followingUserPost: Boolean!
@@ -343,16 +336,6 @@ export default gql`
     postCount: Int!
     author: UserInfoMinimal!
     posts: [PostInfoNew]!
-  }
-
-  type TagInfo {
-    label: String!
-    numberOfPosts: Int!
-    numberOfUniqueUsers: Int!
-    oldestPostDate: String!
-    newestPostDate: String!
-    topPosts: [Post]
-    posts: [Post]
   }
 
   input UserInput {

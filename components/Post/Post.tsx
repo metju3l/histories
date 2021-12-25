@@ -8,11 +8,6 @@ import {
   useLikeMutation,
   useUnlikeMutation,
 } from '../../lib/graphql/relations.graphql';
-import Angry from '../../public/reactions/angry.gif';
-import Haha from '../../public/reactions/haha.gif';
-import Like from '../../public/reactions/like.gif';
-import Love from '../../public/reactions/love.gif';
-import Wow from '../../public/reactions/wow.gif';
 import { MiniUserCard } from '../MiniUserCard';
 import {
   AddToCollectionModal,
@@ -164,22 +159,7 @@ const Post: React.FC<PostProps> = ({
                           </svg>
                         </span>
                       ) : (
-                        <Image
-                          src={
-                            localLikeState == '👍'
-                              ? Like
-                              : localLikeState == '❤'
-                              ? Love
-                              : localLikeState == '😆'
-                              ? Haha
-                              : localLikeState == '😲'
-                              ? Wow
-                              : Angry
-                          }
-                          height={40}
-                          width={40}
-                          alt="haha"
-                        />
+                        localLikeState
                       )
                     ) : (
                       <span>

@@ -1,9 +1,11 @@
-import { PlacesInput } from '../../../../.cache/__types__';
+import {
+  PersonalizedPostsInput,
+  PlacesInput,
+  PostsInput,
+} from '../../../../.cache/__types__';
 import {
   CollectionQuery,
   FilterPlacesQuery,
-  GetPaths,
-  GetTagInfo,
   MeQuery,
   PersonalizedPostsQuery,
   PlaceQuery,
@@ -20,34 +22,12 @@ const queries = {
     return 'Hello';
   },
 
-  // PLACE QUERY
+  // PLACE
   place: async (_parent: undefined, { id }: { id: number }) => {
     return await PlaceQuery({ id });
   },
 
-  personalizedPosts: async (
-    _parent: undefined,
-    { input }: { input: { skip: number; take: number } },
-    context: contextType
-  ) => {
-    return await PersonalizedPostsQuery({
-      ...input,
-      logged: context.validToken ? context.decoded.id : null,
-    });
-  },
-
-  paths: async () => await GetPaths(),
-
-  suggestedUsers: async (
-    _parent: undefined,
-    _input: undefined,
-    context: contextType
-  ) => {
-    return await SuggestedUsersQuery(
-      context.validToken ? context.decoded.id : null
-    );
-  },
-
+  // PLACES
   places: async (
     _parent: undefined,
     {
@@ -62,6 +42,18 @@ const queries = {
       loggedId: context.validToken ? context.decoded.id : null,
     }),
 
+  // POST
+  post: async (
+    _parent: undefined,
+    { id }: { id: number },
+    context: contextType
+  ) =>
+    await PostQuery({
+      id,
+      logged: context.decoded === null ? null : context.decoded.id,
+    }),
+
+  // POSTS
   posts: async (
     _parent: undefined,
     {
@@ -95,25 +87,31 @@ const queries = {
       loggedId: context.validToken ? context.decoded.id : null,
     }),
 
-  // LOGGED USER QUERY
+  // PERSONALIZED POSTS
+  personalizedPosts: async (
+    _parent: undefined,
+    { input }: { input: PersonalizedPostsInput },
+    context: contextType
+  ) =>
+    await PersonalizedPostsQuery({
+      ...input,
+      logged: context.validToken ? context.decoded.id : null,
+    }),
+
+  suggestedUsers: async (
+    _parent: undefined,
+    _input: undefined,
+    context: contextType
+  ) => {
+    return await SuggestedUsersQuery(
+      context.validToken ? context.decoded.id : null
+    );
+  },
+
+  // LOGGED USER
   me: async (_parent: undefined, _input: undefined, context: contextType) =>
     // if user is logged return user data, else return null
     context.validToken ? await MeQuery({ id: context.decoded.id }) : null,
-
-  // POST QUERY
-  post: async (
-    _parent: undefined,
-    { id }: { id: number },
-    context: contextType
-  ) =>
-    await PostQuery({
-      id,
-      logged: context.decoded === null ? null : context.decoded.id,
-    }),
-
-  tag: async (_parent: undefined, { label }: { label: string }) => {
-    return GetTagInfo({ label });
-  },
 
   // USER QUERY
   user: async (
