@@ -1,3 +1,4 @@
+import UrlPrefix from '@lib/functions/UrlPrefix';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React from 'react';
@@ -24,7 +25,7 @@ const Photos = () => {
             {post.url && (
               <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
                 <Image
-                  src={post.url[0]}
+                  src={UrlPrefix + post.url[0]}
                   layout="fill"
                   objectFit="cover"
                   objectPosition="center"

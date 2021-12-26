@@ -9,7 +9,7 @@ import {
   ValidatePassword,
   ValidateUsername,
 } from '../../../../shared/validation';
-import { UploadPhoto } from '../../../s3/';
+import { UploadPhoto } from '../../../IPFS';
 import {
   AddPostToCollection,
   CreateCollection,

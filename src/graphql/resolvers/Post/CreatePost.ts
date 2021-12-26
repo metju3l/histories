@@ -1,3 +1,4 @@
+import UrlPrefix from '../../../../lib/functions/UrlPrefix';
 import DbConnector from '../../../database/driver';
 import { NSFWCheck } from '../../../functions';
 
@@ -23,7 +24,7 @@ const CreatePost = async ({
   const isNSFW = (
     await Promise.all(
       url.map(async (x) => {
-        const res = await NSFWCheck(x.url);
+        const res = await NSFWCheck(UrlPrefix + x.url);
         // if NSFW probability is more than 0.8 out of 1 return NSFW as true
         return res !== undefined && res > 0.8;
       })

@@ -1,6 +1,5 @@
 import DbConnector from '../../../database/driver';
 import RunCypherQuery from '../../../database/RunCypherQuery';
-import { DeleteFile } from '../../../s3';
 
 const Delete = async ({
   logged,
@@ -37,10 +36,6 @@ RETURN labels(target) AS labels`,
       await session.run(`MATCH (user:User)-[:CREATED]->(post:Post)
 WHERE ID(user) = ${logged} AND ID(post) = ${id}
 RETURN post.url as urls`);
-
-    await Promise.all(
-      fileAddress.records[0].get('urls').map((url: string) => DeleteFile(url))
-    );
   }
   await session.run(query);
 

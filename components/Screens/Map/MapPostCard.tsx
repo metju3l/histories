@@ -1,3 +1,4 @@
+import UrlPrefix from '@lib/functions/UrlPrefix';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React from 'react';
@@ -35,7 +36,7 @@ const MapPostCard: React.FC<{
       {place.preview && (
         <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
           <Image
-            src={place.preview[0]}
+            src={UrlPrefix + place.preview[0]}
             layout="fill"
             objectFit="cover"
             objectPosition="center"

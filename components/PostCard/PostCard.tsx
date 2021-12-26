@@ -16,6 +16,7 @@ import {
 } from '@graphql/relations.graphql';
 import { Menu, Transition } from '@headlessui/react';
 import GeneratedProfileUrl from '@lib/functions/GeneratedProfileUrl';
+import UrlPrefix from '@lib/functions/UrlPrefix';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC, useRef, useState } from 'react';
@@ -276,7 +277,7 @@ const PostCard: FC<{
         </div>
 
         <div className="w-full">
-          <img src={data.post.url[currentImage]} alt="Post" />
+          <img src={UrlPrefix + data.post.url[currentImage]} alt="Post" />
           {currentImage > 0 && (
             <button onClick={() => setCurrentImage(currentImage - 1)}>
               {'<'}

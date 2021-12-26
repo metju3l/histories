@@ -1,4 +1,5 @@
 import { LoginContext } from '@components/Layout';
+import UrlPrefix from '@lib/functions/UrlPrefix';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import React, { useContext, useEffect, useState } from 'react';
@@ -113,7 +114,7 @@ const Post: React.FC<PostProps> = ({
           {photos && (
             <div className="relative w-full bg-white cursor-pointer dark:bg-black h-[360px] bg-secondary">
               <Image
-                src={photos[0].url}
+                src={UrlPrefix + photos[0].url}
                 layout="fill"
                 objectFit="contain"
                 objectPosition="center"

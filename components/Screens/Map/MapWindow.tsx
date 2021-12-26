@@ -1,3 +1,4 @@
+import UrlPrefix from '@lib/functions/UrlPrefix';
 import Viewport from '@lib/types/viewport';
 import Image from 'next/image';
 import React, { useRef } from 'react';
@@ -90,7 +91,7 @@ const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
                 >
                   {place.icon ? (
                     <Image
-                      src={place.icon}
+                      src={UrlPrefix + place.icon}
                       width={90}
                       height={90}
                       objectFit="contain"
@@ -100,7 +101,7 @@ const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
                   ) : (
                     <Image
                       // @ts-ignore
-                      src={place.preview[0]}
+                      src={UrlPrefix + place.preview[0]}
                       layout="fill"
                       objectFit="cover"
                       objectPosition="center"

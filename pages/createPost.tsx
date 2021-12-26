@@ -212,10 +212,10 @@ const Login: FC = () => {
                 <Separator />
                 {/* LOCATION SELECT */}
                 <div className="flex w-full">
-                  <div className="p-2 flex flex-col gap-2">
+                  <div className="flex flex-col p-2 gap-2">
                     <Search setSearchCoordinates={setSearchCoordinates} />
                     <motion.div
-                      className="flex flex-col gap-1 cursor-pointer border p-2 border-gray-300 rounded-xl"
+                      className="flex flex-col p-2 border border-gray-300 cursor-pointer gap-1 rounded-xl"
                       animate={{ height: placeDetail ? '100%' : 'auto' }}
                       transition={{
                         duration: 0.2,
@@ -223,7 +223,7 @@ const Login: FC = () => {
                       }}
                     >
                       <div
-                        className="flex gap-1 items-center"
+                        className="flex items-center gap-1"
                         onClick={() => setPlaceDetail(!placeDetail)}
                       >
                         <motion.span
@@ -249,7 +249,7 @@ const Login: FC = () => {
                       }}
                     >
                       <div
-                        className="flex items-center gap-1 cursor-pointer"
+                        className="flex items-center cursor-pointer gap-1"
                         onClick={() => setCollapsed(!collapsed)}
                       >
                         <motion.span

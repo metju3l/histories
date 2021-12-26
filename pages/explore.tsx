@@ -1,5 +1,6 @@
 import { Layout } from '@components/Layout';
 import { usePersonalizedPostsQuery, usePostQuery } from '@graphql/post.graphql';
+import UrlPrefix from '@lib/functions/UrlPrefix';
 import Image from 'next/image';
 import React from 'react';
 
@@ -39,7 +40,7 @@ const PostCard: React.FC<{ id: number; index: number }> = ({ id, index }) => {
       }`}
     >
       <Image
-        src={data!.post.url[0]}
+        src={UrlPrefix + data!.post.url[0]}
         layout="fill"
         alt="image"
         objectFit="cover"

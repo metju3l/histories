@@ -52,22 +52,18 @@ export const ReactionMenu: React.FC<{
     >
       <Reaction text="👍" tooltip="like" onClick={onLike}>
         👍
-        {/* <Image src={Like} height={60} width={60} alt="haha" /> */}
       </Reaction>
       <Reaction text="❤" tooltip="love" onClick={onLike}>
-        ❤{/* <Image src={Love} height={60} width={60} alt="haha" /> */}
+        ❤
       </Reaction>
       <Reaction text="😆" tooltip="haha" onClick={onLike}>
         😆
-        {/* <Image src={Haha} height={60} width={60} alt="haha" /> */}
       </Reaction>
       <Reaction text="😲" tooltip="wow" onClick={onLike}>
         😲
-        {/* <Image src={Wow} height={60} width={60} alt="haha" /> */}
       </Reaction>
       <Reaction text="😠" tooltip="angry" onClick={onLike}>
         😠
-        {/* <Image src={Angry} height={60} width={60} alt="haha" /> */}
       </Reaction>
     </motion.div>
   );

@@ -1,5 +1,6 @@
 import { Loading } from '@components/UI';
 import { usePostsQuery } from '@graphql/post.graphql';
+import UrlPrefix from '@lib/functions/UrlPrefix';
 import Image from 'next/image';
 import { SidebarPlaceType } from 'pages/map';
 import React from 'react';
@@ -23,7 +24,7 @@ const PlaceDetail: React.FC<{
         <div className="relative w-full rounded-lg cursor-pointer h-52 md:h-72 bg-secondary">
           {sidebarPlace.preview && (
             <Image
-              src={sidebarPlace.preview[0]}
+              src={UrlPrefix + sidebarPlace.preview[0]}
               layout="fill"
               objectFit="cover"
               objectPosition="center"
@@ -58,7 +59,7 @@ const PlaceDetail: React.FC<{
                   {post.url && (
                     <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
                       <Image
-                        src={post.url[0]}
+                        src={UrlPrefix + post.url[0]}
                         layout="fill"
                         objectFit="cover"
                         objectPosition="center"
