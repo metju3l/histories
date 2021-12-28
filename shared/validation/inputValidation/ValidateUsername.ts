@@ -15,6 +15,7 @@ const ValidateUsername = (
     '_document',
     'robots.txt',
     'sitemap.xml',
+    'hashes.txt',
     'manifest.json',
     'verify',
     '404',

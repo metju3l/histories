@@ -2,6 +2,7 @@ import { hash } from 'bcryptjs';
 
 import RunCypherQuery from '../../../database/RunCypherQuery';
 import SendEmail from '../../../email/SendEmail';
+import SignJWT from '../../../functions/SignJWT';
 
 type CreateUserProps = {
   username: string;
@@ -19,7 +20,7 @@ const CreateUser = async ({
   email,
   password,
   emailSubscription,
-}: CreateUserProps): Promise<void> => {
+}: CreateUserProps) => {
   // generate password hash
   const hashedPassword = await hash(
     password,
@@ -30,24 +31,37 @@ const CreateUser = async ({
   const authorizationToken = `${new Date().getTime()}`;
 
   const query = `
-  CREATE (n:User {
+  CREATE (user:User {
     username : $username,
     firstName: $firstName,
     lastName: $lastName,
+    
     email: $email,
     password: $hashedPassword,
     createdAt: $createdAt,
+
     verified: false,
+    authorizationToken: $authorizationToken,  // token used to verify email address
+    
+    profile: $profile,
+    profileBlurhash: "",
+    
     locale: $locale,
-    authorizationToken: $authorizationToken, 
-    newFollowerNotification: true,
-    followingPlacePostNotification: true,
-    followingUserPostNotification: true,
-    newsletterNotification: true
+    
+    newFollowerNotification: $notifications,
+    followingPlacePostNotification: $notifications,
+    followingUserPostNotification: $notifications,
+    newsletterNotification: $notifications
   })
+  SET user.id = ID(user)
+  RETURN user.id AS id
   `;
 
-  await RunCypherQuery({
+  const profile = `https://avatars.dicebear.com/api/initials/${encodeURIComponent(
+    firstName
+  )}%20${encodeURIComponent(lastName)}.svg`;
+
+  const [user] = await RunCypherQuery({
     query,
     params: {
       username,
@@ -56,9 +70,10 @@ const CreateUser = async ({
       email,
       hashedPassword,
       authorizationToken,
-      emailSubscription,
-      createdAt: new Date(),
+      createdAt: new Date().getTime(),
+      profile: profile,
       locale: 'en',
+      notifications: emailSubscription,
     },
   });
 
@@ -68,6 +83,8 @@ const CreateUser = async ({
     EmailContent({ token: authorizationToken, firstName, lastName }),
     email
   );
+
+  return SignJWT(user.records[0].get('id'));
 };
 
 type EmailProps = {

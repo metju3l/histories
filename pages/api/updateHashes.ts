@@ -4,10 +4,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 async function UpdateHashes() {
   if (
-    !fs.existsSync('./public/api/hashes.txt') ||
-    (fs.existsSync('./public/api/hashes.txt') &&
-      Date.now() - fs.statSync('./public/api/hashes.txt').mtime.getTime() >
-        3600000)
+    !fs.existsSync('./public/hashes.txt') ||
+    (fs.existsSync('./public/hashes.txt') &&
+      Date.now() - fs.statSync('./public/hashes.txt').mtime.getTime() > 3600000)
   ) {
     const query = `
     CALL{
@@ -29,7 +28,7 @@ async function UpdateHashes() {
       ...res.records[0].get('postUrls').flat(),
       ...res.records[0].get('profileUrls'),
     ];
-    fs.writeFileSync('./public/api/hashes.txt', hashes.join('\n'));
+    fs.writeFileSync('./public/hashes.txt', hashes.join('\n'));
 
     return 'hashes.txt is older than 1 hour, updated';
   } else return 'hashes.txt is up to date';

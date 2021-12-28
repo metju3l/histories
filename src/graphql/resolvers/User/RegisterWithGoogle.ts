@@ -1,22 +1,9 @@
 import axios from 'axios';
-import { sign } from 'jsonwebtoken';
+import { remove as removeDiacritics } from 'diacritics';
 
 import RunCypherQuery from '../../../database/RunCypherQuery';
+import SignJWT from '../../../functions/SignJWT';
 import { UploadPhoto } from '../../../IPFS';
-
-function SignJWT(id: string) {
-  // create and return jwt
-  return sign(
-    // JWT payload
-    {
-      id,
-    },
-    process.env.JWT_SECRET!, // JWT secret
-    {
-      expiresIn: '360min', // JWT token expiration
-    }
-  );
-}
 
 async function RegisterWithGooge(googleJWT: string) {
   const query = `
@@ -59,10 +46,19 @@ async function RegisterWithGooge(googleJWT: string) {
 
     // if there is some user with same email or googleID
     if (existingUser.records.length > 0) {
-      // if user has same googleID return JWT
-      if (existingUser.records[0].get('user').googleID == res.data.sub)
-        return SignJWT(existingUser.records[0].get('user').id);
-      else throw new Error('User with same email already exists');
+      // if user has same email and doesn't have googleID add googleID to user and return JWT
+      if (existingUser.records[0].get('user').googleID === undefined)
+        await RunCypherQuery({
+          query: `MATCH (user:User)
+                  WHERE user.email =~ $email   
+                  SET user.googleID = $googleID`,
+          params: {
+            googleID: res.data.sub, // googleID
+            email: res.data.email,
+          },
+        });
+
+      return SignJWT(existingUser.records[0].get('user').id);
     }
 
     // if there is no user with same email or googleID create user and return JWT
@@ -79,7 +75,9 @@ async function RegisterWithGooge(googleJWT: string) {
         query,
         params: {
           googleID: res.data.sub,
-          username: `${res.data.given_name}${date.substring(date.length - 6)}`, // generate unique username
+          username: `${removeDiacritics(res.data.given_name)}${date.substring(
+            date.length - 6
+          )}`, // generate unique username
           firstName: res.data.given_name,
           lastName: res.data.family_name,
           email: res.data.email,

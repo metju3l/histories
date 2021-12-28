@@ -204,8 +204,7 @@ const mutations = {
     const validatePassword = ValidatePassword(input.password).error;
     if (validatePassword) throw new Error(validatePassword);
 
-    await CreateUser(input);
-    return 0;
+    return await CreateUser(input);
   },
 
   createCollection: async (
