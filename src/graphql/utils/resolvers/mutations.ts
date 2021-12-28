@@ -1,3 +1,6 @@
+import sharp from 'sharp';
+import streamToPromise from 'stream-to-promise';
+
 import { LoginInput, UpdateProfileInput } from '../../../../.cache/__types__';
 import {
   ValidateComment,
@@ -23,6 +26,7 @@ import {
   Follow,
   Like,
   Login,
+  RegisterWithGoogle,
   RemovePostFromCollection,
   Report,
   Unfollow,
@@ -34,6 +38,11 @@ import LastPost from '../../resolvers/lastPost';
 import { contextType, OnlyLogged, Validate } from './resolvers';
 
 const mutations = {
+  registerWithGoogle: async (
+    _parent: undefined,
+    { googleJWT }: { googleJWT: string }
+  ) => await RegisterWithGoogle(googleJWT),
+
   login: async (_parent: undefined, { input }: { input: LoginInput }) =>
     await Login(input),
 
@@ -285,7 +294,24 @@ const mutations = {
     if (input.photo.length === 0) throw new Error('No photo');
 
     const urls: Array<{ url: string; blurhash: string }> = await Promise.all(
-      input.photo.map(async (photo: any) => await UploadPhoto(photo))
+      input.photo.map(async (photo: any) => {
+        const { createReadStream, mimetype } = await photo;
+        // check if file is image
+        if (!mimetype.startsWith('image/'))
+          throw new Error('file is not a image');
+
+        const stream = await createReadStream();
+        // await upload stream
+        const buffer = await streamToPromise(stream);
+
+        const imageBuffer = await sharp(buffer)
+          .resize(2560, undefined, { withoutEnlargement: true })
+          // convert image format to jpeg
+          .jpeg()
+          .toBuffer();
+
+        return await UploadPhoto(imageBuffer);
+      })
     );
 
     if (context.validToken)

@@ -21,6 +21,7 @@ export { default as DeleteUser } from './User/DeleteUser';
 export { default as EditUser } from './User/EditUser';
 export { default as Login } from './User/Login';
 export { default as MeQuery } from './User/MeQuery';
+export { default as RegisterWithGoogle } from './User/RegisterWithGoogle';
 export { default as SuggestedUsersQuery } from './User/SuggestedUsersQuery';
 export { default as UserQuery } from './User/UserQuery';
 export { default as VerifyToken } from './User/VerifyToken';

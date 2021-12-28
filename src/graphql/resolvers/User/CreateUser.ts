@@ -38,8 +38,12 @@ const CreateUser = async ({
     password: $hashedPassword,
     createdAt: $createdAt,
     verified: false,
-    authorizationToken: $authorizationToken,
-    emailSubscription: $emailSubscription
+    locale: $locale,
+    authorizationToken: $authorizationToken, 
+    newFollowerNotification: true,
+    followingPlacePostNotification: true,
+    followingUserPostNotification: true,
+    newsletterNotification: true
   })
   `;
 
@@ -53,7 +57,8 @@ const CreateUser = async ({
       hashedPassword,
       authorizationToken,
       emailSubscription,
-      createdAt: new Date().getTime(),
+      createdAt: new Date(),
+      locale: 'en',
     },
   });
 

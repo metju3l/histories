@@ -6,6 +6,10 @@ mutation login($input: LoginInput!) {
   login(input: $input)
 }
 
+mutation registerWithGoogle($googleJWT: String!) {
+  registerWithGoogle(googleJWT: $googleJWT)
+}
+
 query suggestedUsers {
   suggestedUsers {
     id

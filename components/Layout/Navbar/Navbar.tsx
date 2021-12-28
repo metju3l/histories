@@ -1,6 +1,7 @@
 import { Menu } from '@headlessui/react';
 import FirstLetterUppercase from '@lib/functions/FirstLetterUppercase';
 import LogOut from '@lib/functions/LogOut';
+import UrlPrefix from '@lib/functions/UrlPrefix';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -18,6 +19,7 @@ const Navbar: React.FC = () => {
   const userIsLogged = loginContext.data?.me?.id;
 
   if (loginContext.error) console.error(loginContext.error);
+
   return (
     <nav className="fixed z-40 w-full bg-white border-b border-gray-200 dark:text-white dark:bg-[#171716] dark:border-gray-800">
       <div className="flex items-center justify-between h-full max-w-4xl pt-4 m-auto">
@@ -51,7 +53,12 @@ const Navbar: React.FC = () => {
               >
                 <Image
                   className="rounded-full gray-400"
-                  src={loginContext.data!.me!.profile}
+                  src={
+                    // if user has a profile picture add IPFS gateway to hash
+                    loginContext.data!.me!.profile.startsWith('http')
+                      ? loginContext.data!.me!.profile
+                      : UrlPrefix + loginContext.data!.me!.profile
+                  }
                   layout="fill"
                   objectFit="contain"
                   objectPosition="center"

@@ -189,7 +189,7 @@ CALL {
   RETURN r AS isFollowing
 }
 
-RETURN user{.*, id: ID(user),
+RETURN user{.*, 
   posts: COLLECT(DISTINCT post{.*,
       id: ID(post),
       author: user{.*,

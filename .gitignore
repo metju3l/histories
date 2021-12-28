@@ -54,4 +54,4 @@ nodemon.json
 
 tsconfig.tsbuildinfo
 
-public/hashes.txt
+public/api/hashes.txt
