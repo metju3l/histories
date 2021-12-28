@@ -27,4 +27,5 @@ Default.args = {
   firstName: 'John',
   lastName: 'Doe',
   username: 'johndoe',
+  profile: 'https://thispersondoesnotexist.com/image',
 };
