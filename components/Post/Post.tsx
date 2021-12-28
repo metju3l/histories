@@ -95,7 +95,6 @@ const Post: React.FC<PostProps> = ({
         postId={id}
         setOpenState={setCollectionSelectModal}
       />
-
       <PostTimeline time={postDate} show={timeline}>
         <div
           onMouseLeave={() => {

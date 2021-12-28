@@ -35,7 +35,7 @@ query personalizedPosts($skip: Int!, $take: Int!) {
       firstName
       lastName
       username
-      profileUrl
+      profile
     }
     url
     createdAt

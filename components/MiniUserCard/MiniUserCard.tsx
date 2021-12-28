@@ -1,3 +1,4 @@
+import UrlPrefix from '@lib/functions/UrlPrefix';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,6 +14,7 @@ export type MiniUserCardProps = {
   lastName: string;
   username: string;
   time?: number;
+  profile: string;
 };
 
 const Post: React.FC<MiniUserCardProps> = ({
@@ -20,6 +22,7 @@ const Post: React.FC<MiniUserCardProps> = ({
   lastName,
   username,
   time,
+  profile,
 }) => {
   const [nameHover, setNameHover] = useState(false);
 
@@ -30,7 +33,7 @@ const Post: React.FC<MiniUserCardProps> = ({
       <Link href={'/' + username} passHref>
         <div className="relative w-10 h-10 rounded-full cursor-pointer bg-secondary">
           <Image
-            src={GeneratedProfileUrl(firstName, lastName)}
+            src={profile.startsWith('http') ? profile : UrlPrefix + profile}
             layout="fill"
             objectFit="contain"
             objectPosition="center"

@@ -114,22 +114,11 @@ export default gql`
   type PersonalizedPostAuthor {
     id: Int!
     bio: String
-    profileUrl: String!
+    profile: String!
     firstName: String!
     lastName: String!
     username: String!
     createdAt: Float!
-  }
-
-  type PersonalizedPostPlace {
-    id: Int!
-    postCount: Int!
-    likeCount: Int!
-    name: String!
-    description: String
-    preview: String
-    latitude: Float!
-    longitude: Float!
   }
 
   type PersonalizedPostComment {
@@ -154,7 +143,7 @@ export default gql`
     likeCount: Int!
     commentCount: Int!
     comments: [PersonalizedPostComment]!
-    place: PersonalizedPostPlace!
+    place: Place!
     query: String
   }
 

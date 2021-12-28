@@ -1,5 +1,10 @@
 type PostProps = {
-  author: { firstName: string; lastName: string; username: string };
+  author: {
+    firstName: string;
+    lastName: string;
+    username: string;
+    profile: string;
+  };
   timeline?: boolean;
   photos?: Array<{ url: string }>;
   createdAt: number;
