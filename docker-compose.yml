@@ -4,6 +4,7 @@ services:
   neo4j:
     image: neo4j:4.3.2
     restart: unless-stopped
+    container_name: Neo4j
     ports:
       - 7474:7474
       - 7687:7687
@@ -17,31 +18,23 @@ services:
       - NEO4J_AUTH=neo4j/password
       - NEO4JLABS_PLUGINS='["apoc"]'
 
-  minio:
-    image: minio/minio:latest
+  ipfs:
+    image: lscr.io/linuxserver/ipfs
     restart: unless-stopped
-    volumes:
-      - MinioData:/data
-    command: server /data --console-address ":9001"
-    ports:
-      - 9001:9000
-      - 9002:9001
-
-  mongo:
-    image: mongo
-    restart: always
-    ports:
-      - 27018:27017
-    volumes:
-      - MongodbData:/data
+    container_name: IPFS
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /path/to/data:/config
+    ports:
+      - 80:80
+      - 4001:4001
+      - 5001:5001
+      - 8080:8080
+      - 443:443
 
 volumes:
   Neo4jData:
-    driver: local
-  MongodbData:
-    driver: local
-  MinioData:
     driver: local

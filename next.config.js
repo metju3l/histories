@@ -32,6 +32,6 @@ module.exports = withPWA({
     return config;
   },
   images: {
-    domains: ['avatars.dicebear.com', 'ipfs.io', 'ipfs.infura.io'],
+    domains: ['avatars.dicebear.com', 'ipfs.io', 'ipfs.infura.io', 'localhost'],
   },
 });

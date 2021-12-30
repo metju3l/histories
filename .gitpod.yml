@@ -3,6 +3,7 @@ tasks:
   - name: Setup
     init: >
       yarn;
+      docker-compose up -d;
       cp .env.local.example .env.local;
       cp nodemon.json.example nodemon.json;
       yarn tsc --project tsconfig-express.json;
@@ -17,10 +18,30 @@ tasks:
 
 # Ports to expose on workspace startup
 ports:
+  # Nextjs
   - port: 3000
     onOpen: ignore
     visibility: public
+
+  # Storybook
   - port: 6006
+    onOpen: ignore
+    visibility: public
+
+  # IPFS
+  - port: 80
+    onOpen: ignore
+    visibility: public
+  - port: 4001
+    onOpen: ignore
+    visibility: public
+  - port: 5001
+    onOpen: ignore
+    visibility: public
+  - port: 8080
+    onOpen: ignore
+    visibility: public
+  - port: 443
     onOpen: ignore
     visibility: public
 

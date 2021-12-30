@@ -4,6 +4,14 @@ import { create } from 'ipfs-http-client';
 const UploadPhoto = async (
   photo: Buffer
 ): Promise<{ url: string; blurhash: string }> => {
+  // if IPFS client is running on default address (localhost:5001)
+  if (process.env.IPFS_CLIENT == 'default') {
+    const client = create();
+    const res = await client.add(photo); // upload file, Infura will automatically pin the file
+    return { url: res.path, blurhash: '' };
+  }
+
+  // if using infura client
   // if infura credentials are not set, throw error
   if (!process.env.INFURA_PROJECT_ID)
     throw new Error('Infura project ID is not defined');
@@ -27,7 +35,7 @@ const UploadPhoto = async (
     },
   });
 
-  const res = await client.add(photo); // upload file, Infura will automatically pin the file
+  const res = await client.add(photo);
   return { url: res.path, blurhash: '' };
 };
 
