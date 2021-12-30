@@ -8,9 +8,20 @@ const Account = () => {
   return (
     <SettingsLayout
       current="account"
-      title="account"
       heading="account"
       headingDescription=""
+      head={{
+        title: `${t('Account settings')} | hiStories`,
+        description: `Account settings`,
+        canonical: 'https://www.histories.cc/settings',
+        openGraph: {
+          title: `Account settings | hiStories`,
+          type: 'website',
+          url: 'https://www.histories.cc/settings',
+          description: `Account settings`,
+          site_name: 'Settings page',
+        },
+      }}
     >
       <h3 className="text-2xl font-medium">{t('delete account')}</h3>
       <p className="pb-4 text-base text-gray-500">

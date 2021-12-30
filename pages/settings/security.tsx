@@ -8,9 +8,20 @@ const Account = () => {
   return (
     <SettingsLayout
       current="security"
-      title="security"
       heading="security"
       headingDescription=""
+      head={{
+        title: `${t('Security settings')} | hiStories`,
+        description: `Security settings`,
+        canonical: 'https://www.histories.cc/settings/security',
+        openGraph: {
+          title: `Security settings | hiStories`,
+          type: 'website',
+          url: 'https://www.histories.cc/settings/security',
+          description: `Security settings`,
+          site_name: 'Settings page',
+        },
+      }}
     >
       <h3 className="text-2xl font-medium">{t('password')}</h3>
       <div className="py-4">

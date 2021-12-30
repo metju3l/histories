@@ -1,4 +1,5 @@
 import { Layout } from '@components/Layout';
+import { HeadProps } from '@components/Layout/Layout';
 import { Separator } from '@components/UI';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -6,15 +7,16 @@ import { useTranslation } from 'react-i18next';
 import SubNavItem from './SubNavItem';
 
 export type SettingsLayoutProps = {
+  head: HeadProps;
+
   current: string;
-  title: string;
   heading: string;
   headingDescription?: string;
 };
 
 const SettingsLayout: React.FC<SettingsLayoutProps> = ({
+  head,
   current,
-  title,
   children,
   heading,
   headingDescription,
@@ -22,7 +24,7 @@ const SettingsLayout: React.FC<SettingsLayoutProps> = ({
   const { t } = useTranslation();
 
   return (
-    <Layout title={title} redirectNotLogged>
+    <Layout redirectNotLogged head={head}>
       <div className="w-full">
         <div className="w-full max-w-4xl px-6 m-auto xl:px-0">
           <div className="flex pt-6 pb-8">

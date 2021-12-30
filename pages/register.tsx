@@ -70,7 +70,21 @@ const Register: React.FC = () => {
   }
 
   return (
-    <Layout redirectLogged title={'sign up | hiStories'}>
+    <Layout
+      redirectLogged
+      head={{
+        title: `Sign up | HiStories`,
+        description: `Create new HiStories account`,
+        canonical: 'https://www.histories.cc/register',
+        openGraph: {
+          title: `Sign up | HiStories`,
+          type: 'website',
+          url: 'https://www.histories.cc/register',
+          description: `Create new HiStories account`,
+          site_name: 'Sign up page',
+        },
+      }}
+    >
       <div className="p-10 m-auto max-w-[27rem]">
         <form
           onSubmit={async (event) => {

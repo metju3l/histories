@@ -1,12 +1,9 @@
 import 'react-dropdown/style.css';
 
-import { PostCard } from '@components/PostCard';
-import { ProfilePage } from '@components/ProfilePage';
 import { useCollectionQuery } from '@graphql/collection.graphql';
 import { useMeQuery } from '@graphql/user.graphql';
 import { NextPageContext } from 'next';
 import React, { FC } from 'react';
-import Dropdown from 'react-dropdown';
 
 const Collections: FC<{ id: number }> = ({ id }) => {
   const { data, loading, error } = useCollectionQuery({ variables: { id } });
@@ -24,34 +21,7 @@ const Collections: FC<{ id: number }> = ({ id }) => {
 
   return (
     <>
-      <ProfilePage
-        title={`${data.collection?.name} | hiStories`}
-        username={data.collection.author.username}
-        collectionId={data.collection.id}
-        rightColumn={
-          <div>
-            <div className="flex items-center justify-between w-full px-4 pb-4">
-              <span className="flex items-center text-white">
-                <div className="mr-2"> sort by</div>
-                <Dropdown
-                  options={sortOptions}
-                  onChange={() => {
-                    // save the sort option in url query
-                  }}
-                  value={sortOptions[0]}
-                  placeholder="Select an option"
-                  className="w-36"
-                />
-              </span>
-            </div>
-            <div className="">
-              {data.collection.posts.map((post) => (
-                <PostCard key={post!.id} id={post!.id} currentCollection={id} />
-              ))}
-            </div>
-          </div>
-        }
-      />
+      <div></div>
     </>
   );
 };

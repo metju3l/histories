@@ -15,7 +15,20 @@ const Explore: React.FC = () => {
   console.log(data?.personalizedPosts);
 
   return (
-    <Layout title="hiStories">
+    <Layout
+      head={{
+        title: `Explore | hiStories`,
+        description: `Explore HiStories, place where you can share historical photos of places`,
+        canonical: 'https://www.histories.cc/explore',
+        openGraph: {
+          title: `Explore | HiStories`,
+          type: 'website',
+          url: 'https://www.histories.cc/explore',
+          description: `Explore HiStories`,
+          site_name: 'Explore page',
+        },
+      }}
+    >
       <div className="m-auto mt-4 grid grid-cols-3 gap-2 max-w-screen-xl">
         {data?.personalizedPosts.map((post, index) => (
           <PostCard key={post!.id} id={post!.id} index={index} />

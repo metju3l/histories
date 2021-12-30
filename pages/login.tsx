@@ -77,7 +77,21 @@ const Login: FC = () => {
   }
 
   return (
-    <Layout redirectLogged title={'login | hiStories'}>
+    <Layout
+      redirectLogged
+      head={{
+        title: `Log in | HiStories`,
+        description: `Log in to your HiStories account`,
+        canonical: 'https://www.histories.cc/login',
+        openGraph: {
+          title: `Log in | HiStories`,
+          type: 'website',
+          url: 'https://www.histories.cc/login',
+          description: `Log in to your HiStories account`,
+          site_name: 'Log in page',
+        },
+      }}
+    >
       <div className="p-10 m-auto max-w-[27rem]">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
           <div>

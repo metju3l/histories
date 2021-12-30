@@ -17,9 +17,20 @@ const Account = () => {
   return (
     <SettingsLayout
       current="notifications"
-      title="notifications"
       heading="notifications"
       headingDescription=""
+      head={{
+        title: `${t('Notifications settings')} | hiStories`,
+        description: `Notifications settings`,
+        canonical: 'https://www.histories.cc/settings/notifications',
+        openGraph: {
+          title: `Notifications settings | hiStories`,
+          type: 'website',
+          url: 'https://www.histories.cc/settings/notifications',
+          description: `Notifications settings`,
+          site_name: 'Settings page',
+        },
+      }}
     >
       <h3 className="text-2xl font-medium">{t('email notifications')}</h3>
       <p className="pb-4 text-base text-gray-500"></p>

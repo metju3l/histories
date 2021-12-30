@@ -170,7 +170,20 @@ const Login: FC = () => {
 
   if (data?.me === null) router.replace('/');
   return (
-    <Layout title="Create post | hiStories">
+    <Layout
+      head={{
+        title: `New post | hiStories`,
+        description: `Create new post on HiStories`,
+        canonical: 'https://www.histories.cc/createPost',
+        openGraph: {
+          title: `New post | HiStories`,
+          type: 'website',
+          url: 'https://www.histories.cc/newPost',
+          description: `Create new post on HiStories`,
+          site_name: 'New post page',
+        },
+      }}
+    >
       <Formik
         initialValues={{
           photoDate: '',

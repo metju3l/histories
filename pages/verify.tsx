@@ -1,4 +1,3 @@
-import { Layout } from '@components/Layout';
 import Button from '@components/UI/Button';
 import { useMeQuery, useVerifyTokenMutation } from '@graphql/user.graphql';
 import { useRouter } from 'next/router';
@@ -16,7 +15,7 @@ export default function Page() {
   if (router.query.token === undefined) return <div>check your email</div>;
   else
     return (
-      <Layout dontRedirectUnverified title={''}>
+      <div>
         {isLoading ? (
           <Button isLoading />
         ) : (
@@ -40,6 +39,6 @@ export default function Page() {
             Authorize email
           </Button>
         )}
-      </Layout>
+      </div>
     );
 }

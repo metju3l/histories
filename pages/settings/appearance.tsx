@@ -10,9 +10,20 @@ const Account = () => {
   return (
     <SettingsLayout
       current="appearance"
-      title="appearance"
       heading="appearance"
       headingDescription=""
+      head={{
+        title: `${t('Appearance settings')} | hiStories`,
+        description: `Accessibility settings`,
+        canonical: 'https://www.histories.cc/settings/appearance',
+        openGraph: {
+          title: `Appearance settings | hiStories`,
+          type: 'website',
+          url: 'https://www.histories.cc/settings/appearance',
+          description: `Appearance settings`,
+          site_name: 'Settings page',
+        },
+      }}
     >
       <h3 className="text-2xl font-medium">{t('theme')}</h3>
       <div className="flex py-4 gap-6">

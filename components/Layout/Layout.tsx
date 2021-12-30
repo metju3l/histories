@@ -1,5 +1,5 @@
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
-import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 
@@ -7,8 +7,33 @@ import { MeQuery, useMeQuery } from '../../lib/graphql/user.graphql';
 import { Navbar } from './Navbar';
 import ProtectedRoutes from './ProtectedRoutes';
 
-type LayoutProps = {
+export type HeadProps = {
   title: string;
+  description: string;
+  canonical?: string;
+  openGraph: {
+    title: string;
+    type: string;
+    images?: Array<{
+      url: string;
+      width: number;
+      height: number;
+      alt: string;
+    }>;
+    url: string;
+    description: string;
+    site_name: string;
+    profile?: {
+      firstName: string;
+      lastName: string;
+      username: string;
+    };
+  };
+};
+
+type LayoutProps = {
+  head: HeadProps;
+
   dontRedirectUnverified?: boolean;
   redirectLogged?: boolean;
   redirectNotLogged?: boolean;
@@ -30,7 +55,7 @@ export const LoginContext = React.createContext<LoginContextType>({
 });
 
 const Layout: React.FC<LayoutProps> = ({
-  title,
+  head,
   dontRedirectUnverified,
   redirectLogged,
   redirectNotLogged,
@@ -40,34 +65,35 @@ const Layout: React.FC<LayoutProps> = ({
 
   return (
     <LoginContext.Provider value={{ data, loading, error, refetch }}>
-      <Head>
-        <title>{title}</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta
-          name="keywords"
-          content="DELTA - Střední škola informatiky a ekonomie, s.r.o."
-        />
-        <link rel="icon" href="/icons/favicon.ico" />
-        <link rel="manifest" href="/manifest.json" />
-        <link
-          href="/icons/icon-72x72.png"
-          rel="icon"
-          type="image/png"
-          sizes="72x72"
-        />
-        <link
-          href="/icons/icon-512x512.png"
-          rel="icon"
-          type="image/png"
-          sizes="512x512"
-        />
-        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.jpg"></link>
-        <meta name="description" content="hiStories" />
-        <link rel="manifest" href="manifest.json" />
-        <link rel="apple-touch-icon" href="/logo.png" />
-        <meta name="theme-color" content="#17A6FA" />
-      </Head>
+      <NextSeo
+        title={head.title}
+        description={head.description}
+        canonical={head.canonical}
+        openGraph={{
+          ...head.openGraph,
+          locale: 'en_US',
+        }}
+        twitter={{
+          handle: '@handle',
+          site: '@site',
+          cardType: 'summary_large_image',
+        }}
+        additionalMetaTags={[
+          {
+            name: 'theme-color',
+            content: '#17A6FA',
+          },
+          {
+            name: 'keywords',
+            content:
+              'historical photos, old places, timeline, map, places history, Pardubice v běhu času, Pardubice history, history of place, social site, history places on map, map with timeline',
+          },
+          {
+            name: 'viewport',
+            content: 'width=device-width, initial-scale=1.0',
+          },
+        ]}
+      />
       <Toaster position="top-center" reverseOrder={true} />
       {(dontRedirectUnverified !== true ||
         redirectLogged ||

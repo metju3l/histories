@@ -15,7 +15,20 @@ const Index: React.FC = () => {
   }
 
   return (
-    <Layout title="hiStories">
+    <Layout
+      head={{
+        title: `HiStories`,
+        description: `HiStories feed, posts from people and places you follow`,
+        canonical: 'https://www.histories.cc/',
+        openGraph: {
+          title: `HiStories`,
+          type: 'website',
+          url: 'https://www.histories.cc/',
+          description: `HiStories feed, posts from people and places you follow`,
+          site_name: 'Main page',
+        },
+      }}
+    >
       <div className="flex m-auto max-w-screen-xl">
         <div className="hidden w-[30%] p-[1em] xl:block">
           <div className="sticky top-20"></div>

@@ -106,7 +106,20 @@ const Map: React.FC = () => {
   }, [whatToShow]);
 
   return (
-    <Layout title="map | hiStories">
+    <Layout
+      head={{
+        title: `Map | HiStories`,
+        description: `HiStorical map of the world with stories and timeline`,
+        canonical: 'https://www.histories.cc/map',
+        openGraph: {
+          title: `Map | HiStories`,
+          type: 'website',
+          url: 'https://www.histories.cc/map',
+          description: `HiStorical map of the world with stories and timeline`,
+          site_name: 'Map',
+        },
+      }}
+    >
       <MapContext.Provider
         value={{
           bounds,
