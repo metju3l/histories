@@ -1,6 +1,7 @@
 import { hash } from 'bcryptjs';
 
 import RunCypherQuery from '../../../database/RunCypherQuery';
+import VerificationEmail from '../../../email/content/EmailVerification';
 import SendEmail from '../../../email/SendEmail';
 import SignJWT from '../../../functions/SignJWT';
 
@@ -28,7 +29,7 @@ const CreateUser = async ({
   );
 
   // authorization token for email verifiaction
-  const authorizationToken = `${new Date().getTime()}`;
+  const authorizationToken = new Date().getTime().toString();
 
   const query = `
   CREATE (user:User {
@@ -80,30 +81,11 @@ const CreateUser = async ({
   // send email for verification
   await SendEmail(
     'Verify email',
-    EmailContent({ token: authorizationToken, firstName, lastName }),
+    VerificationEmail({ token: authorizationToken, firstName }),
     email
   );
 
   return SignJWT(user.records[0].get('id'));
-};
-
-type EmailProps = {
-  token: string;
-  firstName: string;
-  lastName: string;
-};
-
-const EmailContent = ({ token, firstName, lastName }: EmailProps): string => {
-  // email content
-  return `
-  <div>
-    Hey ${firstName},
-    <br>
-    Please verify your email address by clicking  
-    <a href="https://www.histories.cc/verify?token=${token}">here</a>.
-    If it wasn't you, please ifnore this email lmao.
-    Enjoy using histories xdd 😎 
-  </div>`;
 };
 
 export default CreateUser;

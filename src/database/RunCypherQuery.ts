@@ -1,6 +1,6 @@
 import { QueryResult, Session } from 'neo4j-driver';
-import strip from 'strip-comments';
 
+import OptimizeString from '../../shared/functions/OptimizeString';
 import DbConnector from './driver';
 
 type RunSingleQueryParams = {
@@ -17,9 +17,7 @@ async function RunSingleQuery({
   // credit to this amazing person from stack owerflow
   // https://stackoverflow.com/a/1981837
 
-  const optimizedQuery = strip(query) // remove all comments
-    .replace(/\n/g, ' ') // replace new line with space
-    .replace(/  +/g, ' '); // remove all unnecessary spaces
+  const optimizedQuery = OptimizeString(query);
 
   // run query
   return await session.run(optimizedQuery, params);
