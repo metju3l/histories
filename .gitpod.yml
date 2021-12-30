@@ -6,7 +6,7 @@ tasks:
       docker-compose up -d;
       cp .env.local.example .env.local;
       cp nodemon.json.example nodemon.json;
-      yarn tsc --project tsconfig-express.json;
+      yarn build;
       gp sync-done setup;
     command: echo "Setup done"
   - name: Dev Server

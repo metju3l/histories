@@ -22,6 +22,7 @@
     "codegen": "graphql-let",
     "dev": "concurrently \"tsc -w --project tsconfig-express.json\" \"nodemon server.js --watch dist\"",
     "build": "yarn codegen && tsc --project tsconfig-express.json && next build",
+    "postbuild": "next-sitemap",
     "start": "NODE_ENV=production node server.js",
     "lint": "next lint",
     "format": "prettier --write .",
