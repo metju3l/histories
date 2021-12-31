@@ -1,3 +1,5 @@
+import orange_main from '../../../shared/colors/orange_main';
+
 export type VerificationEmail = {
   token: string;
   firstName: string;
@@ -32,7 +34,7 @@ const VerificationEmail = ({ token, firstName }: VerificationEmail): string => {
             <a
               href="https://www.histories.cc/verify?token=${token}"
               style="
-                background-color: #fc6e47;
+                background-color: ${orange_main};
                 color: white;
                 border: 0;
                 border-radius: 8px;
@@ -82,7 +84,7 @@ const VerificationEmail = ({ token, firstName }: VerificationEmail): string => {
               Don’t want to receive these emails?<br />
               <a
                 href="https://www.histories.cc/settings/notifications"
-                style="color: #fc6e47; text-decoration: none"
+                style="color: ${orange_main}; text-decoration: none"
               >
                 Unsubscribe here
               </a>
