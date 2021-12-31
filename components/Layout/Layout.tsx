@@ -2,6 +2,7 @@ import { ApolloError, ApolloQueryResult } from '@apollo/client';
 import { NextSeo } from 'next-seo';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
+import { orange_main } from 'shared/colors';
 
 import { MeQuery, useMeQuery } from '../../lib/graphql/user.graphql';
 import { Navbar } from './Navbar';
@@ -81,7 +82,7 @@ const Layout: React.FC<LayoutProps> = ({
         additionalMetaTags={[
           {
             name: 'theme-color',
-            content: '#17A6FA',
+            content: orange_main,
           },
           {
             name: 'keywords',
@@ -92,8 +93,49 @@ const Layout: React.FC<LayoutProps> = ({
             name: 'viewport',
             content: 'width=device-width, initial-scale=1.0',
           },
+          {
+            name: 'msapplication-TileColor',
+            content: orange_main,
+          },
+          {
+            name: 'msapplication-config',
+            content: 'icons/browserconfig.xml',
+          },
+        ]}
+        additionalLinkTags={[
+          {
+            rel: 'apple-touch-icon',
+            sizes: '180x180',
+            href: '/icons/apple-touch-icon.png',
+          },
+          {
+            rel: 'icon',
+            type: 'image/png',
+            sizes: '32x32',
+            href: '/icons/favicon-32x32.png',
+          },
+          {
+            rel: 'icon',
+            type: 'image/png',
+            sizes: '16x16',
+            href: '/icons/favicon-16x16.png',
+          },
+          {
+            rel: 'manifest',
+            href: '/icons/site.webmanifest',
+          },
+          {
+            rel: 'mask-icon',
+            href: '/icons/safari-pinned-tab.svg',
+            color: orange_main,
+          },
+          {
+            rel: 'shortcut icon',
+            href: '/icons/favicon.ico',
+          },
         ]}
       />
+
       <Toaster position="top-center" reverseOrder={true} />
       {(dontRedirectUnverified !== true ||
         redirectLogged ||
