@@ -1,6 +1,7 @@
 {
     "name": "Histories",
     "short_name": "Histories",
+    "description": "Platform for sharing history",
     "icons": [
         {
             "src": "/icons/android-chrome-192x192.png",
@@ -15,5 +16,7 @@
     ],
     "theme_color": "#fc6e47",
     "background_color": "#fc6e47",
-    "start_url": "https://"
+    "start_url": "",
+    "display": "standalone",
+    "orientation": "portrait"
 }

@@ -2,9 +2,9 @@ import { ApolloError, ApolloQueryResult } from '@apollo/client';
 import { NextSeo } from 'next-seo';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
-import { orange_main } from 'shared/colors';
 
 import { MeQuery, useMeQuery } from '../../lib/graphql/user.graphql';
+import { orange_main } from '../../shared/colors';
 import { Navbar } from './Navbar';
 import ProtectedRoutes from './ProtectedRoutes';
 
@@ -122,7 +122,7 @@ const Layout: React.FC<LayoutProps> = ({
           },
           {
             rel: 'manifest',
-            href: '/icons/site.webmanifest',
+            href: 'manifest.json',
           },
           {
             rel: 'mask-icon',
