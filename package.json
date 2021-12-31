@@ -26,9 +26,10 @@
     "start": "NODE_ENV=production node server.js",
     "lint": "next lint",
     "format": "prettier --write .",
-    "type-check": "tsc --pretty --noEmit",
     "test": "jest",
-    "test-all": "yarn test && yarn lint && yarn type-check",
+    "test:lib": "jest --testPathPattern=lib",
+    "test:shared": "jest --testPathPattern=shared",
+    "test:types": "tsc --pretty --noEmit",
     "sb": "start-storybook -p 6006 --no-manager-cache ",
     "sb-build": "build-storybook -o ./lib/stories-static",
     "sb-start": "start-storybook"

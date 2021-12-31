@@ -1,5 +1,3 @@
-import OptimizeString from '../../../shared/functions/OptimizeString';
-
 export type VerificationEmail = {
   token: string;
   firstName: string;
@@ -7,7 +5,7 @@ export type VerificationEmail = {
 
 const VerificationEmail = ({ token, firstName }: VerificationEmail): string => {
   // email content
-  const content = `<!DOCTYPE html>
+  return `<!DOCTYPE html>
     <html lang="en">
       <head>
         <meta charset="UTF-8" />
@@ -95,8 +93,6 @@ const VerificationEmail = ({ token, firstName }: VerificationEmail): string => {
       </body>
     </html>
     `;
-
-  return OptimizeString(content);
 };
 
 export default VerificationEmail;
