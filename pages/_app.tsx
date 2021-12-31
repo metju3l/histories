@@ -6,7 +6,8 @@ import { MeQuery, useMeQuery } from '@graphql/user.graphql';
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
 import NextNprogress from 'nextjs-progressbar';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useApollo } from '../lib/utils/apollo';
 
@@ -61,6 +62,14 @@ export const LoginContext = React.createContext<LoginContextType>({
 
 const LoginProvider: React.FC = ({ children }) => {
   const { data, loading, error, refetch } = useMeQuery();
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    // on load get browser language
+    i18n.changeLanguage(navigator.language);
+  }, []);
+
+  // todo: use language from database
 
   return (
     <LoginContext.Provider value={{ data, loading, error, refetch }}>
