@@ -1,4 +1,5 @@
 import { orange_main } from '../../../shared/colors';
+
 import { Layout } from './components';
 
 export type VerificationEmail = {
