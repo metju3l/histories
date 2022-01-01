@@ -1,5 +1,5 @@
-import EditCollectionModal from '@components/Collection/EditCollectionModal';
 import { LoginContext } from '@components/Layouts/Layout';
+import EditCollectionModal from '@components/Modules/Collection/EditCollectionModal';
 import {
   useCollectionQuery,
   useEditCollectionMutation,

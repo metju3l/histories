@@ -3,7 +3,10 @@ import 'tailwindcss/tailwind.css';
 import { Story } from '@storybook/react';
 import React from 'react';
 
-import { MiniUserCard, MiniUserCardProps } from '../../components/MiniUserCard';
+import {
+  MiniUserCard,
+  MiniUserCardProps,
+} from '../../components/Modules/MiniUserCard';
 
 // Component
 const Component = {

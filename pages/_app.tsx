@@ -1,5 +1,5 @@
 import '../lib/translation/i18n';
-import '../lib/styles/main.scss';
+import '../lib/styles/main.css';
 
 import { ApolloError, ApolloProvider, ApolloQueryResult } from '@apollo/client';
 import { MeQuery, useMeQuery } from '@graphql/user.graphql';

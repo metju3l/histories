@@ -1,6 +1,6 @@
 import 'react-dropdown/style.css';
 
-import CreateCollectionModal from '@components/Collection/CreateCollectionModal';
+import CreateCollectionModal from '@components/Modules/Collection/CreateCollectionModal';
 import { useGetUserInfoQuery, useMeQuery } from '@graphql/user.graphql';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';

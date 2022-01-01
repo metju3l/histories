@@ -8,7 +8,7 @@ import { IoIosMore } from 'react-icons/io';
 import {
   useLikeMutation,
   useUnlikeMutation,
-} from '../../lib/graphql/relations.graphql';
+} from '../../../lib/graphql/relations.graphql';
 import { MiniUserCard } from '../MiniUserCard';
 import {
   AddToCollectionModal,

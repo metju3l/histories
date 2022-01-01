@@ -3,7 +3,7 @@ import 'tailwindcss/tailwind.css';
 import { Story } from '@storybook/react';
 import React from 'react';
 
-import { Modal } from '../../components/Modal';
+import { Modal } from '../../components/Modules/Modal';
 
 // Component
 const Component = {
