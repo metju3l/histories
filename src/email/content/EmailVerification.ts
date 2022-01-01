@@ -1,6 +1,5 @@
 import { orange_main } from '../../../shared/colors';
-
-import { Layout } from './components';
+import { Layout } from './Components';
 
 export type VerificationEmail = {
   token: string;
