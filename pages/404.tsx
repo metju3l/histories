@@ -1,7 +1,26 @@
+import MainLayout from '@components/Layouts/Main';
+import PageNotFoundTemplate from '@components/Templates/PageNotFound';
 import React from 'react';
 
 const PageNotFound: React.FC = () => {
-  return <h1>404 - Page Not Found</h1>;
+  return (
+    <MainLayout
+      head={{
+        title: `Page not found | HiStories`,
+        description: `Page not found`,
+        canonical: 'https://www.histories.cc/404',
+        openGraph: {
+          title: `Page not found | HiStories`,
+          type: 'website',
+          url: 'https://www.histories.cc/404',
+          description: `Page not found`,
+          site_name: '404',
+        },
+      }}
+    >
+      <PageNotFoundTemplate />
+    </MainLayout>
+  );
 };
 
 export default PageNotFound;

@@ -1,6 +1,6 @@
 import { Separator } from '@components/Elements';
 import { Layout } from '@components/Layouts';
-import { HeadProps } from '@components/Layouts/Main';
+import HeadProps from '@lib/types/head';
 import Link from 'next/link';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

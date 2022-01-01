@@ -25,7 +25,7 @@ And it also is my high school final project.
 
 [![Edit with Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/hiStories-cc/hiStories)
 
-## Setup dev server:
+### Setup dev server:
 
 1. copy `.env.local.example` to `.env.local` and change values
 2. copy `nodemon.json.example` to `nodemon.json` and change values
@@ -33,7 +33,7 @@ And it also is my high school final project.
 4. setup environment `docker-compose up -d`
 5. run `yarn dev`
 
-## Setup storybook
+### Setup storybook
 
 1. install dependencies `yarn`
 2. run dev server `yarn sb`

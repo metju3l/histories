@@ -1,8 +1,9 @@
+import HeadProps from '@lib/types/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
 import { LoginContext } from '../../pages/_app';
-import Main, { HeadProps } from './Main';
+import Main from './Main';
 
 export type AuthLayoutProps = { head: HeadProps };
 

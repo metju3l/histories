@@ -1,4 +1,5 @@
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
+import HeadProps from '@lib/types/head';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 import React, { useEffect } from 'react';
@@ -8,30 +9,6 @@ import { MeQuery, useMeQuery } from '../../lib/graphql/user.graphql';
 import { LoginContext as AppLoginContext } from '../../pages/_app';
 import { orange_main } from '../../shared/colors';
 import { Navbar } from '../Modules/Navbar';
-
-export type HeadProps = {
-  title: string;
-  description: string;
-  canonical?: string;
-  openGraph: {
-    title: string;
-    type: string;
-    images?: Array<{
-      url: string;
-      width: number;
-      height: number;
-      alt: string;
-    }>;
-    url: string;
-    description: string;
-    site_name: string;
-    profile?: {
-      firstName: string;
-      lastName: string;
-      username: string;
-    };
-  };
-};
 
 type LayoutProps = {
   head: HeadProps;
