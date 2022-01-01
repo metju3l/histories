@@ -1,8 +1,8 @@
-import ArrowIcon from '@components/Icons/ArrowIcon';
-import { Layout } from '@components/Layout';
-import { Search } from '@components/MainPage';
-import { Separator } from '@components/UI';
-import Button from '@components/UI/Buttons/Button';
+import { Separator } from '@components/Elements';
+import Button from '@components/Elements/Buttons/Button';
+import ArrowIcon from '@components/Elements/Icons/ArrowIcon';
+import { Layout } from '@components/Layouts';
+import { Search } from '@components/Templates/MainPage';
 import { useCreatePostMutation } from '@graphql/post.graphql';
 import { useMeQuery } from '@graphql/user.graphql';
 import { Field, Form, Formik } from 'formik';

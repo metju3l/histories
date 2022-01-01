@@ -1,6 +1,9 @@
-import { defaultValues, MapContext } from '@components/Screens/Map/MapContext';
-import MapGL from '@components/Screens/Map/MapWindow';
-import RightPanel from '@components/Screens/Map/RightPanel/RightPanel';
+import {
+  defaultValues,
+  MapContext,
+} from '@components/Templates/Map/MapContext';
+import MapGL from '@components/Templates/Map/MapWindow';
+import RightPanel from '@components/Templates/Map/RightPanel/RightPanel';
 import { usePlacesQuery } from '@graphql/geo.graphql';
 import { usePostsQuery } from '@graphql/post.graphql';
 import Viewport from '@lib/types/viewport';
@@ -9,9 +12,9 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import { Maybe } from '../.cache/__types__';
-import ArrowIcon from '../components/Icons/ArrowIcon';
-import { Layout, LoginContext } from '../components/Layout';
-import { TimeLine } from '../components/TimeLine';
+import ArrowIcon from '../components/Elements/Icons/ArrowIcon';
+import { Layout, LoginContext } from '../components/Layouts';
+import { TimeLine } from '../components/Modules/TimeLine';
 
 export type SidebarPlaceType = {
   id: number;

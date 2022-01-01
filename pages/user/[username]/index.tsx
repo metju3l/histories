@@ -1,4 +1,4 @@
-import { Layout } from '@components/Layout';
+import { Layout } from '@components/Layouts';
 import { useGetUserInfoQuery, useMeQuery } from '@graphql/user.graphql';
 import UrlPrefix from '@lib/functions/UrlPrefix';
 import { NextPageContext } from 'next';

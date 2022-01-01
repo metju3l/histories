@@ -1,4 +1,4 @@
-import { Layout } from '@components/Layout';
+import { Layout } from '@components/Layouts';
 import { Post } from '@components/Post';
 import { usePersonalizedPostsQuery } from '@graphql/post.graphql';
 import { useMeQuery } from '@graphql/user.graphql';

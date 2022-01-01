@@ -1,5 +1,5 @@
-import SettingsLayout from '@components/Screens/Settings/SettingsLayout';
-import { CheckboxElement } from '@components/UI';
+import { CheckboxElement } from '@components/Elements';
+import SettingsLayout from '@components/Templates/Settings/SettingsLayout';
 import { useUpdateProfileMutation } from '@graphql/user.graphql';
 import { LoginContext } from 'pages/_app';
 import React from 'react';

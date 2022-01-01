@@ -1,6 +1,6 @@
-import { Layout } from '@components/Layout';
-import { Button, Input } from '@components/UI';
-import GoogleAuthButton from '@components/UI/Buttons/GoogleAuth';
+import { Button, Input } from '@components/Elements';
+import GoogleAuthButton from '@components/Elements/Buttons/GoogleAuth';
+import { Layout } from '@components/Layouts';
 import { useMeQuery } from '@graphql/user.graphql';
 import { useCreateUserMutation } from '@graphql/user.graphql';
 import Link from 'next/link';

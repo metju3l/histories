@@ -1,5 +1,5 @@
-import { Layout } from '@components/Layout';
-import GoogleAuthButton from '@components/UI/Buttons/GoogleAuth';
+import GoogleAuthButton from '@components/Elements/Buttons/GoogleAuth';
+import { Layout } from '@components/Layouts';
 import { useLoginMutation } from '@graphql/user.graphql';
 import Cookie from 'js-cookie';
 import Link from 'next/link';
