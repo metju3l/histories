@@ -6,8 +6,8 @@ mutation login($input: LoginInput!) {
   login(input: $input)
 }
 
-mutation registerWithGoogle($googleJWT: String!) {
-  registerWithGoogle(googleJWT: $googleJWT)
+mutation googleAuth($googleJWT: String!) {
+  googleAuth(googleJWT: $googleJWT)
 }
 
 query suggestedUsers {
@@ -92,22 +92,6 @@ query Me {
 mutation searchUser($username: String!) {
   searchUser(input: { username: $username })
 }
-mutation createUser(
-  $username: String!
-  $email: String!
-  $firstName: String!
-  $lastName: String!
-  $password: String!
-  $emailSubscription: Boolean!
-) {
-  createUser(
-    input: {
-      username: $username
-      email: $email
-      firstName: $firstName
-      lastName: $lastName
-      password: $password
-      emailSubscription: $emailSubscription
-    }
-  )
+mutation createUser($input: CreateUserInput!) {
+  createUser(input: $input)
 }

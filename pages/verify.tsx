@@ -1,4 +1,4 @@
-import Button from '@components/UI/Button';
+import Button from '@components/UI/Buttons/Button';
 import { useMeQuery, useVerifyTokenMutation } from '@graphql/user.graphql';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';

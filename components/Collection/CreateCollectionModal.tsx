@@ -1,6 +1,6 @@
 import { LoginContext } from '@components/Layout';
 import { Modal } from '@components/Modal';
-import Button from '@components/UI/Button';
+import Button from '@components/UI/Buttons/Button';
 import { useCreateCollectionMutation } from '@graphql/collection.graphql';
 import { Switch } from '@headlessui/react';
 import React, { useState } from 'react';

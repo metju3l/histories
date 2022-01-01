@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Loading } from './';
+import { Loading } from '..';
 
 export type ButtonProps = {
   isLoading?: boolean;

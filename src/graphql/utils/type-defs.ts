@@ -35,7 +35,7 @@ export default gql`
   type Mutation {
     "Returns JWT"
     login(input: LoginInput!): String!
-    registerWithGoogle(googleJWT: String!): String!
+    googleAuth(googleJWT: String!): String!
 
     deleteUser(input: DeleteUserInput!): String!
     delete(id: Int!): String
@@ -338,9 +338,8 @@ export default gql`
   }
 
   input LoginInput {
-    googleJWT: String
-    username: String
-    password: String
+    username: String!
+    password: String!
   }
 
   input CreateUserInput {
@@ -350,5 +349,6 @@ export default gql`
     firstName: String!
     lastName: String!
     password: String!
+    locale: String
   }
 `;

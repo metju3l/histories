@@ -1,5 +1,5 @@
-import { ValidateUsername } from '../../../../shared/validation';
-import RunCypherQuery from '../../../database/RunCypherQuery';
+import { ValidateUsername } from '../../../../../shared/validation';
+import RunCypherQuery from '../../../../database/RunCypherQuery';
 
 type queryResult = {
   id: number;
@@ -10,12 +10,6 @@ type queryResult = {
   bio: string | null;
   verified: boolean;
   created: number;
-  notifications: {
-    newFollower: boolean;
-    followingUserPost: boolean;
-    followingPlacePost: boolean;
-    newsletter: boolean;
-  };
   following?: {
     id: number;
     email: string;
@@ -189,7 +183,7 @@ CALL {
   RETURN r AS isFollowing
 }
 
-RETURN user{.*, 
+RETURN user{.*, id: ID(user),
   posts: COLLECT(DISTINCT post{.*,
       id: ID(post),
       author: user{.*,
@@ -201,12 +195,6 @@ RETURN user{.*,
           id: ID(place)}
       }),
   followingCount,
-  notificationSettings: {
-    newFollower: user.newFollowerNotification,
-    followingUserPost: user.followingUserPostNotification,
-    followingPlacePost: user.followingPlacePostNotification,
-    newsletter: user.newsletterNotification
-  },
   // if user doesn't have a profile picture return link to api with generated pictures
   profile:  CASE WHEN (user.profile IS NOT NULL) 
               THEN user.profile

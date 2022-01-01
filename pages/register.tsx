@@ -1,31 +1,23 @@
 import { Layout } from '@components/Layout';
 import { Button, Input } from '@components/UI';
-import {
-  useMeQuery,
-  useRegisterWithGoogleMutation,
-} from '@graphql/user.graphql';
+import GoogleAuthButton from '@components/UI/Buttons/GoogleAuth';
+import { useMeQuery } from '@graphql/user.graphql';
 import { useCreateUserMutation } from '@graphql/user.graphql';
-import Cookie from 'js-cookie';
-import Image from 'next/image';
 import Link from 'next/link';
 import router from 'next/router';
 import React, { useState } from 'react';
-import GoogleLogin, {
-  GoogleLoginResponse,
-  GoogleLoginResponseOffline,
-} from 'react-google-login';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+
 import {
   ValidateEmail,
   ValidateName,
   ValidatePassword,
   ValidateUsername,
-} from 'shared/validation';
+} from '../shared/validation';
 
 const Register: React.FC = () => {
   const [createUser] = useCreateUserMutation();
-  const [registerWithGoogle] = useRegisterWithGoogleMutation();
   const { t } = useTranslation();
   const { data, loading, error } = useMeQuery();
   const [isLoading, setIsLoading] = useState(false);
@@ -46,28 +38,6 @@ const Register: React.FC = () => {
   if (loading) return <div></div>;
   if (error) return <div></div>;
   if (data?.me) router.replace('/');
-
-  async function GoogleSubmit(
-    response: GoogleLoginResponse | GoogleLoginResponseOffline
-  ) {
-    if ('tokenId' in response)
-      try {
-        const result = await registerWithGoogle({
-          variables: {
-            googleJWT: response.tokenId,
-          },
-        });
-        if (result.data?.registerWithGoogle !== 'error') {
-          Cookie.set('jwt', result.data?.registerWithGoogle as string, {
-            sameSite: 'strict',
-          });
-          router.reload();
-        }
-      } catch (error: any) {
-        toast.error(error.message);
-      }
-    else toast.error('Google login failed');
-  }
 
   return (
     <Layout
@@ -96,7 +66,17 @@ const Register: React.FC = () => {
             } else {
               try {
                 await createUser({
-                  variables: formValues,
+                  variables: {
+                    input: {
+                      username: formValues.username,
+                      email: formValues.email,
+                      password: formValues.password,
+                      firstName: formValues.firstName,
+                      lastName: formValues.lastName,
+                      emailSubscription: formValues.emailSubscription,
+                      locale: navigator.language,
+                    },
+                  },
                 });
                 router.push('/login');
               } catch (error) {
@@ -217,56 +197,13 @@ const Register: React.FC = () => {
           <div className="mt-2 mb-2">
             <Button isLoading={isLoading}>Sign up</Button>
           </div>
-          {
-            // show login with google only if google client id is set
-            process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
-              <GoogleLogin
-                clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
-                render={(renderProps) => (
-                  <WithGoogle renderProps={renderProps} />
-                )}
-                buttonText=""
-                onSuccess={GoogleSubmit}
-                onFailure={() => toast.error('Google registration failed')}
-                cookiePolicy={'single_host_origin'}
-              />
-            )
-          }
-
+          <GoogleAuthButton />
           <Link href="/login">
             <a className="pl-2 underline">login to an existing account</a>
           </Link>
         </form>
       </div>
     </Layout>
-  );
-};
-
-const WithGoogle: React.FC<{
-  renderProps: {
-    onClick: () => void;
-    disabled?: boolean | undefined;
-  };
-}> = ({ renderProps }) => {
-  const { t } = useTranslation();
-
-  return (
-    <button
-      onClick={renderProps.onClick}
-      disabled={renderProps.disabled}
-      type="submit"
-      className="flex items-center justify-center px-4 mt-6 font-medium text-black bg-white border border-gray-800 gap-1 py-1.5 rounded-md"
-    >
-      <Image
-        src="/assets/google.svg"
-        height={18}
-        width={18}
-        alt="google logo"
-        quality={60}
-      />
-
-      <a>{t('register')}</a>
-    </button>
   );
 };
 

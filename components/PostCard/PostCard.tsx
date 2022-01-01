@@ -1,6 +1,6 @@
 import { CommentHandler } from '@components/Comment';
 import { LoginContext } from '@components/Layout/Layout';
-import Button from '@components/UI/Button';
+import Button from '@components/UI/Buttons/Button';
 import {
   useCreateCommentMutation,
   useDeleteMutation,

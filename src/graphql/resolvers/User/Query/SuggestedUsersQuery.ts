@@ -1,4 +1,4 @@
-import RunCypherQuery from '../../../database/RunCypherQuery';
+import RunCypherQuery from '../../../../database/RunCypherQuery';
 
 const SuggestedUsersQuery = async (logged: number | null) => {
   const query =

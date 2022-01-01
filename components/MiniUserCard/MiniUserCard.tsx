@@ -7,7 +7,7 @@ import TimeAgo from 'react-timeago';
 import GeneratedProfileUrl from '../../lib/functions/GeneratedProfileUrl';
 import UrlPrefix from '../../lib/functions/UrlPrefix';
 import hoverHandler from '../../lib/hooks/hoverHandler';
-import Button from '../UI/Button';
+import Button from '../UI/Buttons/Button';
 
 export type MiniUserCardProps = {
   firstName: string;

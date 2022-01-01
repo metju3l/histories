@@ -1,18 +1,10 @@
 import { hash } from 'bcryptjs';
 
-import RunCypherQuery from '../../../database/RunCypherQuery';
-import VerificationEmail from '../../../email/content/EmailVerification';
-import SendEmail from '../../../email/SendEmail';
-import SignJWT from '../../../functions/SignJWT';
-
-type CreateUserProps = {
-  username: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  emailSubscription: boolean;
-};
+import { CreateUserInput } from '../../../../../.cache/__types__';
+import RunCypherQuery from '../../../../database/RunCypherQuery';
+import VerificationEmail from '../../../../email/content/EmailVerification';
+import SendEmail from '../../../../email/SendEmail';
+import SignJWT from '../../../../functions/SignJWT';
 
 const CreateUser = async ({
   username,
@@ -21,7 +13,8 @@ const CreateUser = async ({
   email,
   password,
   emailSubscription,
-}: CreateUserProps) => {
+  locale,
+}: CreateUserInput) => {
   // generate password hash
   const hashedPassword = await hash(
     password,
@@ -73,7 +66,7 @@ const CreateUser = async ({
       authorizationToken,
       createdAt: new Date().getTime(),
       profile: profile,
-      locale: 'en',
+      locale: locale ?? 'en',
       notifications: emailSubscription,
     },
   });

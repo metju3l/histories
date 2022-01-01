@@ -1,7 +1,11 @@
 import sharp from 'sharp';
 import streamToPromise from 'stream-to-promise';
 
-import { LoginInput, UpdateProfileInput } from '../../../../.cache/__types__';
+import {
+  CreateUserInput,
+  LoginInput,
+  UpdateProfileInput,
+} from '../../../../.cache/__types__';
 import {
   ValidateComment,
   ValidateCoordinates,
@@ -24,9 +28,9 @@ import {
   EditCollection,
   EditUser,
   Follow,
+  GoogleAuth,
   Like,
   Login,
-  RegisterWithGoogle,
   RemovePostFromCollection,
   Report,
   Unfollow,
@@ -38,10 +42,10 @@ import LastPost from '../../resolvers/lastPost';
 import { contextType, OnlyLogged, Validate } from './resolvers';
 
 const mutations = {
-  registerWithGoogle: async (
+  googleAuth: async (
     _parent: undefined,
     { googleJWT }: { googleJWT: string }
-  ) => await RegisterWithGoogle(googleJWT),
+  ) => await GoogleAuth(googleJWT),
 
   login: async (_parent: undefined, { input }: { input: LoginInput }) =>
     await Login(input),
@@ -174,14 +178,7 @@ const mutations = {
     {
       input,
     }: {
-      input: {
-        username: string;
-        firstName: string;
-        lastName: string;
-        email: string;
-        emailSubscription: boolean;
-        password: string;
-      };
+      input: CreateUserInput;
     }
   ) => {
     // check email

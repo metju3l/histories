@@ -1,5 +1,5 @@
-import { UpdateProfileInput } from '../../../../.cache/__types__';
-import RunCypherQuery from '../../../database/RunCypherQuery';
+import { UpdateProfileInput } from '../../../../../.cache/__types__';
+import RunCypherQuery from '../../../../database/RunCypherQuery';
 
 const EditUser = async (
   {

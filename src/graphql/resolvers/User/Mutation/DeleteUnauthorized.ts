@@ -1,4 +1,4 @@
-import RunCypherQuery from '../../../database/RunCypherQuery';
+import RunCypherQuery from '../../../../database/RunCypherQuery';
 
 // run this query every 12 hours with github action
 const DeleteUnauthorized = async (): Promise<void> => {

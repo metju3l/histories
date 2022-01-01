@@ -13,7 +13,7 @@ const SendEmail = async (subject: string, html: string, target: string) => {
 
   try {
     await transport.sendMail({
-      from: `hiStories <${process.env.MAIL_USERNAME}>`,
+      from: `histories <${process.env.MAIL_USERNAME}>`,
       to: target,
       subject,
       html,

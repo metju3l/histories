@@ -1,5 +1,5 @@
 import { Modal } from '@components/Modal';
-import Button from '@components/UI/Button';
+import Button from '@components/UI/Buttons/Button';
 import { useEditCollectionMutation } from '@graphql/collection.graphql';
 import { useDeleteMutation } from '@graphql/post.graphql';
 import { Switch } from '@headlessui/react';

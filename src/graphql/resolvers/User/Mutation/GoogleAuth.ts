@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { remove as removeDiacritics } from 'diacritics';
 
-import RunCypherQuery from '../../../database/RunCypherQuery';
-import SignJWT from '../../../functions/SignJWT';
-import { UploadPhoto } from '../../../IPFS';
+import RunCypherQuery from '../../../../database/RunCypherQuery';
+import SignJWT from '../../../../functions/SignJWT';
+import { UploadPhoto } from '../../../../IPFS';
 
 async function RegisterWithGooge(googleJWT: string) {
   const query = `

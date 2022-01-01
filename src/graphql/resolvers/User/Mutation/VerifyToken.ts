@@ -1,5 +1,5 @@
-import { ValidateVerificationToken } from '../../../../shared/validation';
-import RunCypherQuery from '../../../database/RunCypherQuery';
+import { ValidateVerificationToken } from '../../../../../shared/validation';
+import RunCypherQuery from '../../../../database/RunCypherQuery';
 
 const VerifyUser = async (token: string): Promise<string> => {
   // validate token input
