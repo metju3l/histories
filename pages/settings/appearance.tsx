@@ -1,4 +1,4 @@
-import SettingsLayout from '@components/Templates/Settings/SettingsLayout';
+import SettingsLayout from '@components/Layouts/Settings';
 import { useTheme } from 'next-themes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

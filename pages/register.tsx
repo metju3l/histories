@@ -1,47 +1,73 @@
-import { Button, Input } from '@components/Elements';
+import { Button } from '@components/Elements';
 import GoogleAuthButton from '@components/Elements/Buttons/GoogleAuth';
-import { Layout } from '@components/Layouts';
-import { useMeQuery } from '@graphql/user.graphql';
+import AuthLayout from '@components/Layouts/Auth';
 import { useCreateUserMutation } from '@graphql/user.graphql';
+import Cookie from 'js-cookie';
 import Link from 'next/link';
-import router from 'next/router';
+import Router from 'next/router';
 import React, { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
-import {
-  ValidateEmail,
-  ValidateName,
-  ValidatePassword,
-  ValidateUsername,
-} from '../shared/validation';
+type Inputs = {
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  password: string;
+  repeatPassword: string;
+  notifications: boolean;
+};
 
 const Register: React.FC = () => {
-  const [createUser] = useCreateUserMutation();
-  const { t } = useTranslation();
-  const { data, loading, error } = useMeQuery();
-  const [isLoading, setIsLoading] = useState(false);
+  const [createAccount] = useCreateUserMutation();
+  const [loading, setLoading] = useState(false);
 
-  const formInputs = {
-    firstName: '',
-    lastName: '',
-    username: '',
-    email: '',
-    password: '',
-    repeatPassword: '',
-    emailSubscription: false,
+  const { t } = useTranslation();
+
+  const {
+    register,
+    handleSubmit,
+    formState: {},
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (data.password !== data.repeatPassword) {
+      toast.error('Passwords must match');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const result = await createAccount({
+        variables: {
+          input: {
+            username: data.username,
+            password: data.password,
+            email: data.email,
+            firstName: data.firstName,
+            emailSubscription: data.notifications,
+            lastName: data.lastName,
+            locale: navigator.language,
+          },
+        },
+      });
+      if (result.data?.createUser !== 'error') {
+        // register successful
+        Cookie.set('jwt', result.data?.createUser as string, {
+          sameSite: 'strict',
+        });
+        Router.reload();
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+    setLoading(false);
   };
 
-  const [formValues, setFormValues] = useState(formInputs);
-  const [errors, setErrors] = useState(formInputs);
-
-  if (loading) return <div></div>;
-  if (error) return <div></div>;
-  if (data?.me) router.replace('/');
-
   return (
-    <Layout
-      redirectLogged
+    <AuthLayout
       head={{
         title: `Sign up | HiStories`,
         description: `Create new HiStories account`,
@@ -56,146 +82,60 @@ const Register: React.FC = () => {
       }}
     >
       <div className="p-10 m-auto max-w-[27rem]">
-        <form
-          onSubmit={async (event) => {
-            event.preventDefault();
-            setIsLoading(true);
-
-            if (formValues.password !== formValues.repeatPassword) {
-              toast.error('Passwords must match');
-            } else {
-              try {
-                await createUser({
-                  variables: {
-                    input: {
-                      username: formValues.username,
-                      email: formValues.email,
-                      password: formValues.password,
-                      firstName: formValues.firstName,
-                      lastName: formValues.lastName,
-                      emailSubscription: formValues.emailSubscription,
-                      locale: navigator.language,
-                    },
-                  },
-                });
-                router.push('/login');
-              } catch (error) {
-                // @ts-ignore
-                toast.error(error.message);
-              }
-            }
-            setIsLoading(false);
-          }}
-        >
-          <div className="flex gap-4">
-            <Input
-              placeholder="First name"
-              autoComplete="given-name"
-              helperText={errors.firstName && 'First name ' + errors.firstName}
-              value={formValues.firstName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setFormValues({ ...formValues, firstName: e.target.value });
-                setErrors({
-                  ...errors,
-                  firstName: ValidateName(e.target.value).error ?? '',
-                });
-              }}
-            />
-
-            <Input
-              placeholder="Last name"
-              autoComplete="family-name"
-              helperText={errors.lastName && 'Last name ' + errors.lastName}
-              value={formValues.lastName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setFormValues({ ...formValues, lastName: e.target.value });
-                setErrors({
-                  ...errors,
-                  lastName: ValidateName(e.target.value).error ?? '',
-                });
-              }}
-            />
-          </div>
-          <Input
-            placeholder="Username"
-            autoComplete="username"
-            helperText={errors.username}
-            value={formValues.username}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setFormValues({ ...formValues, username: e.target.value });
-              setErrors({
-                ...errors,
-                username: ValidateUsername(e.target.value).error ?? '',
-              });
-            }}
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+          <input
+            placeholder="First name"
+            autoComplete="given-name"
+            {...register('firstName', { required: true, maxLength: 50 })}
           />
 
-          <Input
+          <input
+            placeholder="Last name"
+            autoComplete="family-name"
+            {...register('lastName', { required: true, maxLength: 50 })}
+          />
+          <input
+            placeholder="Username"
+            autoComplete="username"
+            {...register('username', {
+              required: true,
+              minLength: 3,
+              maxLength: 32,
+            })}
+          />
+
+          <input
             placeholder="Email"
             type="email"
             autoComplete="email"
-            helperText={errors.email}
-            value={formValues.email}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setFormValues({ ...formValues, email: e.target.value });
-              setErrors({
-                ...errors,
-                email: ValidateEmail(e.target.value).error ?? '',
-              });
-            }}
+            {...register('email', { required: true })}
           />
 
-          <Input
+          <input
             placeholder="Password"
             type="password"
             autoComplete="new-password"
-            helperText={errors.password}
-            value={formValues.password}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setFormValues({ ...formValues, password: e.target.value });
-              setErrors({
-                ...errors,
-                password: ValidatePassword(e.target.value).error ?? '',
-              });
-            }}
+            {...register('password', { required: true, minLength: 8 })}
           />
 
-          <Input
+          <input
             placeholder="Repeat password"
             type="password"
             autoComplete="new-password"
-            helperText={errors.repeatPassword}
-            value={formValues.repeatPassword}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setFormValues({ ...formValues, repeatPassword: e.target.value });
-              setErrors({
-                ...errors,
-                repeatPassword:
-                  ValidatePassword(e.target.value).error ??
-                  formValues.password !== e.target.value
-                    ? 'Passwords must match'
-                    : '',
-              });
-            }}
+            {...register('repeatPassword', { required: true, minLength: 8 })}
           />
 
           <label className="inline-flex items-center mt-3">
             <input
               type="checkbox"
               className="w-5 h-5 text-orange-600 rounded-lg form-checkbox"
-              checked={formValues.emailSubscription}
-              onClick={() =>
-                setFormValues({
-                  ...formValues,
-                  emailSubscription: !formValues.emailSubscription,
-                })
-              }
+              {...register('notifications')}
             />
             <span className="ml-2 text-gray-700">Send me email updates</span>
           </label>
 
           <div className="mt-2 mb-2">
-            <Button isLoading={isLoading}>Sign up</Button>
+            <Button isLoading={loading}>Sign up</Button>
           </div>
           <GoogleAuthButton />
           <Link href="/login">
@@ -203,7 +143,7 @@ const Register: React.FC = () => {
           </Link>
         </form>
       </div>
-    </Layout>
+    </AuthLayout>
   );
 };
 

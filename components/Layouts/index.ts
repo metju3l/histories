@@ -1,2 +1,2 @@
-export { default as Layout } from './Layout';
-export { LoginContext } from './Layout';
+export { default as Layout } from './Main';
+export { LoginContext } from './Main';

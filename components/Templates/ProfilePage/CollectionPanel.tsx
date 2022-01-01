@@ -1,4 +1,4 @@
-import { LoginContext } from '@components/Layouts/Layout';
+import { LoginContext } from '@components/Layouts/Main';
 import EditCollectionModal from '@components/Modules/Collection/EditCollectionModal';
 import {
   useCollectionQuery,

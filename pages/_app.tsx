@@ -10,6 +10,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useApollo } from '../lib/utils/apollo';
+import { orange_main } from 'dist/shared/colors';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const apolloClient = useApollo(null);
@@ -33,7 +34,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
           }}
         />
         <NextNprogress
-          color="#23C45E"
+          color={orange_main}
           height={2}
           options={{ showSpinner: false }}
           showOnShallow

@@ -1,9 +1,10 @@
 import { CheckboxElement } from '@components/Elements';
-import SettingsLayout from '@components/Templates/Settings/SettingsLayout';
+import SettingsLayout from '@components/Layouts/Settings';
 import { useUpdateProfileMutation } from '@graphql/user.graphql';
-import { LoginContext } from 'pages/_app';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { LoginContext } from '../_app';
 
 const Account = () => {
   const { t } = useTranslation();

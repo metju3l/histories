@@ -1,5 +1,5 @@
 import GoogleAuthButton from '@components/Elements/Buttons/GoogleAuth';
-import { Layout } from '@components/Layouts';
+import AuthLayout from '@components/Layouts/Auth';
 import { useLoginMutation } from '@graphql/user.graphql';
 import Cookie from 'js-cookie';
 import Link from 'next/link';
@@ -17,12 +17,15 @@ type Inputs = {
 const Login: FC = () => {
   const [login] = useLoginMutation();
   const [loading, setLoading] = useState(false);
+
   const { t } = useTranslation();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
     try {
@@ -48,8 +51,7 @@ const Login: FC = () => {
   };
 
   return (
-    <Layout
-      redirectLogged
+    <AuthLayout
       head={{
         title: `Log in | HiStories`,
         description: `Log in to your HiStories account`,
@@ -63,42 +65,40 @@ const Login: FC = () => {
         },
       }}
     >
-      <div className="p-10 m-auto max-w-[27rem]">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-          <div>
-            <h4 className="pt-0 pb-2 font-medium text-gray-600">
-              {t('username or email')}
-            </h4>
-            <input
-              className="w-full px-2 text-gray-600 border border-gray-300 outline-none rounded-md focus:border-gray-500 py-1.5"
-              type="text"
-              {...register('login', { required: true })}
-            />
-          </div>
-          <div>
-            <h4 className="pt-0 pb-2 font-medium text-gray-600">
-              {t('password')}
-            </h4>
-            <input
-              className="w-full px-2 text-gray-600 border border-gray-300 outline-none rounded-md focus:border-gray-500 py-1.5"
-              type="password"
-              {...register('password', { required: true })}
-            />
-          </div>
-          <button
-            type="submit"
-            className="block px-4 mt-6 font-medium bg-gray-800 border border-gray-800 py-1.5 rounded-md text-gray-50"
-          >
-            {t(loading ? 'loading' : 'login')}
-          </button>
-          <GoogleAuthButton />
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+        <div>
+          <h4 className="pt-0 pb-2 font-medium text-gray-600">
+            {t('username or email')}
+          </h4>
+          <input
+            className="w-full px-2 text-gray-600 border border-gray-300 outline-none rounded-md focus:border-gray-500 py-1.5"
+            type="text"
+            {...register('login', { required: true })}
+          />
+        </div>
+        <div>
+          <h4 className="pt-0 pb-2 font-medium text-gray-600">
+            {t('password')}
+          </h4>
+          <input
+            className="w-full px-2 text-gray-600 border border-gray-300 outline-none rounded-md focus:border-gray-500 py-1.5"
+            type="password"
+            {...register('password', { required: true })}
+          />
+        </div>
+        <button
+          type="submit"
+          className="block px-4 mt-6 font-medium bg-gray-800 border border-gray-800 py-1.5 rounded-md text-gray-50"
+        >
+          {t(loading ? 'loading' : 'login')}
+        </button>
+        <GoogleAuthButton />
 
-          <Link href="/register">
-            <a className="pl-2 underline">{t('create new account')}</a>
-          </Link>
-        </form>
-      </div>
-    </Layout>
+        <Link href="/register">
+          <a className="pl-2 underline">{t('create new account')}</a>
+        </Link>
+      </form>
+    </AuthLayout>
   );
 };
 

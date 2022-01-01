@@ -1,14 +1,12 @@
 import { Separator } from '@components/Elements';
 import { Layout } from '@components/Layouts';
-import { HeadProps } from '@components/Layouts/Layout';
+import { HeadProps } from '@components/Layouts/Main';
+import Link from 'next/link';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import SubNavItem from './SubNavItem';
-
 export type SettingsLayoutProps = {
   head: HeadProps;
-
   current: string;
   heading: string;
   headingDescription?: string;
@@ -74,6 +72,32 @@ const SettingsLayout: React.FC<SettingsLayoutProps> = ({
         </div>
       </div>
     </Layout>
+  );
+};
+
+type SubNavItemProps = {
+  title: string;
+  href: string;
+  current: string;
+};
+
+const SubNavItem: React.FC<SubNavItemProps> = ({ title, href, current }) => {
+  const { t } = useTranslation();
+
+  return (
+    <li>
+      <Link href={href}>
+        <a
+          className={`flex py-2 px-4 rounded-md w-full font-medium ${
+            current === title
+              ? 'bg-[#45413C] text-white'
+              : 'hover:bg-gray-100 dark:hover:bg-[#45413C] text-gray-600 dark:text-gray-400'
+          }`}
+        >
+          {t(title)}
+        </a>
+      </Link>
+    </li>
   );
 };
 

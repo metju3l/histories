@@ -1,12 +1,13 @@
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
+import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 import { MeQuery, useMeQuery } from '../../lib/graphql/user.graphql';
+import { LoginContext as AppLoginContext } from '../../pages/_app';
 import { orange_main } from '../../shared/colors';
 import { Navbar } from '../Modules/Navbar';
-import ProtectedRoutes from './ProtectedRoutes';
 
 export type HeadProps = {
   title: string;
@@ -35,7 +36,6 @@ export type HeadProps = {
 type LayoutProps = {
   head: HeadProps;
 
-  dontRedirectUnverified?: boolean;
   redirectLogged?: boolean;
   redirectNotLogged?: boolean;
   children: React.ReactNode;
@@ -57,12 +57,25 @@ export const LoginContext = React.createContext<LoginContextType>({
 
 const Layout: React.FC<LayoutProps> = ({
   head,
-  dontRedirectUnverified,
   redirectLogged,
   redirectNotLogged,
   children,
 }) => {
+  const appLoginContext = React.useContext(AppLoginContext);
+
+  const router = useRouter();
+
   const { data, loading, error, refetch } = useMeQuery();
+
+  useEffect(() => {
+    if (
+      (redirectLogged && appLoginContext.data?.me?.id) ||
+      (redirectNotLogged &&
+        (appLoginContext.data?.me?.id === undefined ||
+          appLoginContext.data?.me?.id === null))
+    )
+      router.push('/');
+  }, [appLoginContext.data]);
 
   return (
     <LoginContext.Provider value={{ data, loading, error, refetch }}>
@@ -137,15 +150,6 @@ const Layout: React.FC<LayoutProps> = ({
       />
 
       <Toaster position="top-center" reverseOrder={true} />
-      {(dontRedirectUnverified !== true ||
-        redirectLogged ||
-        redirectNotLogged) && (
-        <ProtectedRoutes
-          dontRedirectUnverified={dontRedirectUnverified}
-          redirectLogged={redirectLogged}
-          redirectNotLogged={redirectNotLogged}
-        />
-      )}
 
       <Navbar />
       <div className="h-screen pt-16 bg-white dark:bg-[#171716]">
