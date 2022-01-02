@@ -11,7 +11,7 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ userQuery }) => {
   const user = userQuery.user;
 
   return (
-    <div className="sticky top-0">
+    <div className="sticky top-0 max-w-xs">
       {/* PROFILE PICTURE */}
       <Link href={'/user/' + user.username} passHref>
         <div className="relative -mt-24 w-28 h-28 sm:h-40 sm:w-40 transition-all duration-400 ease-in-out">

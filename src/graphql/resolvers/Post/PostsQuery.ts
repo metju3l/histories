@@ -5,6 +5,7 @@ type queryInput = {
   filter: {
     placeId?: number;
     authorId?: number;
+    authorUsername?: string;
     maxLatitude: number | null;
     minLatitude: number | null;
     maxLongitude: number | null;
@@ -32,7 +33,8 @@ const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
     AND (place.location.longitude <= $maxLongitude OR $maxLongitude IS NULL)              // max longitude
     AND (distance(place.location, point($radius)) <= $radius.distance OR $radius IS NULL) // radius 
     AND (ID(place) = $placeId OR $placeId IS NULL)                                        // place id
-    AND (ID(author) = $authorId OR $authorId IS NULL)                                     // author id
+    AND (author.id = $authorId OR $authorId IS NULL)                                      // author id
+    AND (author.username =~ $authorUsername OR $authorUsername IS NULL)                   // author id
 
     CALL {
         WITH post
@@ -82,6 +84,9 @@ const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
       radius: filter?.radius ?? null,
       loggedId,
       authorId: filter?.authorId ?? null,
+      authorUsername: filter?.authorUsername
+        ? `(?i)${filter.authorUsername}`
+        : null,
       placeId: filter?.placeId ?? null,
     },
   });

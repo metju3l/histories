@@ -101,6 +101,7 @@ query posts($input: PostsInput) {
       username
       firstName
       lastName
+      profile
     }
     place {
       id

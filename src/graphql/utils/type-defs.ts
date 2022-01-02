@@ -100,6 +100,7 @@ export default gql`
     take: Int
     placeId: Int
     authorId: Int
+    authorUsername: String
   }
 
   input PostsInput {

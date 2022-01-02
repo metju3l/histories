@@ -62,6 +62,7 @@ const queries = {
         filter: {
           placeId?: number;
           authorId?: number;
+          authorUsername?: string;
           maxLatitude: number | null;
           minLatitude: number | null;
           maxLongitude: number | null;

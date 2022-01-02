@@ -67,8 +67,7 @@ const PersonalizedPosts = () => {
               ...previousResult,
               personalizedPosts: [
                 ...previousResult.personalizedPosts,
-                // @ts-ignore
-                ...fetchMoreResult.personalizedPosts,
+                ...(fetchMoreResult?.personalizedPosts ?? []),
               ],
             };
           },
