@@ -185,7 +185,7 @@ export default gql`
     hashtags: [Hashtag]
     url: [String!]!
     id: Int!
-    author: UserInfoMinimal!
+    author: User!
     likes: [UserInfoMinimal]!
     liked: Boolean!
     place: Place!

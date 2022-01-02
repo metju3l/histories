@@ -33,7 +33,7 @@ function createIsomorphLink(context: ResolverContext = {}) {
   }
 }
 
-function createApolloClient(
+export function createApolloClient(
   context?: ResolverContext
 ): ApolloClient<NormalizedCacheObject> {
   return new ApolloClient({
