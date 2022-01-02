@@ -1,7 +1,7 @@
-import UrlPrefix from 'shared/config/UrlPrefix';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React from 'react';
+import UrlPrefix from 'shared/config/UrlPrefix';
 
 import { MapContext } from './MapContext';
 

@@ -1,9 +1,9 @@
 import { Loading } from '@components/Elements';
 import { usePostsQuery } from '@graphql/post.graphql';
-import UrlPrefix from 'shared/config/UrlPrefix';
 import Image from 'next/image';
 import { SidebarPlaceType } from 'pages/map';
 import React from 'react';
+import UrlPrefix from 'shared/config/UrlPrefix';
 
 const PlaceDetail: React.FC<{
   sidebarPlace: SidebarPlaceType;

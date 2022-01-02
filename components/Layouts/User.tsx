@@ -1,57 +1,47 @@
-import UserDoesNotExist from '@components/Modules/404/UserDoesNotExist';
-import { useGetUserInfoQuery } from '@graphql/user.graphql';
-import UrlPrefix from 'shared/config/UrlPrefix';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
 import { LoginContext } from '../../pages/_app';
+import UrlPrefix from '../../shared/config/UrlPrefix';
 import { Layout } from '.';
+import { UserQuery } from '@graphql/user.graphql';
 
-type UserLayoutProps = { username: string; currentTab: string };
+type UserLayoutProps = { userQuery: UserQuery; currentTab: string };
 
 const UserLayout: React.FC<UserLayoutProps> = ({
-  username,
+  userQuery,
   currentTab,
   children,
 }) => {
   // login context
   const loginContext = React.useContext(LoginContext);
 
-  const { data, loading, error, refetch } = useGetUserInfoQuery({
-    variables: { username: username },
-  });
-
-  if (loading) return <div>loading</div>;
-  if (error) return <div>error</div>;
-
-  if (data === undefined) return <UserDoesNotExist />;
-
-  const user = data.user;
+  const user = userQuery.user;
 
   return (
     <Layout
       head={{
-        title: `${data.user.firstName} ${data.user.lastName} | hiStories`,
-        description: `${data.user.firstName} ${data.user.lastName}'s profile on HiStories`,
+        title: `${user.firstName} ${user.lastName} | hiStories`,
+        description: `${user.firstName} ${user.lastName}'s profile on HiStories`,
         canonical: 'https://www.histories.cc/user/krystofex',
         openGraph: {
-          title: `${data.user.firstName} ${data.user.lastName} | HiStories`,
+          title: `${user.firstName} ${user.lastName} | HiStories`,
           type: 'website',
           images: [
             {
-              url: data.user.profile.startsWith('http')
-                ? data.user.profile
-                : UrlPrefix + data.user.profile,
+              url: user.profile.startsWith('http')
+                ? user.profile
+                : UrlPrefix + user.profile,
               width: 92,
               height: 92,
-              alt: `${data.user.firstName} ${data.user.lastName}'s profile picture`,
+              alt: `${user.firstName} ${user.lastName}'s profile picture`,
             },
           ],
           url: 'https://www.histories.cc/user/krystofex',
-          description: `${data.user.firstName} ${data.user.lastName}'s profile`,
+          description: `${user.firstName} ${user.lastName}'s profile`,
           site_name: 'Profil page',
-          profile: data.user,
+          profile: user,
         },
       }}
     >
@@ -59,13 +49,13 @@ const UserLayout: React.FC<UserLayoutProps> = ({
       <div className="flex px-4 m-auto max-w-screen-2xl">
         <div className="sticky top-0">
           {/* PROFILE PICTURE */}
-          <Link href={'/user/' + username} passHref>
+          <Link href={'/user/' + user.username} passHref>
             <div className="relative -mt-24 w-28 h-28 sm:h-40 sm:w-40 transition-all duration-400 ease-in-out">
               <Image
                 src={
-                  data.user.profile.startsWith('http')
-                    ? data.user.profile
-                    : UrlPrefix + data.user.profile
+                  user.profile.startsWith('http')
+                    ? user.profile
+                    : UrlPrefix + user.profile
                 }
                 layout="fill"
                 objectFit="contain"

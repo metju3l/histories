@@ -1,10 +1,10 @@
 import { Layout } from '@components/Layouts';
 import { Minimap } from '@components/Modules/Minimap';
 import { usePostQuery } from '@graphql/post.graphql';
-import UrlPrefix from 'shared/config/UrlPrefix';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import UrlPrefix from 'shared/config/UrlPrefix';
 
 const PostDetail: React.FC<{ id: number }> = ({ id }) => {
   const { data, loading, error } = usePostQuery({ variables: { id } });

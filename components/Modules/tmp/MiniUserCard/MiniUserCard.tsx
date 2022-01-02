@@ -5,8 +5,8 @@ import React, { useState } from 'react';
 import TimeAgo from 'react-timeago';
 
 import GeneratedProfileUrl from '../../../../lib/functions/GeneratedProfileUrl';
-import UrlPrefix from '../../../../shared/config/UrlPrefix';
 import hoverHandler from '../../../../lib/hooks/hoverHandler';
+import UrlPrefix from '../../../../shared/config/UrlPrefix';
 import Button from '../../../Elements/Buttons/Button';
 
 export type MiniUserCardProps = {

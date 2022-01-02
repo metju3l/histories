@@ -1,9 +1,9 @@
 import { LoginContext } from '@components/Layouts';
-import UrlPrefix from 'shared/config/UrlPrefix';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import React, { useContext, useEffect, useState } from 'react';
 import { IoIosMore } from 'react-icons/io';
+import UrlPrefix from 'shared/config/UrlPrefix';
 
 import {
   useLikeMutation,

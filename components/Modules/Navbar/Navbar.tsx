@@ -1,12 +1,12 @@
 import { Menu } from '@headlessui/react';
 import FirstLetterUppercase from '@lib/functions/FirstLetterUppercase';
 import LogOut from '@lib/functions/LogOut';
-import UrlPrefix from 'shared/config/UrlPrefix';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import UrlPrefix from 'shared/config/UrlPrefix';
 
 import { LoginContext } from '../../Layouts';
 import DropdownItem from './DropdownItem';

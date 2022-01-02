@@ -1,8 +1,8 @@
-import UrlPrefix from 'shared/config/UrlPrefix';
 import Viewport from '@lib/types/viewport';
 import Image from 'next/image';
 import React, { useRef } from 'react';
 import ReactMapGL, { ExtraState, MapRef, Marker } from 'react-map-gl';
+import UrlPrefix from 'shared/config/UrlPrefix';
 import Bounds from 'types/Bounds';
 
 import { Maybe } from '../../../.cache/__types__';

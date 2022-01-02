@@ -1,8 +1,8 @@
 import { Layout } from '@components/Layouts';
 import { usePersonalizedPostsQuery, usePostQuery } from '@graphql/post.graphql';
-import UrlPrefix from 'shared/config/UrlPrefix';
 import Image from 'next/image';
 import React from 'react';
+import UrlPrefix from 'shared/config/UrlPrefix';
 
 const Explore: React.FC = () => {
   const { data, loading, error, refetch } = usePersonalizedPostsQuery({
