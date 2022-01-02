@@ -16,11 +16,10 @@ export default function Page() {
   else
     return (
       <div>
-        {isLoading ? (
-          <Button isLoading />
-        ) : (
-          <Button
-            onClick={async () => {
+        <Button
+          loading={isLoading}
+          {...{
+            onClick: async () => {
               setIsLoading(true);
               if (router.query.token !== undefined)
                 try {
@@ -34,11 +33,11 @@ export default function Page() {
                   toast.error(error.message);
                 }
               setIsLoading(false);
-            }}
-          >
-            Authorize email
-          </Button>
-        )}
+            },
+          }}
+        >
+          Authorize email
+        </Button>
       </div>
     );
 }

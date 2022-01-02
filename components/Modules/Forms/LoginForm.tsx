@@ -1,3 +1,4 @@
+import Button from '@components/Elements/Buttons/Button';
 import GoogleAuthButton from '@components/Elements/Buttons/GoogleAuth';
 import LoginFormInputs from '@lib/types/forms/loginFormInputs';
 import Link from 'next/link';
@@ -38,14 +39,11 @@ const LoginForm: React.FC<LoginFormProps> = ({
           {...register('password', { required: true })}
         />
       </div>
-      <button
-        type="submit"
-        className="block px-4 mt-6 font-medium bg-gray-800 border border-gray-800 py-1.5 rounded-md text-gray-50"
-      >
+      <Button style="primary_solid" loading={loading}>
         {t(loading ? 'loading' : 'login')}
-      </button>
-      <GoogleAuthButton />
+      </Button>
 
+      <GoogleAuthButton />
       <Link href="/register">
         <a className="pl-2 underline">{t('create new account')}</a>
       </Link>

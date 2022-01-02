@@ -399,7 +399,7 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
                 })}
               </div>
 
-              <Button isLoading={isLoading}>submit</Button>
+              <Button loading={isLoading}>submit</Button>
             </div>
           </Form>
         )}

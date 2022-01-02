@@ -79,7 +79,7 @@ const CreateCollectionModal: React.FC<{
               ? 'Only you will see this collection'
               : 'Collection will be visible to anyone'}
           </p>
-          <Button isLoading={isLoading} type="primary">
+          <Button loading={isLoading} style="primary_solid">
             Submit
           </Button>
         </form>

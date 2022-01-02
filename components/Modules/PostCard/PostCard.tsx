@@ -358,18 +358,19 @@ const PostCard: FC<{
                     ref={inputRef}
                   />
                   <Button
-                    onClick={async () => {
-                      try {
-                        await createCommentMutation({
-                          variables: { target: id, content: commentContent },
-                        });
-                        setCommentContent('');
-                        await refetch();
-                      } catch (error: any) {
-                        toast.error(error.message);
-                      }
+                    {...{
+                      onClick: async () => {
+                        try {
+                          await createCommentMutation({
+                            variables: { target: id, content: commentContent },
+                          });
+                          setCommentContent('');
+                          await refetch();
+                        } catch (error: any) {
+                          toast.error(error.message);
+                        }
+                      },
                     }}
-                    isLoading={false}
                   >
                     Comment
                   </Button>

@@ -111,26 +111,27 @@ const FollowButton = ({ isFollowing, id, refetch }: any) => {
 
   return (
     <Button
-      type="primary"
-      isLoading={isLoading}
-      onClick={async () => {
-        setIsLoading(true);
-        try {
-          if (isFollowing) {
-            await unfollowMutation({
-              variables: { userID: id },
-            });
-          } else {
-            await followMutation({
-              variables: { userID: id },
-            });
+      loading={isLoading}
+      {...{
+        onClick: async () => {
+          setIsLoading(true);
+          try {
+            if (isFollowing) {
+              await unfollowMutation({
+                variables: { userID: id },
+              });
+            } else {
+              await followMutation({
+                variables: { userID: id },
+              });
+            }
+            await refetch();
+          } catch (error) {
+            // @ts-ignore
+            toast.error(error.message);
           }
-          await refetch();
-        } catch (error) {
-          // @ts-ignore
-          toast.error(error.message);
-        }
-        setIsLoading(false);
+          setIsLoading(false);
+        },
       }}
     >
       {isFollowing ? 'Unfollow' : 'Follow'}

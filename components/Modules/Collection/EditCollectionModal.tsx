@@ -110,9 +110,7 @@ const EditCollectionModal: React.FC<{
           <br />
           <br />
           <br />
-          <Button isLoading={isLoading} type="primary">
-            Submit
-          </Button>
+          <Button loading={isLoading}>Submit</Button>
         </form>
       </div>
     </Modal>

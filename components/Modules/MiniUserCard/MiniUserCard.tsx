@@ -124,12 +124,8 @@ const ProfilePopup: React.FC<{
         </div>
       </div>
       <div className="flex w-full gap-2">
-        <Button isLoading={false} type="primary">
-          Follow
-        </Button>
-        <Button isLoading={false} type="secondary">
-          •••
-        </Button>
+        <Button>Follow</Button>
+        <Button style="primary_outline">•••</Button>
       </div>
     </motion.div>
   );
