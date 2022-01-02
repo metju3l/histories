@@ -1,7 +1,7 @@
 import React from 'react';
 import { Marker } from 'react-map-gl';
 
-import MarkerIcon from './Icons/Marker';
+import { MarkerIcon } from './icons';
 
 export type MinimapMarkerProps = {
   latitude: number;

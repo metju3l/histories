@@ -3,7 +3,6 @@ import '../lib/styles/main.css';
 
 import { ApolloError, ApolloProvider, ApolloQueryResult } from '@apollo/client';
 import { MeQuery, useMeQuery } from '@graphql/user.graphql';
-import { orange_main } from 'dist/shared/colors';
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
 import NextNprogress from 'nextjs-progressbar';
@@ -11,6 +10,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useApollo } from '../lib/utils/apollo';
+import { orange_main } from '../shared/config/colors';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const apolloClient = useApollo(null);
