@@ -1,4 +1,4 @@
-import { Button } from '@components/Elements';
+import { Button, Input } from '@components/Elements';
 import GoogleAuthButton from '@components/Elements/Buttons/GoogleAuth';
 import RegisterFormInputs from '@lib/types/forms/registerFormInputs';
 import Link from 'next/link';
@@ -18,46 +18,54 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 }) => {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-2">
-      <input
-        placeholder="First name"
+      <Input
+        label="First name"
+        register={register}
+        name="firstName"
+        options={{ required: true, maxLength: 50 }}
         autoComplete="given-name"
-        {...register('firstName', { required: true, maxLength: 50 })}
       />
 
-      <input
-        placeholder="Last name"
+      <Input
+        label="Last name"
+        register={register}
+        name="lastName"
+        options={{ required: true, maxLength: 50 }}
         autoComplete="family-name"
-        {...register('lastName', { required: true, maxLength: 50 })}
       />
-      <input
-        placeholder="Username"
+
+      <Input
+        label="username"
+        register={register}
+        name="username"
+        options={{ required: true, minLength: 3, maxLength: 50 }}
         autoComplete="username"
-        {...register('username', {
-          required: true,
-          minLength: 3,
-          maxLength: 32,
-        })}
       />
 
-      <input
-        placeholder="Email"
-        type="email"
+      <Input
+        label="email"
+        register={register}
+        name="email"
+        options={{ required: true }}
         autoComplete="email"
-        {...register('email', { required: true })}
       />
 
-      <input
-        placeholder="Password"
+      <Input
+        label="password"
+        register={register}
+        name="password"
         type="password"
+        options={{ required: true, minLength: 8 }}
         autoComplete="new-password"
-        {...register('password', { required: true, minLength: 8 })}
       />
 
-      <input
-        placeholder="Repeat password"
+      <Input
+        label="Repeat password"
+        register={register}
+        name="repeatPassword"
         type="password"
+        options={{ required: true, minLength: 8 }}
         autoComplete="new-password"
-        {...register('repeatPassword', { required: true, minLength: 8 })}
       />
 
       <label className="inline-flex items-center mt-3">

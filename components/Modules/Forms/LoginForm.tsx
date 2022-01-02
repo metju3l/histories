@@ -1,3 +1,4 @@
+import { Input } from '@components/Elements';
 import Button from '@components/Elements/Buttons/Button';
 import GoogleAuthButton from '@components/Elements/Buttons/GoogleAuth';
 import LoginFormInputs from '@lib/types/forms/loginFormInputs';
@@ -21,24 +22,21 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-2">
-      <div>
-        <h4 className="pt-0 pb-2 font-medium text-gray-600">
-          {t('username or email')}
-        </h4>
-        <input
-          className="w-full px-2 text-gray-600 border border-gray-300 outline-none rounded-md focus:border-gray-500 py-1.5"
-          type="text"
-          {...register('login', { required: true })}
-        />
-      </div>
-      <div>
-        <h4 className="pt-0 pb-2 font-medium text-gray-600">{t('password')}</h4>
-        <input
-          className="w-full px-2 text-gray-600 border border-gray-300 outline-none rounded-md focus:border-gray-500 py-1.5"
-          type="password"
-          {...register('password', { required: true })}
-        />
-      </div>
+      <Input
+        label={t('username or email')}
+        register={register}
+        name="login"
+        options={{ required: true }}
+        autoComplete="username"
+      />
+      <Input
+        label={t('password')}
+        type="password"
+        register={register}
+        name="password"
+        options={{ required: true }}
+        autoComplete="password"
+      />
       <Button style="primary_solid" loading={loading}>
         {t(loading ? 'loading' : 'login')}
       </Button>
