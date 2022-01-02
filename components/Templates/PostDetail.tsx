@@ -39,7 +39,7 @@ const PostDetail: React.FC<{ id: number }> = ({ id }) => {
     >
       <main className="max-w-4xl m-auto">
         {data.post.url.length > 0 && (
-          <div className="flex mt-8">
+          <div className="flex flex-col mt-8 md:flex-row">
             <div className="relative w-full bg-white cursor-pointer dark:bg-black h-[60vh] bg-secondary">
               <Image
                 src={UrlPrefix + data.post.url[0]}
@@ -49,9 +49,9 @@ const PostDetail: React.FC<{ id: number }> = ({ id }) => {
                 alt="Profile picture"
               />
             </div>
-            <div className="flex flex-col w-[60%] gap-4">
+            <div className="flex flex-col w-full px-4 md:w-[60%] gap-4 md:p-0">
               {/* PROFILE INFO */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center px-4 gap-2">
                 <Link href={`/user/${data.post.author.username}`} passHref>
                   <div className="relative w-10 h-10 rounded-full cursor-pointer bg-secondary">
                     <Image
@@ -79,12 +79,14 @@ const PostDetail: React.FC<{ id: number }> = ({ id }) => {
               <div className="w-full">{data.post.description}</div>
 
               {/* MINIMAP */}
-              <Minimap
-                coordinates={[
-                  data.post.place.latitude,
-                  data.post.place.longitude,
-                ]}
-              />
+              <div className="w-full h-[40vh]">
+                <Minimap
+                  coordinates={[
+                    data.post.place.latitude,
+                    data.post.place.longitude,
+                  ]}
+                />
+              </div>
             </div>
           </div>
         )}

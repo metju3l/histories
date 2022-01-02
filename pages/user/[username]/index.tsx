@@ -2,8 +2,8 @@ import UserLayout from '@components/Layouts/User';
 import { NextPageContext } from 'next';
 import React from 'react';
 
-const Collections: React.FC<{ username: string }> = ({ username }) => {
-  return <UserLayout username={username}></UserLayout>;
+const PostsPage: React.FC<{ username: string }> = ({ username }) => {
+  return <UserLayout username={username} currentTab="posts"></UserLayout>;
 };
 
 export const getServerSideProps = async (
@@ -21,4 +21,4 @@ export const getServerSideProps = async (
   };
 };
 
-export default Collections;
+export default PostsPage;
