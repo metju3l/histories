@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 
-import { Loading } from '../../Elements';
+import { Loading } from '../../../Elements';
 
 export type ModalProps = {
   isOpen: boolean;

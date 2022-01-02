@@ -1,5 +1,5 @@
 import { LoginContext } from '@components/Layouts';
-import { Modal } from '@components/Modules/Modal';
+import { Modal } from '@components/Modules/tmp/Modal';
 import { useAddToCollectionMutation } from '@graphql/relations.graphql';
 import React from 'react';
 import { toast } from 'react-hot-toast';

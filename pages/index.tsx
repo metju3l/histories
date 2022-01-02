@@ -1,5 +1,5 @@
 import { Layout } from '@components/Layouts';
-import { Post } from '@components/Modules/Post';
+import { Post } from '@components/Modules/tmp/Post';
 import { usePersonalizedPostsQuery } from '@graphql/post.graphql';
 import { useMeQuery } from '@graphql/user.graphql';
 import React from 'react';

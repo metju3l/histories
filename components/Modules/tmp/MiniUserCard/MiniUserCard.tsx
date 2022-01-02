@@ -4,10 +4,10 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import TimeAgo from 'react-timeago';
 
-import GeneratedProfileUrl from '../../../lib/functions/GeneratedProfileUrl';
-import UrlPrefix from '../../../lib/functions/UrlPrefix';
-import hoverHandler from '../../../lib/hooks/hoverHandler';
-import Button from '../../Elements/Buttons/Button';
+import GeneratedProfileUrl from '../../../../lib/functions/GeneratedProfileUrl';
+import UrlPrefix from '../../../../lib/functions/UrlPrefix';
+import hoverHandler from '../../../../lib/hooks/hoverHandler';
+import Button from '../../../Elements/Buttons/Button';
 
 export type MiniUserCardProps = {
   firstName: string;

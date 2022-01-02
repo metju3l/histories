@@ -1,7 +1,6 @@
 import {
   PersonalizedPostsInput,
   PlacesInput,
-  PostsInput,
 } from '../../../../.cache/__types__';
 import {
   CollectionQuery,

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-import { useDeleteMutation } from '../../../lib/graphql/post.graphql';
+import { useDeleteMutation } from '../../../../lib/graphql/post.graphql';
 import {
   useLikeMutation,
   useUnlikeMutation,
-} from '../../../lib/graphql/relations.graphql';
-import { LoginContext } from '../../Layouts';
+} from '../../../../lib/graphql/relations.graphql';
+import { LoginContext } from '../../../Layouts';
 import { Comment } from '.';
 
 // this component gets data neccesary for a comment component

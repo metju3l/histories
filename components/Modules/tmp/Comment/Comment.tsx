@@ -3,8 +3,8 @@ import Image from 'next/image';
 import React, { useRef, useState } from 'react';
 import TimeAgo from 'react-timeago';
 
-import GeneratedProfileUrl from '../../../lib/functions/GeneratedProfileUrl';
-import hoverHandler from '../../../lib/hooks/hoverHandler';
+import GeneratedProfileUrl from '../../../../lib/functions/GeneratedProfileUrl';
+import hoverHandler from '../../../../lib/hooks/hoverHandler';
 import { Menu } from '../Modal';
 
 export type CommentProps = {
