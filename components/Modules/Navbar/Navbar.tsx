@@ -1,7 +1,7 @@
 import { Menu } from '@headlessui/react';
 import FirstLetterUppercase from '@lib/functions/FirstLetterUppercase';
 import LogOut from '@lib/functions/LogOut';
-import UrlPrefix from '@lib/functions/UrlPrefix';
+import UrlPrefix from 'shared/config/UrlPrefix';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';

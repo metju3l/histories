@@ -1,4 +1,4 @@
-import UrlPrefix from '@lib/functions/UrlPrefix';
+import UrlPrefix from 'shared/config/UrlPrefix';
 import Viewport from '@lib/types/viewport';
 import Image from 'next/image';
 import React, { useRef } from 'react';

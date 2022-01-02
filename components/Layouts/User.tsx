@@ -1,6 +1,6 @@
 import UserDoesNotExist from '@components/Modules/404/UserDoesNotExist';
 import { useGetUserInfoQuery } from '@graphql/user.graphql';
-import UrlPrefix from '@lib/functions/UrlPrefix';
+import UrlPrefix from 'shared/config/UrlPrefix';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -32,7 +32,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   return (
     <Layout
       head={{
-        title: `${data.user.firstName} ${data.user.firstName} | hiStories`,
+        title: `${data.user.firstName} ${data.user.lastName} | hiStories`,
         description: `${data.user.firstName} ${data.user.lastName}'s profile on HiStories`,
         canonical: 'https://www.histories.cc/user/krystofex',
         openGraph: {

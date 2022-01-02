@@ -7,7 +7,7 @@ import { Toaster } from 'react-hot-toast';
 
 import { MeQuery, useMeQuery } from '../../lib/graphql/user.graphql';
 import { LoginContext as AppLoginContext } from '../../pages/_app';
-import { orange_main } from '../../shared/colors';
+import { orange_main } from '../../shared/config/colors';
 import { Navbar } from '../Modules/Navbar';
 
 type LayoutProps = {

@@ -1,4 +1,4 @@
-import { orange_main } from '../../../../shared/colors';
+import { orange_main } from '../../../../shared/config/colors';
 
 const Footer = `
 <footer

@@ -1,4 +1,4 @@
-import UrlPrefix from '../../../../lib/functions/UrlPrefix';
+import UrlPrefix from '../../../../shared/config/UrlPrefix';
 import DbConnector from '../../../database/driver';
 import { NSFWCheck } from '../../../functions';
 

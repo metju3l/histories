@@ -1,7 +1,7 @@
 import { Layout } from '@components/Layouts';
 import { Minimap } from '@components/Modules/Minimap';
 import { usePostQuery } from '@graphql/post.graphql';
-import UrlPrefix from '@lib/functions/UrlPrefix';
+import UrlPrefix from 'shared/config/UrlPrefix';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';

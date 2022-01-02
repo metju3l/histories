@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import TimeAgo from 'react-timeago';
 
 import GeneratedProfileUrl from '../../../../lib/functions/GeneratedProfileUrl';
-import UrlPrefix from '../../../../lib/functions/UrlPrefix';
+import UrlPrefix from '../../../../shared/config/UrlPrefix';
 import hoverHandler from '../../../../lib/hooks/hoverHandler';
 import Button from '../../../Elements/Buttons/Button';
 

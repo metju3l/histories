@@ -1,4 +1,4 @@
-import UrlPrefix from '@lib/functions/UrlPrefix';
+import UrlPrefix from 'shared/config/UrlPrefix';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React from 'react';

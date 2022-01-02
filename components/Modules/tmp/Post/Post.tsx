@@ -1,5 +1,5 @@
 import { LoginContext } from '@components/Layouts';
-import UrlPrefix from '@lib/functions/UrlPrefix';
+import UrlPrefix from 'shared/config/UrlPrefix';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import React, { useContext, useEffect, useState } from 'react';
