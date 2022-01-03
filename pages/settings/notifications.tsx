@@ -1,6 +1,7 @@
 import { CheckboxElement } from '@components/Elements';
 import SettingsLayout from '@components/Layouts/Settings';
 import { useUpdateProfileMutation } from '@graphql/user.graphql';
+import { RedirectAnonymousGetServerSideProps } from '@lib/functions';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -107,5 +108,7 @@ const Account = () => {
     </SettingsLayout>
   );
 };
+
+export const getServerSideProps = RedirectAnonymousGetServerSideProps;
 
 export default Account;

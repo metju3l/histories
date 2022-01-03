@@ -1,4 +1,5 @@
 import SettingsLayout from '@components/Layouts/Settings';
+import { RedirectAnonymousGetServerSideProps } from '@lib/functions';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -33,5 +34,7 @@ const Account = () => {
     </SettingsLayout>
   );
 };
+
+export const getServerSideProps = RedirectAnonymousGetServerSideProps;
 
 export default Account;

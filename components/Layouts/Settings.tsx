@@ -2,11 +2,8 @@ import { Separator } from '@components/Elements';
 import { Layout } from '@components/Layouts';
 import HeadProps from '@lib/types/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { LoginContext } from '../../pages/_app';
 
 export type SettingsLayoutProps = {
   head: HeadProps;
@@ -22,16 +19,6 @@ const SettingsLayout: React.FC<SettingsLayoutProps> = ({
   heading,
   headingDescription,
 }) => {
-  // login context
-  const { data } = React.useContext(LoginContext);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    // if user is logged redirect to home
-    if (typeof data?.me?.id !== 'number') router.push('/');
-  }, [data]);
-
   const { t } = useTranslation();
 
   return (
