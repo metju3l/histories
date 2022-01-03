@@ -1,10 +1,7 @@
 import { ApolloClient, InMemoryCache, QueryResult } from '@apollo/client';
 import UserLayout from '@components/Layouts/User';
 import { Post } from '@components/Modules/Post';
-import {
-  PostsDocument,
-  PostsQuery,
-} from '@graphql/post.graphql';
+import { PostsDocument, PostsQuery } from '@graphql/post.graphql';
 import { UserDocument } from '@graphql/user.graphql';
 import {
   GetCookieFromServerSideProps,
@@ -123,7 +120,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   // create new apollo graphql client
   const client = new ApolloClient({
-    uri: 'http://localhost:3000/api/graphql', // process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
+    uri:
+      process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ??
+      'http://localhost:3000/api/graphql',
     cache: new InMemoryCache(),
   });
 
