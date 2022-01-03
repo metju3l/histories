@@ -17,9 +17,7 @@ import {
   PostTimeline,
   UnlikePost,
 } from '.';
-import { Menu, Transition } from '@headlessui/react';
-import DropdownItem from '../Navbar/DropdownItem';
-import { toast } from 'react-hot-toast';
+import OptionsMenu from './OptionsMenu';
 
 const Post: React.FC<PostProps> = ({
   author,
@@ -100,60 +98,13 @@ const Post: React.FC<PostProps> = ({
           onMouseLeave={() => {
             clearTimeout(timer);
           }}
-          className="w-full mb-4 border sm:rounded-2xl max-w-[600px] bg-white"
+          className="w-full mb-4 bg-white border sm:rounded-2xl max-w-[600px]"
         >
           <div className="flex items-center justify-between px-4 pt-6">
             <MiniUserCard {...author} time={createdAt} />
-
-            {/* OPTIONS */}
-            <Menu as="div" className="relative">
-              <Menu.Button as="div" className="flex items-center gap-2">
-                <IoIosMore className="text-2xl" />
-              </Menu.Button>
-              <Transition
-                as={Fragment}
-                enter="transition ease-out duration-100"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
-                <Menu.Items
-                  as="div"
-                  className="absolute right-0 z-50 flex flex-col w-48 mt-2 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 focus:outline-none dark:border-gray-800 truncated"
-                >
-                  {/* REMEMBER */}
-                  <DropdownItem text="Report" top />
-
-                  {/* UNFOLLOW */}
-                  <DropdownItem text="Unfollow" />
-
-                  {/* GO TO POST */}
-                  <Menu.Item>
-                    <DropdownItem text="Go to post" href={`/post/${id}`} />
-                  </Menu.Item>
-
-                  {/* COPY LINK */}
-                  <Menu.Item>
-                    <DropdownItem
-                      text="Copy link"
-                      onClick={async () => {
-                        await navigator.clipboard.writeText(
-                          `https://www.histories.cc/post/${id}`
-                        );
-                        toast.success('Link copied to clipboard');
-                      }}
-                    />
-                  </Menu.Item>
-
-                  {/* CANCEL */}
-                  <Menu.Item>
-                    <DropdownItem text="Cancel" onClick={() => {}} bottom />
-                  </Menu.Item>
-                </Menu.Items>
-              </Transition>
-            </Menu>
+            <OptionsMenu id={id}>
+              <IoIosMore className="text-2xl" />
+            </OptionsMenu>
           </div>
           <p className="px-4 pt-2 font-medium">{description}</p>
           {photos && (
