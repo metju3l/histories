@@ -71,7 +71,7 @@ const Navbar: React.FC = () => {
               >
                 <DropdownItem
                   text={loginContext.data!.me!.username}
-                  href={`/${loginContext.data!.me!.username}`}
+                  href={`/user/${loginContext.data!.me!.username}`}
                   top
                 />
                 <DropdownItem text={t('create post')} href="/createPost" />

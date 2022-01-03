@@ -42,7 +42,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
       }}
     >
       <div className="w-full h-64 bg-brand" />
-      <div className="flex px-4 m-auto max-w-screen-2xl">
+      <div className="flex px-4 m-auto max-w-screen-2xl gap-6 bg-[#FAFBFB]">
         <LeftPanel userQuery={userQuery} />
         <div className="w-full">
           {/* SUBNAV */}

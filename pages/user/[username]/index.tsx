@@ -1,6 +1,6 @@
 import UserLayout from '@components/Layouts/User';
 import UserDoesNotExist from '@components/Modules/404/UserDoesNotExist';
-import { Post } from '@components/Modules/tmp/Post';
+import { Post } from '@components/Modules/Post';
 import { usePostsQuery } from '@graphql/post.graphql';
 import { useUserQuery } from '@graphql/user.graphql';
 import { NextPageContext } from 'next';
@@ -69,6 +69,24 @@ const PostsPage: React.FC<{ username: string }> = ({ username }) => {
               await refetch();
             }}
           >
+            {posts.data?.posts.map((post: any) => (
+              <Post
+                timeline
+                {...post}
+                key={post.id}
+                refetch={refetch}
+                photos={post.url.map((x: string) => ({ url: x }))}
+              />
+            ))}
+            {posts.data?.posts.map((post: any) => (
+              <Post
+                timeline
+                {...post}
+                key={post.id}
+                refetch={refetch}
+                photos={post.url.map((x: string) => ({ url: x }))}
+              />
+            ))}
             {posts.data?.posts.map((post: any) => (
               <Post
                 timeline
