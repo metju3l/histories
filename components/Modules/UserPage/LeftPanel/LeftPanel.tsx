@@ -1,15 +1,12 @@
-import { UserQuery } from '@graphql/user.graphql';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
 import UrlPrefix from '../../../../shared/config/UrlPrefix';
 
-export type UserLeftPanelProps = { userQuery: UserQuery };
+export type UserLeftPanelProps = { user: any };
 
-const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ userQuery }) => {
-  const user = userQuery.user;
-
+const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
   return (
     <div className="sticky top-0 max-w-xs">
       {/* PROFILE PICTURE */}

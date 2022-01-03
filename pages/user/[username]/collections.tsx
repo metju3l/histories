@@ -20,7 +20,19 @@ const CollectionsPage: React.FC<{ username: string }> = ({ username }) => {
   if (data === undefined || data.user === undefined)
     return <UserDoesNotExist />;
 
-  return <UserLayout userQuery={data} currentTab="collections"></UserLayout>;
+  return (
+    <UserLayout
+      user={data.user}
+      currentTab="collections"
+      head={{
+        title: '',
+        description: '',
+        canonical: undefined,
+        // @ts-ignore
+        openGraph: undefined,
+      }}
+    ></UserLayout>
+  );
 };
 
 export const getServerSideProps = async (

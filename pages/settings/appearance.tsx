@@ -1,5 +1,5 @@
 import SettingsLayout from '@components/Layouts/Settings';
-import { RedirectAnonymousGetServerSideProps } from '@lib/functions';
+import { RedirectAnonymous } from '@lib/functions/ServerSideProps';
 import { useTheme } from 'next-themes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -76,6 +76,6 @@ const ThemeCard: React.FC<{
   );
 };
 
-export const getServerSideProps = RedirectAnonymousGetServerSideProps;
+export const getServerSideProps = RedirectAnonymous;
 
 export default Account;

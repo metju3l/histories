@@ -1,5 +1,5 @@
 import SettingsLayout from '@components/Layouts/Settings';
-import { RedirectAnonymousGetServerSideProps } from '@lib/functions';
+import { RedirectAnonymous } from '@lib/functions/ServerSideProps';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -35,6 +35,6 @@ const Account = () => {
   );
 };
 
-export const getServerSideProps = RedirectAnonymousGetServerSideProps;
+export const getServerSideProps = RedirectAnonymous;
 
 export default Account;

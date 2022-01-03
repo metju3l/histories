@@ -5,7 +5,7 @@ import { Layout } from '@components/Layouts';
 import { Search } from '@components/Templates/MainPage';
 import { useCreatePostMutation } from '@graphql/post.graphql';
 import { useMeQuery } from '@graphql/user.graphql';
-import { RedirectAnonymousGetServerSideProps } from '@lib/functions';
+import { RedirectAnonymous } from '@lib/functions/ServerSideProps';
 import { Field, Form, Formik } from 'formik';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
@@ -409,6 +409,6 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
   );
 };
 
-export const getServerSideProps = RedirectAnonymousGetServerSideProps;
+export const getServerSideProps = RedirectAnonymous;
 
 export default Login;

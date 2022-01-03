@@ -20,7 +20,19 @@ const UserMapPage: React.FC<{ username: string }> = ({ username }) => {
   if (data === undefined || data.user === undefined)
     return <UserDoesNotExist />;
 
-  return <UserLayout userQuery={data} currentTab="map"></UserLayout>;
+  return (
+    <UserLayout
+      user={data.user}
+      currentTab="map"
+      head={{
+        title: '',
+        description: '',
+        canonical: undefined,
+        // @ts-ignore
+        openGraph: undefined,
+      }}
+    ></UserLayout>
+  );
 };
 
 export const getServerSideProps = async (

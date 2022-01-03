@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext } from 'next';
 
-import { GetCookieFromServerSideProps, IsJwtValid, SSRRedirect } from '.';
+import { GetCookieFromServerSideProps, IsJwtValid, SSRRedirect } from '..';
 
 const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { req } = ctx;

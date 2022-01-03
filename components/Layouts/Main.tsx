@@ -89,7 +89,7 @@ const Layout: React.FC<LayoutProps> = ({
           },
           {
             name: 'msapplication-config',
-            content: 'icons/browserconfig.xml',
+            content: '/icons/browserconfig.xml',
           },
         ]}
         additionalLinkTags={[
@@ -112,7 +112,7 @@ const Layout: React.FC<LayoutProps> = ({
           },
           {
             rel: 'manifest',
-            href: 'manifest.json',
+            href: '/manifest.json',
           },
           {
             rel: 'mask-icon',
