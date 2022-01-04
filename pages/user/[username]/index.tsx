@@ -1,7 +1,11 @@
 import { ApolloClient, InMemoryCache, QueryResult } from '@apollo/client';
 import UserLayout from '@components/Layouts/User';
 import { Post } from '@components/Modules/Post';
-import { PostsDocument, PostsQuery } from '@graphql/post.graphql';
+import {
+  PostsDocument,
+  PostsQuery,
+  usePostsQuery,
+} from '@graphql/post.graphql';
 import { UserDocument } from '@graphql/user.graphql';
 import {
   GetCookieFromServerSideProps,
@@ -11,9 +15,9 @@ import {
 import { GetServerSidePropsContext } from 'next';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import UrlPrefix from 'shared/config/UrlPrefix';
 
 import { Exact, InputMaybe, PostsInput } from '../../../.cache/__types__';
+import UrlPrefix from '../../../shared/config/UrlPrefix';
 import { ValidateUsername } from '../../../shared/validation';
 
 const PostsPage: React.FC<{
@@ -30,7 +34,19 @@ const PostsPage: React.FC<{
     }>
   >;
   anonymous: boolean;
-}> = ({ user, posts, anonymous }) => {
+}> = ({ user, posts: postsTmp, anonymous }) => {
+  const { data, loading, refetch, fetchMore } = usePostsQuery({
+    variables: {
+      input: {
+        filter: {
+          authorUsername: user.username,
+          skip: 0,
+          take: 10,
+        },
+      },
+    },
+  });
+
   return (
     <UserLayout
       user={user}
@@ -60,54 +76,64 @@ const PostsPage: React.FC<{
       }}
     >
       <div className="w-full">
-        {posts.loading ? (
-          <div>loading posts</div>
-        ) : (
-          <InfiniteScroll
-            dataLength={posts.data!.posts.length} //This is important field to render the next data
-            next={() => {
-              posts.fetchMore({
-                variables: {
-                  input: {
-                    filter: {
-                      authorUsername: user.username,
-                      skip: posts.data!.posts.length,
-                      take: 10,
-                    },
+        <InfiniteScroll
+          dataLength={
+            loading ? postsTmp.data?.posts.length ?? 0 : data!.posts.length
+          } //This is important field to render the next data
+          next={() => {
+            if (loading) return;
+
+            fetchMore({
+              variables: {
+                input: {
+                  filter: {
+                    authorUsername: user.username,
+                    skip: data!.posts.length,
+                    take: 10,
                   },
                 },
-                updateQuery: (previousResult, { fetchMoreResult }) => {
-                  return {
-                    ...previousResult,
-                    posts: [
-                      ...previousResult.posts,
-                      ...(fetchMoreResult?.posts ?? []),
-                    ],
-                  };
-                },
-              });
-            }}
-            hasMore={(posts.data?.posts.length ?? 1) % 10 === 0}
-            loader={
-              <p style={{ textAlign: 'center' }}>
-                <b>loading</b>
-              </p>
-            }
-            refreshFunction={async () => {
-              await posts.refetch();
-            }}
-          >
-            {posts.data?.posts.map((post: any) => (
-              <Post
-                timeline
-                {...post}
-                key={post.id}
-                refetch={posts.refetch}
-                photos={post.url.map((x: string) => ({ url: x }))}
-              />
-            ))}
-          </InfiniteScroll>
-        )}
+              },
+              updateQuery: (previousResult, { fetchMoreResult }) => {
+                return {
+                  ...previousResult,
+                  posts: [
+                    ...previousResult.posts,
+                    ...(fetchMoreResult?.posts ?? []),
+                  ],
+                };
+              },
+            });
+          }}
+          hasMore={loading ? false : (data?.posts.length ?? 1) % 10 === 0}
+          loader={
+            <p style={{ textAlign: 'center' }}>
+              <b>loading</b>
+            </p>
+          }
+          refreshFunction={async () => {
+            await refetch();
+          }}
+        >
+          {loading
+            ? postsTmp.data?.posts.map((post: any) => (
+                <Post
+                  timeline
+                  {...post}
+                  key={post.id}
+                  refetch={refetch}
+                  photos={post.url.map((x: string) => ({ url: x }))}
+                />
+              ))
+            : data?.posts.map((post: any) => (
+                <Post
+                  timeline
+                  {...post}
+                  key={post.id}
+                  refetch={refetch}
+                  photos={post.url.map((x: string) => ({ url: x }))}
+                />
+              ))}
+        </InfiniteScroll>
       </div>
     </UserLayout>
   );
@@ -127,7 +153,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   });
 
   // fetch user query
-  if (!req.url?.startsWith('_next') && ctx.query.username != 'manifest.json') {
+  if (!req.url?.startsWith('_next')) {
     // check if username is valid, if not redirect to 404 page with argument
     if (typeof ctx.query.username !== 'string')
       return SSRRedirect('/404?error=user_does_not_exist');
@@ -135,32 +161,36 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const validateUsername = ValidateUsername(ctx.query.username).error;
     if (validateUsername) return SSRRedirect('/404?error=user_does_not_exist');
 
-    const { data: userData } = await client.query({
-      query: UserDocument,
-      variables: { username: ctx.query.username },
-    });
+    try {
+      const { data: userData } = await client.query({
+        query: UserDocument,
+        variables: { username: ctx.query.username },
+      });
 
-    const postsQuery = await client.query({
-      query: PostsDocument,
-      variables: {
-        input: {
-          filter: {
-            authorUsername: ctx.query.username,
-            skip: 0,
-            take: 10,
+      const postsQuery = await client.query({
+        query: PostsDocument,
+        variables: {
+          input: {
+            filter: {
+              authorUsername: ctx.query.username,
+              skip: 0,
+              take: 10,
+            },
           },
         },
-      },
-    });
+      });
 
-    // return props
-    return {
-      props: {
-        user: userData.user,
-        posts: postsQuery,
-        anonymous,
-      },
-    };
+      // return props
+      return {
+        props: {
+          user: userData.user,
+          posts: postsQuery,
+          anonymous,
+        },
+      };
+    } catch (e) {
+      return SSRRedirect('/404?error=user_does_not_exist');
+    }
   }
   return {
     // @ts-ignore
