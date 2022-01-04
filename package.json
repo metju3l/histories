@@ -32,7 +32,8 @@
     "test:types": "tsc --pretty --noEmit",
     "sb": "start-storybook -p 6006 --no-manager-cache ",
     "sb-build": "build-storybook -o ./lib/stories-static",
-    "sb-start": "start-storybook"
+    "sb-start": "start-storybook",
+    "chromatic": "chromatic --project-token <CHROMATIC_PROJECT_TOKEN>"
   },
   "dependencies": {
     "@apollo/client": "^3.4.17",
