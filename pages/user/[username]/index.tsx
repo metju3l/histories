@@ -136,7 +136,7 @@ const PostsPage: React.FC<{
           {
             // data?.posts.length == 0 &&
             <span className="px-8">
-              <div className="border dark:border-gray-800 bg-white dark:bg-gray-900 lg:rounded-lg md:rounded-lg sm:rounded-lg shadow-sm dark:shadow-md ">
+              <div className="bg-white border dark:border-gray-800 dark:bg-gray-900 lg:rounded-lg md:rounded-lg sm:rounded-lg shadow-sm dark:shadow-md">
                 <div className="p-5 ">
                   <div className="grid justify-items-center space-y-2">
                     <div>
@@ -146,7 +146,7 @@ const PostsPage: React.FC<{
                         viewBox="0 0 24 24"
                         stroke="currentColor"
                         aria-hidden="true"
-                        className="h-8 w-8 text-brand-500"
+                        className="w-8 h-8 text-brand-500"
                       >
                         <path
                           strokeLinecap="round"

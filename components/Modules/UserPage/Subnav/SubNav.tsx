@@ -14,7 +14,7 @@ const SubNav: React.FC<UserSubNavProps> = ({ currentTab, user }) => {
   const loginContext = React.useContext(LoginContext);
 
   return (
-    <div className="flex w-full px-2 pt-2 pb-6 gap-3">
+    <div className="flex flex-wrap w-full px-2 pt-2 pb-6 gap-3">
       <UserSubNavItem
         href={`/user/${user.username}`}
         currentTab={currentTab}

@@ -7,7 +7,7 @@ import Loading, { LoadingProps } from '../../components/Elements/Loading';
 
 // Component
 const Component = {
-  title: 'Loading',
+  title: 'Elements/Loading',
   component: Loading,
   argTypes: {
     size: {

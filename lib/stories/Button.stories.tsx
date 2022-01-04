@@ -8,7 +8,7 @@ import Button, { ButtonProps } from '../../components/Elements/Buttons/Button';
 
 // Component
 const Component = {
-  title: 'Controls/Button',
+  title: 'Elements/Button',
   component: Button,
 };
 export default Component;
