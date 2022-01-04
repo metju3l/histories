@@ -4,6 +4,7 @@ type PostProps = {
     lastName: string;
     username: string;
     profile: string;
+    id: number;
   };
   timeline?: boolean;
   photos?: Array<{ url: string }>;

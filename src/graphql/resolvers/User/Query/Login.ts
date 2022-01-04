@@ -15,7 +15,7 @@ const Login = async ({
 }: LoginInput): Promise<any | null> => {
   const query = `
   MATCH (user:User) 
-  // where incasesensitive username or email matches 
+  // where case insensitive username or email matches 
   WHERE user.username =~ $name  
     XOR user.email =~ $name  // using XOR to avoid checking both username and email at the same time (which would potentially make a brute force attack faster)
   RETURN user{.*, id: ID(user)} as user
@@ -35,6 +35,10 @@ const Login = async ({
       name: `(?i)${username}`, // (?i) = case insensitive
     },
   });
+
+  // if user has been created with Google, and it doesn't have a password, he can't login
+  if (userInfo.records[0].get('user').password === undefined)
+    throw new Error('This account has not set a password yet');
 
   // if password matches
   if (compareSync(password, userInfo.records[0].get('user').password))

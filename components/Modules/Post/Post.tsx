@@ -1,9 +1,9 @@
-import { LoginContext } from '@components/Layouts';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import React, { Fragment, useContext, useEffect, useState } from 'react';
+import { LoginContext } from '../../../pages/_app';
+import React, { Fragment, useEffect, useState } from 'react';
 import { IoIosMore } from 'react-icons/io';
-import UrlPrefix from 'shared/config/UrlPrefix';
+import UrlPrefix from '../../../shared/config/UrlPrefix';
 
 import {
   useLikeMutation,
@@ -32,7 +32,7 @@ const Post: React.FC<PostProps> = ({
   id,
   refetch,
 }) => {
-  const loginContext = useContext(LoginContext);
+  const loginContext = React.useContext(LoginContext);
 
   const [collectionSelectModal, setCollectionSelectModal] = useState(false);
 
@@ -43,8 +43,6 @@ const Post: React.FC<PostProps> = ({
   // like and unlike mutations
   const [likeMutation] = useLikeMutation();
   const [unlikeMutation] = useUnlikeMutation();
-
-  let timer: any;
 
   // on refetch reset local states to value from graphql query
   useEffect(() => {
@@ -94,15 +92,10 @@ const Post: React.FC<PostProps> = ({
         setOpenState={setCollectionSelectModal}
       />
       <PostTimeline time={postDate} show={timeline}>
-        <div
-          onMouseLeave={() => {
-            clearTimeout(timer);
-          }}
-          className="w-full mb-4 bg-white border sm:rounded-2xl max-w-[600px]"
-        >
+        <div className="w-full mb-4 bg-white border sm:rounded-2xl max-w-[600px]">
           <div className="flex items-center justify-between px-4 pt-6">
             <MiniUserCard {...author} time={createdAt} />
-            <OptionsMenu id={id}>
+            <OptionsMenu id={id} author={author}>
               <IoIosMore className="text-2xl" />
             </OptionsMenu>
           </div>
@@ -129,47 +122,27 @@ const Post: React.FC<PostProps> = ({
                   }}
                 >
                   <a className="flex items-center text-base gap-1">
-                    {localLikeState ? (
-                      localLikeState == 'like' ? (
-                        <span>
-                          <svg
-                            aria-hidden="true"
-                            focusable="false"
-                            data-prefix="fas"
-                            data-icon="star"
-                            className="w-4 h-4 text-yellow-500"
-                            role="img"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 576 512"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"
-                            ></path>
-                          </svg>
-                        </span>
-                      ) : (
-                        localLikeState
-                      )
-                    ) : (
-                      <span>
+                    {
+                      <span className="text-red-500">
                         <svg
-                          aria-hidden="true"
-                          focusable="false"
-                          data-prefix="far"
-                          data-icon="star"
-                          className="w-4 h-4"
-                          role="img"
                           xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 576 512"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                          className="w-5 h-5"
                         >
                           <path
-                            fill="currentColor"
-                            d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            fill={
+                              localLikeState == 'like' ? 'currentColor' : 'none'
+                            }
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                           ></path>
                         </svg>
                       </span>
-                    )}
+                    }
                     {localLikeCount} stars
                   </a>
                 </motion.button>

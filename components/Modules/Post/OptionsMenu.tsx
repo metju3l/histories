@@ -2,14 +2,20 @@ import { Menu, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { toast } from 'react-hot-toast';
 
+import { LoginContext } from '../../../pages/_app';
 import DropdownItem from '../Dropdown/DropdownItem';
 import DropdownTransition from '../Dropdown/DropdownTransition';
 
 export type OptionsMenuProps = {
   id: number;
+  author: {
+    id: number;
+  };
 };
 
-const OptionsMenu: React.FC<OptionsMenuProps> = ({ id, children }) => {
+const OptionsMenu: React.FC<OptionsMenuProps> = ({ author, id, children }) => {
+  const loginContext = React.useContext(LoginContext);
+
   return (
     <Menu as="div" className="relative">
       <Menu.Button as="div" className="flex items-center gap-2">
@@ -20,15 +26,29 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({ id, children }) => {
           as="div"
           className="absolute right-0 z-50 flex flex-col w-48 mt-2 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 focus:outline-none dark:border-gray-800 truncated"
         >
-          {/* REPORT */}
-          <DropdownItem text="Report" top />
+          {loginContext.data?.me?.id === author.id ? (
+            <>
+              {/* REPORT */}
+              <DropdownItem text="Delete post" top />
+            </>
+          ) : (
+            loginContext.data?.me?.id && (
+              <>
+                {/* REPORT */}
+                <DropdownItem text="Report" top />
 
-          {/* UNFOLLOW */}
-          <DropdownItem text="Unfollow" />
-
+                {/* UNFOLLOW */}
+                <DropdownItem text="Unfollow" />
+              </>
+            )
+          )}
           {/* GO TO POST */}
           <Menu.Item>
-            <DropdownItem text="Go to post" href={`/post/${id}`} />
+            <DropdownItem
+              text="Go to post"
+              href={`/post/${id}`}
+              top={!loginContext.data?.me?.id}
+            />
           </Menu.Item>
 
           {/* COPY LINK */}
