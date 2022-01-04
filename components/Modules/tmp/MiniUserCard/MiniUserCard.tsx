@@ -30,7 +30,7 @@ const Post: React.FC<MiniUserCardProps> = ({
 
   return (
     <div className="flex items-center gap-3">
-      <Link href={'/' + username} passHref>
+      <Link href={'/user/' + username} passHref>
         <div className="relative w-10 h-10 rounded-full cursor-pointer bg-secondary">
           <Image
             src={profile.startsWith('http') ? profile : UrlPrefix + profile}
