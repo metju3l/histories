@@ -1,3 +1,4 @@
+import { ConvertBounds } from '@lib/functions';
 import Viewport from '@lib/types/viewport';
 import Image from 'next/image';
 import React, { useRef } from 'react';
@@ -11,18 +12,6 @@ import { MapContext } from './MapContext';
 type MapGLProps = {
   onMove?: (bounds: Bounds) => void;
 };
-
-function ConvertBounds(bounds: {
-  _ne: { lat: number; lng: number };
-  _sw: { lat: number; lng: number };
-}): Bounds {
-  return {
-    maxLatitude: bounds._ne.lat,
-    minLatitude: bounds._sw.lat,
-    maxLongitude: bounds._ne.lng,
-    minLongitude: bounds._sw.lng,
-  };
-}
 
 async function OnMove(
   mapRef: React.MutableRefObject<Maybe<MapRef>>,

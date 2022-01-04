@@ -38,7 +38,7 @@ const PostsPage: React.FC<{
       head={{
         title: `${user.firstName} ${user.lastName} | hiStories`,
         description: `${user.firstName} ${user.lastName}'s profile on HiStories`,
-        canonical: 'https://www.histories.cc/user/krystofex',
+        canonical: `https://www.histories.cc/user/${user.username}`,
         openGraph: {
           title: `${user.firstName} ${user.lastName} | HiStories`,
           type: 'website',
@@ -49,10 +49,10 @@ const PostsPage: React.FC<{
                 : UrlPrefix + user.profile,
               width: 92,
               height: 92,
-              alt: `${user.firstName} ${user.lastName}'s profile picture`,
+              alt: `${user.firstName}'s profile picture`,
             },
           ],
-          url: 'https://www.histories.cc/user/krystofex',
+          url: `https://www.histories.cc/user/${user.username}`,
           description: `${user.firstName} ${user.lastName}'s profile`,
           site_name: 'Profil page',
           profile: user,

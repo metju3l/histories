@@ -20,12 +20,12 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   return (
     <Layout head={head}>
       <div className="w-full h-64 bg-brand" />
-      <div className="flex px-4 m-auto max-w-screen-2xl gap-6 bg-[#FAFBFB]">
+      <div className="px-4 m-auto grid grid-cols-12 lg:gap-8 max-w-screen-2xl gap-6 bg-[#FAFBFB]">
         <LeftPanel user={user} />
-        <div className="w-full">
+        <div className="mb-5 lg:col-span-8 md:col-span-12 col-span-12 space-y-5 ">
           {/* SUBNAV */}
           <SubNav currentTab={currentTab} user={user} />
-          <main>{children}</main>
+          <main className="w-full h-full">{children}</main>
         </div>
       </div>
     </Layout>
