@@ -1,3 +1,4 @@
+import { Maybe } from '../../../../.cache/__types__';
 import { Tooltip } from '@components/Elements';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -5,7 +6,22 @@ import React from 'react';
 
 import UrlPrefix from '../../../../shared/config/UrlPrefix';
 
-export type UserLeftPanelProps = { user: any };
+export type UserLeftPanelProps = {
+  user: {
+    username: string;
+    firstName: string;
+    lastName: string;
+    profile: string;
+    verified: boolean;
+
+    createdAt: string;
+    followerCount: number;
+    followingCount: number;
+    postCount: number;
+
+    bio: Maybe<string>;
+  };
+};
 
 const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
   return (
@@ -42,25 +58,38 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
             </h2>
           </Link>
           {/* NEW USER BADGE */}
-          {new Date().getTime() - user.createdAt < 129600000 && (
+          {new Date().getTime() - new Date(user.createdAt).getTime() <
+            129600000 && (
             <Tooltip text="This account was created less than 2 days ago">
-              <div className="block items-center px-3 py-1 text-xs font-semibold text-gray-500 bg-white border rounded-full space-x-1.5 dark:bg-gray-800 shadown-sm dark:border-gray-700 w-max">
+              <div className="items-center block px-3 py-1 text-xs font-semibold text-green-500 bg-white border border-green-500 rounded-full space-x-1.5 dark:bg-gray-800 shadown-sm dark:border-gray-700 w-max">
                 new user
               </div>
             </Tooltip>
           )}
+          {user.verified && (
+            <div className="items-center block px-3 py-1 text-xs font-semibold text-green-500 border-green-500 rounded-full space-x-1.5 shadown-sm w-max">
+              verified
+            </div>
+          )}
         </div>
 
         <p className="flex pt-4 text-xl text-primary gap-8">
-          {/* FOLLOWERS */}
+          {/* FOLLOWERS COUNT */}
           <h4 className="flex flex-col text-base font-medium cursor-pointer">
             <span className="text-black">{user.followerCount}</span>
             <span className="text-gray-500">{' Followers'}</span>
           </h4>
-          {/* FOLLOWING */}
+          {/* FOLLOWING COUNT */}
           <h4 className="flex flex-col text-base font-medium cursor-pointer">
             <span className="text-black">{user.followingCount}</span>
             <span className="text-gray-500">{' Following'}</span>
+          </h4>
+          {/* POSTS COUNT */}
+          <h4 className="flex flex-col text-base font-medium cursor-pointer">
+            <span className="text-black">{user.postCount}</span>
+            <span className="text-gray-500">
+              {user.postCount == 1 ? ' Post' : ' Posts'}
+            </span>
           </h4>
         </p>
 

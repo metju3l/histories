@@ -266,7 +266,7 @@ export default gql`
     lastName: String!
     bio: String
     profile: String!
-    verified: String!
+    verified: Boolean!
     createdAt: Float!
     isFollowing: Boolean!
     followerCount: Int!
@@ -287,7 +287,7 @@ export default gql`
     lastName: String!
     bio: String
     profile: String!
-    verified: String!
+    verified: Boolean!
     createdAt: Float!
     isFollowing: Boolean!
     followerCount: Int!

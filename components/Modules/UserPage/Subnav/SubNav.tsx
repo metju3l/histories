@@ -28,7 +28,7 @@ const SubNav: React.FC<UserSubNavProps> = ({ currentTab, user }) => {
         currentTab={currentTab}
         name="collections"
       >
-        <CollectionsIcon />
+        <CollectionsIcon className="w-4 h-4" />
         Collections
       </UserSubNavItem>
       <UserSubNavItem

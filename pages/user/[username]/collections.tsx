@@ -1,28 +1,42 @@
+import { ApolloClient, InMemoryCache, QueryResult } from '@apollo/client';
 import UserLayout from '@components/Layouts/User';
-import UserDoesNotExist from '@components/Modules/404/UserDoesNotExist';
-import { useUserQuery } from '@graphql/user.graphql';
-import { NextPageContext } from 'next';
+import Card from '@components/Modules/UserPage/Card';
+import { CollectionsIcon } from '@components/Modules/UserPage/Subnav/icons';
+import { PostsDocument, PostsQuery } from '@graphql/post.graphql';
+import { UserDocument } from '@graphql/user.graphql';
+import {
+  GetCookieFromServerSideProps,
+  IsJwtValid,
+  SSRRedirect,
+} from '@lib/functions';
+import { GetServerSidePropsContext } from 'next';
 import React from 'react';
 
+import { Exact, InputMaybe, PostsInput } from '../../../.cache/__types__';
+import { ValidateUsername } from '../../../shared/validation';
 import { LoginContext } from '../../_app';
 
-const CollectionsPage: React.FC<{ username: string }> = ({ username }) => {
+const CollectionsPage: React.FC<{
+  user: {
+    username: string;
+    firstName: string;
+    lastName: string;
+    profile: string;
+  };
+  posts: QueryResult<
+    PostsQuery,
+    Exact<{
+      input?: InputMaybe<PostsInput> | undefined;
+    }>
+  >;
+  anonymous: boolean;
+}> = ({ user, posts: postsTmp, anonymous }) => {
   // login context
   const loginContext = React.useContext(LoginContext);
 
-  const { data, loading, error, refetch } = useUserQuery({
-    variables: { username: username },
-  });
-
-  if (loading) return <div>loading</div>;
-  if (error) return <div>error</div>;
-
-  if (data === undefined || data.user === undefined)
-    return <UserDoesNotExist />;
-
   return (
     <UserLayout
-      user={data.user}
+      user={user}
       currentTab="collections"
       head={{
         title: '',
@@ -31,22 +45,72 @@ const CollectionsPage: React.FC<{ username: string }> = ({ username }) => {
         // @ts-ignore
         openGraph: undefined,
       }}
-    ></UserLayout>
+    >
+      <Card>
+        <CollectionsIcon className="w-8 h-8" />
+        <div>{`${user.firstName} has not any public collections`}</div>
+      </Card>
+    </UserLayout>
   );
 };
 
-export const getServerSideProps = async (
-  context: NextPageContext
-): Promise<{
-  props: {
-    username: string;
-  };
-}> => {
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const { req } = ctx;
+  const jwt = GetCookieFromServerSideProps(req.headers.cookie, 'jwt');
+  const anonymous = jwt === null ? true : IsJwtValid(jwt);
+
+  // create new apollo graphql client
+  const client = new ApolloClient({
+    uri:
+      process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ??
+      'http://localhost:3000/api/graphql',
+    cache: new InMemoryCache(),
+  });
+
+  // fetch user query
+  if (!req.url?.startsWith('_next')) {
+    // check if username is valid, if not redirect to 404 page with argument
+    if (typeof ctx.query.username !== 'string')
+      return SSRRedirect('/404?error=user_does_not_exist');
+
+    const validateUsername = ValidateUsername(ctx.query.username).error;
+    if (validateUsername) return SSRRedirect('/404?error=user_does_not_exist');
+
+    try {
+      const { data: userData } = await client.query({
+        query: UserDocument,
+        variables: { username: ctx.query.username },
+      });
+
+      const postsQuery = await client.query({
+        query: PostsDocument,
+        variables: {
+          input: {
+            filter: {
+              authorUsername: ctx.query.username,
+              skip: 0,
+              take: 10,
+            },
+          },
+        },
+      });
+
+      // return props
+      return {
+        props: {
+          user: userData.user,
+          posts: postsQuery,
+          anonymous,
+        },
+      };
+    } catch (e) {
+      return SSRRedirect('/404?error=user_does_not_exist');
+    }
+  }
   return {
-    props: {
-      // @ts-ignore
-      username: context.query.username.toString(),
-    },
+    // @ts-ignore
+    // this should not be needed 🤷‍♀️
+    props: { user: { username: ctx.query.username }, anonymous },
   };
 };
 
