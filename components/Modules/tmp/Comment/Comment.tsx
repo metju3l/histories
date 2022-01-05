@@ -25,12 +25,10 @@ const Comment: React.FC<CommentProps> = ({
   author,
   createdAt,
   owner,
-  isLogged,
   deleteComment,
 }) => {
   const [mouseOverComment, setMouseOverComment] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
-  const [showLikeOptions, setShowLikeOptions] = useState(false);
   const [commentContent, setCommentContent] = useState('');
   const [showReplyInput, setShowReplyInput] = useState(false);
 

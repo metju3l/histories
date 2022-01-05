@@ -30,11 +30,7 @@ const EditCollectionModal: React.FC<{
   const [editCollection] = useEditCollectionMutation();
   const [deleteMutation] = useDeleteMutation();
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const { register, handleSubmit } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
     setIsLoading(true);
     try {

@@ -1,12 +1,10 @@
 import SettingsLayout from '@components/Layouts/Settings';
 import { RedirectAnonymous } from '@lib/functions/ServerSideProps';
-import { useTheme } from 'next-themes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 const Account = () => {
   const { t } = useTranslation();
-  const { theme, setTheme } = useTheme();
 
   return (
     <SettingsLayout

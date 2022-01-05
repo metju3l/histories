@@ -37,7 +37,7 @@ const PostsPage: React.FC<{
     }>
   >;
   anonymous: boolean;
-}> = ({ user, posts: postsTmp, anonymous }) => {
+}> = ({ user, posts: postsTmp }) => {
   const { data, loading, refetch, fetchMore } = usePostsQuery({
     variables: {
       input: {

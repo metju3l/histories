@@ -5,14 +5,12 @@ import React from 'react';
 import UrlPrefix from 'shared/config/UrlPrefix';
 
 const Explore: React.FC = () => {
-  const { data, loading, error, refetch } = usePersonalizedPostsQuery({
+  const { data, loading, error } = usePersonalizedPostsQuery({
     variables: { skip: 0, take: 50 },
   });
 
   if (loading) return <div>post loading</div>;
   if (error) return <div>post error</div>;
-
-  console.log(data?.personalizedPosts);
 
   return (
     <Layout
@@ -43,8 +41,6 @@ const PostCard: React.FC<{ id: number; index: number }> = ({ id, index }) => {
 
   if (loading) return <div>loading</div>;
   if (error) return <div>error</div>;
-
-  console.log(data);
 
   return (
     <div

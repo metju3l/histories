@@ -48,7 +48,7 @@ const Index: React.FC = () => {
 };
 
 const PersonalizedPosts = () => {
-  const { data, loading, error, refetch, fetchMore, updateQuery } =
+  const { data, loading, error, refetch, fetchMore } =
     usePersonalizedPostsQuery({
       variables: { skip: 0, take: 20 }, // minimize number of things needed to load at start
     });

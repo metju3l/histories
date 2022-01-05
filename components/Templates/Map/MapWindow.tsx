@@ -10,11 +10,13 @@ import { Maybe } from '../../../.cache/__types__';
 import { MapContext } from './MapContext';
 
 type MapGLProps = {
+  // eslint-disable-next-line no-unused-vars
   onMove?: (bounds: Bounds) => void;
 };
 
 async function OnMove(
   mapRef: React.MutableRefObject<Maybe<MapRef>>,
+  // eslint-disable-next-line no-unused-vars
   onMove?: (bounds: Bounds) => void
 ) {
   // if onMove function is not undefined

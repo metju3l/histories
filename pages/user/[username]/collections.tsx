@@ -18,7 +18,6 @@ import React from 'react';
 
 import { Exact, InputMaybe, PostsInput } from '../../../.cache/__types__';
 import { ValidateUsername } from '../../../shared/validation';
-import { LoginContext } from '../../_app';
 
 const CollectionsPage: React.FC<{
   user: {
@@ -34,10 +33,7 @@ const CollectionsPage: React.FC<{
     }>
   >;
   anonymous: boolean;
-}> = ({ user, posts: postsTmp, anonymous }) => {
-  // login context
-  const loginContext = React.useContext(LoginContext);
-
+}> = ({ user }) => {
   return (
     <UserLayout
       user={user}

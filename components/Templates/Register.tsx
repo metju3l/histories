@@ -6,13 +6,10 @@ import Router from 'next/router';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { useTranslation } from 'react-i18next';
 
 const RegisterTemplate: React.FC = () => {
   const [createAccount] = useCreateUserMutation();
   const [loading, setLoading] = useState(false);
-
-  const { t } = useTranslation();
 
   const {
     register,

@@ -6,18 +6,15 @@ import Router from 'next/router';
 import React, { FC, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { useTranslation } from 'react-i18next';
 
 const LoginTemplate: FC = () => {
   const [login] = useLoginMutation();
   const [loading, setLoading] = useState(false);
 
-  const { t } = useTranslation();
-
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: {},
   } = useForm<LoginFormInputs>();
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {

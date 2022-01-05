@@ -1,5 +1,4 @@
 import Button from '@components/Elements/Buttons/Button';
-import { LoginContext } from '@components/Layouts';
 import { Modal } from '@components/Modules/tmp/Modal';
 import { useCreateCollectionMutation } from '@graphql/collection.graphql';
 import { Switch } from '@headlessui/react';
@@ -12,18 +11,11 @@ const CreateCollectionModal: React.FC<{
   openState: boolean;
   refetch: any;
 }> = ({ openState, setOpenState, refetch }) => {
-  const loginContext = React.useContext(LoginContext);
-
   const [isLoading, setIsLoading] = useState(false);
   const [isPrivate, setIsPrivate] = useState(false);
   const [createCollection] = useCreateCollectionMutation();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const onSubmit = async (data: { name: string; description: string }) => {
     setIsLoading(true);
     try {

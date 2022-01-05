@@ -8,12 +8,11 @@ import { usePlacesQuery } from '@graphql/geo.graphql';
 import { usePostsQuery } from '@graphql/post.graphql';
 import Viewport from '@lib/types/viewport';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import { Maybe } from '../.cache/__types__';
 import ArrowIcon from '../components/Elements/Icons/ArrowIcon';
-import { Layout, LoginContext } from '../components/Layouts';
+import { Layout } from '../components/Layouts';
 import { TimeLine } from '../components/Modules/TimeLine';
 
 export type SidebarPlaceType = {
@@ -27,9 +26,6 @@ export type SidebarPlaceType = {
 };
 
 const Map: React.FC = () => {
-  const loginContext = React.useContext(LoginContext);
-
-  const router = useRouter();
   const [bounds, setBounds] = useState(defaultValues.bounds);
   const placesQuery = usePlacesQuery({
     variables: {

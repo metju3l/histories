@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import UserLayout from '@components/Layouts/User';
 import Marker from '@components/Modules/Minimap/Marker';
-import { PostsDocument, usePostsQuery } from '@graphql/post.graphql';
+import { PostsDocument } from '@graphql/post.graphql';
 import { UserDocument } from '@graphql/user.graphql';
 import {
   GetCookieFromServerSideProps,
@@ -16,7 +16,6 @@ import { Default } from 'shared/config/MapStyles';
 
 import UrlPrefix from '../../../shared/config/UrlPrefix';
 import { ValidateUsername } from '../../../shared/validation';
-import { LoginContext } from '../../_app';
 
 const UserMapPage: React.FC<{
   user: {
@@ -27,23 +26,12 @@ const UserMapPage: React.FC<{
   };
   postsTmp: any;
 }> = ({ user, postsTmp }) => {
-  // login context
-  const loginContext = React.useContext(LoginContext);
-
   const [viewport, setViewport] = useState<Viewport>({
     latitude: 50,
     longitude: 15,
     zoom: 9,
     bearing: 0,
     pitch: 0,
-  });
-
-  const postsQuery = usePostsQuery({
-    variables: {
-      input: {
-        filter: { take: 1 },
-      },
-    },
   });
 
   return (
