@@ -10,7 +10,7 @@ const ValidateUsername = (
     'settings',
     'map',
     'explore',
-    'createPost',
+    'create',
     '_app',
     '_document',
     'robots.txt',

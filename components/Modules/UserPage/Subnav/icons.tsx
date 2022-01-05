@@ -17,6 +17,66 @@ export const CollectionsIcon: React.FC<{ className?: string }> = ({
   );
 };
 
+export const BarsIcon: React.FC<{ className?: string }> = ({ className }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fas"
+      data-icon="bars"
+      className={className}
+      role="img"
+      viewBox="0 0 448 512"
+    >
+      <path
+        fill="currentColor"
+        d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
+      />
+    </svg>
+  );
+};
+
+export const PlusIcon: React.FC<{ className?: string }> = ({ className }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fas"
+      data-icon="plus"
+      className={className}
+      role="img"
+      viewBox="0 0 448 512"
+    >
+      <path
+        fill="currentColor"
+        d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+      />
+    </svg>
+  );
+};
+
+export const GridIcon: React.FC<{ className?: string }> = ({ className }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fas"
+      data-icon="th-large"
+      className={className}
+      role="img"
+      viewBox="0 0 512 512"
+    >
+      <path
+        fill="currentColor"
+        d="M296 32h192c13.255 0 24 10.745 24 24v160c0 13.255-10.745 24-24 24H296c-13.255 0-24-10.745-24-24V56c0-13.255 10.745-24 24-24zm-80 0H24C10.745 32 0 42.745 0 56v160c0 13.255 10.745 24 24 24h192c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24zM0 296v160c0 13.255 10.745 24 24 24h192c13.255 0 24-10.745 24-24V296c0-13.255-10.745-24-24-24H24c-13.255 0-24 10.745-24 24zm296 184h192c13.255 0 24-10.745 24-24V296c0-13.255-10.745-24-24-24H296c-13.255 0-24 10.745-24 24v160c0 13.255 10.745 24 24 24z"
+      />
+    </svg>
+  );
+};
+
 export const PostsIcon: React.FC = () => {
   return (
     <svg

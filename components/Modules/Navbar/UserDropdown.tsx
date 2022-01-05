@@ -44,7 +44,7 @@ const UserDropdown: React.FC = () => {
             href={`/user/${loginContext.data!.me!.username}`}
             top
           />
-          <DropdownItem text={t('create post')} href="/createPost" />
+          <DropdownItem text={t('create post')} href="/create/post" />
           <DropdownItem text={t('settings')} href="/settings" />
           <DropdownItem text={t('logout')} onClick={() => LogOut()} bottom />
         </Menu.Items>

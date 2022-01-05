@@ -2,6 +2,7 @@ import { ApolloClient, InMemoryCache, QueryResult } from '@apollo/client';
 import UserLayout from '@components/Layouts/User';
 import { Post } from '@components/Modules/Post';
 import Card from '@components/Modules/UserPage/Card';
+import { PlusIcon } from '@components/Modules/UserPage/Subnav/icons';
 import {
   PostsDocument,
   PostsQuery,
@@ -14,6 +15,7 @@ import {
   SSRRedirect,
 } from '@lib/functions';
 import { GetServerSidePropsContext } from 'next';
+import Link from 'next/link';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -77,6 +79,14 @@ const PostsPage: React.FC<{
       }}
     >
       <div className="w-full">
+        {/* CREATE POST */}
+        <div className="flex justify-end w-full">
+          <Link href="/create/post" passHref>
+            <button className="flex items-center px-3 py-1 text-xs font-semibold text-gray-500 border border-gray-500 rounded-full gap-2 space-x-1.5 shadown-sm w-max">
+              <PlusIcon className="w-2 h-2" /> Create post
+            </button>
+          </Link>
+        </div>
         <InfiniteScroll
           dataLength={
             loading ? postsTmp.data?.posts.length ?? 0 : data!.posts.length

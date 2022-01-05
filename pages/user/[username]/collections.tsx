@@ -1,7 +1,10 @@
 import { ApolloClient, InMemoryCache, QueryResult } from '@apollo/client';
 import UserLayout from '@components/Layouts/User';
 import Card from '@components/Modules/UserPage/Card';
-import { CollectionsIcon } from '@components/Modules/UserPage/Subnav/icons';
+import {
+  CollectionsIcon,
+  PlusIcon,
+} from '@components/Modules/UserPage/Subnav/icons';
 import { PostsDocument, PostsQuery } from '@graphql/post.graphql';
 import { UserDocument } from '@graphql/user.graphql';
 import {
@@ -10,6 +13,7 @@ import {
   SSRRedirect,
 } from '@lib/functions';
 import { GetServerSidePropsContext } from 'next';
+import Link from 'next/link';
 import React from 'react';
 
 import { Exact, InputMaybe, PostsInput } from '../../../.cache/__types__';
@@ -46,6 +50,13 @@ const CollectionsPage: React.FC<{
         openGraph: undefined,
       }}
     >
+      <div className="flex justify-end w-full">
+        <Link href="/create/post" passHref>
+          <button className="flex items-center px-3 py-1 text-xs font-semibold text-gray-500 border border-gray-500 rounded-full gap-2 space-x-1.5 shadown-sm w-max">
+            <PlusIcon className="w-2 h-2" /> Create collection
+          </button>
+        </Link>
+      </div>
       <Card>
         <CollectionsIcon className="w-8 h-8" />
         <div>{`${user.firstName} has not any public collections`}</div>

@@ -92,7 +92,7 @@ const Post: React.FC<PostProps> = ({
         setOpenState={setCollectionSelectModal}
       />
       <PostTimeline time={postDate} show={timeline}>
-        <div className="w-full mb-4 bg-white border sm:rounded-2xl max-w-[600px]">
+        <div className="w-full mb-4 bg-white border dark:border-[#373638] dark:bg-[#2b2b2b] sm:rounded-2xl max-w-[600px]">
           <div className="flex items-center justify-between px-4 pt-6">
             <MiniUserCard {...author} time={createdAt} />
             <OptionsMenu id={id} author={author}>

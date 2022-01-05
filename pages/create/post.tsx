@@ -19,7 +19,7 @@ import MapGL, {
   NavigationControl,
 } from 'react-map-gl';
 
-import { Maybe } from '../.cache/__types__';
+import { Maybe } from '../../.cache/__types__';
 
 const DropZoneComponent = ({
   setFiles,
@@ -175,11 +175,11 @@ const Login: FC = () => {
       head={{
         title: `New post | hiStories`,
         description: `Create new post on HiStories`,
-        canonical: 'https://www.histories.cc/createPost',
+        canonical: 'https://www.histories.cc/create/post',
         openGraph: {
           title: `New post | HiStories`,
           type: 'website',
-          url: 'https://www.histories.cc/newPost',
+          url: 'https://www.histories.cc/create/post',
           description: `Create new post on HiStories`,
           site_name: 'New post page',
         },
