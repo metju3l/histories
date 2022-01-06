@@ -1,3 +1,4 @@
+import { useDeleteMutation } from '@graphql/post.graphql';
 import { Menu, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { toast } from 'react-hot-toast';
@@ -11,10 +12,18 @@ export type OptionsMenuProps = {
   author: {
     id: number;
   };
+  setVisible: React.Dispatch<React.SetStateAction<'deleted' | null>>;
 };
 
-const OptionsMenu: React.FC<OptionsMenuProps> = ({ author, id, children }) => {
+const OptionsMenu: React.FC<OptionsMenuProps> = ({
+  author,
+  id,
+  setVisible,
+  children,
+}) => {
   const loginContext = React.useContext(LoginContext);
+
+  const [deleteMutation] = useDeleteMutation();
 
   return (
     <Menu as="div" className="relative">
@@ -28,8 +37,24 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({ author, id, children }) => {
         >
           {loginContext.data?.me?.id === author.id ? (
             <>
-              {/* REPORT */}
-              <DropdownItem text="Delete post" top />
+              {/* DELETE */}
+              <DropdownItem
+                text="Delete post"
+                top
+                onClick={async () => {
+                  try {
+                    await deleteMutation({
+                      variables: {
+                        id,
+                      },
+                    });
+                    setVisible('deleted');
+                    toast.success('Post deleted');
+                  } catch (error: any) {
+                    toast.error(error.message);
+                  }
+                }}
+              />
             </>
           ) : (
             loginContext.data?.me?.id && (

@@ -129,7 +129,7 @@ const Layout: React.FC<LayoutProps> = ({
       <Toaster position="top-center" reverseOrder={true} />
 
       <Navbar />
-      <div className="h-screen pt-16 bg-[#FAFBFB] dark:bg-[#171716]">
+      <div className="min-h-screen pt-16 bg-[#FAFBFB] dark:bg-[#171716]">
         {children}
       </div>
     </LoginContext.Provider>

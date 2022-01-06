@@ -22,9 +22,9 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   return (
     <Layout head={head}>
       <div className="w-full h-64 bg-brand" />
-      <div className="px-4 m-auto grid grid-cols-12 lg:gap-8 max-w-screen-2xl gap-6">
+      <div className="px-4 m-auto grid grid-cols-12 lg:gap-8 max-w-screen-2xl gap-6 h-[calc(100vh - 300px)]">
         <LeftPanel user={user} />
-        <div className="lg:col-span-8 md:col-span-12 col-span-12 space-y-2">
+        <div className="h-full lg:col-span-8 md:col-span-12 col-span-12 space-y-2">
           {/* SUBNAV */}
           <SubNav
             currentTab={currentTab}
@@ -32,7 +32,9 @@ const UserLayout: React.FC<UserLayoutProps> = ({
             view={view}
             setView={setView}
           />
-          <main className="w-full h-full">{children}</main>
+          <main className="w-full" style={{ height: 'calc(100vh - 400px)' }}>
+            {children}
+          </main>
         </div>
       </div>
     </Layout>

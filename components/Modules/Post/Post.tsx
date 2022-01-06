@@ -18,6 +18,7 @@ import {
   UnlikePost,
 } from '.';
 import OptionsMenu from './OptionsMenu';
+import Card from '../UserPage/Card';
 
 const Post: React.FC<PostProps> = ({
   author,
@@ -34,6 +35,7 @@ const Post: React.FC<PostProps> = ({
 }) => {
   const loginContext = React.useContext(LoginContext);
 
+  const [visible, setVisible] = useState<null | 'deleted'>(null);
   const [collectionSelectModal, setCollectionSelectModal] = useState(false);
 
   // using local states to avoid refetching and provide faster response for user
@@ -84,6 +86,13 @@ const Post: React.FC<PostProps> = ({
       });
   };
 
+  if (visible === 'deleted')
+    return (
+      <Card>
+        <div>This post was deleted</div>
+      </Card>
+    );
+
   return (
     <>
       <AddToCollectionModal
@@ -95,7 +104,7 @@ const Post: React.FC<PostProps> = ({
         <div className="w-full mb-4 bg-white border dark:border-[#373638] dark:bg-[#2b2b2b] sm:rounded-2xl max-w-[600px]">
           <div className="flex items-center justify-between px-4 pt-6">
             <MiniUserCard {...author} time={createdAt} />
-            <OptionsMenu id={id} author={author}>
+            <OptionsMenu id={id} author={author} setVisible={setVisible}>
               <IoIosMore className="text-2xl" />
             </OptionsMenu>
           </div>
