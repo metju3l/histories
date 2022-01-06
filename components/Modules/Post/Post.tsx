@@ -10,6 +10,7 @@ import {
 import { LoginContext } from '../../../pages/_app';
 import UrlPrefix from '../../../shared/config/UrlPrefix';
 import { MiniUserCard } from '../tmp/MiniUserCard';
+import Card from '../UserPage/Card';
 import {
   AddToCollectionModal,
   LikePost,
@@ -18,7 +19,6 @@ import {
   UnlikePost,
 } from '.';
 import OptionsMenu from './OptionsMenu';
-import Card from '../UserPage/Card';
 
 const Post: React.FC<PostProps> = ({
   author,

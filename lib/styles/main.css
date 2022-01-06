@@ -13,3 +13,8 @@
     @apply text-base text-justify;
   }
 }
+
+/* just because it colided with map layer icon */
+.mapboxgl-ctrl-bottom-right {
+  display: none !important;
+}

@@ -139,7 +139,7 @@ const Map: React.FC = () => {
           setShowSidebar,
         }}
       >
-        <div className="w-full">
+        <div className="w-full bg-[#FAFBFB] dark:bg-[#171716]">
           <AnimatePresence>
             <motion.section
               className="w-full grid"
@@ -158,7 +158,7 @@ const Map: React.FC = () => {
                 height: 'calc(100vh - 56px)',
               }}
             >
-              <div className="relative w-full p-2 bg-white col-span-1">
+              <div className="relative w-full p-2 col-span-1">
                 <button
                   onClick={() => setShowSidebar(!showSidebar)}
                   className="absolute z-50 flex items-center h-8 py-1 text-gray-500 bg-white border border-gray-200 top-4 right-4 hover:text-black hover:border-gray-400 rounded-xl"

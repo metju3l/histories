@@ -1,8 +1,10 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import UserLayout from '@components/Layouts/User';
+import { LayersIcon } from '@components/Modules/Minimap/icons';
 import Marker from '@components/Modules/Minimap/Marker';
 import { PostsDocument } from '@graphql/post.graphql';
 import { UserDocument } from '@graphql/user.graphql';
+import { Menu } from '@headlessui/react';
 import {
   GetCookieFromServerSideProps,
   IsJwtValid,
@@ -10,10 +12,11 @@ import {
 } from '@lib/functions';
 import Viewport from '@lib/types/viewport';
 import { GetServerSidePropsContext } from 'next';
+import { useTheme } from 'next-themes';
 import React, { useState } from 'react';
 import ReactMapGL from 'react-map-gl';
-import { Default } from 'shared/config/MapStyles';
 
+import { Dark,Light, Satellite } from '../../../shared/config/MapStyles';
 import UrlPrefix from '../../../shared/config/UrlPrefix';
 import { ValidateUsername } from '../../../shared/validation';
 
@@ -33,6 +36,12 @@ const UserMapPage: React.FC<{
     bearing: 0,
     pitch: 0,
   });
+
+  const [mapStyle, setMapStyle] = React.useState<
+    'theme' | 'light' | 'dark' | 'satellite'
+  >('theme');
+
+  const { resolvedTheme } = useTheme();
 
   return (
     <UserLayout
@@ -67,8 +76,19 @@ const UserMapPage: React.FC<{
         {...{
           width: '100%',
           height: '100%',
-          className: 'rounded-lg',
-          mapStyle: Default, // MAPBOX STYLE
+          className: 'rounded-lg relative',
+          // default map style by theme
+          mapStyle:
+            mapStyle === 'theme'
+              ? resolvedTheme === 'dark'
+                ? Dark
+                : Light
+              : // explicit map styles
+              mapStyle === 'dark'
+              ? Dark
+              : mapStyle === 'satellite'
+              ? Satellite
+              : Light, // MAPBOX STYLE
           mapboxApiAccessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN, // MAPBOX API ACCESS TOKEN
         }}
         onViewportChange={setViewport}
@@ -94,6 +114,69 @@ const UserMapPage: React.FC<{
             />
           ))
         }
+        <div className="absolute z-40 right-2 bottom-2">
+          <Menu>
+            <Menu.Button
+              as="button"
+              className="flex items-center h-8 py-1 text-gray-500 bg-white border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl"
+            >
+              <LayersIcon className="w-8 h-8 p-2 text-black rounded-lg" />
+            </Menu.Button>
+            <Menu.Items
+              as="div"
+              className="absolute right-0 z-50 flex flex-row p-2 bg-white border border-gray-200 rounded-lg gap-2 -mt-9 transform -translate-y-full dark:bg-gray-900 focus:outline-none dark:border-gray-800 truncated"
+            >
+              <button
+                className="block w-20 h-20 rounded"
+                onClick={() => setMapStyle('light')}
+              >
+                <ReactMapGL
+                  {...{
+                    ...viewport,
+                    zoom: viewport.zoom - 4,
+                  }}
+                  width="100%"
+                  height="100%"
+                  className="rounded-lg"
+                  mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
+                  mapStyle={Light}
+                />
+              </button>
+              <button
+                className="block w-20 h-20"
+                onClick={() => setMapStyle('dark')}
+              >
+                <ReactMapGL
+                  {...{
+                    ...viewport,
+                    zoom: viewport.zoom - 4,
+                  }}
+                  width="100%"
+                  height="100%"
+                  className="rounded-lg"
+                  mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
+                  mapStyle={Dark}
+                />
+              </button>
+              <button
+                className="block w-20 h-20"
+                onClick={() => setMapStyle('satellite')}
+              >
+                <ReactMapGL
+                  {...{
+                    ...viewport,
+                    zoom: viewport.zoom - 4,
+                  }}
+                  width="100%"
+                  height="100%"
+                  className="rounded-lg"
+                  mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
+                  mapStyle={Satellite}
+                />
+              </button>
+            </Menu.Items>
+          </Menu>
+        </div>
       </ReactMapGL>
     </UserLayout>
   );
