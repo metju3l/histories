@@ -1,10 +1,7 @@
 import { ApolloClient, InMemoryCache, QueryResult } from '@apollo/client';
 import UserLayout from '@components/Layouts/User';
 import Card from '@components/Modules/UserPage/Card';
-import {
-  CollectionsIcon,
-  PlusIcon,
-} from '@components/Modules/UserPage/Subnav/icons';
+import { CollectionsIcon, PlusIcon } from '@components/icons';
 import { PostsDocument, PostsQuery } from '@graphql/post.graphql';
 import { UserDocument } from '@graphql/user.graphql';
 import {

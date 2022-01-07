@@ -8,7 +8,7 @@ import {
   MapIcon,
   PostsIcon,
   SettingsIcon,
-} from './icons';
+} from '../../../icons';
 import UserSubNavItem from './SubNavItem';
 
 export type UserSubNavProps = {

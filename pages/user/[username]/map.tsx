@@ -16,7 +16,7 @@ import { useTheme } from 'next-themes';
 import React, { useState } from 'react';
 import ReactMapGL from 'react-map-gl';
 
-import { Dark,Light, Satellite } from '../../../shared/config/MapStyles';
+import { Dark, Light, Satellite } from '../../../shared/config/MapStyles';
 import UrlPrefix from '../../../shared/config/UrlPrefix';
 import { ValidateUsername } from '../../../shared/validation';
 
@@ -133,7 +133,7 @@ const UserMapPage: React.FC<{
                 <ReactMapGL
                   {...{
                     ...viewport,
-                    zoom: viewport.zoom - 4,
+                    zoom: viewport.zoom > 4 ? viewport.zoom - 4 : viewport.zoom,
                   }}
                   width="100%"
                   height="100%"
@@ -149,7 +149,7 @@ const UserMapPage: React.FC<{
                 <ReactMapGL
                   {...{
                     ...viewport,
-                    zoom: viewport.zoom - 4,
+                    zoom: viewport.zoom > 4 ? viewport.zoom - 4 : viewport.zoom,
                   }}
                   width="100%"
                   height="100%"
@@ -165,7 +165,7 @@ const UserMapPage: React.FC<{
                 <ReactMapGL
                   {...{
                     ...viewport,
-                    zoom: viewport.zoom - 4,
+                    zoom: viewport.zoom > 4 ? viewport.zoom - 4 : viewport.zoom,
                   }}
                   width="100%"
                   height="100%"
