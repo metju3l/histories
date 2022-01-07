@@ -5,6 +5,7 @@ import RunCypherQuery from '../../../../database/RunCypherQuery';
 import VerificationEmail from '../../../../email/content/EmailVerification';
 import SendEmail from '../../../../email/SendEmail';
 import SignJWT from '../../../../functions/SignJWT';
+import { v4 as uuidv4 } from 'uuid';
 
 const CreateUser = async ({
   username,
@@ -22,7 +23,7 @@ const CreateUser = async ({
   );
 
   // authorization token for email verifiaction
-  const authorizationToken = new Date().getTime().toString();
+  const authorizationToken = uuidv4();
 
   const query = `
   CREATE (user:User {

@@ -1,3 +1,4 @@
+import ForgotPassword from '../../resolvers/User/Mutation/ForgotPassword';
 import sharp from 'sharp';
 import streamToPromise from 'stream-to-promise';
 
@@ -46,6 +47,9 @@ const mutations = {
     _parent: undefined,
     { googleJWT }: { googleJWT: string }
   ) => await GoogleAuth(googleJWT),
+
+  forgotPassword: async (_parent: undefined, { login }: { login: string }) =>
+    await ForgotPassword(login),
 
   login: async (_parent: undefined, { input }: { input: LoginInput }) =>
     await Login(input),

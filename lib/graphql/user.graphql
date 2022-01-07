@@ -19,6 +19,10 @@ query suggestedUsers {
   }
 }
 
+mutation forgotPassword($login: String!) {
+  forgotPassword(login: $login)
+}
+
 query user($username: String, $id: Int) {
   user(input: { username: $username, id: $id }) {
     email

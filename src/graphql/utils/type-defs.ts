@@ -35,7 +35,12 @@ export default gql`
   type Mutation {
     "Returns JWT"
     login(input: LoginInput!): String!
+
+    "Register and login with Google"
     googleAuth(googleJWT: String!): String!
+
+    "Sends password reset email"
+    forgotPassword(login: String!): String
 
     deleteUser(input: DeleteUserInput!): String!
     delete(id: Int!): String
