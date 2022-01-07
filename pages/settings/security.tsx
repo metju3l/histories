@@ -1,10 +1,17 @@
+import { Button } from '@components/Elements';
 import SettingsLayout from '@components/Layouts/Settings';
 import { RedirectAnonymous } from '@lib/functions/ServerSideProps';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { LoginContext } from '../../pages/_app';
+
 const Account = () => {
   const { t } = useTranslation();
+
+  const { data: loginContext } = React.useContext(LoginContext);
+
+  console.log(loginContext);
 
   return (
     <SettingsLayout
@@ -24,18 +31,30 @@ const Account = () => {
         },
       }}
     >
-      <h3 className="text-2xl font-medium">{t('password')}</h3>
-      <div className="py-4">
-        <input
-          value="this is not your password"
-          className="w-full max-w-sm px-2 text-gray-400 border border-gray-300 outline-none dark:bg-[#45413C] rounded-md focus:border-gray-500 py-1.5"
-          type="password"
-          disabled
-        />
-      </div>
-      <button className="block px-4 py-1 font-medium text-gray-600 bg-gray-200 border border-gray-200 rounded-md hover:bg-gray-300">
-        {t('change password')}
-      </button>
+      <h2 className="font-medium text-gray-600">Password</h2>
+
+      {!loginContext?.me?.hasPassword ? (
+        <>
+          <span className="px-8">
+            <div className="text-red-700 bg-red-100 border border-red-700 dark:border-[#373638] dark:bg-[#2b2b2b] lg:rounded-lg md:rounded-lg sm:rounded-lg shadow-sm dark:shadow-md">
+              <div className="p-5 ">
+                <div className="grid justify-items-center space-y-2">
+                  You haven{"'"}t set a password yet.
+                </div>
+              </div>
+            </div>
+          </span>
+          <p className="pb-4">
+            Your account was created using Google, create new password to be
+            able to login to your account with your email and password.
+          </p>
+          <Button style="primary_outline">Create password</Button>
+        </>
+      ) : (
+        <div className="pt-6">
+          <Button style="primary_outline">Change password</Button>
+        </div>
+      )}
     </SettingsLayout>
   );
 };

@@ -72,6 +72,7 @@ query Me {
     lastName
     username
     email
+    hasPassword
     collections {
       id
       name

@@ -1,8 +1,8 @@
 import { ApolloClient, InMemoryCache, QueryResult } from '@apollo/client';
+import { PlusIcon } from '@components/icons';
 import UserLayout from '@components/Layouts/User';
 import { Post } from '@components/Modules/Post';
 import Card from '@components/Modules/UserPage/Card';
-import { PlusIcon } from '@components/icons';
 import {
   PostsDocument,
   PostsQuery,

@@ -214,6 +214,7 @@ RETURN user{.*,
             END,
   followerCount,
   postCount,
+  hasPassword: EXISTS(user.password),
   followers: COLLECT(DISTINCT follower{.*,
                                   id: ID(follower)
                               }), 
@@ -227,6 +228,8 @@ RETURN user{.*,
 } AS user`;
 
   const [result] = await RunCypherQuery({ query });
+
+  console.log(result.records[0]);
 
   // If user doesn't exist
   if (result.records[0] === undefined) throw new Error('User does not exist');

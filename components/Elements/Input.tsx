@@ -8,6 +8,7 @@ export type InputProps = {
   name: string;
   autoComplete?: string;
   label?: string;
+  disabled?: boolean;
 };
 
 const Input: React.FC<InputProps> = ({
@@ -17,6 +18,7 @@ const Input: React.FC<InputProps> = ({
   options,
   autoComplete,
   label,
+  disabled,
 }) => {
   return (
     <label htmlFor={name}>
@@ -27,6 +29,7 @@ const Input: React.FC<InputProps> = ({
       <input
         id={name}
         type={type}
+        disabled={disabled}
         className="w-full h-10 px-3 mt-2 mb-1 leading-tight text-gray-700 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
         {...register(name, options)}
         autoComplete={autoComplete}

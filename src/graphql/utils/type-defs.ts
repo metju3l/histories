@@ -273,6 +273,7 @@ export default gql`
     followingCount: Int!
     postCount: Int!
     id: Float!
+    hasPassword: Boolean!
     following: [UserInfoMinimal]
     followers: [UserInfoMinimal]
     collections: [Collection]
