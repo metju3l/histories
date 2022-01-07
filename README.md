@@ -5,8 +5,6 @@
 <div align="center">
     <a href="https://www.histories.cc"><b>hiStories.cc</b></a>
     •
-    <a href="https://www.chromatic.com/library?appId=61a39cca9c186c003a9e202f"><b>Storybook</b></a>
-        •
     <a href="https://gitpod.io/#https://github.com/hiStories-cc/hiStories"><b>Gitpod</b></a>
 </div>
 <br>
@@ -33,18 +31,12 @@ And it also is my high school final project.
 4. setup environment `docker-compose up -d`
 5. run `yarn dev`
 
-### Setup storybook
-
-1. install dependencies `yarn`
-2. run dev server `yarn sb`
-
 ## Tech stack
 
 - [Next.js](https://nextjs.org/)
 - [TypeScript](https://github.com/microsoft/TypeScript)
 - [GraphQL](https://graphql.org/)
 - [Neo4j](https://neo4j.com/)
-- [Storybook](https://storybook.js.org/)
 - [IPFS](https://ipfs.io/)
 
 ## Project structure
@@ -67,7 +59,6 @@ hiStories/
 ├── lib (frontend)
 │   ├── graphql
 │   ├── hooks
-│   ├── stories (storybook stories)
 │   └── tranlation (i18n)
 ├── components (inspired by atomic design principles)
 │   ├── elements (small building blocks)

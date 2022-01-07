@@ -1,7 +1,7 @@
 import { Tooltip } from '@components/Elements';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Maybe } from '../../../../.cache/__types__';
 import { LoginContext } from '../../../../pages/_app';
@@ -27,8 +27,6 @@ export type UserLeftPanelProps = {
 
 const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
   const loginContext = React.useContext(LoginContext);
-
-  const [editMode, setEditMode] = useState<boolean>(false);
 
   return (
     <div className="relative top-0 lg:sticky lg:col-span-4 md:col-span-12 col-span-12">
@@ -113,19 +111,19 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
         <p className="mt-4 font-medium text-black dark:text-white">
           {user.bio}
         </p>
-        {loginContext.data?.me?.id === user.id &&
-          (editMode ? (
+        {loginContext.data?.me?.id === user.id ? (
+          <Link href="/settings" passHref>
             <button className="items-center block px-3 py-1 mt-6 text-xs font-semibold text-gray-500 border border-gray-500 rounded-full space-x-1.5 shadown-sm w-max">
-              Save changes
-            </button>
-          ) : (
-            <button
-              className="items-center block px-3 py-1 mt-6 text-xs font-semibold text-gray-500 border border-gray-500 rounded-full space-x-1.5 shadown-sm w-max"
-              onClick={() => setEditMode(true)}
-            >
               Edit profile
             </button>
-          ))}
+          </Link>
+        ) : (
+          loginContext.data?.me?.id && (
+            <button className="items-center block px-3 py-1 mt-6 text-xs font-semibold text-green-500 border border-green-500 rounded-full space-x-1.5 shadown-sm w-max">
+              Follow
+            </button>
+          )
+        )}
       </div>
     </div>
   );

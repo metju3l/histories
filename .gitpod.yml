@@ -12,19 +12,11 @@ tasks:
   - name: Dev Server
     init: gp sync-await setup
     command: yarn dev
-  - name: Storybook dev
-    init: gp sync-await setup
-    command: yarn sb
 
 # Ports to expose on workspace startup
 ports:
   # Nextjs
   - port: 3000
-    onOpen: ignore
-    visibility: public
-
-  # Storybook
-  - port: 6006
     onOpen: ignore
     visibility: public
 
