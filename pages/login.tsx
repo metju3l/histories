@@ -1,8 +1,8 @@
 import AuthLayout from '@components/Layouts/Auth';
-import LoginTemplate from '@components/Templates/Login';
-import React, { FC } from 'react';
+import LoginTemplate from '@components/Templates/Auth/Login';
+import React from 'react';
 
-const Login: FC = () => {
+const Login: React.FC = () => {
   return (
     <AuthLayout
       head={{

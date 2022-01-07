@@ -1,5 +1,5 @@
 import AuthLayout from '@components/Layouts/Auth';
-import RegisterTemplate from '@components/Templates/Register';
+import RegisterTemplate from '@components/Templates/Auth/Register';
 import React from 'react';
 
 const Register: React.FC = () => {
