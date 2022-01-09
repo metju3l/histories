@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import PasswordReset from '../../../../email/content/PasswordReset';
 
 const ForgotPassword = async (login: string) => {
-  const passwordResetToken = uuidv4(); // generate reset token
+  const passwordResetToken = `${new Date().getTime()}-${uuidv4()}`; // generate token
 
   const query = `
     MATCH (user:User) 

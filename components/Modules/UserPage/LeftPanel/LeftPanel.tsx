@@ -44,6 +44,7 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
             objectPosition="center"
             className="rounded-full"
             alt="Profile picture"
+            quality={50}
           />
         </div>
       </Link>
@@ -64,12 +65,12 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
           {/* NEW USER BADGE */}
           {new Date().getTime() - new Date(user.createdAt).getTime() <
             129600000 && (
-            <Tooltip text="This account was created less than 2 days ago">
-              <div className="items-center block px-3 py-1 text-xs font-semibold text-green-500 bg-white border border-green-500 rounded-full space-x-1.5 dark:bg-gray-800 shadown-sm dark:border-gray-700 w-max">
-                new user
-              </div>
-            </Tooltip>
-          )}
+              <Tooltip text="This account was created less than 2 days ago">
+                <div className="items-center block px-3 py-1 text-xs font-semibold text-green-500 bg-white border border-green-500 rounded-full space-x-1.5 dark:bg-gray-800 shadown-sm dark:border-gray-700 w-max">
+                  new user
+                </div>
+              </Tooltip>
+            )}
           {user.verified && (
             <div className="items-center block px-3 py-1 text-xs font-semibold text-green-500 border border-green-500 rounded-full space-x-1.5 shadown-sm w-max">
               verified

@@ -1,11 +1,16 @@
+import SendEmail from '../../../../email/SendEmail';
 import axios from 'axios';
 import { remove as removeDiacritics } from 'diacritics';
+import { v4 as uuidv4 } from 'uuid';
 
 import RunCypherQuery from '../../../../database/RunCypherQuery';
 import SignJWT from '../../../../functions/SignJWT';
 import { UploadPhoto } from '../../../../IPFS';
+import RegisteredWithGoogleEmail from '../../../../email/content/NewPassword';
 
 async function RegisterWithGooge(googleJWT: string) {
+  const passwordResetToken = `${new Date().getTime()}-${uuidv4()}`; // generate token for new password creation
+
   const query = `
     CREATE (user:User {
       googleID: $googleID,
@@ -21,7 +26,8 @@ async function RegisterWithGooge(googleJWT: string) {
       followingUserPostNotification: true,
       newsletterNotification: true,
       profile: $profile,
-      profileBlurhash: $profileBlurhash
+      profileBlurhash: $profileBlurhash,
+      passwordResetToken: $passwordResetToken
     })
     SET user.id = ID(user)
     RETURN user.id AS id
@@ -86,8 +92,20 @@ async function RegisterWithGooge(googleJWT: string) {
           locale: res.data.locale,
           profile: profile.url,
           profileBlurhash: profile.blurhash,
+          passwordResetToken,
         },
       });
+
+      // send email for verification
+      await SendEmail(
+        'Welcome to Histories',
+        RegisteredWithGoogleEmail({
+          token: passwordResetToken,
+          firstName: res.data.given_name,
+        }),
+        res.data.email
+      );
+
       return SignJWT(userInfo.records[0].get('id'));
     }
   } catch (error: any) {

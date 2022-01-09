@@ -2,7 +2,16 @@ import RunCypherQuery from '../../../../database/RunCypherQuery';
 import { hash } from 'bcryptjs';
 import { validate } from 'uuid';
 
-const ResetPassword = async (token: string, newPassword: string) => {
+const ResetPassword = async (wholeToken: string, newPassword: string) => {
+  // if token is older than three days, it's invalid
+  const tokenCreatedAt = wholeToken.substring(0, wholeToken.indexOf('-')); // get first part of tokne == time when was created
+  if (
+    new Date().getTime() - parseFloat(tokenCreatedAt) >
+    1000 * 60 * 60 * 24 * 3
+  )
+    throw new Error('Token expired');
+
+  const token = wholeToken.substring(wholeToken.indexOf('-') + 1); // get everything except first part of token == uuid
   if (!validate(token)) throw new Error('Invalid token');
 
   // generate password hash
@@ -23,7 +32,7 @@ const ResetPassword = async (token: string, newPassword: string) => {
   const [result] = await RunCypherQuery({
     query,
     params: {
-      token,
+      token: wholeToken,
       newPassword: hashedPassword,
     },
   });

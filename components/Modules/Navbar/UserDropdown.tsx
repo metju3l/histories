@@ -32,6 +32,7 @@ const UserDropdown: React.FC = () => {
           objectFit="contain"
           objectPosition="center"
           alt="Profile picture"
+          quality={40}
         />
       </Menu.Button>
       <Transition as={Fragment} {...DropdownTransition}>

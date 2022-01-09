@@ -4,6 +4,7 @@ import RegisterFormInputs from '@lib/types/forms/registerFormInputs';
 import Link from 'next/link';
 import React from 'react';
 import { UseFormRegister } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 export type RegisterFormProps = {
   onSubmit: () => void;
@@ -16,6 +17,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   register,
   loading,
 }) => {
+  const { t } = useTranslation(); // i18n
+
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-2">
       <Input
@@ -83,6 +86,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       <GoogleAuthButton />
       <Link href="/login">
         <a className="pl-2 underline">login to an existing account</a>
+      </Link>
+      <Link href="/forgot-password">
+        <a className="pl-2 underline">{t('forgot password')}</a>
       </Link>
     </form>
   );
