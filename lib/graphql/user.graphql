@@ -23,10 +23,6 @@ mutation forgotPassword($login: String!) {
   forgotPassword(login: $login)
 }
 
-mutation resetPassword($input: ResetPasswordInput!) {
-  resetPassword(input: $input)
-}
-
 query user($username: String, $id: Int) {
   user(input: { username: $username, id: $id }) {
     email

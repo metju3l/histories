@@ -14,11 +14,14 @@ import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
 const Login: React.FC = () => {
-  const [login] = useLoginMutation(); // login mutation
-  const [loading, setLoading] = useState(false); // loading after submiting
-  const { t } = useTranslation(); // translation
+  const [login] = useLoginMutation();             // login mutation
+  const [loading, setLoading] = useState(false);  // loading after submiting
+  const { t } = useTranslation();                 // translation
 
-  const { register, handleSubmit } = useForm<LoginFormInputs>();
+  const {
+    register,
+    handleSubmit,
+  } = useForm<LoginFormInputs>();
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     setLoading(true);
@@ -83,14 +86,12 @@ const Login: React.FC = () => {
         <Link href="/register">
           <a className="pl-2 underline">{t('create new account')}</a>
         </Link>
-        <Link href="/forgot-password">
-          <a className="pl-2 underline">{t('forgot_password')}</a>
-        </Link>
       </form>
     </AuthLayout>
   );
 };
 
 export const getServerSideProps = RedirectLogged;
+
 
 export default Login;

@@ -1,32 +1,31 @@
 import { Input } from '@components/Elements';
 import Button from '@components/Elements/Buttons/Button';
 import AuthLayout from '@components/Layouts/Auth';
-import { useResetPasswordMutation } from '@graphql/user.graphql';
 import { RedirectInvalidToken } from '@lib/functions/ServerSideProps';
+// import { useChangePasswordMutation } from '@graphql/user.graphql';
 import NewPasswordFormInputs from '@lib/types/forms/newPasswordFormInputs';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { toast } from 'react-hot-toast';
+import { toast } from 'react-hot-toast'; 
 import { useTranslation } from 'react-i18next';
 
-// create new password when forgot password
 const NewPassword: React.FC<{ token: string }> = ({ token }) => {
-  const [loading, setLoading] = useState(false); // loading
-  const { t } = useTranslation(); // i18n
-  const [resetPassword] = useResetPasswordMutation(); // mutation
-  const router = useRouter(); // router
+  const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
+
+  // const [changePassword] = useChangePasswordMutation();
+
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
-    formState: {},
+    formState: { },
   } = useForm<NewPasswordFormInputs>();
 
   const onSubmit: SubmitHandler<NewPasswordFormInputs> = async (data) => {
     setLoading(true);
-
-    // validate form
     if (
       data.password != data.repeatPassword ||
       data.password.length < 8 ||
@@ -38,19 +37,19 @@ const NewPassword: React.FC<{ token: string }> = ({ token }) => {
     }
 
     try {
-      // run mutation
-      await resetPassword({
+      /*await changePassword({
         variables: {
-          input: {
-            token,
-            newPassword: data.password,
-          },
+          
+
+
         },
       });
-      toast.success('Your password has been changed'); // success
-      router.replace('/login'); // redirect to login page
+*/
+      toast.success('Your password has been changed');
+
+      router.replace('/login');
     } catch (error: any) {
-      toast.error(error.message); // error
+      toast.error(error.message);
     }
     setLoading(false);
   };
@@ -95,6 +94,6 @@ const NewPassword: React.FC<{ token: string }> = ({ token }) => {
   );
 };
 
-export const getServerSideProps = RedirectInvalidToken;
+export const getServerSideProps = RedirectInvalidToken
 
 export default NewPassword;
