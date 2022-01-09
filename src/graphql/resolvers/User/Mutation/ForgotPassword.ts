@@ -10,7 +10,7 @@ const ForgotPassword = async (login: string) => {
     MATCH (user:User) 
     // where case insensitive username or email matches 
     WHERE user.username =~ $name  
-        XOR user.email =~ $name  // using XOR to avoid checking both username and email at the same time (which would potentially make a brute force attack faster)
+       OR user.email =~ $name  
     SET user.passwordResetToken = $passwordResetToken   
     RETURN user{.*} as user
   `;
@@ -18,12 +18,10 @@ const ForgotPassword = async (login: string) => {
   const [user] = await RunCypherQuery({
     query,
     params: {
-      name: login,
+      name: `(?i)${login}`,
       passwordResetToken,
     },
   });
-
-  console.log(user.records[0].get('user').email);
 
   // send email for verification
   await SendEmail(

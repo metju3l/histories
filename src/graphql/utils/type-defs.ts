@@ -42,6 +42,9 @@ export default gql`
     "Sends password reset email"
     forgotPassword(login: String!): String
 
+    "Reset password"
+    resetPassword(input: ResetPasswordInput!): String
+
     deleteUser(input: DeleteUserInput!): String!
     delete(id: Int!): String
     report(id: Int!): String
@@ -59,6 +62,11 @@ export default gql`
     createComment(input: CreateCommentInput!): String!
     addToCollection(input: AddToCollectionInput!): String!
     removeFromCollection(input: AddToCollectionInput!): String!
+  }
+
+  input ResetPasswordInput {
+    token: String!
+    newPassword: String!
   }
 
   input NotificationsSettingsInput {

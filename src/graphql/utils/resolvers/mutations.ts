@@ -6,6 +6,7 @@ import {
   CreateUserInput,
   LoginInput,
   UpdateProfileInput,
+  ResetPasswordInput,
 } from '../../../../.cache/__types__';
 import {
   ValidateComment,
@@ -41,6 +42,7 @@ import {
 } from '../../resolvers';
 import LastPost from '../../resolvers/lastPost';
 import { contextType, OnlyLogged, Validate } from './resolvers';
+import ResetPassword from '../../resolvers/User/Mutation/ResetPassword';
 
 const mutations = {
   googleAuth: async (
@@ -50,6 +52,11 @@ const mutations = {
 
   forgotPassword: async (_parent: undefined, { login }: { login: string }) =>
     await ForgotPassword(login),
+
+  resetPassword: async (
+    _parent: undefined,
+    { input }: { input: ResetPasswordInput }
+  ) => ResetPassword(input.token, input.newPassword),
 
   login: async (_parent: undefined, { input }: { input: LoginInput }) =>
     await Login(input),
