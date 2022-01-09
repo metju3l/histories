@@ -1,10 +1,11 @@
 import Button from '@components/Elements/Buttons/Button';
 import { useMeQuery, useVerifyTokenMutation } from '@graphql/user.graphql';
+import { RedirectInvalidToken } from '@lib/functions/ServerSideProps';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-export default function Page() {
+const VerifyPage = () => {
   const router = useRouter();
   const isLogged = useMeQuery();
   const [verifyToken] = useVerifyTokenMutation();
@@ -40,4 +41,8 @@ export default function Page() {
         </Button>
       </div>
     );
-}
+};
+
+export const getServerSideProps = RedirectInvalidToken;
+
+export default VerifyPage;

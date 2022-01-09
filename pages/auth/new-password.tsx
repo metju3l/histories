@@ -1,9 +1,7 @@
 import AuthLayout from '@components/Layouts/Auth';
 import NewPasswordTemplate from '@components/Templates/Auth/NewPassword';
-import { SSRRedirect } from '@lib/functions';
-import { GetServerSidePropsContext } from 'next';
+import { RedirectInvalidToken } from '@lib/functions/ServerSideProps';
 import React from 'react';
-import { validate } from 'uuid';
 
 const NewPassword: React.FC<{ token: string }> = ({ token }) => {
   return (
@@ -26,14 +24,6 @@ const NewPassword: React.FC<{ token: string }> = ({ token }) => {
   );
 };
 
-// get token from url query and validate it
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  const token = ctx.query.token; // get token from url query
-
-  if (typeof token !== 'string') return SSRRedirect('/'); // validate token type
-  if (!validate(token)) return SSRRedirect('/'); // validate UUID
-
-  return { props: { token } }; // return token in props
-}
+export const getServerSideProps = RedirectInvalidToken
 
 export default NewPassword;
