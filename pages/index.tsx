@@ -73,7 +73,7 @@ const PersonalizedPosts = () => {
           },
         });
       }}
-      hasMore={true}
+      hasMore={(data?.personalizedPosts.length ?? 1) % 10 === 0}
       loader={
         <p style={{ textAlign: 'center' }}>
           <b>loading</b>
@@ -87,14 +87,6 @@ const PersonalizedPosts = () => {
       refreshFunction={async () => {
         await refetch();
       }}
-      pullDownToRefresh
-      pullDownToRefreshThreshold={80}
-      pullDownToRefreshContent={
-        <h3 style={{ textAlign: 'center' }}>&#8595; Pull down to refresh</h3>
-      }
-      releaseToRefreshContent={
-        <h3 style={{ textAlign: 'center' }}>&#8593; Release to refresh</h3>
-      }
     >
       {data?.personalizedPosts.map((post: any) => (
         <Post
