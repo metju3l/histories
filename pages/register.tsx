@@ -1,5 +1,6 @@
 import AuthLayout from '@components/Layouts/Auth';
 import RegisterTemplate from '@components/Templates/Auth/Register';
+import { RedirectLogged } from '@lib/functions/ServerSideProps';
 import React from 'react';
 
 const Register: React.FC = () => {
@@ -22,5 +23,8 @@ const Register: React.FC = () => {
     </AuthLayout>
   );
 };
+
+export const getServerSideProps = RedirectLogged;
+
 
 export default Register;

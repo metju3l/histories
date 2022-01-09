@@ -11,7 +11,6 @@ const Account = () => {
 
   const { data: loginContext } = React.useContext(LoginContext);
 
-  console.log(loginContext);
 
   return (
     <SettingsLayout

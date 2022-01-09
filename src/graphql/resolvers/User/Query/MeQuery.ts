@@ -229,8 +229,6 @@ RETURN user{.*,
 
   const [result] = await RunCypherQuery({ query });
 
-  console.log(result.records[0]);
-
   // If user doesn't exist
   if (result.records[0] === undefined) throw new Error('User does not exist');
   // else

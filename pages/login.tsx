@@ -1,5 +1,6 @@
 import AuthLayout from '@components/Layouts/Auth';
 import LoginTemplate from '@components/Templates/Auth/Login';
+import { RedirectLogged } from '@lib/functions/ServerSideProps';
 import React from 'react';
 
 const Login: React.FC = () => {
@@ -22,5 +23,8 @@ const Login: React.FC = () => {
     </AuthLayout>
   );
 };
+
+export const getServerSideProps = RedirectLogged;
+
 
 export default Login;

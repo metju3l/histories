@@ -1,5 +1,6 @@
 import AuthLayout from '@components/Layouts/Auth';
 import ForgotPasswordTemplate from '@components/Templates/Auth/ForgotPassword';
+import { RedirectLogged } from '@lib/functions/ServerSideProps';
 import React from 'react';
 
 const ForgotPassword: React.FC = () => {
@@ -22,5 +23,8 @@ const ForgotPassword: React.FC = () => {
     </AuthLayout>
   );
 };
+
+export const getServerSideProps = RedirectLogged;
+
 
 export default ForgotPassword;
