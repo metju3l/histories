@@ -1,4 +1,9 @@
-import { ApolloClient, InMemoryCache, QueryResult } from '@apollo/client';
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  QueryResult,
+} from '@apollo/client';
 import { PlusIcon } from '@components/icons';
 import UserLayout from '@components/Layouts/User';
 import { Post } from '@components/Modules/Post';
@@ -8,7 +13,10 @@ import {
   PostsQuery,
   usePostsQuery,
 } from '@graphql/post.graphql';
-import { UserDocument } from '@graphql/user.graphql';
+import {
+  UserDocument,
+  UserQuery,
+} from '@graphql/user.graphql';
 import {
   GetCookieFromServerSideProps,
   IsJwtValid,
@@ -24,12 +32,7 @@ import UrlPrefix from '../../../shared/config/UrlPrefix';
 import { ValidateUsername } from '../../../shared/validation';
 
 const PostsPage: React.FC<{
-  user: {
-    username: string;
-    firstName: string;
-    lastName: string;
-    profile: string;
-  };
+  userQuery: UserQuery;
   posts: QueryResult<
     PostsQuery,
     Exact<{
@@ -37,7 +40,9 @@ const PostsPage: React.FC<{
     }>
   >;
   anonymous: boolean;
-}> = ({ user, posts: postsTmp }) => {
+}> = ({ userQuery, posts: postsTmp }) => {
+  const user = userQuery.user;
+
   const { data, loading, refetch, fetchMore } = usePostsQuery({
     variables: {
       input: {
@@ -181,9 +186,15 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   // create new apollo graphql client
   const client = new ApolloClient({
-    uri:
-      process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ??
-      'http://localhost:3000/api/graphql',
+    link: createHttpLink({
+      uri:
+        process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ??
+        'http://localhost:3000/api/graphql',
+      headers: {
+        authorization: jwt ? `Bearer ${jwt}` : '',
+      },
+    }),
+
     cache: new InMemoryCache(),
   });
 
@@ -197,7 +208,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     if (validateUsername) return SSRRedirect('/404?error=user_does_not_exist');
 
     try {
-      const { data: userData } = await client.query({
+      const { data: userQuery }: { data: UserQuery } = await client.query({
         query: UserDocument,
         variables: { username: ctx.query.username },
       });
@@ -218,7 +229,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       // return props
       return {
         props: {
-          user: userData.user,
+          userQuery,
           posts: postsQuery,
           anonymous,
         },
@@ -227,10 +238,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       return SSRRedirect('/404?error=user_does_not_exist');
     }
   }
+  // this should not be needed 🤷‍♀️
   return {
-    // @ts-ignore
-    // this should not be needed 🤷‍♀️
-    props: { user: { username: ctx.query.username }, anonymous },
+    props: {},
   };
 };
 

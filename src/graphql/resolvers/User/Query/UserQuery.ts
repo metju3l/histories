@@ -132,9 +132,11 @@ CALL {
   ORDER BY postTmp.createdAt DESC
 }
 
+// POST COUNT
 CALL {
-  WITH postTmp
-  RETURN COUNT(DISTINCT postTmp) AS postCount
+  WITH user
+  OPTIONAL MATCH (user)-[:CREATED]->(post:Post) // get all users posts
+  RETURN COUNT(DISTINCT post) AS postCount      // count them
 }
 
 CALL {

@@ -1,7 +1,12 @@
-import { Tooltip } from '@components/Elements';
+import { Button, Tooltip } from '@components/Elements';
+import {
+  useFollowMutation,
+  useUnfollowMutation,
+} from '@graphql/relations.graphql';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 import { Maybe } from '../../../../.cache/__types__';
 import { LoginContext } from '../../../../pages/_app';
@@ -22,10 +27,21 @@ export type UserLeftPanelProps = {
     postCount: number;
 
     bio: Maybe<string>;
+    isFollowing: boolean;
   };
 };
 
 const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
+  const [follow] = useFollowMutation(); // follow mutation
+  const [unfollow] = useUnfollowMutation(); // unfollow mutation
+  // save numbers to variables so I can update data on user page without refetching
+  const [localFollowingState, setLocalFollowingState] = useState<boolean>(
+    user.isFollowing
+  );
+  // number of followers without logged user to possibility of updating data without refetching
+  const followerCountWithoutMe =
+    user.followerCount - (user.isFollowing ? 1 : 0);
+
   const loginContext = React.useContext(LoginContext);
 
   return (
@@ -65,12 +81,12 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
           {/* NEW USER BADGE */}
           {new Date().getTime() - new Date(user.createdAt).getTime() <
             129600000 && (
-              <Tooltip text="This account was created less than 2 days ago">
-                <div className="items-center block px-3 py-1 text-xs font-semibold text-green-500 bg-white border border-green-500 rounded-full space-x-1.5 dark:bg-gray-800 shadown-sm dark:border-gray-700 w-max">
-                  new user
-                </div>
-              </Tooltip>
-            )}
+            <Tooltip text="This account was created less than 2 days ago">
+              <div className="items-center block px-3 py-1 text-xs font-semibold text-green-500 bg-white border border-green-500 rounded-full space-x-1.5 dark:bg-gray-800 shadown-sm dark:border-gray-700 w-max">
+                new user
+              </div>
+            </Tooltip>
+          )}
           {user.verified && (
             <div className="items-center block px-3 py-1 text-xs font-semibold text-green-500 border border-green-500 rounded-full space-x-1.5 shadown-sm w-max">
               verified
@@ -82,7 +98,7 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
           {/* FOLLOWERS COUNT */}
           <h4 className="flex flex-col text-base font-medium cursor-pointer">
             <span className="text-black dark:text-gray-300">
-              {user.followerCount}
+              {followerCountWithoutMe + (localFollowingState ? 1 : 0)}
             </span>
             <span className="text-gray-500 dark:text-gray-400">
               {' Followers'}
@@ -120,9 +136,34 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
           </Link>
         ) : (
           loginContext.data?.me?.id && (
-            <button className="items-center block px-3 py-1 mt-6 text-xs font-semibold text-green-500 border border-green-500 rounded-full space-x-1.5 shadown-sm w-max">
-              Follow
-            </button>
+            <Button
+              onClick={async () => {
+                try {
+                  // if following, run unfollow mutation
+                  if (localFollowingState) {
+                    await unfollow({
+                      variables: {
+                        userID: user.id,
+                      },
+                    });
+                    setLocalFollowingState(false); // change local state to avoid refetch
+                  }
+                  // if not following, run follow mutation
+                  else {
+                    await follow({
+                      variables: {
+                        userID: user.id,
+                      },
+                    });
+                    setLocalFollowingState(true); // change local state to avoid refetch
+                  }
+                } catch (error: any) {
+                  toast.error(error.message);
+                }
+              }}
+            >
+              {localFollowingState ? 'Unfollow' : 'Follow'}
+            </Button>
           )
         )}
       </div>

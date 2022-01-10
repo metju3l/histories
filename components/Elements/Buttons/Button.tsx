@@ -20,6 +20,7 @@ export type ButtonProps = {
   size?: Sizes;
   args?: any;
   className?: string;
+  onClick?: () => void;
 };
 
 export const ButtonStyles = {
@@ -56,9 +57,11 @@ const Button: React.FC<ButtonProps> = ({
   args,
   children,
   className,
+  onClick,
 }) => (
   <button
     {...args}
+    onClick={onClick}
     type={loading ? 'button' : 'submit'}
     className={
       'block ' +
