@@ -1,9 +1,10 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import UserLayout from '@components/Layouts/User';
 import { LayersIcon } from '@components/Modules/Minimap/icons';
 import Marker from '@components/Modules/Minimap/Marker';
+import Card from '@components/Modules/UserPage/Card';
 import { PostsDocument } from '@graphql/post.graphql';
-import { UserDocument } from '@graphql/user.graphql';
+import { UserDocument, UserQuery } from '@graphql/user.graphql';
 import { Menu } from '@headlessui/react';
 import {
   GetCookieFromServerSideProps,
@@ -21,14 +22,11 @@ import UrlPrefix from '../../../shared/config/UrlPrefix';
 import { ValidateUsername } from '../../../shared/validation';
 
 const UserMapPage: React.FC<{
-  user: {
-    username: string;
-    firstName: string;
-    lastName: string;
-    profile: string;
-  };
+  userQuery: UserQuery;
   postsTmp: any;
-}> = ({ user, postsTmp }) => {
+}> = ({ userQuery, postsTmp }) => {
+  const user = userQuery.user;
+
   const [viewport, setViewport] = useState<Viewport>({
     latitude: 50,
     longitude: 15,
@@ -71,113 +69,125 @@ const UserMapPage: React.FC<{
         },
       }}
     >
-      <ReactMapGL
-        {...viewport}
-        {...{
-          width: '100%',
-          height: '100%',
-          className: 'rounded-lg relative',
-          // default map style by theme
-          mapStyle:
-            mapStyle === 'theme'
-              ? resolvedTheme === 'dark'
+      <div className="flex flex-col w-full h-full gap-4">
+        {postsTmp.length < 1 && (
+          <Card warning>
+            <div>
+              {user.firstName} doesn{"'"}t have any posts on her map yet
+            </div>
+          </Card>
+        )}
+        <ReactMapGL
+          {...viewport}
+          {...{
+            width: '100%',
+            height: '100%',
+            className: 'rounded-lg relative',
+            // default map style by theme
+            mapStyle:
+              mapStyle === 'theme'
+                ? resolvedTheme === 'dark'
+                  ? Dark
+                  : Light
+                : // explicit map styles
+                mapStyle === 'dark'
                 ? Dark
-                : Light
-              : // explicit map styles
-              mapStyle === 'dark'
-              ? Dark
-              : mapStyle === 'satellite'
-              ? Satellite
-              : Light, // MAPBOX STYLE
-          mapboxApiAccessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN, // MAPBOX API ACCESS TOKEN
-        }}
-        onViewportChange={setViewport}
-      >
-        {
-          // postsQuery.loading ?
-          postsTmp.map((post: any) => (
-            <Marker
-              key={post.id}
-              latitude={post.place.latitude}
-              longitude={post.place.longitude}
-              onClick={
-                // on click set viewport to marker location
-                () =>
-                  setViewport({
-                    latitude: post.place.latitude,
-                    longitude: post.place.longitude,
-                    zoom: 14,
-                    bearing: 0,
-                    pitch: 0,
-                  })
-              }
-            />
-          ))
-        }
-        <div className="absolute z-40 right-2 bottom-2">
-          <Menu>
-            <Menu.Button
-              as="button"
-              className="flex items-center h-8 py-1 text-gray-500 bg-white border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl"
-            >
-              <LayersIcon className="w-8 h-8 p-2 text-black rounded-lg" />
-            </Menu.Button>
-            <Menu.Items
-              as="div"
-              className="absolute right-0 z-50 flex flex-row p-2 bg-white border border-gray-200 rounded-lg gap-2 -mt-9 transform -translate-y-full dark:bg-gray-900 focus:outline-none dark:border-gray-800 truncated"
-            >
-              <button
-                className="block w-20 h-20 rounded"
-                onClick={() => setMapStyle('light')}
+                : mapStyle === 'satellite'
+                ? Satellite
+                : Light, // MAPBOX STYLE
+            mapboxApiAccessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN, // MAPBOX API ACCESS TOKEN
+          }}
+          onViewportChange={setViewport}
+        >
+          {
+            // postsQuery.loading ?
+            postsTmp.map((post: any) => (
+              <Marker
+                key={post.id}
+                latitude={post.place.latitude}
+                longitude={post.place.longitude}
+                onClick={
+                  // on click set viewport to marker location
+                  () =>
+                    setViewport({
+                      latitude: post.place.latitude,
+                      longitude: post.place.longitude,
+                      zoom: 14,
+                      bearing: 0,
+                      pitch: 0,
+                    })
+                }
+              />
+            ))
+          }
+          <div className="absolute z-40 right-2 bottom-2">
+            <Menu>
+              <Menu.Button
+                as="button"
+                className="flex items-center h-8 py-1 text-gray-500 bg-white border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl"
               >
-                <ReactMapGL
-                  {...{
-                    ...viewport,
-                    zoom: viewport.zoom > 4 ? viewport.zoom - 4 : viewport.zoom,
-                  }}
-                  width="100%"
-                  height="100%"
-                  className="rounded-lg"
-                  mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
-                  mapStyle={Light}
-                />
-              </button>
-              <button
-                className="block w-20 h-20"
-                onClick={() => setMapStyle('dark')}
+                <LayersIcon className="w-8 h-8 p-2 text-black rounded-lg" />
+              </Menu.Button>
+              <Menu.Items
+                as="div"
+                className="absolute right-0 z-50 flex flex-row p-2 bg-white border border-gray-200 rounded-lg gap-2 -mt-9 transform -translate-y-full dark:bg-gray-900 focus:outline-none dark:border-gray-800 truncated"
               >
-                <ReactMapGL
-                  {...{
-                    ...viewport,
-                    zoom: viewport.zoom > 4 ? viewport.zoom - 4 : viewport.zoom,
-                  }}
-                  width="100%"
-                  height="100%"
-                  className="rounded-lg"
-                  mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
-                  mapStyle={Dark}
-                />
-              </button>
-              <button
-                className="block w-20 h-20"
-                onClick={() => setMapStyle('satellite')}
-              >
-                <ReactMapGL
-                  {...{
-                    ...viewport,
-                    zoom: viewport.zoom > 4 ? viewport.zoom - 4 : viewport.zoom,
-                  }}
-                  width="100%"
-                  height="100%"
-                  className="rounded-lg"
-                  mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
-                  mapStyle={Satellite}
-                />
-              </button>
-            </Menu.Items>
-          </Menu>
-        </div>
-      </ReactMapGL>
+                <button
+                  className="block w-20 h-20 rounded"
+                  onClick={() => setMapStyle('light')}
+                >
+                  <ReactMapGL
+                    {...{
+                      ...viewport,
+                      zoom:
+                        viewport.zoom > 4 ? viewport.zoom - 4 : viewport.zoom,
+                    }}
+                    width="100%"
+                    height="100%"
+                    className="rounded-lg"
+                    mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
+                    mapStyle={Light}
+                  />
+                </button>
+                <button
+                  className="block w-20 h-20"
+                  onClick={() => setMapStyle('dark')}
+                >
+                  <ReactMapGL
+                    {...{
+                      ...viewport,
+                      zoom:
+                        viewport.zoom > 4 ? viewport.zoom - 4 : viewport.zoom,
+                    }}
+                    width="100%"
+                    height="100%"
+                    className="rounded-lg"
+                    mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
+                    mapStyle={Dark}
+                  />
+                </button>
+                <button
+                  className="block w-20 h-20"
+                  onClick={() => setMapStyle('satellite')}
+                >
+                  <ReactMapGL
+                    {...{
+                      ...viewport,
+                      zoom:
+                        viewport.zoom > 4 ? viewport.zoom - 4 : viewport.zoom,
+                    }}
+                    width="100%"
+                    height="100%"
+                    className="rounded-lg"
+                    mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
+                    mapStyle={Satellite}
+                  />
+                </button>
+              </Menu.Items>
+            </Menu>
+          </div>
+        </ReactMapGL>
+      </div>
     </UserLayout>
   );
 };
@@ -189,14 +199,20 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   // create new apollo graphql client
   const client = new ApolloClient({
-    uri:
-      process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ??
-      'http://localhost:3000/api/graphql',
+    link: createHttpLink({
+      uri:
+        process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ??
+        'http://localhost:3000/api/graphql',
+      headers: {
+        authorization: jwt ? `Bearer ${jwt}` : '',
+      },
+    }),
+
     cache: new InMemoryCache(),
   });
 
   // fetch user query
-  if (!req.url?.startsWith('_next') && ctx.query.username != 'manifest.json') {
+  if (!req.url?.startsWith('_next')) {
     // check if username is valid, if not redirect to 404 page with argument
     if (typeof ctx.query.username !== 'string')
       return SSRRedirect('/404?error=user_does_not_exist');
@@ -204,32 +220,36 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const validateUsername = ValidateUsername(ctx.query.username).error;
     if (validateUsername) return SSRRedirect('/404?error=user_does_not_exist');
 
-    const { data: userData } = await client.query({
-      query: UserDocument,
-      variables: { username: ctx.query.username },
-    });
+    try {
+      const { data: userQuery }: { data: UserQuery } = await client.query({
+        query: UserDocument,
+        variables: { username: ctx.query.username },
+      });
 
-    const { data: postsData } = await client.query({
-      query: PostsDocument,
-      variables: {
-        input: {
-          filter: {
-            authorUsername: ctx.query.username,
-            skip: 0,
-            take: 200,
+      const { data: postsData } = await client.query({
+        query: PostsDocument,
+        variables: {
+          input: {
+            filter: {
+              authorUsername: ctx.query.username,
+              skip: 0,
+              take: 200,
+            },
           },
         },
-      },
-    });
+      });
 
-    // return props
-    return {
-      props: {
-        user: userData.user,
-        postsTmp: postsData.posts,
-        anonymous,
-      },
-    };
+      // return props
+      return {
+        props: {
+          userQuery,
+          postsTmp: postsData.posts,
+          anonymous,
+        },
+      };
+    } catch (e) {
+      return SSRRedirect('/404?error=user_does_not_exist');
+    }
   }
   return {
     // @ts-ignore

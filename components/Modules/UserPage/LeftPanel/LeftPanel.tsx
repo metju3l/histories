@@ -141,21 +141,21 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
                 try {
                   // if following, run unfollow mutation
                   if (localFollowingState) {
+                    setLocalFollowingState(false); // change local state to avoid refetch
                     await unfollow({
                       variables: {
                         userID: user.id,
                       },
                     });
-                    setLocalFollowingState(false); // change local state to avoid refetch
                   }
                   // if not following, run follow mutation
                   else {
+                    setLocalFollowingState(true); // change local state to avoid refetch
                     await follow({
                       variables: {
                         userID: user.id,
                       },
                     });
-                    setLocalFollowingState(true); // change local state to avoid refetch
                   }
                 } catch (error: any) {
                   toast.error(error.message);

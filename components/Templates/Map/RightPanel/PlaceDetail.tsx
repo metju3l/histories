@@ -1,6 +1,7 @@
 import { Loading } from '@components/Elements';
 import { usePostsQuery } from '@graphql/post.graphql';
 import Image from 'next/image';
+import Link from 'next/link';
 import { SidebarPlaceType } from 'pages/map';
 import React from 'react';
 import UrlPrefix from 'shared/config/UrlPrefix';
@@ -70,9 +71,11 @@ const PlaceDetail: React.FC<{
                     </div>
                   )}
                   <div className="px-4 py-2">
-                    <h2 className="text-lg font-medium">
-                      {post.author.firstName} {post.author.lastName}
-                    </h2>
+                    <Link href={`/user/${post.author.username}`} passHref>
+                      <h2 className="text-lg font-medium cursor-pointer">
+                        {post.author.firstName} {post.author.lastName}
+                      </h2>
+                    </Link>
                     <h3 className="text-gray-600" style={{ fontSize: '12px' }}>
                       {post.description}
                     </h3>

@@ -13,10 +13,7 @@ import {
   PostsQuery,
   usePostsQuery,
 } from '@graphql/post.graphql';
-import {
-  UserDocument,
-  UserQuery,
-} from '@graphql/user.graphql';
+import { UserDocument, UserQuery } from '@graphql/user.graphql';
 import {
   GetCookieFromServerSideProps,
   IsJwtValid,

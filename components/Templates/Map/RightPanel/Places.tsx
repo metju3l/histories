@@ -14,7 +14,10 @@ const Places: React.FC = () => {
             place.latitude > mapContext.bounds.minLatitude &&
             place.latitude < mapContext.bounds.maxLatitude &&
             place.longitude > mapContext.bounds.minLongitude &&
-            place.longitude < mapContext.bounds.maxLongitude
+            place.longitude < mapContext.bounds.maxLongitude &&
+            mapContext.placesQuery?.data?.places.filter(
+              (x) => x.id === place.id
+            )
         )
         .map(
           (place) =>

@@ -1,9 +1,14 @@
-import { ApolloClient, InMemoryCache, QueryResult } from '@apollo/client';
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  QueryResult,
+} from '@apollo/client';
 import { CollectionsIcon, PlusIcon } from '@components/icons';
 import UserLayout from '@components/Layouts/User';
 import Card from '@components/Modules/UserPage/Card';
 import { PostsDocument, PostsQuery } from '@graphql/post.graphql';
-import { UserDocument } from '@graphql/user.graphql';
+import { UserDocument, UserQuery } from '@graphql/user.graphql';
 import {
   GetCookieFromServerSideProps,
   IsJwtValid,
@@ -17,12 +22,8 @@ import { Exact, InputMaybe, PostsInput } from '../../../.cache/__types__';
 import { ValidateUsername } from '../../../shared/validation';
 
 const CollectionsPage: React.FC<{
-  user: {
-    username: string;
-    firstName: string;
-    lastName: string;
-    profile: string;
-  };
+  userQuery: UserQuery;
+
   posts: QueryResult<
     PostsQuery,
     Exact<{
@@ -30,7 +31,9 @@ const CollectionsPage: React.FC<{
     }>
   >;
   anonymous: boolean;
-}> = ({ user }) => {
+}> = ({ userQuery }) => {
+  const user = userQuery.user;
+
   return (
     <UserLayout
       user={user}
@@ -65,9 +68,15 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   // create new apollo graphql client
   const client = new ApolloClient({
-    uri:
-      process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ??
-      'http://localhost:3000/api/graphql',
+    link: createHttpLink({
+      uri:
+        process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT ??
+        'http://localhost:3000/api/graphql',
+      headers: {
+        authorization: jwt ? `Bearer ${jwt}` : '',
+      },
+    }),
+
     cache: new InMemoryCache(),
   });
 
@@ -81,7 +90,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     if (validateUsername) return SSRRedirect('/404?error=user_does_not_exist');
 
     try {
-      const { data: userData } = await client.query({
+      const { data: userQuery }: { data: UserQuery } = await client.query({
         query: UserDocument,
         variables: { username: ctx.query.username },
       });
@@ -102,7 +111,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       // return props
       return {
         props: {
-          user: userData.user,
+          userQuery,
           posts: postsQuery,
           anonymous,
         },
