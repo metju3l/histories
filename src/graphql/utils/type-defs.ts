@@ -13,6 +13,9 @@ export default gql`
     "Returns info about logged user"
     me: Me
 
+    "Search"
+    search(input: SearchInput!): SearchResult!
+
     userPosts(input: UserPostsInput!): [Post!]!
     personalizedPosts(input: PersonalizedPostsInput): [PersonalizedPost!]!
 
@@ -56,12 +59,15 @@ export default gql`
     editCollection(input: EditCollectionInput!): String
     updateProfile(input: UpdateProfileInput!): String!
     createPost(input: CreatePostInput!): String!
-    searchUser(input: SearchUserInput!): String!
     createUser(input: CreateUserInput!): String!
     verifyToken(token: String!): String!
     createComment(input: CreateCommentInput!): String!
     addToCollection(input: AddToCollectionInput!): String!
     removeFromCollection(input: AddToCollectionInput!): String!
+  }
+
+  input SearchInput {
+    text: String!
   }
 
   input ResetPasswordInput {
@@ -74,6 +80,11 @@ export default gql`
     followingUserPost: Boolean
     followingPlacePost: Boolean
     newsletter: Boolean
+  }
+
+  type SearchResult {
+    users: [User!]!
+    posts: [Post!]!
   }
 
   input Radius {
@@ -346,10 +357,6 @@ export default gql`
   input UserInput {
     username: String
     id: Int
-  }
-
-  input SearchUserInput {
-    username: String!
   }
 
   input LoginInput {

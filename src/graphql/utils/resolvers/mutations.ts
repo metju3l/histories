@@ -180,10 +180,6 @@ const mutations = {
     return 0;
   },
 
-  searchUser: async () => {
-    // search for username like this
-  },
-
   createUser: async (
     _parent: undefined,
     {

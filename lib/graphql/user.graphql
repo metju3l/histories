@@ -98,9 +98,6 @@ query Me {
   }
 }
 
-mutation searchUser($username: String!) {
-  searchUser(input: { username: $username })
-}
 mutation createUser($input: CreateUserInput!) {
   createUser(input: $input)
 }

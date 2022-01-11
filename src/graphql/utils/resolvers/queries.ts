@@ -1,6 +1,8 @@
+import FullTextSearch from '../../resolvers/Search/FullTextSearch';
 import {
   PersonalizedPostsInput,
   PlacesInput,
+  SearchInput, 
 } from '../../../../.cache/__types__';
 import {
   CollectionQuery,
@@ -21,10 +23,13 @@ const queries = {
     return 'Hello';
   },
 
+  // SEARCH
+  search: async (_parent: undefined, { input }: { input: SearchInput }) =>
+    await FullTextSearch(input.text),
+
   // PLACE
-  place: async (_parent: undefined, { id }: { id: number }) => {
-    return await PlaceQuery({ id });
-  },
+  place: async (_parent: undefined, { id }: { id: number }) =>
+    await PlaceQuery({ id }),
 
   // PLACES
   places: async (

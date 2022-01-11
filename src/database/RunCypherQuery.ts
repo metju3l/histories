@@ -32,14 +32,15 @@ async function RunCypherQuery(args: RunCypherQueryParams) {
   // initialize driver
   const driver = DbConnector();
 
-  // start session
-  const session = driver.session();
-
   // if args is an single object make it array
   const argsArray = Array.isArray(args) ? args : [args];
 
   const result: QueryResult[] = await Promise.all(
-    argsArray.map(async (arg) => RunSingleQuery({ ...arg, session }))
+    argsArray.map(async (arg) => {
+      // start session
+      const session = driver.session();
+      return RunSingleQuery({ ...arg, session });
+    })
   );
 
   // close session
