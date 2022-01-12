@@ -1,17 +1,21 @@
-import { create } from 'ipfs-http-client';
+import * as blurhash from 'blurhash';
+import { createCanvas, Image, loadImage } from 'canvas';
+import { create, IPFSHTTPClient } from 'ipfs-http-client';
 
-// upload to IPFS using Infura api
-const UploadPhoto = async (
-  photo: Buffer
-): Promise<{ url: string; blurhash: string }> => {
-  // if IPFS client is running on default address (localhost:5001)
-  if (process.env.IPFS_CLIENT == 'default') {
-    const client = create();
-    const res = await client.add(photo); // upload file, Infura will automatically pin the file
-    return { url: res.path, blurhash: '' };
-  }
+// get image dimensions
+function getImageData(image: Image) {
+  const canvas = createCanvas(image.width, image.height);
+  const context = canvas.getContext('2d');
+  context.drawImage(image, 0, 0);
+  return context.getImageData(0, 0, image.width, image.height);
+}
 
-  // if using infura client
+// generate blurhash
+export async function GetBlurhash({ data, width, height }: ImageData) {
+  return blurhash.encode(data, width, height, 6, 6);
+}
+
+export function CreateInfuraClient(): IPFSHTTPClient {
   // if infura credentials are not set, throw error
   if (!process.env.INFURA_PROJECT_ID)
     throw new Error('Infura project ID is not defined');
@@ -35,8 +39,23 @@ const UploadPhoto = async (
     },
   });
 
-  const res = await client.add(photo);
-  return { url: res.path, blurhash: '' };
-};
+  return client;
+}
+
+// upload to IPFS using Infura api
+async function UploadPhoto(photo: Buffer) {
+  const client =
+    process.env.IPFS_CLIENT == 'default' ? create() : CreateInfuraClient();
+
+  const image = await loadImage(photo); // load image from buffer
+  const imageData = getImageData(image); // get image data
+
+  const [url, blurhash] = await Promise.all([
+    client.add(photo),
+    GetBlurhash(imageData),
+  ]);
+
+  return { url: url.path, blurhash, width: image.width, height: image.height };
+}
 
 export default UploadPhoto;

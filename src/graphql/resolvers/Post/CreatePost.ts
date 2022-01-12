@@ -17,7 +17,7 @@ const CreatePost = async ({
   photoDate: string;
   longitude: number;
   latitude: number;
-  url: Array<{ url: string; blurhash: string }>;
+  url: Array<{ url: string; blurhash: string; width: number; height: number }>;
 }): Promise<string> => {
   // check every image in an array with NSFW api
   // if any of images is NSFW set `post.nsfw = true` and `post.public = false` by default
@@ -39,7 +39,9 @@ const CreatePost = async ({
     createdAt: ${new Date().getTime()},
     postDate: ${photoDate},
     url: ${JSON.stringify(url.map((x) => x.url))},
-    blurhash: ${JSON.stringify(url.map((x) => x.blurhash))},
+    width: ${JSON.stringify(url.map((x) => x.width))},
+    height: ${JSON.stringify(url.map((x) => x.height))},
+    blurhash: $blurhash,
     nsfw: ${isNSFW ?? false}, 
     edited: false,
     public: ${!(isNSFW ?? false)}
@@ -54,7 +56,11 @@ const CreatePost = async ({
   const driver = DbConnector();
   const session = driver.session();
 
-  const postID = await (await session.run(query)).records[0].get('post').id;
+  const postID = await (
+    await session.run(query, {
+      blurhash: JSON.stringify(url.map((x) => x.blurhash)),
+    })
+  ).records[0].get('post').id;
 
   await session.run(`WITH ${hashtags} AS tags
   MATCH (user:User), (post:Post)

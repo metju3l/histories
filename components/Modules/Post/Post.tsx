@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import Image from 'next/image';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Blurhash } from 'react-blurhash';
 import { IoIosMore } from 'react-icons/io';
 
 import {
@@ -8,7 +8,6 @@ import {
   useUnlikeMutation,
 } from '../../../lib/graphql/relations.graphql';
 import { LoginContext } from '../../../pages/_app';
-import UrlPrefix from '../../../shared/config/UrlPrefix';
 import { MiniUserCard } from '../tmp/MiniUserCard';
 import Card from '../UserPage/Card';
 import {
@@ -111,13 +110,23 @@ const Post: React.FC<PostProps> = ({
           <p className="px-4 pt-2 font-medium">{description}</p>
           {photos && (
             <div className="relative w-full bg-white cursor-pointer dark:bg-black h-[360px] bg-secondary">
+              <Blurhash
+                hash="Ur0}whh0gNgjloggfjg3g3g3f6fhlVgNg3gN"
+                width="300px"
+                height="100px"
+                resolutionX={32}
+                resolutionY={32}
+                punch={1}
+              />
+              {/*
               <Image
                 src={UrlPrefix + photos[0].url}
+                // blurDataURL={blurDataUrl}
                 layout="fill"
                 objectFit="contain"
                 objectPosition="center"
                 alt="Profile picture"
-              />
+              />*/}
             </div>
           )}
           <div className={`px-4 relative ${photos ? '' : 'pt-4 '}`}>

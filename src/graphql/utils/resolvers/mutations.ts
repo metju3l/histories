@@ -296,7 +296,12 @@ const mutations = {
 
     if (input.photo.length === 0) throw new Error('No photo');
 
-    const urls: Array<{ url: string; blurhash: string }> = await Promise.all(
+    const urls: Array<{
+      url: string;
+      blurhash: string;
+      width: number;
+      height: number;
+    }> = await Promise.all(
       input.photo.map(async (photo: any) => {
         const { createReadStream, mimetype } = await photo;
         // check if file is image

@@ -54,13 +54,6 @@ query user($username: String, $id: Int) {
       description
       postDate
       createdAt
-      author {
-        id
-        firstName
-        username
-        lastName
-        email
-      }
     }
   }
 }

@@ -209,6 +209,7 @@ export default gql`
     description: String
     hashtags: [Hashtag]
     url: [String!]!
+    blurhash: [String!]!
     id: Int!
     author: User!
     likes: [UserInfoMinimal]!
@@ -329,10 +330,6 @@ export default gql`
     id: Float!
     url: [String!]!
     description: String
-  }
-
-  type PostID {
-    id: Int!
   }
 
   type UserInfoMinimal {
