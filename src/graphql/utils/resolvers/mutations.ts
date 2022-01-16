@@ -7,6 +7,7 @@ import {
   LoginInput,
   UpdateProfileInput,
   ResetPasswordInput,
+  CreatePostInput,
 } from '../../../../.cache/__types__';
 import {
   ValidateComment,
@@ -43,6 +44,8 @@ import {
 import LastPost from '../../resolvers/lastPost';
 import { contextType, OnlyLogged, Validate } from './resolvers';
 import ResetPassword from '../../resolvers/User/Mutation/ResetPassword';
+import { GenerateBlurhash, NSFWCheck } from '../../../functions';
+import UrlPrefix from '../../../../shared/config/UrlPrefix';
 
 const mutations = {
   googleAuth: async (
@@ -259,14 +262,7 @@ const mutations = {
     {
       input,
     }: {
-      input: {
-        photo: any;
-        description: string;
-        hashtags: string;
-        photoDate: string;
-        longitude: number;
-        latitude: number;
-      };
+      input: CreatePostInput;
     },
     context: contextType
   ) => {
@@ -279,8 +275,10 @@ const mutations = {
     if (validateCoordinates) throw new Error(validateCoordinates);
 
     // check description
-    const validateDescription = ValidateDescription(input.description).error;
-    if (validateDescription) throw new Error(validateDescription);
+    if (input.description) {
+      const validateDescription = ValidateDescription(input.description).error;
+      if (validateDescription) throw new Error(validateDescription);
+    }
 
     // check date
     const validateDate = ValidateDate(Number(input.photoDate)).error;
@@ -294,43 +292,70 @@ const mutations = {
     )
       throw new Error('you can create post every 10sec');
 
-    if (input.photo.length === 0) throw new Error('No photo');
-
-    const urls: Array<{
-      url: string;
+    let containsNSFW: boolean = false;
+    const photos: Array<{
+      hash: string;
       blurhash: string;
       width: number;
       height: number;
+      index: number;
     }> = await Promise.all(
-      input.photo.map(async (photo: any) => {
+      input.photo.map(async (photo, index: number) => {
         const { createReadStream, mimetype } = await photo;
+
         // check if file is image
         if (!mimetype.startsWith('image/'))
           throw new Error('file is not a image');
 
-        const stream = await createReadStream();
-        // await upload stream
-        const buffer = await streamToPromise(stream);
+        const originalBuffer: Buffer = await streamToPromise(
+          createReadStream()
+        ); // await upload stream
 
-        const imageBuffer = await sharp(buffer)
+        const newBuffer: Promise<Buffer> = sharp(originalBuffer)
           .resize(2560, undefined, { withoutEnlargement: true })
-          // convert image format to jpeg
           .jpeg()
-          .toBuffer();
+          .toBuffer(); // downscale image and convert it to JPEG
 
-        return await UploadPhoto(imageBuffer);
+        async function UploadToIPFSAndNSFWCheck(buffer: Buffer): Promise<{
+          hash: string;
+          width: number;
+          height: number;
+        }> {
+          const photoData = await UploadPhoto(buffer); // upload photo to IPFS and get hash
+          // only check if all photos so far are not NSFW
+          if (!containsNSFW) {
+            const res = await NSFWCheck(UrlPrefix + photo.hash); //get result from API
+            if (res !== undefined && res > 0.8) containsNSFW = true; // if NSFW probability is more than 0.8 out of 1 set NSFW to true
+          }
+          return photoData;
+        }
+
+        // run blurhash generation and upload to IPFS concurrently
+        const [blurhash, photoData]: [
+          string,
+          {
+            hash: string;
+            width: number;
+            height: number;
+          }
+        ] = await Promise.all([
+          GenerateBlurhash(originalBuffer),
+          UploadToIPFSAndNSFWCheck(await newBuffer),
+        ]);
+
+        return { ...photoData, blurhash, index };
       })
     );
 
-    if (context.validToken)
-      CreatePost({
-        ...input,
-        userID: context.decoded.id,
-        url: urls,
-      });
-    else throw new Error('User is not logged');
-
-    return 'post created';
+    return await CreatePost({
+      coordinates: { latitude: input.latitude, longitude: input.longitude },
+      userID: context.decoded.id,
+      nsfw: containsNSFW,
+      photoDate: input.photoDate,
+      description: input.description,
+      hashtags: input.hashtags,
+      photos,
+    });
   },
 
   delete: async (

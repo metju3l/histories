@@ -1,6 +1,7 @@
 import * as blurhash from 'blurhash';
 import { createCanvas, Image, loadImage } from 'canvas';
 import { create, IPFSHTTPClient } from 'ipfs-http-client';
+import sharp from 'sharp';
 
 // get image dimensions
 function getImageData(image: Image) {
@@ -8,11 +9,6 @@ function getImageData(image: Image) {
   const context = canvas.getContext('2d');
   context.drawImage(image, 0, 0);
   return context.getImageData(0, 0, image.width, image.height);
-}
-
-// generate blurhash
-export async function GetBlurhash({ data, width, height }: ImageData) {
-  return blurhash.encode(data, width, height, 6, 6);
 }
 
 export function CreateInfuraClient(): IPFSHTTPClient {
@@ -47,15 +43,17 @@ async function UploadPhoto(photo: Buffer) {
   const client =
     process.env.IPFS_CLIENT == 'default' ? create() : CreateInfuraClient();
 
+  // use original image to get width and heigt
   const image = await loadImage(photo); // load image from buffer
   const imageData = getImageData(image); // get image data
 
-  const [url, blurhash] = await Promise.all([
-    client.add(photo),
-    GetBlurhash(imageData),
-  ]);
+  const uploaded = await client.add(photo);
 
-  return { url: url.path, blurhash, width: image.width, height: image.height };
+  return {
+    hash: uploaded.path,
+    width: imageData.width,
+    height: imageData.height,
+  };
 }
 
 export default UploadPhoto;

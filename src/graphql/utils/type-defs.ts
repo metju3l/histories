@@ -16,7 +16,6 @@ export default gql`
     "Search"
     search(input: SearchInput!): SearchResult!
 
-    userPosts(input: UserPostsInput!): [Post!]!
     personalizedPosts(input: PersonalizedPostsInput): [PersonalizedPost!]!
 
     "Returns place detail information"
@@ -157,7 +156,7 @@ export default gql`
   type PersonalizedPost {
     id: Int!
     description: String
-    url: [String]!
+    photos: [Photo!]!
     createdAt: Float!
     postDate: Float!
     edited: Boolean!
@@ -188,7 +187,7 @@ export default gql`
     longitude: Float!
     description: String
     name: String
-    preview: [String!]
+    preview: Photo!
     icon: String
     posts: [Post]!
     nearbyPlaces: [NearbyPlaces]!
@@ -203,16 +202,24 @@ export default gql`
     distance: Float!
   }
 
+  type Photo {
+    hash: String!
+    blurhash: String!
+    width: Int!
+    height: Int!
+    index: Int!
+    id: Float!
+  }
+
   type Post {
     createdAt: Float!
     postDate: Float!
     description: String
     hashtags: [Hashtag]
-    url: [String!]!
-    blurhash: [String!]!
     id: Int!
     author: User!
     likes: [UserInfoMinimal]!
+    photos: [Photo!]!
     liked: Boolean!
     place: Place!
     comments: [Comment]!
@@ -252,11 +259,6 @@ export default gql`
     bio: String
     password: String
     notificationSettings: NotificationsSettingsInput
-  }
-
-  input UserPostsInput {
-    id: Int!
-    offset: Int
   }
 
   input DeleteUserInput {
