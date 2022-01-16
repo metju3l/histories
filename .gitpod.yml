@@ -4,7 +4,7 @@ tasks:
     init: >
       yarn;
       docker-compose up -d;
-      cp .env.local.example .env.local;
+      cp .env.example .env.local;
       cp nodemon.json.example nodemon.json;
       yarn build;
       gp sync-done setup;
@@ -39,6 +39,14 @@ ports:
 
 vscode:
   extensions:
-    - 'pkief.material-icon-theme'
-    - 'bradlc.vscode-tailwindcss'
-    - 'esbenp.prettier-vscode'
+    - dbaeumer.vscode-eslint
+    - mikestead.dotenv
+    - graphql.vscode-graphql
+    - esbenp.prettier-vscode
+    - eamodio.gitlens
+    - pflannery.vscode-versionlens
+    - wix.vscode-import-cost
+    - formulahendry.auto-close-tag
+    - bradlc.vscode-tailwindcss
+    - bierner.markdown-preview-github-styles
+    - pkief.material-icon-theme

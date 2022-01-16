@@ -25,7 +25,7 @@ And it also is my high school final project.
 
 ### Setup dev server:
 
-1. copy `.env.local.example` to `.env.local` and change values
+1. copy `.env.example` to `.env.local` and change values
 2. copy `nodemon.json.example` to `nodemon.json` and change values
 3. install dependencies `yarn`
 4. setup environment `docker-compose up -d`
