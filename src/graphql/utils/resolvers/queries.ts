@@ -2,7 +2,7 @@ import FullTextSearch from '../../resolvers/Search/FullTextSearch';
 import {
   PersonalizedPostsInput,
   PlacesInput,
-  SearchInput, 
+  SearchInput,
 } from '../../../../.cache/__types__';
 import {
   CollectionQuery,

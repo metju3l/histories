@@ -22,11 +22,11 @@ export type SidebarPlaceType = {
   latitude: number;
   icon?: string | null;
   preview?: {
-    hash: string
-    blurhash: string
-    width: number
-    height: number
-  }
+    hash: string;
+    blurhash: string;
+    width: number;
+    height: number;
+  };
   description?: Maybe<string>;
 };
 
@@ -67,17 +67,17 @@ const Map: React.FC = () => {
               // exclude just places in bounds
               exclude: placesQuery.data?.places
                 ? placesQuery.data.places
-                  .filter(
-                    (place) =>
-                      place.latitude > bounds.minLatitude &&
-                      place.latitude < bounds.maxLatitude &&
-                      place.longitude > bounds.minLongitude &&
-                      place.longitude < bounds.maxLongitude &&
-                      placesQuery.data?.places.filter(
-                        (x) => x.id === place.id
-                      )
-                  )
-                  .map((place) => place.id)
+                    .filter(
+                      (place) =>
+                        place.latitude > bounds.minLatitude &&
+                        place.latitude < bounds.maxLatitude &&
+                        place.longitude > bounds.minLongitude &&
+                        place.longitude < bounds.maxLongitude &&
+                        placesQuery.data?.places.filter(
+                          (x) => x.id === place.id
+                        )
+                    )
+                    .map((place) => place.id)
                 : [],
             },
           },

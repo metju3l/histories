@@ -11,7 +11,6 @@ const Account = () => {
 
   const { data: loginContext } = React.useContext(LoginContext);
 
-
   return (
     <SettingsLayout
       current="security"
