@@ -16,7 +16,7 @@ export default gql`
     "Search"
     search(input: SearchInput!): SearchResult!
 
-    personalizedPosts(input: PersonalizedPostsInput): [PersonalizedPost!]!
+    personalizedPosts(input: PersonalizedPostsInput): [Post!]!
 
     "Returns place detail information"
     place(id: Int!): Place!
@@ -135,42 +135,6 @@ export default gql`
     take: Int!
   }
 
-  type PersonalizedPostAuthor {
-    id: Int!
-    bio: String
-    profile: String!
-    firstName: String!
-    lastName: String!
-    username: String!
-    createdAt: Float!
-  }
-
-  type PersonalizedPostComment {
-    id: Int!
-    content: String
-    author: PersonalizedPostAuthor!
-    edited: Boolean!
-    liked: String
-  }
-
-  type PersonalizedPost {
-    id: Int!
-    description: String
-    photos: [Photo!]!
-    createdAt: Float!
-    postDate: Float!
-    edited: Boolean!
-    nsfw: Boolean!
-    public: Boolean!
-    author: PersonalizedPostAuthor!
-    liked: String
-    likeCount: Int!
-    commentCount: Int!
-    comments: [PersonalizedPostComment]!
-    place: Place!
-    query: String
-  }
-
   input AddToCollectionInput {
     postId: Int!
     collectionId: Int!
@@ -218,7 +182,9 @@ export default gql`
     hashtags: [Hashtag]
     id: Int!
     author: User!
-    likes: [UserInfoMinimal]!
+    likes: [User!]!
+    likeCount: Int!
+    commentCount: Int!
     photos: [Photo!]!
     liked: Boolean!
     place: Place!
@@ -230,7 +196,7 @@ export default gql`
     createdAt: Float!
     content: String!
     liked: Boolean!
-    author: UserInfoMinimal!
+    author: User!
   }
 
   type Hashtag {
@@ -301,8 +267,8 @@ export default gql`
     postCount: Int!
     id: Float!
     hasPassword: Boolean!
-    following: [UserInfoMinimal]
-    followers: [UserInfoMinimal]
+    following: [User!]
+    followers: [User!]
     collections: [Collection]
     posts: [Post!]!
     notificationSettings: NotificationsSettings!
@@ -322,24 +288,10 @@ export default gql`
     followingCount: Int!
     postCount: Int!
     id: Float!
-    following: [UserInfoMinimal]
-    followers: [UserInfoMinimal]
+    following: [User!]!
+    followers: [User!]!
     collections: [Collection]
     posts: [Post!]!
-  }
-
-  type PostInfoNew {
-    id: Float!
-    url: [String!]!
-    description: String
-  }
-
-  type UserInfoMinimal {
-    id: Float!
-    username: String!
-    firstName: String!
-    lastName: String!
-    email: String!
   }
 
   type Collection {
@@ -349,8 +301,8 @@ export default gql`
     name: String!
     preview: String
     postCount: Int!
-    author: UserInfoMinimal!
-    posts: [PostInfoNew]!
+    author: User!
+    posts: [Post!]!
   }
 
   input UserInput {
