@@ -21,9 +21,7 @@ const ForgotPassword = async (login: string) => {
       name: login,
       passwordResetToken,
     },
-  });
-
-  console.log(user.records[0].get('user').email);
+  }); 
 
   // send email for verification
   await SendEmail(

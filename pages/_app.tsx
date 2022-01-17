@@ -17,6 +17,10 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 
   return (
     <ApolloProvider client={apolloClient}>
+      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+      <script
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
+      />
       <ThemeProvider attribute="class" defaultTheme="light">
         <NextNprogress
           color={orange_main}

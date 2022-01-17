@@ -78,7 +78,7 @@ async function CreatePost({
     params: {
       userID,
       description,
-      createdAt: new Date(0).getTime(),
+      createdAt: new Date().getTime(),
       postDate: photoDate,
       nsfw,
       public: !nsfw,
@@ -87,8 +87,6 @@ async function CreatePost({
       photos,
     },
   });
-
-  console.log(result.records[0]);
 
   const driver = DbConnector();
   const session = driver.session();

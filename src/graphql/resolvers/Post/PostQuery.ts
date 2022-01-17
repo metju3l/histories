@@ -67,8 +67,6 @@ const PostQuery = async ({
 
   const [result] = await RunCypherQuery({ query, params: { postId: id } });
 
-  console.log(result.records[0].get('post'));
-
   if (result.records[0] === undefined) throw new Error('Post does not exist');
   else return result.records[0].get('post');
 };

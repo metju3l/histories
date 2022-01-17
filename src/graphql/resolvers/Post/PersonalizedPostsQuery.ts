@@ -89,9 +89,7 @@ const PersonalizedPostsQuery = async ({
       skip: neo4j.int(skip),
       take: neo4j.int(take > 100 ? 100 : take), // disable fetching more than 100 posts at once
     },
-  });
-
-  console.log(result.records[0].get('posts'));
+  }); 
 
   return result.records[0].get('posts');
 };

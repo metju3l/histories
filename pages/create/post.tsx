@@ -228,30 +228,6 @@ const Login: FC = () => {
                 <div className="flex w-full">
                   <div className="flex flex-col p-2 gap-2">
                     <Search setSearchCoordinates={setSearchCoordinates} />
-                    <motion.div
-                      className="flex flex-col p-2 border border-gray-300 cursor-pointer gap-1 rounded-xl"
-                      animate={{ height: placeDetail ? '100%' : 'auto' }}
-                      transition={{
-                        duration: 0.2,
-                        ease: 'easeInOut',
-                      }}
-                    >
-                      <div
-                        className="flex items-center gap-1"
-                        onClick={() => setPlaceDetail(!placeDetail)}
-                      >
-                        <motion.span
-                          animate={{ rotate: placeDetail ? '270deg' : '90deg' }}
-                          transition={{
-                            duration: 0.2,
-                            ease: 'easeInOut',
-                          }}
-                        >
-                          <ArrowIcon className={'w-5 h-5 text-black'} />
-                        </motion.span>
-                        <a className="font-medium text-black">Selected place</a>
-                      </div>
-                    </motion.div>
                   </div>
                   <div className="w-full p-2">
                     <motion.div
