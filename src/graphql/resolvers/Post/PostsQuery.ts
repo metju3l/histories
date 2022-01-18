@@ -26,7 +26,7 @@ type queryInput = {
 
 const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
   const query = `
-  MATCH (place:Place)<-[:IS_LOCATED]-(post:Post)<-[:CREATED]-(author:User), (post)-[:CONTAINS]->(photo:Photo)
+  MATCH (place:Place)<-[:IS_LOCATED]-(post:Post)<-[:CREATED]-(author:User), (post)-[:CONTAINS]->(photo:Photo), (logged:User)
   WHERE (place.location.latitude >= $minLatitude OR $minLatitude IS NULL)                 // min latitude
     AND (place.location.latitude <= $maxLatitude OR $maxLatitude IS NULL)                 // max latitude
     AND (place.location.longitude >= $minLongitude OR $minLongitude IS NULL)              // min longitude
@@ -35,6 +35,7 @@ const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
     AND (ID(place) = $placeId OR $placeId IS NULL)                                        // place id
     AND (author.id = $authorId OR $authorId IS NULL)                                      // author id
     AND (author.username =~ $authorUsername OR $authorUsername IS NULL)                   // author id
+    ${loggedId ? `AND ID(logged) = ${loggedId}` : ''}
 
     CALL {
         WITH post
@@ -60,9 +61,12 @@ const PlacesQuery = async ({ filter, loggedId }: queryInput) => {
         RETURN COLLECT(DISTINCT photo{.*}) AS photos
     }
 
+
+ 
     RETURN COLLECT(DISTINCT post{.*,
         id: ID(post),
         likeCount,
+        liked: ${loggedId ? 'EXISTS((logged)-[:LIKE]->(post))' : 'false'},
         followerCount,
         followingCount,
         author: author{.*,id: ID(author)},

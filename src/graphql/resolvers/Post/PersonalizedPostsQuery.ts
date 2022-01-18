@@ -16,7 +16,7 @@ const PersonalizedPostsQuery = async ({
  
           ${
             logged !== null
-              ? 'WHERE ((user)-[:FOLLOW]->(author)) OR (user = author) AND ID(user) = $loggedID'
+              ? 'WHERE (((user)-[:FOLLOW]->(author)) OR (user = author)) AND ID(user) = $loggedID'
               : ''
           }
         
@@ -57,28 +57,25 @@ const PersonalizedPostsQuery = async ({
                 OPTIONAL MATCH (comment:Comment)-[:BELONGS_TO]->(post)
                 RETURN COUNT(DISTINCT comment) AS commentCount   // return count
             }
+ 
+            WITH post{.*,
+              id: ID(post),
+              likeCount,
+              liked: ${logged ? 'EXISTS((user)-[:LIKE]->(post))' : 'false'},
+              followerCount,
+              followingCount,
+              commentCount,   // total number of post comments
+              author: author{.*,id: ID(author)},
+              photos,
+              place: place{.*, 
+                  id: ID(place),
+                  latitude: place.location.latitude,  // latitude
+                  longitude: place.location.longitude,    // longitude
+                  postCount: placePostsCount
+              }
+          } AS post
 
-            CALL {
-              WITH user, post 
-              RETURN exists((user)-[:LIKE]->(post)) AS liked
-            }
-
-            RETURN COLLECT(DISTINCT post{.*,
-                id: ID(post),
-                likeCount,
-                liked,
-                followerCount,
-                followingCount,
-                commentCount,   // total number of post comments
-                author: author{.*,id: ID(author)},
-                photos,
-                place: place{.*, 
-                    id: ID(place),
-                    latitude: place.location.latitude,  // latitude
-                    longitude: place.location.longitude,    // longitude
-                    postCount: placePostsCount
-                }
-            })[$skip..$skip + $take] // limit array 
+            RETURN COLLECT(DISTINCT post)[$skip..$skip + $take] // limit array 
             AS posts `;
 
   const [result] = await RunCypherQuery({
@@ -89,7 +86,7 @@ const PersonalizedPostsQuery = async ({
       skip: neo4j.int(skip),
       take: neo4j.int(take > 100 ? 100 : take), // disable fetching more than 100 posts at once
     },
-  }); 
+  });
 
   return result.records[0].get('posts');
 };
