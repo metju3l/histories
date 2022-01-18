@@ -50,7 +50,7 @@ const PostsPage: React.FC<{
         },
       },
     },
-  }); 
+  });
 
   return (
     <UserLayout

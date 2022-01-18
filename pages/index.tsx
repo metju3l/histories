@@ -88,15 +88,9 @@ const PersonalizedPosts = () => {
         await refetch();
       }}
     >
-      {data?.personalizedPosts.map((post: any) => (
-        <Post
-          timeline
-          {...post}
-          key={post.id}
-          refetch={refetch}
-          photos={post.photos}
-        />
-      ))}
+      {data?.personalizedPosts.map(
+        (post) => post && <Post timeline {...post} key={post.id} />
+      )}
     </InfiniteScroll>
   );
 };

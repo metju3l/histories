@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Blurhash } from 'react-blurhash';
 import { IoIosMore } from 'react-icons/io';
 
+import { Maybe, Photo } from '../../../.cache/__types__';
 import {
   useLikeMutation,
   useUnlikeMutation,
@@ -12,14 +13,27 @@ import { LoginContext } from '../../../pages/_app';
 import UrlPrefix from '../../../shared/config/UrlPrefix';
 import { MiniUserCard } from '../tmp/MiniUserCard';
 import Card from '../UserPage/Card';
-import {
-  AddToCollectionModal,
-  LikePost,
-  PostProps,
-  PostTimeline,
-  UnlikePost,
-} from '.';
+import { AddToCollectionModal, LikePost, PostTimeline, UnlikePost } from '.';
 import OptionsMenu from './OptionsMenu';
+
+type PostProps = {
+  author: {
+    firstName: string;
+    lastName: string;
+    username: string;
+    profile: string;
+    id: number;
+  };
+  timeline?: boolean;
+  photos?: Array<Photo>;
+  createdAt: number;
+  description?: Maybe<string>;
+  likeCount: number;
+  commentCount: number;
+  postDate: number;
+  liked: boolean;
+  id: number;
+};
 
 const Post: React.FC<PostProps> = ({
   author,
@@ -32,42 +46,28 @@ const Post: React.FC<PostProps> = ({
   postDate,
   liked,
   id,
-  refetch,
 }) => {
   const loginContext = React.useContext(LoginContext);
 
-  const [visible, setVisible] = useState<null | 'deleted'>(null);
+  const [visible, setVisible] = useState<null | 'deleted'>(null); // show deleted card instead of post if post is deleted
   const [collectionSelectModal, setCollectionSelectModal] = useState(false);
 
-  // using local states to avoid refetching and provide faster response for user
-  const [localLikeState, setLocalLikeState] = useState<string | null>(liked);
-  const [localLikeCount, setLocalLikeCount] = useState<number>(likeCount);
+  const [localLikeState, setLocalLikeState] = useState<boolean>(liked); // using local states to avoid refetching and provide faster response for user
 
-  // like and unlike mutations
+  const likeCountWithoutMe = likeCount - (liked ? 1 : 0); // number of likes without logged user
+
+  // like and unlike mutations (they can only be created in the component (not in function))
   const [likeMutation] = useLikeMutation();
   const [unlikeMutation] = useUnlikeMutation();
-
-  // on refetch reset local states to value from graphql query
-  useEffect(() => {
-    setLocalLikeCount(likeCount);
-  }, [likeCount]);
-
-  useEffect(() => {
-    setLocalLikeState(liked);
-  }, [liked]);
 
   const onLike = async (type: string) => {
     // allow only when user is logged in
     if (loginContext.data?.me?.id)
       // runs like mutation and changes local states
       await LikePost({
-        type,
-        localLikeCount,
         localLikeState,
         id,
         likeMutation,
-        refetch,
-        setLocalLikeCount,
         setLocalLikeState,
       });
   };
@@ -77,12 +77,9 @@ const Post: React.FC<PostProps> = ({
     if (loginContext.data?.me?.id)
       // runs unlike mutation and changes local states
       await UnlikePost({
-        localLikeCount,
         localLikeState,
         id,
         unlikeMutation,
-        refetch,
-        setLocalLikeCount,
         setLocalLikeState,
       });
   };
@@ -112,7 +109,7 @@ const Post: React.FC<PostProps> = ({
           <p className="px-4 pt-2 font-medium">{description}</p>
           {photos && (
             <div className="relative w-full bg-white cursor-pointer dark:bg-black h-[360px] bg-secondary">
-              <div className="w-full flex justify-center">
+              <div className="flex justify-center w-full">
                 <Blurhash
                   hash={photos[0].blurhash}
                   width={photos[0].width > 598 ? 598 : photos[0].width}
@@ -156,15 +153,16 @@ const Post: React.FC<PostProps> = ({
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth="2"
-                            fill={
-                              localLikeState == 'like' ? 'currentColor' : 'none'
-                            }
+                            fill={localLikeState ? 'currentColor' : 'none'}
                             d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                           ></path>
                         </svg>
                       </span>
                     }
-                    {localLikeCount} stars
+                    {likeCountWithoutMe + (localLikeState ? 1 : 0)}{' '}
+                    {likeCountWithoutMe + (localLikeState ? 1 : 0) == 1
+                      ? 'like'
+                      : 'likes'}
                   </a>
                 </motion.button>
               </div>
