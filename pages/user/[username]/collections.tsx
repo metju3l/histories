@@ -17,6 +17,7 @@ import {
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Exact, InputMaybe, PostsInput } from '../../../.cache/__types__';
 import { ValidateUsername } from '../../../shared/validation';
@@ -33,7 +34,7 @@ const CollectionsPage: React.FC<{
   anonymous: boolean;
 }> = ({ userQuery }) => {
   const user = userQuery.user;
-
+  const { t } = useTranslation();
   return (
     <UserLayout
       user={user}
@@ -49,13 +50,13 @@ const CollectionsPage: React.FC<{
       <div className="flex justify-end w-full">
         <Link href="/create/post" passHref>
           <button className="flex items-center px-3 py-1 text-xs font-semibold text-gray-500 border border-gray-500 rounded-full gap-2 space-x-1.5 shadown-sm w-max">
-            <PlusIcon className="w-2 h-2" /> Create collection
+            <PlusIcon className="w-2 h-2" /> {t('create_collection')}
           </button>
         </Link>
       </div>
       <Card>
         <CollectionsIcon className="w-8 h-8" />
-        <div>{`${user.firstName} has not any public collections`}</div>
+        <div>{t('no_collections')}</div>
       </Card>
     </UserLayout>
   );

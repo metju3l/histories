@@ -53,21 +53,21 @@ const ForgotPassword: React.FC = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
         <Input
-          label={t('username or email')}
+          label={t('username_or_email')}
           register={register}
           name="login"
           options={{ required: true }}
           autoComplete="username"
         />
         <Button style="primary_solid" loading={loading}>
-          {t(loading ? 'loading' : 'Send Password Reset Link')}
+          {t(loading ? 'loading' : 'send_reset_password_link')}
         </Button>
 
         <Link href="/register">
-          <a className="pl-2 underline">{t('create new account')}</a>
+          <a className="pl-2 underline">{t('create_new_account')}</a>
         </Link>
         <Link href="/login">
-          <a className="pl-2 underline">{t('log in')}</a>
+          <a className="pl-2 underline">{t('login')}</a>
         </Link>
       </form>
     </AuthLayout>

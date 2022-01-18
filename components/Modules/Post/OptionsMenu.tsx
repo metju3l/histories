@@ -3,6 +3,7 @@ import { useUnfollowMutation } from '@graphql/relations.graphql';
 import { Menu, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 import { LoginContext } from '../../../pages/_app';
 import DropdownItem from '../Dropdown/DropdownItem';
@@ -23,6 +24,7 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
   children,
 }) => {
   const loginContext = React.useContext(LoginContext);
+  const { t } = useTranslation();
 
   const [deleteMutation] = useDeleteMutation();
   const [unfollowMutation] = useUnfollowMutation();
@@ -41,7 +43,7 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
             <>
               {/* DELETE */}
               <DropdownItem
-                text="Delete post"
+                text={t('delete_post')}
                 top
                 onClick={async () => {
                   try {
@@ -51,7 +53,7 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
                       },
                     });
                     setVisible('deleted');
-                    toast.success('Post deleted');
+                    toast.success(t('post_deleted'));
                   } catch (error: any) {
                     toast.error(error.message);
                   }
@@ -62,11 +64,11 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
             loginContext.data?.me?.id && (
               <>
                 {/* REPORT */}
-                <DropdownItem text="Report" top />
+                <DropdownItem text={t('report_post')} top />
 
                 {/* UNFOLLOW */}
                 <DropdownItem
-                  text="Unfollow"
+                  text={t('unfollow')}
                   onClick={async () => {
                     try {
                       await unfollowMutation({
@@ -74,7 +76,7 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
                           userID: author.id,
                         },
                       });
-                      toast.success('Unfollowed');
+                      toast.success(t('user_unfollowed'));
                     } catch (error: any) {
                       toast.error(error.message);
                     }
@@ -86,7 +88,7 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
           {/* GO TO POST */}
           <Menu.Item>
             <DropdownItem
-              text="Go to post"
+              text={t('go_to_post')}
               href={`/post/${id}`}
               top={!loginContext.data?.me?.id}
             />
@@ -95,19 +97,19 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
           {/* COPY LINK */}
           <Menu.Item>
             <DropdownItem
-              text="Copy link"
+              text={t('copy_link')}
               onClick={async () => {
                 await navigator.clipboard.writeText(
                   `https://www.histories.cc/post/${id}`
                 );
-                toast.success('Link copied to clipboard');
+                toast.success(t('link_copied'));
               }}
             />
           </Menu.Item>
 
           {/* CANCEL */}
           <Menu.Item>
-            <DropdownItem text="Cancel" onClick={() => {}} bottom />
+            <DropdownItem text={t('close')} onClick={() => {}} bottom />
           </Menu.Item>
         </Menu.Items>
       </Transition>

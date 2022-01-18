@@ -29,21 +29,21 @@ const Account = () => {
       <h3 className="text-2xl font-medium">{t('theme')}</h3>
       <div className="flex py-4 gap-6">
         <ThemeCard
-          title="Light"
+          title={t('light')}
           onClick={() => setTheme('light')}
           active={theme === 'light'}
         >
           Sun icon tbd
         </ThemeCard>
         <ThemeCard
-          title="Dark"
+          title={t('dark')}
           onClick={() => setTheme('dark')}
           active={theme === 'dark'}
         >
           Moon icon tbd
         </ThemeCard>
         <ThemeCard
-          title="System"
+          title={t('system')}
           onClick={() => setTheme('system')}
           active={theme === 'system'}
         >

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import FirstLetterUppercase from '../../lib/functions/FirstLetterUppercase';
 
@@ -8,8 +7,6 @@ const CheckboxElement: React.FC<{
   description: string;
   args?: React.HTMLProps<HTMLInputElement>;
 }> = ({ title, description, args }) => {
-  const { t } = useTranslation();
-
   return (
     <label className="inline-flex pb-4">
       <input
@@ -18,8 +15,8 @@ const CheckboxElement: React.FC<{
         {...args}
       />
       <div className="flex flex-col">
-        <div className="font-medium">{FirstLetterUppercase(t(title))}</div>
-        <div>{t(description)}</div>
+        <div className="font-medium">{FirstLetterUppercase(title)}</div>
+        <div>{description}</div>
       </div>
     </label>
   );

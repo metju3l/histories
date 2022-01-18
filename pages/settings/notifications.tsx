@@ -34,11 +34,13 @@ const Account = () => {
         },
       }}
     >
-      <h3 className="text-2xl font-medium">{t('email notifications')}</h3>
-      <p className="pb-4 text-base text-gray-500"></p>
+      <h3 className="text-2xl font-medium">{t('email_notifications')}</h3>
+      <p className="pb-4 text-base text-gray-500">
+        {t('email_notifications_description')}
+      </p>
       <CheckboxElement
-        title="New follower notifications"
-        description="Get notification whenever someone follows you"
+        title={t('email_notifications_new_followers')}
+        description={t('email_notifications_new_followers_description')}
         args={{
           defaultChecked: notificationSettings?.newFollower,
           onClick: async (e) =>
@@ -54,9 +56,8 @@ const Account = () => {
         }}
       />
       <CheckboxElement
-        title="Post from people you follow"
-        description="Get notification when some of people you follow creates new
-        post"
+        title={t('email_notifications_new_posts')}
+        description={t('email_notifications_new_posts_description')}
         args={{
           defaultChecked: notificationSettings?.followingUserPost,
           onClick: async (e) =>
@@ -72,8 +73,8 @@ const Account = () => {
         }}
       />
       <CheckboxElement
-        title="Post in places you follow"
-        description="Get notification when new post appends in places you follow"
+        title={t('email_notifications_places')}
+        description={t('email_notifications_places_description')}
         args={{
           defaultChecked: notificationSettings?.followingPlacePost,
           onClick: async (e) =>
@@ -89,8 +90,8 @@ const Account = () => {
         }}
       />
       <CheckboxElement
-        title="HiStories newsletter"
-        description="Get email newsletter with HiStories news"
+        title={t('email_notifications_histories_newsletter')}
+        description={t('email_notifications_histories_newsletter_description')}
         args={{
           defaultChecked: notificationSettings?.newsletter,
           onClick: async (e) =>

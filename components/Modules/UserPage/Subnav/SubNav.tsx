@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { LoginContext } from '../../../../pages/_app';
 import {
@@ -27,6 +28,8 @@ const SubNav: React.FC<UserSubNavProps> = ({
   // login context
   const loginContext = React.useContext(LoginContext);
 
+  const { t } = useTranslation();
+
   return (
     <div className="flex items-center justify-between w-full px-2 pt-2 transition-all duration-500 ease-in-out">
       <div className="flex flex-col flex-wrap sm:flex-row sm:gap-3 gap-5">
@@ -36,7 +39,7 @@ const SubNav: React.FC<UserSubNavProps> = ({
           name="posts"
         >
           <PostsIcon />
-          Posts
+          {t('posts')}
         </UserSubNavItem>
         <UserSubNavItem
           href={`/user/${user.username}/collections`}
@@ -44,7 +47,7 @@ const SubNav: React.FC<UserSubNavProps> = ({
           name="collections"
         >
           <CollectionsIcon className="w-4 h-4" />
-          Collections
+          {t('collections')}
         </UserSubNavItem>
         <UserSubNavItem
           href={`/user/${user.username}/map`}
@@ -52,7 +55,7 @@ const SubNav: React.FC<UserSubNavProps> = ({
           name="map"
         >
           <MapIcon />
-          {`${user.firstName}'s map`}
+          {`${user.firstName}'s ${t('map')}`}
         </UserSubNavItem>
         {loginContext.data?.me?.id === user.id && (
           <UserSubNavItem
@@ -61,7 +64,7 @@ const SubNav: React.FC<UserSubNavProps> = ({
             name="settings"
           >
             <SettingsIcon />
-            Settings
+            {t('settings')}
           </UserSubNavItem>
         )}
       </div>

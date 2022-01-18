@@ -3,6 +3,7 @@ import { Modal } from '@components/Modules/tmp/Modal';
 import { useAddToCollectionMutation } from '@graphql/relations.graphql';
 import React from 'react';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 export type AddToCollectionModalProps = {
   postId: number;
@@ -17,6 +18,7 @@ const AddToCollectionModal: React.FC<AddToCollectionModalProps> = ({
 }) => {
   const loginContext = React.useContext(LoginContext);
   const [addToCollectionMutation] = useAddToCollectionMutation();
+  const { t } = useTranslation();
 
   return (
     <Modal title="Save to" isOpen={isOpen} setOpenState={setOpenState}>
@@ -27,7 +29,7 @@ const AddToCollectionModal: React.FC<AddToCollectionModalProps> = ({
             onClick={async () => {
               try {
                 toast.success(
-                  'Post saved to ' + collection?.name ?? 'collection'
+                  t('post_saved_to') + ' ' + collection?.name ?? t('collection')
                 );
                 await addToCollectionMutation({
                   variables: {
