@@ -22,7 +22,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-2">
       <Input
-        label="First name"
+        label={t('first_name')}
         register={register}
         name="firstName"
         options={{ required: true, maxLength: 50 }}
@@ -30,7 +30,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       />
 
       <Input
-        label="Last name"
+        label={t('last_name')}
         register={register}
         name="lastName"
         options={{ required: true, maxLength: 50 }}
@@ -38,7 +38,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       />
 
       <Input
-        label="username"
+        label={t('username')}
         register={register}
         name="username"
         options={{ required: true, minLength: 3, maxLength: 50 }}
@@ -46,7 +46,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       />
 
       <Input
-        label="email"
+        label={t('email')}
         register={register}
         name="email"
         options={{ required: true }}
@@ -54,7 +54,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       />
 
       <Input
-        label="password"
+        label={t('password')}
         register={register}
         name="password"
         type="password"
@@ -63,7 +63,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       />
 
       <Input
-        label="Repeat password"
+        label={t('repeat_password')}
         register={register}
         name="repeatPassword"
         type="password"
@@ -77,18 +77,20 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           className="w-5 h-5 text-orange-600 rounded-lg form-checkbox"
           {...register('notifications')}
         />
-        <span className="ml-2 text-gray-700">Send me email updates</span>
+        <span className="ml-2 text-gray-700">
+          {t('send_email_notifications')}
+        </span>
       </label>
 
       <div className="mt-2 mb-2">
-        <Button loading={loading}>Sign up</Button>
+        <Button loading={loading}>{t('register')}</Button>
       </div>
       <GoogleAuthButton text={t('register')} />
       <Link href="/login">
-        <a className="pl-2 underline">login to an existing account</a>
+        <a className="pl-2 underline">{t('log_in_to_existing_account')}</a>
       </Link>
       <Link href="/forgot-password">
-        <a className="pl-2 underline">{t('forgot password')}</a>
+        <a className="pl-2 underline">{t('forgot_password')}</a>
       </Link>
     </form>
   );

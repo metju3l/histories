@@ -87,7 +87,7 @@ const Account: React.FC<{
     >
       <h3 className="text-2xl font-medium">{t('profile')}</h3>
       <p className="pb-4 text-base text-gray-500">
-        These informations will be visible to other users.
+        {t('profile_update_description')}
       </p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="pb-8 grid grid-cols-1 w-80 gap-2">
@@ -125,16 +125,16 @@ const Account: React.FC<{
             autoComplete="username"
           />
           <div className="mt-2 mb-2">
-            <Button loading={loading}>{t('save')}</Button>
+            <Button loading={loading}>{t('update_profile')}</Button>
           </div>
         </div>
       </form>
-      <h3 className="text-2xl font-medium">{t('delete account')}</h3>
+      <h3 className="text-2xl font-medium">{t('delete_account')}</h3>
       <p className="pb-4 text-base text-gray-500">
-        This action cannot be taken back.
+        {t('delete_account_description')}
       </p>
       <button className="block px-4 py-1 font-medium text-red-600 bg-red-200 border border-red-200 rounded-md">
-        {t('delete account')}
+        {t('delete_account')}
       </button>
     </SettingsLayout>
   );

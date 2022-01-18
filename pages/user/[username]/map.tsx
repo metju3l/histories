@@ -14,6 +14,7 @@ import Viewport from '@lib/types/viewport';
 import { GetServerSidePropsContext } from 'next';
 import { useTheme } from 'next-themes';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ReactMapGL from 'react-map-gl';
 
 import { Dark, Light, Satellite } from '../../../shared/config/MapStyles';
@@ -33,6 +34,7 @@ const UserMapPage: React.FC<{
     bearing: 0,
     pitch: 0,
   });
+  const { t } = useTranslation();
 
   const [mapStyle, setMapStyle] = React.useState<
     'theme' | 'light' | 'dark' | 'satellite'
@@ -71,9 +73,7 @@ const UserMapPage: React.FC<{
       <div className="flex flex-col w-full h-full gap-4">
         {postsTmp.length < 1 && (
           <Card warning>
-            <div>
-              {user.firstName} doesn{"'"}t have any posts on her map yet
-            </div>
+            <div>{t('no_posts')}</div>
           </Card>
         )}
         <ReactMapGL

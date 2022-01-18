@@ -61,7 +61,7 @@ const Login: React.FC = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
         <Input
-          label={t('username or email')}
+          label={t('username_or_email')}
           register={register}
           name="login"
           options={{ required: true }}
@@ -81,7 +81,7 @@ const Login: React.FC = () => {
 
         <GoogleAuthButton text={t('google_login')} />
         <Link href="/register">
-          <a className="pl-2 underline">{t('create new account')}</a>
+          <a className="pl-2 underline">{t('create_new_account')}</a>
         </Link>
         <Link href="/forgot-password">
           <a className="pl-2 underline">{t('forgot_password')}</a>

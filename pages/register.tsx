@@ -8,11 +8,12 @@ import Router from 'next/router';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 const Register: React.FC = () => {
   const [createAccount] = useCreateUserMutation(); // create new user mutation
   const [loading, setLoading] = useState(false); // loading after submit
-
+  const { t } = useTranslation(); // translation
   const {
     register,
     handleSubmit,
@@ -21,7 +22,7 @@ const Register: React.FC = () => {
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
     if (data.password !== data.repeatPassword) {
-      toast.error('Passwords must match');
+      toast.error(t('passwords_not_match'));
       return;
     }
 
