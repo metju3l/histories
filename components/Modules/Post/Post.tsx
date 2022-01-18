@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { Blurhash } from 'react-blurhash';
+import { useTranslation } from 'react-i18next';
 import { IoIosMore } from 'react-icons/io';
 
 import { Maybe, Photo } from '../../../.cache/__types__';
@@ -53,7 +54,7 @@ const Post: React.FC<PostProps> = ({
   const [collectionSelectModal, setCollectionSelectModal] = useState(false);
 
   const [localLikeState, setLocalLikeState] = useState<boolean>(liked); // using local states to avoid refetching and provide faster response for user
-
+  const { t } = useTranslation();
   const likeCountWithoutMe = likeCount - (liked ? 1 : 0); // number of likes without logged user
 
   // like and unlike mutations (they can only be created in the component (not in function))
@@ -87,7 +88,7 @@ const Post: React.FC<PostProps> = ({
   if (visible === 'deleted')
     return (
       <Card>
-        <div>This post was deleted</div>
+        <div>{t('post_deleted')}</div>
       </Card>
     );
 
@@ -160,9 +161,7 @@ const Post: React.FC<PostProps> = ({
                       </span>
                     }
                     {likeCountWithoutMe + (localLikeState ? 1 : 0)}{' '}
-                    {likeCountWithoutMe + (localLikeState ? 1 : 0) == 1
-                      ? 'like'
-                      : 'likes'}
+                    {t('likes_count')}
                   </a>
                 </motion.button>
               </div>
@@ -184,7 +183,7 @@ const Post: React.FC<PostProps> = ({
                     />
                   </svg>
                 </span>
-                <span>{`${commentCount} comments`} </span>
+                <span>{`${commentCount} ${t('comments_count')}`} </span>
               </div>
               <div className="flex items-center text-base gap-2">
                 <span onClick={() => setCollectionSelectModal(true)}>

@@ -8,9 +8,8 @@ import GoogleLogin, {
   GoogleLoginResponseOffline,
 } from 'react-google-login';
 import toast from 'react-hot-toast';
-import { useTranslation } from 'react-i18next';
 
-const GoogleAuthButton: React.FC = () => {
+const GoogleAuthButton: React.FC<{ text: string }> = ({ text }) => {
   const [googleAuth] = useGoogleAuthMutation();
 
   async function OnSubmit(
@@ -39,7 +38,9 @@ const GoogleAuthButton: React.FC = () => {
     process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? (
       <GoogleLogin
         clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
-        render={(renderProps) => <WithGoogle renderProps={renderProps} />}
+        render={(renderProps) => (
+          <WithGoogle renderProps={renderProps} text={text} />
+        )}
         buttonText=""
         onSuccess={OnSubmit}
         onFailure={() => toast.error('Google registration failed')}
@@ -54,9 +55,8 @@ const WithGoogle: React.FC<{
     onClick: () => void;
     disabled?: boolean | undefined;
   };
-}> = ({ renderProps }) => {
-  const { t } = useTranslation();
-
+  text: string;
+}> = ({ renderProps, text }) => {
   return (
     <button
       onClick={renderProps.onClick}
@@ -72,7 +72,7 @@ const WithGoogle: React.FC<{
         quality={60}
       />
 
-      <a>{t('register')}</a>
+      <a>{text}</a>
     </button>
   );
 };

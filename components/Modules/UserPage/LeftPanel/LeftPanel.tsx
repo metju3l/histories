@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 import { Maybe } from '../../../../.cache/__types__';
 import { LoginContext } from '../../../../pages/_app';
@@ -43,6 +44,7 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
     user.followerCount - (user.isFollowing ? 1 : 0);
 
   const loginContext = React.useContext(LoginContext);
+  const { t } = useTranslation();
 
   return (
     <div className="relative top-0 lg:sticky lg:col-span-4 md:col-span-12 col-span-12">
@@ -83,13 +85,13 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
             129600000 && (
             <Tooltip text="This account was created less than 2 days ago">
               <div className="items-center block px-3 py-1 text-xs font-semibold text-green-500 bg-white border border-green-500 rounded-full space-x-1.5 dark:bg-gray-800 shadown-sm dark:border-gray-700 w-max">
-                new user
+                {t('new_user')}
               </div>
             </Tooltip>
           )}
           {user.verified && (
             <div className="items-center block px-3 py-1 text-xs font-semibold text-green-500 border border-green-500 rounded-full space-x-1.5 shadown-sm w-max">
-              verified
+              {t('verified_user')}
             </div>
           )}
         </div>
@@ -101,7 +103,7 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
               {followerCountWithoutMe + (localFollowingState ? 1 : 0)}
             </span>
             <span className="text-gray-500 dark:text-gray-400">
-              {' Followers'}
+              {t('followers')}
             </span>
           </h4>
           {/* FOLLOWING COUNT */}
@@ -110,7 +112,7 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
               {user.followingCount}
             </span>
             <span className="text-gray-500 dark:text-gray-400">
-              {' Following'}
+              {t('following')}
             </span>
           </h4>
           {/* POSTS COUNT */}
@@ -119,7 +121,7 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
               {user.postCount}
             </span>
             <span className="text-gray-500 dark:text-gray-400">
-              {user.postCount == 1 ? ' Post' : ' Posts'}
+              {t('post_count')}
             </span>
           </h4>
         </p>
@@ -131,7 +133,7 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
         {loginContext.data?.me?.id === user.id ? (
           <Link href="/settings" passHref>
             <button className="items-center block px-3 py-1 mt-6 text-xs font-semibold text-gray-500 border border-gray-500 rounded-full space-x-1.5 shadown-sm w-max">
-              Edit profile
+              {t('edit_profile')}
             </button>
           </Link>
         ) : (
@@ -162,7 +164,7 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
                 }
               }}
             >
-              {localFollowingState ? 'Unfollow' : 'Follow'}
+              {localFollowingState ? t('unfollow') : t('follow')}
             </Button>
           )
         )}

@@ -79,7 +79,7 @@ const Login: React.FC = () => {
           {t(loading ? 'loading' : 'login')}
         </Button>
 
-        <GoogleAuthButton />
+        <GoogleAuthButton text={t('google_login')} />
         <Link href="/register">
           <a className="pl-2 underline">{t('create new account')}</a>
         </Link>
