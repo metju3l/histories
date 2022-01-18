@@ -85,7 +85,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       <div className="mt-2 mb-2">
         <Button loading={loading}>{t('register')}</Button>
       </div>
-      <GoogleAuthButton text={t('register')} />
+      <GoogleAuthButton text={t('google_register')} />
       <Link href="/login">
         <a className="pl-2 underline">{t('log_in_to_existing_account')}</a>
       </Link>

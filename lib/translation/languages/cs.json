@@ -84,6 +84,7 @@
   "username_or_email": "Uživatelské jméno nebo e-mail",
   "password_required": "Heslo je povinné",
   "google_login": "Přihlásit se přes Google",
+  "google_register": "Zaregistrovat se přes Google",
   "create_new_account": "Vytvořit nový účet",
   "forgot_password": "Zapomenuté heslo?",
   "passwords_not_match": "Hesla se neshodují",
