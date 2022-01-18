@@ -1,4 +1,5 @@
 import { useDeleteMutation } from '@graphql/post.graphql';
+import { useUnfollowMutation } from '@graphql/relations.graphql';
 import { Menu, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { toast } from 'react-hot-toast';
@@ -24,6 +25,7 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
   const loginContext = React.useContext(LoginContext);
 
   const [deleteMutation] = useDeleteMutation();
+  const [unfollowMutation] = useUnfollowMutation();
 
   return (
     <Menu as="div" className="relative">
@@ -63,7 +65,21 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
                 <DropdownItem text="Report" top />
 
                 {/* UNFOLLOW */}
-                <DropdownItem text="Unfollow" />
+                <DropdownItem
+                  text="Unfollow"
+                  onClick={async () => {
+                    try {
+                      await unfollowMutation({
+                        variables: {
+                          userID: author.id,
+                        },
+                      });
+                      toast.success('Unfollowed');
+                    } catch (error: any) {
+                      toast.error(error.message);
+                    }
+                  }}
+                />
               </>
             )
           )}

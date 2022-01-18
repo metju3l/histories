@@ -9,6 +9,7 @@ export type InputProps = {
   autoComplete?: string;
   label?: string;
   disabled?: boolean;
+  placeholder?: string;
 };
 
 const Input: React.FC<InputProps> = ({
@@ -19,6 +20,7 @@ const Input: React.FC<InputProps> = ({
   autoComplete,
   label,
   disabled,
+  placeholder,
 }) => {
   return (
     <label htmlFor={name}>
@@ -30,6 +32,7 @@ const Input: React.FC<InputProps> = ({
         id={name}
         type={type}
         disabled={disabled}
+        placeholder={placeholder}
         className="w-full h-10 px-3 mt-2 mb-1 leading-tight text-gray-700 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
         {...register(name, options)}
         autoComplete={autoComplete}
