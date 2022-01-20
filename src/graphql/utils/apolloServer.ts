@@ -6,7 +6,7 @@ import schema from './schema';
 
 const apolloServer = new ApolloServer({
   schema,
-    introspection: true, 
+  introspection: true,
   plugins: [
     // graphql playground
     ApolloServerPluginLandingPageGraphQLPlayground({

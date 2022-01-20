@@ -21,7 +21,7 @@ const ForgotPassword = async (login: string) => {
       name: login,
       passwordResetToken,
     },
-  }); 
+  });
 
   // send email for verification
   await SendEmail(
