@@ -52,10 +52,10 @@ const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
           : Light
         : // explicit map styles
         mapStyle === 'dark'
-        ? Dark
-        : mapStyle === 'satellite'
-        ? Satellite
-        : Light,
+          ? Dark
+          : mapStyle === 'satellite'
+            ? Satellite
+            : Light,
     mapboxApiAccessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN, // MAPBOX API ACCESS TOKEN
   };
 
@@ -87,14 +87,12 @@ const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
             >
               <div className="relative">
                 <div
-                  className={`absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 ${
-                    place.icon ? 'w-24 h-24' : 'w-16 h-16'
-                  }
-                ${
-                  mapContext.hoverPlaceId === place.id && !place.icon
-                    ? 'border-black'
-                    : 'border-transparent'
-                }
+                  className={`absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 ${place.icon ? 'w-24 h-24' : 'w-16 h-16'
+                    }
+                ${mapContext.hoverPlaceId === place.id && !place.icon
+                      ? 'border-black'
+                      : 'border-transparent'
+                    }
                 `}
                   onMouseEnter={() => mapContext.setHoverPlaceId(place.id)}
                   onMouseLeave={() => mapContext.setHoverPlaceId(null)}
@@ -105,6 +103,7 @@ const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
                       src={UrlPrefix + place.icon}
                       width={90}
                       height={90}
+                      loading='eager'
                       objectFit="contain"
                       alt="Picture on map"
                       quality={10}
@@ -115,6 +114,7 @@ const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
                       src={UrlPrefix + place.preview.hash}
                       layout="fill"
                       objectFit="cover"
+                      loading='eager'
                       objectPosition="center"
                       className="rounded-full"
                       alt="Picture on map"

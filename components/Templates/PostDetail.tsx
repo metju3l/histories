@@ -46,6 +46,7 @@ const PostDetail: React.FC<{ id: number }> = ({ id }) => {
                 layout="fill"
                 objectFit="contain"
                 objectPosition="center"
+                loading='eager'
                 alt="Profile picture"
               />
             </div>

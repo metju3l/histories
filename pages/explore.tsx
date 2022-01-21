@@ -44,13 +44,13 @@ const PostCard: React.FC<{ id: number; index: number }> = ({ id, index }) => {
 
   return (
     <div
-      className={`relative w-full  ${
-        index === 1 ? 'col-span-2 row-span-2 h-[40rem]' : 'h-80'
-      }`}
+      className={`relative w-full  ${index === 1 ? 'col-span-2 row-span-2 h-[40rem]' : 'h-80'
+        }`}
     >
       <Image
         src={UrlPrefix + data!.post.photos[0].hash}
         layout="fill"
+        loading='eager'
         alt="image"
         objectFit="cover"
       />

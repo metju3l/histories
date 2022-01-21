@@ -125,6 +125,7 @@ const Post: React.FC<PostProps> = ({
                 objectFit="contain"
                 placeholder="blur"
                 blurDataURL={'https://ipfs.io/ipfs' + photos[0].hash}
+                loading='eager'
                 objectPosition="center"
                 alt="Profile picture"
               />

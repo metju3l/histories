@@ -26,6 +26,7 @@ const PlaceDetail: React.FC<{
           {sidebarPlace.preview && (
             <Image
               src={UrlPrefix + sidebarPlace.preview.hash}
+              loading='eager'
               layout="fill"
               objectFit="cover"
               objectPosition="center"
@@ -62,6 +63,7 @@ const PlaceDetail: React.FC<{
                       <Image
                         src={UrlPrefix + post.photos[0].hash}
                         layout="fill"
+                        loading='eager'
                         objectFit="cover"
                         objectPosition="center"
                         className="rounded-t-lg"

@@ -16,6 +16,7 @@ const AboutPage: React.FC = () => {
         <div className="relative flex justify-center h-16">
           <Image
             src="/logo/big-black.svg"
+            loading='eager'
             alt="Histories logo"
             layout="fill"
             objectFit="contain"
@@ -57,6 +58,8 @@ const AboutPage: React.FC = () => {
               <Image
                 src="/assets/tablet.png"
                 alt="tablet"
+                placeholder="blur"
+                loading='eager'
                 layout="fill"
                 objectFit="contain"
               />
@@ -80,6 +83,9 @@ const AboutPage: React.FC = () => {
               <Image
                 src="/assets/notebook.png"
                 alt="tablet"
+                loading='eager'
+                placeholder="blur"
+
                 layout="fill"
                 objectFit="contain"
               />
@@ -100,8 +106,10 @@ const AboutPage: React.FC = () => {
             <div className="grid grid-cols-2 h-80 w-full">
               <div className="relative w-full h-80">
                 <Image
+                  placeholder="blur"
                   src="/assets/iphone.png"
                   alt="tablet"
+                  loading='eager'
                   layout="fill"
                   objectFit="contain"
                 />
@@ -109,6 +117,8 @@ const AboutPage: React.FC = () => {
               <div className="relative w-full h-80">
                 <Image
                   src="/assets/pixel.png"
+                  loading='eager'
+                  placeholder="blur"
                   alt="tablet"
                   layout="fill"
                   objectFit="contain"

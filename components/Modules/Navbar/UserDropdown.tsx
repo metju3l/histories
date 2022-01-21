@@ -30,6 +30,7 @@ const UserDropdown: React.FC = () => {
           }
           layout="fill"
           objectFit="contain"
+          loading='eager'
           objectPosition="center"
           alt="Profile picture"
           quality={40}
