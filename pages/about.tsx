@@ -1,8 +1,14 @@
-import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import React from 'react';
 import { AiFillAndroid } from 'react-icons/ai';
+
 import NavbarItem from '../components/Modules/Navbar/NavbarItem';
+import IphoneImage from '../public/assets/iphone.png';
+import NotebookImage from '../public/assets/notebook.png';
+import AndroidImage from '../public/assets/pixel.png';
+import TabletImage from '../public/assets/tablet.png';
+import LogoWhite from '../public/logo/big-black.svg';
 
 const AboutPage: React.FC = () => {
   return (
@@ -15,8 +21,7 @@ const AboutPage: React.FC = () => {
       <div className="p-12 pt-36 max-w-6xl m-auto">
         <div className="relative flex justify-center h-16">
           <Image
-            src="/logo/big-black.svg"
-            loading='eager'
+            src={LogoWhite}
             alt="Histories logo"
             layout="fill"
             objectFit="contain"
@@ -56,10 +61,9 @@ const AboutPage: React.FC = () => {
             {/* IAMGE */}
             <div className="relative w-full h-80">
               <Image
-                src="/assets/tablet.png"
+                src={TabletImage}
                 alt="tablet"
                 placeholder="blur"
-                loading='eager'
                 layout="fill"
                 objectFit="contain"
               />
@@ -81,11 +85,9 @@ const AboutPage: React.FC = () => {
             {/* IAMGE */}
             <div className="relative w-full h-80">
               <Image
-                src="/assets/notebook.png"
+                src={NotebookImage}
                 alt="tablet"
-                loading='eager'
                 placeholder="blur"
-
                 layout="fill"
                 objectFit="contain"
               />
@@ -107,17 +109,15 @@ const AboutPage: React.FC = () => {
               <div className="relative w-full h-80">
                 <Image
                   placeholder="blur"
-                  src="/assets/iphone.png"
+                  src={IphoneImage}
                   alt="tablet"
-                  loading='eager'
                   layout="fill"
                   objectFit="contain"
                 />
               </div>
               <div className="relative w-full h-80">
                 <Image
-                  src="/assets/pixel.png"
-                  loading='eager'
+                  src={AndroidImage}
                   placeholder="blur"
                   alt="tablet"
                   layout="fill"
