@@ -4,11 +4,12 @@ import React from 'react';
 import { AiFillAndroid } from 'react-icons/ai';
 
 import NavbarItem from '../components/Modules/Navbar/NavbarItem';
+import CityImage from '../public/assets/city.png';
 import IphoneImage from '../public/assets/iphone.png';
 import NotebookImage from '../public/assets/notebook.png';
 import AndroidImage from '../public/assets/pixel.png';
 import TabletImage from '../public/assets/tablet.png';
-import LogoWhite from '../public/logo/big-black.svg';
+import LogoBlack from '../public/logo/big-black.svg';
 
 const AboutPage: React.FC = () => {
   return (
@@ -18,10 +19,21 @@ const AboutPage: React.FC = () => {
           <NavbarItem text="Home" href="/" active={false} />
         </div>
       </nav>
+      <div className="absolute left-0 w-full h-screen z-[-10]">
+        <Image
+          src={CityImage}
+          alt="city"
+          placeholder="blur"
+          layout="fill"
+          objectFit="cover"
+          className="m-auto"
+        />
+      </div>
+
       <div className="p-12 pt-36 max-w-6xl m-auto">
         <div className="relative flex justify-center h-16">
           <Image
-            src={LogoWhite}
+            src={LogoBlack}
             alt="Histories logo"
             layout="fill"
             objectFit="contain"
@@ -29,7 +41,7 @@ const AboutPage: React.FC = () => {
         </div>
 
         {/* ABOUT */}
-        <div className="flex text-6xl pt-20 flex-col items-center gap-6">
+        <div className="flex text-6xl pt-20 flex-col items-center gap-6 pt-[50vh]">
           <h1 className="text-6xl font-semibold">About</h1>
         </div>
         <p className="pt-4 text-xl">
