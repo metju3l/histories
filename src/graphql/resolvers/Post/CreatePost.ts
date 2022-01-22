@@ -54,6 +54,8 @@ async function CreatePost({
       location: point({longitude: $longitude, latitude: $latitude, srid: 4326})
     })
     MERGE (post)-[:IS_LOCATED]->(place)
+    SET post.id = ID(post)
+    SET place.id = ID(place)
   
     ${
       // connect properties from array to one string
@@ -61,13 +63,14 @@ async function CreatePost({
         .map(
           (photo) => `
         // create photos and connect to post
-        MERGE (post)-[:CONTAINS]->(:Photo {
+        MERGE (post)-[:CONTAINS]->(photo:Photo {
           index: ${photo.index},
           hash: "${photo.hash}",
           blurhash: "${photo.blurhash}",
           width: ${photo.width},
           height: ${photo.height}
         })
+        SET photo.id = ID(photo)
       `
         )
         .join('\n')

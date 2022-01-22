@@ -292,13 +292,13 @@ const mutations = {
     )
       throw new Error('you can create post every 10sec');
 
-    let containsNSFW: boolean = false;
     const photos: Array<{
       hash: string;
       blurhash: string;
       width: number;
       height: number;
       index: number;
+      containsNSFW: boolean;
     }> = await Promise.all(
       input.photo.map(async (photo, index: number) => {
         const { createReadStream, mimetype } = await photo;
@@ -320,14 +320,16 @@ const mutations = {
           hash: string;
           width: number;
           height: number;
+          containsNSFW: boolean;
         }> {
           const photoData = await UploadPhoto(buffer); // upload photo to IPFS and get hash
           // only check if all photos so far are not NSFW
-          if (!containsNSFW) {
-            const res = await NSFWCheck(UrlPrefix + photo.hash); //get result from API
-            if (res !== undefined && res > 0.8) containsNSFW = true; // if NSFW probability is more than 0.8 out of 1 set NSFW to true
-          }
-          return photoData;
+
+          const res = await NSFWCheck(UrlPrefix + photoData.hash); //get result from API
+          console.log(res, UrlPrefix + photoData.hash);
+          const containsNSFW: boolean = res !== undefined && res > 0.8; // if NSFW probability is more than 0.8 out of 1 set NSFW to true
+
+          return { ...photoData, containsNSFW };
         }
 
         // run blurhash generation and upload to IPFS concurrently
@@ -337,6 +339,7 @@ const mutations = {
             hash: string;
             width: number;
             height: number;
+            containsNSFW: boolean;
           }
         ] = await Promise.all([
           GenerateBlurhash(originalBuffer),
@@ -346,6 +349,8 @@ const mutations = {
         return { ...photoData, blurhash, index };
       })
     );
+
+    const containsNSFW = photos.some((photo) => photo.containsNSFW);
 
     return await CreatePost({
       coordinates: { latitude: input.latitude, longitude: input.longitude },

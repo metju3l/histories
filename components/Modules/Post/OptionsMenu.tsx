@@ -47,12 +47,13 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
                 top
                 onClick={async () => {
                   try {
+                    setVisible('deleted');
+
                     await deleteMutation({
                       variables: {
                         id,
                       },
                     });
-                    setVisible('deleted');
                     toast.success(t('post_deleted'));
                   } catch (error: any) {
                     toast.error(error.message);
