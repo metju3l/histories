@@ -249,7 +249,7 @@ const MapMarker: React.FC<MapMarkerProps> = ({
                 onLoadingComplete={() => setLoadingImage(false)}
                 objectFit="cover"
                 objectPosition="center"
-                className="rounded-full p-4"
+                className="p-4 rounded-full"
                 alt="Picture on map"
               />
             </>

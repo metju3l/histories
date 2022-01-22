@@ -31,7 +31,7 @@ const Post: React.FC<MiniUserCardProps> = ({
         <div className="relative w-10 h-10 rounded-full cursor-pointer bg-secondary">
           <Image
             src={profile.startsWith('http') ? profile : UrlPrefix + profile}
-            loading='eager'
+            loading="eager"
             layout="fill"
             objectFit="contain"
             objectPosition="center"

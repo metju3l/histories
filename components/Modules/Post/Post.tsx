@@ -3,6 +3,7 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { Blurhash } from 'react-blurhash';
 import { useTranslation } from 'react-i18next';
+import { HiHeart, HiOutlineHeart } from 'react-icons/hi';
 import { IoIosMore } from 'react-icons/io';
 
 import { Maybe, Photo } from '../../../.cache/__types__';
@@ -125,7 +126,7 @@ const Post: React.FC<PostProps> = ({
                 objectFit="contain"
                 placeholder="blur"
                 blurDataURL={'https://ipfs.io/ipfs' + photos[0].hash}
-                loading='eager'
+                loading="eager"
                 objectPosition="center"
                 alt="Profile picture"
               />
@@ -142,25 +143,9 @@ const Post: React.FC<PostProps> = ({
                   }}
                 >
                   <a className="flex items-center text-base gap-1">
-                    {
-                      <span className="text-red-500">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          aria-hidden="true"
-                          className="w-5 h-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            fill={localLikeState ? 'currentColor' : 'none'}
-                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                          ></path>
-                        </svg>
-                      </span>
-                    }
+                    <span className="text-red-500">
+                      {localLikeState ? <HiHeart /> : <HiOutlineHeart />}
+                    </span>
                     {likeCountWithoutMe + (localLikeState ? 1 : 0)}{' '}
                     {t('likes_count')}
                   </a>

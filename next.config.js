@@ -35,7 +35,13 @@ module.exports = withPWA({
   },
   images: {
     formats: ['image/avif', 'image/webp'],
-    domains: ['avatars.dicebear.com', 'ipfs.io', 'ipfs.infura.io', 'localhost'],
+    domains: [
+      'avatars.dicebear.com',
+      'ipfs.io',
+      'ipfs.infura.io',
+      'images.weserv.nl',
+      'localhost',
+    ],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 512, 768, 1024, 1280],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     minimumCacheTTL: 60 * 60 * 24 * 30,

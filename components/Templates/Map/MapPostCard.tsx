@@ -25,8 +25,9 @@ const MapPostCard: React.FC<{
 
   return (
     <motion.div
-      className={`flex flex-col w-full h-64 bg-white border border-gray-200 rounded-lg ${mapContext.hoverPlaceId === place.id ? 'border-black shadow-sm' : ''
-        }`}
+      className={`flex flex-col w-full h-64 bg-white border border-gray-200 rounded-lg ${
+        mapContext.hoverPlaceId === place.id ? 'border-black shadow-sm' : ''
+      }`}
       onClick={() => mapContext.setSidebarPlace(place)}
       onMouseEnter={() => mapContext.setHoverPlaceId(place.id)}
       onMouseLeave={() => mapContext.setHoverPlaceId(null)}
@@ -44,7 +45,7 @@ const MapPostCard: React.FC<{
             layout="fill"
             objectFit="cover"
             objectPosition="center"
-            loading='eager'
+            loading="eager"
             className="rounded-t-lg"
             alt="Profile picture"
           />

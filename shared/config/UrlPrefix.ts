@@ -1,4 +1,5 @@
 const UrlPrefix =
-  process.env.NEXT_PUBLIC_IPFS_GATEWAY ?? 'https://ipfs.io/ipfs/';
+  'https://images.weserv.nl/?url=' +
+  (process.env.NEXT_PUBLIC_IPFS_GATEWAY ?? 'https://ipfs.io/ipfs/');
 
 export default UrlPrefix;

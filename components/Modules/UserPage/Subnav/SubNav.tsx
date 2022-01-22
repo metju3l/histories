@@ -1,14 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LoginContext } from '../../../../pages/_app';
 import {
   BarsIcon,
   CollectionsIcon,
   GridIcon,
   MapIcon,
   PostsIcon,
-  SettingsIcon,
 } from '../../../icons';
 import UserSubNavItem from './SubNavItem';
 
@@ -25,9 +23,6 @@ const SubNav: React.FC<UserSubNavProps> = ({
   view,
   setView,
 }) => {
-  // login context
-  const loginContext = React.useContext(LoginContext);
-
   const { t } = useTranslation();
 
   return (
@@ -57,16 +52,6 @@ const SubNav: React.FC<UserSubNavProps> = ({
           <MapIcon />
           {`${user.firstName}'s ${t('map')}`}
         </UserSubNavItem>
-        {loginContext.data?.me?.id === user.id && (
-          <UserSubNavItem
-            href={`/settings`}
-            currentTab={currentTab}
-            name="settings"
-          >
-            <SettingsIcon />
-            {t('settings')}
-          </UserSubNavItem>
-        )}
       </div>
       <div onClick={() => setView(view === 'list' ? 'grid' : 'list')}>
         {view === 'list' ? (

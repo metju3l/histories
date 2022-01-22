@@ -30,7 +30,7 @@ const AboutPage: React.FC = () => {
         />
       </div>
 
-      <div className="p-12 pt-36 max-w-6xl m-auto">
+      <div className="max-w-6xl p-12 m-auto pt-36">
         <div className="relative flex justify-center h-16">
           <Image
             src={LogoBlack}
@@ -41,7 +41,7 @@ const AboutPage: React.FC = () => {
         </div>
 
         {/* ABOUT */}
-        <div className="flex text-6xl pt-20 flex-col items-center gap-6 pt-[50vh]">
+        <div className="flex flex-col items-center pt-20 text-6xl gap-6 pt-[50vh]">
           <h1 className="text-6xl font-semibold">About</h1>
         </div>
         <p className="pt-4 text-xl">
@@ -59,14 +59,14 @@ const AboutPage: React.FC = () => {
           .
         </p>
         {/* DOWNLAOD */}
-        <div className="flex text-6xl pt-20 flex-col items-center gap-6">
+        <div className="flex flex-col items-center pt-20 text-6xl gap-6">
           <h1 className="text-6xl font-semibold">Download</h1>
           <h3 className="text-4xl">Use Histories anytime anywhere</h3>
         </div>
         {/* DOWNLOAD GRID */}
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-4 pt-20">
+        <div className="pt-20 grid md:grid-cols-3 grid-cols-1 gap-4">
           {/* WEB APP */}
-          <div className="flex items-center flex-col gap-8">
+          <div className="flex flex-col items-center gap-8">
             {/* HEADING */}
             <h2 className="text-4xl">Web App</h2>
 
@@ -83,14 +83,14 @@ const AboutPage: React.FC = () => {
 
             {/* BUTTON */}
             <Link href="/" passHref>
-              <button className="bg-gradient-to-br text-lg from-[#ff9a00] to-[#ff7300] text-white font-semibold py-2 px-6 rounded-xl min-w-[150px]">
+              <button className="px-6 py-2 text-lg font-semibold text-white bg-gradient-to-br from-[#ff9a00] to-[#ff7300] rounded-xl min-w-[150px]">
                 Go to website
               </button>
             </Link>
           </div>
 
           {/* DESKTOP */}
-          <div className="flex items-center flex-col gap-8">
+          <div className="flex flex-col items-center gap-8">
             {/* HEADING */}
             <h2 className="text-4xl">Desktop</h2>
 
@@ -106,18 +106,18 @@ const AboutPage: React.FC = () => {
             </div>
 
             {/* BUTTON */}
-            <button className="bg-gradient-to-br text-lg from-[#ff9a00] to-[#ff7300] text-white font-semibold py-2 px-6 rounded-xl min-w-[150px]">
+            <button className="px-6 py-2 text-lg font-semibold text-white bg-gradient-to-br from-[#ff9a00] to-[#ff7300] rounded-xl min-w-[150px]">
               Install
             </button>
           </div>
 
           {/* MOBILE */}
-          <div className="flex items-center flex-col gap-8">
+          <div className="flex flex-col items-center gap-8">
             {/* HEADING */}
             <h2 className="text-4xl">Mobile</h2>
 
             {/* IAMGE */}
-            <div className="grid grid-cols-2 h-80 w-full">
+            <div className="w-full grid grid-cols-2 h-80">
               <div className="relative w-full h-80">
                 <Image
                   placeholder="blur"
@@ -139,7 +139,7 @@ const AboutPage: React.FC = () => {
             </div>
 
             {/* BUTTON */}
-            <button className="flex text-lg items-center gap-1 bg-gradient-to-br from-[#ff9a00] to-[#ff7300] text-white font-semibold py-2 px-6 rounded-xl min-w-[150px]">
+            <button className="flex items-center px-6 py-2 text-lg font-semibold text-white gap-1 bg-gradient-to-br from-[#ff9a00] to-[#ff7300] rounded-xl min-w-[150px]">
               <AiFillAndroid className="w-6 h-6" /> In progress
             </button>
           </div>
