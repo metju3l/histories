@@ -34,7 +34,6 @@ module.exports = withPWA({
     return config;
   },
   images: {
-    formats: ['image/avif', 'image/webp'],
     domains: [
       'avatars.dicebear.com',
       'ipfs.io',
