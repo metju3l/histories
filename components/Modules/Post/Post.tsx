@@ -111,11 +111,11 @@ const Post: React.FC<PostProps> = ({
           <p className="px-4 pt-2 font-medium">{description}</p>
           {photos && (
             <div className="relative w-full bg-white cursor-pointer dark:bg-black h-[360px] bg-secondary">
-              <div className="flex justify-center w-full">
+              <div className="flex justify-center w-full h-full items-center">
                 <Blurhash
                   hash={photos[0].blurhash}
-                  width={photos[0].width > 598 ? 598 : photos[0].width}
-                  height={photos[0].height > 360 ? 360 : photos[0].height}
+                  width={(photos[0].width  > photos[0].height )? 405: photos[0].width/photos[0].height  * 360  }
+                  height={(photos[0].height>photos[0].width   )? 360: photos[0].height/photos[0].width  * 360 }
                   punch={1}
                 />
               </div>
