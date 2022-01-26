@@ -128,6 +128,10 @@ export default gql`
 
   input PostsInput {
     filter: PostsFilter
+    " asc | desc // default is asc"
+    sort: String
+    " id | createdAt | likeCount | commentsCount | distance"
+    sortBy: String    
   }
 
   input PersonalizedPostsInput {
