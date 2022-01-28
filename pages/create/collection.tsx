@@ -39,6 +39,7 @@ const CreateCollectionPage: React.FC = () => {
     } catch (error) {
       toast.error(t('error.createCollection'));
     }
+    setLoading(false);
   };
 
   return (
