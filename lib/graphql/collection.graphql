@@ -34,12 +34,6 @@ mutation editCollection(
   )
 }
 
-mutation createCollection(
-  $name: String!
-  $description: String!
-  $isPrivate: Boolean!
-) {
-  createCollection(
-    input: { name: $name, description: $description, isPrivate: $isPrivate }
-  )
+mutation createCollection($input: CreateCollectionInput!) {
+  createCollection(input: $input)
 }

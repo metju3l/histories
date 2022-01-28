@@ -238,7 +238,7 @@ export default gql`
 
   input CreateCollectionInput {
     name: String!
-    description: String!
+    description: String
     isPrivate: Boolean!
   }
 
