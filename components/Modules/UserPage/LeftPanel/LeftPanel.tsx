@@ -59,7 +59,6 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
             }
             layout="fill"
             objectFit="contain"
-            loading="eager"
             objectPosition="center"
             className="rounded-full"
             alt="Profile picture"

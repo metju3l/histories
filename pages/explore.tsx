@@ -51,7 +51,6 @@ const PostCard: React.FC<{ id: number; index: number }> = ({ id, index }) => {
       <Image
         src={UrlPrefix + data!.post.photos[0].hash}
         layout="fill"
-        loading="eager"
         alt="image"
         objectFit="cover"
       />

@@ -29,7 +29,6 @@ const Photos = () => {
                   layout="fill"
                   objectFit="cover"
                   objectPosition="center"
-                  loading="eager"
                   className="rounded-t-lg"
                   alt="Profile picture"
                 />

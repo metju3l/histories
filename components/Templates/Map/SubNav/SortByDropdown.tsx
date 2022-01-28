@@ -1,7 +1,10 @@
 import { Menu, Transition } from '@headlessui/react';
-import { FireIcon, TrendingUpIcon } from '@heroicons/react/outline';
-import { ChevronLeftIcon } from '@heroicons/react/solid';
 import React, { Fragment } from 'react';
+import {
+  HiChevronLeft,
+  HiOutlineFire,
+  HiOutlineTrendingUp,
+} from 'react-icons/hi';
 
 export type SortByDropdownProps = {
   sortBy: string;
@@ -47,16 +50,19 @@ const SortByDropdown: React.FC<SortByDropdownProps> = ({
         >
           <SortByItem
             name="Newest"
-            icon={<ChevronLeftIcon className="w-5 h-5 mr-1 rotate-90" />}
+            icon={<HiChevronLeft className="w-5 h-5 mr-1 rotate-90" />}
           />
           <SortByItem
             name="Oldest"
-            icon={<ChevronLeftIcon className="w-5 h-5 mr-1 -rotate-90" />}
+            icon={<HiChevronLeft className="w-5 h-5 mr-1 -rotate-90" />}
           />
-          <SortByItem name="Hot" icon={<FireIcon className="w-5 h-5 mr-1" />} />
+          <SortByItem
+            name="Hot"
+            icon={<HiOutlineFire className="w-5 h-5 mr-1" />}
+          />
           <SortByItem
             name="Trending"
-            icon={<TrendingUpIcon className="w-5 h-5 mr-1" />}
+            icon={<HiOutlineTrendingUp className="w-5 h-5 mr-1" />}
           />
         </Menu.Items>
       </Transition>
