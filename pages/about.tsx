@@ -49,7 +49,7 @@ const AboutPage: React.FC = () => {
           search and filtering. But we are not just a photo sharing platform. We
           are the community. If you want to explore amazing history of your
           city, let's join us! Also feel free to check out{' '}
-          <Link href="/map">
+          <Link href="/">
             <a className="text-brand">map</a>
           </Link>
           . If you have more questions about this project you can also check a{' '}

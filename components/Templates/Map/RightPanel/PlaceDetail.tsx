@@ -2,7 +2,7 @@ import { Loading } from '@components/Elements';
 import { usePostsQuery } from '@graphql/post.graphql';
 import Image from 'next/image';
 import Link from 'next/link';
-import { SidebarPlaceType } from 'pages/map';
+import { SidebarPlaceType } from 'pages';
 import React from 'react';
 import UrlPrefix from 'shared/config/UrlPrefix';
 

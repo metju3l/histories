@@ -24,7 +24,11 @@ const Navbar: React.FC = () => {
       <div className="flex items-center justify-between h-full max-w-4xl px-4 pt-4 m-auto">
         {/* LEFT SIDE */}
         <span className="flex">
-          <NavbarItem text="Home" href="/" active={router.pathname === '/'} />
+          <NavbarItem
+            text="Home"
+            href="/home"
+            active={router.pathname === '/home'}
+          />
           <NavbarItem
             text={t('explore')}
             href="/explore"
@@ -32,8 +36,8 @@ const Navbar: React.FC = () => {
           />
           <NavbarItem
             text={t('map')}
-            href="/map"
-            active={router.pathname === '/map'}
+            href="/"
+            active={router.pathname === '/'}
           />
         </span>
 

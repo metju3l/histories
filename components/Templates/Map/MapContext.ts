@@ -2,7 +2,7 @@ import { QueryResult } from '@apollo/client';
 import { PlacesQuery } from '@graphql/geo.graphql';
 import { PostsQuery } from '@graphql/post.graphql';
 import Viewport from '@lib/types/viewport';
-import { SidebarPlaceType } from 'pages/map';
+import { SidebarPlaceType } from 'pages';
 import React from 'react';
 import Bounds from 'types/Bounds';
 
