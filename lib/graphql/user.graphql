@@ -7,8 +7,8 @@ query suggestedUsers {
   }
 }
 
-query user($username: String, $id: Int) {
-  user(input: { username: $username, id: $id }) {
+query user($input: UserInput!) {
+  user(input: $input) {
     email
     username
     firstName
@@ -28,6 +28,11 @@ query user($username: String, $id: Int) {
     followerCount
     followingCount
     postCount
+    collections {
+      id
+      name
+      description
+    }
     posts {
       id
       photos {

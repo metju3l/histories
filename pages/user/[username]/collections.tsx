@@ -1,13 +1,7 @@
-import {
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache,
-  QueryResult,
-} from '@apollo/client';
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { CollectionsIcon, PlusIcon } from '@components/icons';
 import UserLayout from '@components/Layouts/User';
 import Card from '@components/Modules/UserPage/Card';
-import { PostsDocument, PostsQuery } from '@graphql/post.graphql';
 import { UserDocument, UserQuery } from '@graphql/user.graphql';
 import {
   GetCookieFromServerSideProps,
@@ -19,18 +13,10 @@ import Link from 'next/link';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Exact, InputMaybe, PostsInput } from '../../../.cache/__types__';
 import { ValidateUsername } from '../../../shared/validation';
 
 const CollectionsPage: React.FC<{
   userQuery: UserQuery;
-
-  posts: QueryResult<
-    PostsQuery,
-    Exact<{
-      input?: InputMaybe<PostsInput> | undefined;
-    }>
-  >;
   anonymous: boolean;
 }> = ({ userQuery }) => {
   const user = userQuery.user;
@@ -54,10 +40,23 @@ const CollectionsPage: React.FC<{
           </button>
         </Link>
       </div>
-      <Card>
-        <CollectionsIcon className="w-8 h-8" />
-        <div>{t('no_collections')}</div>
-      </Card>
+      {userQuery.user.collections?.length == 0 ? (
+        <Card>
+          <CollectionsIcon className="w-8 h-8" />
+          <div>{t('no_collections')}</div>
+        </Card>
+      ) : (
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+          {userQuery.user.collections?.map((collection, index) => (
+            <div
+              key={index}
+              className="w-full border dark:border-[#373638] dark:bg-[#2b2b2b] lg:rounded-lg md:rounded-lg sm:rounded-lg shadow-sm dark:shadow-md flex items-center h-64 justify-center"
+            >
+              {collection?.name}
+            </div>
+          ))}
+        </div>
+      )}
     </UserLayout>
   );
 };
@@ -93,27 +92,13 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     try {
       const { data: userQuery }: { data: UserQuery } = await client.query({
         query: UserDocument,
-        variables: { username: ctx.query.username },
-      });
-
-      const postsQuery = await client.query({
-        query: PostsDocument,
-        variables: {
-          input: {
-            filter: {
-              authorUsername: ctx.query.username,
-              skip: 0,
-              take: 10,
-            },
-          },
-        },
+        variables: { input: { username: ctx.query.username } },
       });
 
       // return props
       return {
         props: {
           userQuery,
-          posts: postsQuery,
           anonymous,
         },
       };

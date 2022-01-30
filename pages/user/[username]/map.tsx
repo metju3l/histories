@@ -159,7 +159,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     try {
       const { data: userQuery }: { data: UserQuery } = await client.query({
         query: UserDocument,
-        variables: { username: ctx.query.username },
+        variables: { input: { username: ctx.query.username } },
       });
 
       const { data: postsData } = await client.query({
