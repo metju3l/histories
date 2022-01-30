@@ -16,13 +16,12 @@ const PlacesQuery = async ({ filter, loggedId }: PlacesQueryInput) => {
     AND (place.location.longitude >= $minLongitude OR $minLongitude IS NULL)              // min longitude
     AND (place.location.longitude <= $maxLongitude OR $maxLongitude IS NULL)              // max longitude
     AND (distance(place.location, point($radius)) <= $radius.distance OR $radius IS NULL) // radius 
-    AND NOT ID(place) IN $exclude                                                         // object id is not in exclude
+    AND NOT place.id IN $exclude                                                         // object id is not in exclude
 
   // return most liked post from place which has photos
   CALL {
       WITH place
       OPTIONAL MATCH (place:Place)<-[:IS_LOCATED]-(post:Post)-[:CONTAINS]->(photo:Photo)
-      WHERE photo.hash IS NOT NULL  // where post has photos
       RETURN photo
       LIMIT 1 // only one to use as preview image
   }

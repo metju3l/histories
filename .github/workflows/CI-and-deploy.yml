@@ -81,7 +81,7 @@ jobs:
       - run: yarn build
   # Publish docker image
   publish:
-    needs: [build]
+    needs: [build, test]
     name: Publish docker image
     runs-on: ubuntu-latest
     steps:

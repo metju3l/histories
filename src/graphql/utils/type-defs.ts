@@ -155,7 +155,7 @@ export default gql`
     longitude: Float!
     description: String
     name: String
-    preview: Photo!
+    preview: Photo
     icon: String
     posts: [Post]!
     nearbyPlaces: [NearbyPlaces]!

@@ -16,7 +16,11 @@ const Places: React.FC = () => {
             place.latitude > mapContext.bounds.minLatitude &&
             place.latitude < mapContext.bounds.maxLatitude &&
             place.longitude > mapContext.bounds.minLongitude &&
-            place.longitude < mapContext.bounds.maxLongitude
+            place.longitude < mapContext.bounds.maxLongitude &&
+            place?.preview?.hash &&
+            place?.preview?.blurhash &&
+            place?.preview?.height &&
+            place?.preview?.width
         )
         .map(
           (place) =>

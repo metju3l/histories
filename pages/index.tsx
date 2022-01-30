@@ -21,12 +21,12 @@ export type SidebarPlaceType = {
   longitude: number;
   latitude: number;
   icon?: string | null;
-  preview?: {
+  preview?: Maybe<{
     hash: string;
     blurhash: string;
     width: number;
     height: number;
-  };
+  }>;
   description?: Maybe<string>;
 };
 
@@ -72,10 +72,7 @@ const Map: React.FC = () => {
                         place.latitude > bounds.minLatitude &&
                         place.latitude < bounds.maxLatitude &&
                         place.longitude > bounds.minLongitude &&
-                        place.longitude < bounds.maxLongitude &&
-                        placesQuery.data?.places.filter(
-                          (x) => x.id === place.id
-                        )
+                        place.longitude < bounds.maxLongitude
                     )
                     .map((place) => place.id)
                 : [],

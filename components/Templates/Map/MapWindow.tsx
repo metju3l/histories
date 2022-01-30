@@ -71,13 +71,13 @@ const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
     },
   };
 
-  const points = mapContext.placesQuery?.data?.places?.map((place) => ({
+  const points = mapContext.placesQuery?.data?.places.map((place) => ({
     type: 'Feature',
     properties: {
       cluster: false,
       id: place.id,
       icon: place.icon,
-      preview: place.preview.hash,
+      preview: place?.preview?.hash,
     },
     geometry: {
       type: 'Point',
