@@ -19,10 +19,11 @@ jobs:
   # Jest
   test:
     name: Test
-    runs-on: ubuntu-latest
     strategy:
       matrix:
+        platform: [ubuntu-latest, macos-latest, windows-latest]
         node-version: [14.x, 16.x]
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
@@ -66,10 +67,11 @@ jobs:
   build:
     needs: [typecheck]
     name: Build (Node ${{ matrix.node-version }})
-    runs-on: ubuntu-latest
     strategy:
       matrix:
+        platform: [ubuntu-latest, macos-latest, windows-latest]
         node-version: [14.x, 16.x]
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}

@@ -19,14 +19,4 @@ test('Username', () => {
   expect(ValidateUsername('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')).toEqual({
     error: 'Username has to be shorter than 32 characters',
   }); // too long
-
-  expect(ValidateUsername('Login')).toEqual({
-    error: 'This username cannot be used',
-  }); // same username as page title
-  expect(ValidateUsername('register')).toEqual({
-    error: 'This username cannot be used',
-  }); // same username as page title
-  expect(ValidateUsername('MAP')).toEqual({
-    error: 'This username cannot be used',
-  }); // same username as page title
 });
