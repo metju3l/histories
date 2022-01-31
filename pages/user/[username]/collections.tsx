@@ -48,12 +48,11 @@ const CollectionsPage: React.FC<{
       ) : (
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
           {userQuery.user.collections?.map((collection, index) => (
-            <div
-              key={index}
-              className="w-full border dark:border-[#373638] dark:bg-[#2b2b2b] lg:rounded-lg md:rounded-lg sm:rounded-lg shadow-sm dark:shadow-md flex items-center h-64 justify-center"
-            >
-              {collection?.name}
-            </div>
+            <Link key={index} href={`/collection/${collection?.id}`} passHref>
+              <div className="flex items-center justify-center w-full h-64 border cursor-pointer dark:border-[#373638] dark:bg-[#2b2b2b] lg:rounded-lg md:rounded-lg sm:rounded-lg shadow-sm dark:shadow-md">
+                {collection?.name}
+              </div>
+            </Link>
           ))}
         </div>
       )}
