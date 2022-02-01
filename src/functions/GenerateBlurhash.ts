@@ -1,17 +1,11 @@
-import sharp from 'sharp';
-import {
-  Canvas,
-  createCanvas,
-  Image,
-  loadImage,
-  NodeCanvasRenderingContext2D,
-} from 'canvas';
 import { encode } from 'blurhash';
+import { createCanvas, Image, loadImage } from 'canvas';
+import sharp from 'sharp';
 
 // get image dimensions and data
 function getImageData(image: Image) {
-  const canvas: Canvas = createCanvas(image.width, image.height);
-  const context: NodeCanvasRenderingContext2D = canvas.getContext('2d');
+  const canvas = createCanvas(image.width, image.height);
+  const context = canvas.getContext('2d');
   context.drawImage(image, 0, 0);
   return context.getImageData(0, 0, image.width, image.height);
 }

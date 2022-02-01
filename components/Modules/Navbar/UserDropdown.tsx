@@ -1,12 +1,12 @@
 import { Menu, Transition } from '@headlessui/react';
 import LogOut from '@lib/functions/LogOut';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import UrlPrefix from 'shared/config/UrlPrefix';
 
 import { LoginContext } from '../../Layouts';
-import DropdownItem from '../Dropdown/DropdownItem';
 import DropdownTransition from '../Dropdown/DropdownTransition';
 
 const UserDropdown: React.FC = () => {
@@ -38,16 +38,33 @@ const UserDropdown: React.FC = () => {
       <Transition as={Fragment} {...DropdownTransition}>
         <Menu.Items
           as="div"
-          className="absolute right-0 z-50 flex flex-col w-48 mt-2 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 focus:outline-none dark:border-gray-800 truncated"
+          className="dropdown"
         >
-          <DropdownItem
-            text={loginContext.data!.me!.username}
-            href={`/user/${loginContext.data!.me!.username}`}
-            top
-          />
-          <DropdownItem text={t('create post')} href="/create/post" />
-          <DropdownItem text={t('settings')} href="/settings" />
-          <DropdownItem text={t('logout')} onClick={() => LogOut()} bottom />
+          <Link href={`/user/${loginContext.data!.me!.username}`} passHref>
+            <Menu.Item as="div" className="rounded-t-lg dropdown-item">
+              {loginContext.data!.me!.username}
+            </Menu.Item>
+          </Link>
+
+          <Link href="/create/post" passHref>
+            <Menu.Item as="div" className="dropdown-item">
+              {t('create_post')}
+            </Menu.Item>
+          </Link>
+
+          <Link href="/settings" passHref>
+            <Menu.Item as="div" className="dropdown-item">
+              {t('settings')}
+            </Menu.Item>
+          </Link>
+
+          <Menu.Item
+            as="div"
+            className="rounded-b-lg dropdown-item"
+            onClick={() => LogOut()}
+          >
+            {t('logout')}
+          </Menu.Item>
         </Menu.Items>
       </Transition>
     </Menu>

@@ -1,7 +1,5 @@
-import * as blurhash from 'blurhash';
 import { createCanvas, Image, loadImage } from 'canvas';
 import { create, IPFSHTTPClient } from 'ipfs-http-client';
-import sharp from 'sharp';
 
 // get image dimensions
 function getImageData(image: Image) {

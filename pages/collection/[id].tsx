@@ -68,7 +68,10 @@ const CheckPost: React.FC<{
         },
       }}
     >
-      <DeleteCollectionModal isOpen={isDeleteCollectionModalOpen} setIsOpen={setIsDeleteCollectionModalOpen} />
+      <DeleteCollectionModal
+        isOpen={isDeleteCollectionModalOpen}
+        setIsOpen={setIsDeleteCollectionModalOpen}
+      />
       <div className="flex items-center justify-between pr-4">
         <div>
           <h1 className="pt-4 text-3xl font-semibold">{collection.name}</h1>

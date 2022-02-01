@@ -67,14 +67,14 @@ const Map: React.FC = () => {
               // exclude just places in bounds
               exclude: placesQuery.data?.places
                 ? placesQuery.data.places
-                    .filter(
-                      (place) =>
-                        place.latitude > bounds.minLatitude &&
-                        place.latitude < bounds.maxLatitude &&
-                        place.longitude > bounds.minLongitude &&
-                        place.longitude < bounds.maxLongitude
-                    )
-                    .map((place) => place.id)
+                  .filter(
+                    (place) =>
+                      place.latitude > bounds.minLatitude &&
+                      place.latitude < bounds.maxLatitude &&
+                      place.longitude > bounds.minLongitude &&
+                      place.longitude < bounds.maxLongitude
+                  )
+                  .map((place) => place.id)
                 : [],
             },
           },
@@ -185,7 +185,6 @@ const Map: React.FC = () => {
                 <MapGL
                   onMove={async (bounds) => {
                     setBounds(bounds);
-                    FetchMore();
                   }}
                 />
               </div>

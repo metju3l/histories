@@ -54,10 +54,10 @@ const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
           : Light
         : // explicit map styles
         mapStyle === 'dark'
-        ? Dark
-        : mapStyle === 'satellite'
-        ? Satellite
-        : Light,
+          ? Dark
+          : mapStyle === 'satellite'
+            ? Satellite
+            : Light,
     mapboxApiAccessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN, // MAPBOX API ACCESS TOKEN
   };
 
@@ -105,15 +105,6 @@ const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
       {...mapFunctions}
       ref={(instance) => (mapRef.current = instance)}
     >
-      {/* mapContext.placesQuery?.data?.places
-        .filter((place) => (place.preview || place.icon) && place)
-        .map((place) => (
-          <MapMarker
-            key={place.id}
-            place={place}
-            onClick={() => mapContext.setSidebarPlace(place)}
-          />
-        )) */}
 
       {clusters.map((cluster) => {
         const [longitude, latitude] = cluster.geometry.coordinates;
@@ -204,10 +195,9 @@ const MapMarker: React.FC<MapMarkerProps> = ({
         <div
           className={`absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 
             ${place.icon ? 'w-24 h-24' : 'w-16 h-16'}
-            ${
-              !place.icon && !loadingImage
-                ? 'border-white hover:border-brand'
-                : 'border-transparent'
+            ${!place.icon && !loadingImage
+              ? 'border-white hover:border-brand'
+              : 'border-transparent'
             }`}
           onMouseEnter={() => mapContext.setHoverPlaceId(place.id)}
           onMouseLeave={() => mapContext.setHoverPlaceId(null)}
@@ -223,7 +213,7 @@ const MapMarker: React.FC<MapMarkerProps> = ({
               alt="Picture on map"
               quality={10}
             />
-          ) : (
+          ) : place.preview.hash ? (
             // else show preview image of place
             <>
               {loadingImage && ( // if image is loading show universal place icon
@@ -234,9 +224,8 @@ const MapMarker: React.FC<MapMarkerProps> = ({
               {numberOfPlaces !== undefined &&
                 numberOfPlaces > 1 && ( // if marker is a cluster
                   <div
-                    className={`absolute ${
-                      loadingImage ? 'top-0 right-0' : '-top-2 -right-2'
-                    } w-6 h-6 text-white text-center bg-brand rounded-full z-20`}
+                    className={`absolute ${loadingImage ? 'top-0 right-0' : '-top-2 -right-2'
+                      } w-6 h-6 text-white text-center bg-brand rounded-full z-20`}
                   >
                     {numberOfPlaces}
                   </div>
@@ -253,7 +242,10 @@ const MapMarker: React.FC<MapMarkerProps> = ({
                 alt="Picture on map"
               />
             </>
-          )}
+          ) :
+            <div className="p-4 text-brand">
+              <PhotoMarkerIcon />
+            </div>}
         </div>
       </div>
     </Marker>
