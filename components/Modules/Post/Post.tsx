@@ -1,10 +1,13 @@
+import AddToCollectionModal from '@components/Templates/Modals/AddToCollectionModal';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { Blurhash } from 'react-blurhash';
 import { useTranslation } from 'react-i18next';
 import { HiHeart, HiOutlineHeart } from 'react-icons/hi';
 import { IoIosMore } from 'react-icons/io';
+import TimeAgo from 'react-timeago';
 
 import { Maybe, Photo } from '../../../.cache/__types__';
 import {
@@ -13,9 +16,8 @@ import {
 } from '../../../lib/graphql/relations.graphql';
 import { LoginContext } from '../../../pages/_app';
 import UrlPrefix from '../../../shared/config/UrlPrefix';
-import { MiniUserCard } from '../tmp/MiniUserCard';
 import Card from '../UserPage/Card';
-import { AddToCollectionModal, LikePost, PostTimeline, UnlikePost } from '.';
+import { LikePost, PostTimeline, UnlikePost } from '.';
 import OptionsMenu from './OptionsMenu';
 
 type PostProps = {
@@ -53,7 +55,6 @@ const Post: React.FC<PostProps> = ({
 
   const [visible, setVisible] = useState<null | 'deleted'>(null); // show deleted card instead of post if post is deleted
   const [collectionSelectModal, setCollectionSelectModal] = useState(false);
-
   const [localLikeState, setLocalLikeState] = useState<boolean>(liked); // using local states to avoid refetching and provide faster response for user
   const { t } = useTranslation();
   const likeCountWithoutMe = likeCount - (liked ? 1 : 0); // number of likes without logged user
@@ -103,7 +104,36 @@ const Post: React.FC<PostProps> = ({
       <PostTimeline time={postDate} show={timeline}>
         <div className="w-full mb-4 bg-white border dark:border-[#373638] dark:bg-[#2b2b2b] sm:rounded-2xl max-w-[600px]">
           <div className="flex items-center justify-between px-4 pt-6">
-            <MiniUserCard {...author} time={createdAt} />
+            <div className="flex items-center gap-3">
+              <Link href={'/user/' + author.username} passHref>
+                <div className="relative w-10 h-10 rounded-full cursor-pointer bg-secondary">
+                  <Image
+                    src={
+                      author.profile.startsWith('http')
+                        ? author.profile
+                        : UrlPrefix + author.profile
+                    }
+                    layout="fill"
+                    objectFit="contain"
+                    objectPosition="center"
+                    className="rounded-full"
+                    alt="Profile picture"
+                  />
+                </div>
+              </Link>
+              <div className="relative flex flex-col">
+                <Link href={'/user/' + author.username}>
+                  <a className="text-lg font-semibold cursor-pointer">
+                    {author.firstName} {author.lastName}
+                  </a>
+                </Link>
+                <a className="cursor-pointer opacity-80">
+                  @{author.username}
+                  {' · '}
+                  <TimeAgo date={createdAt} />
+                </a>
+              </div>
+            </div>
             <OptionsMenu id={id} author={author} setVisible={setVisible}>
               <IoIosMore className="text-2xl" />
             </OptionsMenu>

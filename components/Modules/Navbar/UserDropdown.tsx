@@ -36,10 +36,7 @@ const UserDropdown: React.FC = () => {
         />
       </Menu.Button>
       <Transition as={Fragment} {...DropdownTransition}>
-        <Menu.Items
-          as="div"
-          className="dropdown"
-        >
+        <Menu.Items as="div" className="dropdown">
           <Link href={`/user/${loginContext.data!.me!.username}`} passHref>
             <Menu.Item as="div" className="rounded-t-lg dropdown-item">
               {loginContext.data!.me!.username}

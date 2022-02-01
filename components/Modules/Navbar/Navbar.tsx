@@ -6,7 +6,6 @@ import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LoginContext } from '../../Layouts';
-import DropdownItem from '../Dropdown/DropdownItem';
 import DropdownTransition from '../Dropdown/DropdownTransition';
 import NavbarItem from './NavbarItem';
 import UserDropdown from './UserDropdown';
@@ -79,10 +78,27 @@ const Navbar: React.FC = () => {
                       as="div"
                       className="absolute right-0 z-50 flex flex-col w-48 mt-2 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 focus:outline-none dark:border-gray-800 truncated"
                     >
-                      <DropdownItem text={t('login')} href="/login" top />
-                      <DropdownItem text={t('register')} href="/register" />
-                      <Menu.Item>
-                        <DropdownItem text={t('cancel')} bottom />
+                      <Link href="/login" passHref>
+                        <Menu.Item
+                          as="div"
+                          className="rounded-t-lg dropdown-item"
+                        >
+                          {t('login')}
+                        </Menu.Item>
+                      </Link>
+
+                      <Link href="/register" passHref>
+                        <Menu.Item as="div" className="dropdown-item">
+                          {t('register')}
+                        </Menu.Item>
+                      </Link>
+
+                      {/* CLOSE */}
+                      <Menu.Item
+                        as="div"
+                        className="rounded-b-lg dropdown-item"
+                      >
+                        {t('close')}
                       </Menu.Item>
                     </Menu.Items>
                   </Transition>

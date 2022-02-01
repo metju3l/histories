@@ -1,12 +1,13 @@
+import DeletePostModal from '@components/Templates/Modals/DeletePostModal';
 import { useDeleteMutation } from '@graphql/post.graphql';
 import { useUnfollowMutation } from '@graphql/relations.graphql';
 import { Menu, Transition } from '@headlessui/react';
-import React, { Fragment } from 'react';
+import Link from 'next/link';
+import React, { Fragment, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
 import { LoginContext } from '../../../pages/_app';
-import DropdownItem from '../Dropdown/DropdownItem';
 import DropdownTransition from '../Dropdown/DropdownTransition';
 
 export type OptionsMenuProps = {
@@ -29,92 +30,108 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
   const [deleteMutation] = useDeleteMutation();
   const [unfollowMutation] = useUnfollowMutation();
 
+  const [isDeletePostModalOpen, setIsDeletePostModalOpen] =
+    useState<boolean>(false);
+
   return (
-    <Menu as="div" className="relative">
-      <Menu.Button as="div" className="flex items-center gap-2">
-        {children}
-      </Menu.Button>
-      <Transition as={Fragment} {...DropdownTransition}>
-        <Menu.Items
-          as="div"
-          className="absolute right-0 z-50 flex flex-col w-48 mt-2 bg-white border border-gray-200 rounded-lg dark:bg-gray-900 focus:outline-none dark:border-gray-800 truncated"
-        >
-          {loginContext.data?.me?.id === author.id ? (
-            <>
-              {/* DELETE */}
-              <DropdownItem
-                text={t('delete_post')}
-                top
-                onClick={async () => {
-                  try {
-                    setVisible('deleted');
+    <>
+      <DeletePostModal
+        isOpen={isDeletePostModalOpen}
+        setIsOpen={setIsDeletePostModalOpen}
+        onConfirm={async () => {
+          try {
+            setVisible('deleted');
 
-                    await deleteMutation({
-                      variables: {
-                        id,
-                      },
-                    });
-                    toast.success(t('post_deleted'));
-                  } catch (error: any) {
-                    toast.error(error.message);
-                  }
-                }}
-              />
-            </>
-          ) : (
-            loginContext.data?.me?.id && (
-              <>
-                {/* REPORT */}
-                <DropdownItem text={t('report_post')} top />
+            await deleteMutation({
+              variables: {
+                id,
+              },
+            });
+            toast.success(t('post_deleted'));
+          } catch (error: any) {
+            toast.error(error.message);
+          }
+        }}
+      />
+      <Menu as="div" className="relative">
+        <Menu.Button as="div" className="flex items-center gap-2">
+          {children}
+        </Menu.Button>
+        <Transition as={Fragment} {...DropdownTransition}>
+          <Menu.Items as="div" className="dropdown">
+            {loginContext.data?.me?.id === author.id ? (
+              /* DELETE */
+              <Menu.Item
+                as="div"
+                className="rounded-t-lg dropdown-item-danger"
+                onClick={() => setIsDeletePostModalOpen(true)}
+              >
+                {t('delete_post')}
+              </Menu.Item>
+            ) : (
+              loginContext.data?.me?.id && (
+                <>
+                  {/* REPORT */}
+                  <Menu.Item as="div" className="rounded-t-lg dropdown-item">
+                    {t('report_post')}
+                  </Menu.Item>
 
-                {/* UNFOLLOW */}
-                <DropdownItem
-                  text={t('unfollow')}
-                  onClick={async () => {
-                    try {
-                      await unfollowMutation({
-                        variables: {
-                          userID: author.id,
-                        },
-                      });
-                      toast.success(t('user_unfollowed'));
-                    } catch (error: any) {
-                      toast.error(error.message);
-                    }
-                  }}
-                />
-              </>
-            )
-          )}
-          {/* GO TO POST */}
-          <Menu.Item>
-            <DropdownItem
-              text={t('go_to_post')}
-              href={`/post/${id}`}
-              top={!loginContext.data?.me?.id}
-            />
-          </Menu.Item>
+                  {/* UNFOLLOW */}
+                  <Menu.Item
+                    as="div"
+                    className="rounded-t-lg dropdown-item"
+                    onClick={async () => {
+                      try {
+                        await unfollowMutation({
+                          variables: {
+                            userID: author.id,
+                          },
+                        });
+                        toast.success(t('user_unfollowed'));
+                      } catch (error: any) {
+                        toast.error(error.message);
+                      }
+                    }}
+                  >
+                    {t('unfollow')}
+                  </Menu.Item>
+                </>
+              )
+            )}
+            {/* GO TO POST */}
+            <Link href={`/post/${id}`} passHref>
+              <Menu.Item
+                as="div"
+                className={`${
+                  !loginContext.data?.me?.id ? 'rounded-t-lg' : ''
+                } dropdown-item`}
+              >
+                {t('go_to_post')}
+              </Menu.Item>
+            </Link>
 
-          {/* COPY LINK */}
-          <Menu.Item>
-            <DropdownItem
-              text={t('copy_link')}
+            {/* COPY LINK */}
+            <Menu.Item
+              as="div"
+              className="dropdown-item"
               onClick={async () => {
                 await navigator.clipboard.writeText(
                   `https://www.histories.cc/post/${id}`
                 );
                 toast.success(t('link_copied'));
               }}
-            />
-          </Menu.Item>
+            >
+              {t('copy_link')}
+            </Menu.Item>
 
-          {/* CANCEL */}
-          <Menu.Item>
-            <DropdownItem text={t('close')} onClick={() => {}} bottom />
-          </Menu.Item>
-        </Menu.Items>
-      </Transition>
-    </Menu>
+            {/* CLOSE */}
+            <Menu.Item as="div" className="rounded-b-lg dropdown-item">
+              {t('close')}
+            </Menu.Item>
+          </Menu.Items>
+        </Transition>
+      </Menu>
+    </>
   );
 };
 
