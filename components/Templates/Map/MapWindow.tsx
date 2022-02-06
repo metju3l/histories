@@ -7,31 +7,13 @@ import { useTheme } from 'next-themes';
 import React, { useRef, useState } from 'react';
 import ReactMapGL, { ExtraState, MapRef, Marker } from 'react-map-gl';
 import UrlPrefix from 'shared/config/UrlPrefix';
-import Bounds from 'types/Bounds';
 import useSupercluster from 'use-supercluster';
 
 import { Maybe } from '../../../.cache/__types__';
 import { Dark, Light, Satellite } from '../../../shared/config/MapStyles';
 import { MapContext } from './MapContext';
 
-type MapGLProps = {
-  // eslint-disable-next-line no-unused-vars
-  onMove?: (bounds: Bounds) => void;
-};
-
-async function OnMove(
-  mapRef: React.MutableRefObject<Maybe<MapRef>>,
-  // eslint-disable-next-line no-unused-vars
-  onMove?: (bounds: Bounds) => void
-) {
-  // if onMove function is not undefined
-  if (mapRef.current && onMove) {
-    const bounds = ConvertBounds(mapRef.current.getMap().getBounds());
-    await onMove(bounds);
-  }
-}
-
-const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
+const MapGL: React.FC = () => {
   const mapContext = React.useContext(MapContext);
 
   const [mapStyle, setMapStyle] = React.useState<
@@ -59,16 +41,6 @@ const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
         ? Satellite
         : Light,
     mapboxApiAccessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN, // MAPBOX API ACCESS TOKEN
-  };
-
-  const mapFunctions = {
-    onViewportChange: (viewport: React.SetStateAction<Viewport>) =>
-      mapContext.setViewport(viewport),
-    // OnMove triggers
-    onLoad: async () => OnMove(mapRef, onMove),
-    onInteractionStateChange: async (state: ExtraState) => {
-      if (!state.isDragging) OnMove(mapRef, onMove);
-    },
   };
 
   const points = mapContext.placesQuery?.data?.places.map((place) => ({
@@ -102,7 +74,34 @@ const MapGL: React.FC<MapGLProps> = ({ onMove }) => {
     <ReactMapGL
       {...mapContext.viewport}
       {...mapProps}
-      {...mapFunctions}
+      onViewportChange={(viewport: React.SetStateAction<Viewport>) => {
+        mapContext.setViewport(viewport);
+      }}
+      onInteractionStateChange={async (state: ExtraState) => {
+        if (!state.isDragging) {
+          {
+            if (mapRef.current) {
+              mapContext.setBounds(
+                ConvertBounds(mapRef.current.getMap().getBounds())
+              );
+              try {
+                await mapContext.placesQuery?.refetch({
+                  input: {
+                    filter: {
+                      maxLatitude: mapContext.bounds.maxLatitude,
+                      minLatitude: mapContext.bounds.minLatitude,
+                      maxLongitude: mapContext.bounds.maxLongitude,
+                      minLongitude: mapContext.bounds.minLongitude,
+                    },
+                  },
+                });
+              } catch (error) {
+                console.log(error);
+              }
+            }
+          }
+        }
+      }}
       ref={(instance) => (mapRef.current = instance)}
     >
       {clusters.map((cluster) => {

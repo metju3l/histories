@@ -8,7 +8,7 @@ import { usePlacesQuery } from '@graphql/geo.graphql';
 import { usePostsQuery } from '@graphql/post.graphql';
 import Viewport from '@lib/types/viewport';
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Maybe } from '../.cache/__types__';
 import ArrowIcon from '../components/Elements/Icons/ArrowIcon';
@@ -48,49 +48,6 @@ const Map: React.FC = () => {
     },
   });
 
-  async function FetchMore() {
-    if (placesQuery.loading || postsQuery.loading) return;
-
-    // fetch more data when map view changes
-    if (whatToShow === 'photos')
-      await postsQuery.refetch({
-        input: {
-          filter: bounds,
-        },
-      });
-    else
-      await placesQuery.fetchMore({
-        variables: {
-          input: {
-            filter: {
-              ...bounds,
-              // exclude just places in bounds
-              exclude: placesQuery.data?.places
-                ? placesQuery.data.places
-                    .filter(
-                      (place) =>
-                        place.latitude > bounds.minLatitude &&
-                        place.latitude < bounds.maxLatitude &&
-                        place.longitude > bounds.minLongitude &&
-                        place.longitude < bounds.maxLongitude
-                    )
-                    .map((place) => place.id)
-                : [],
-            },
-          },
-        },
-        updateQuery: (previousResult, { fetchMoreResult }) => {
-          return {
-            ...previousResult,
-            // Add the new matches data to the end of the old matches data.
-            places: [
-              ...previousResult.places,
-              ...(fetchMoreResult?.places ?? []),
-            ],
-          };
-        },
-      });
-  }
   const [hoverPlaceId, setHoverPlaceId] = useState<number | null>(null);
   const [whatToShow, setWhatToShow] = useState<string | null>(null);
   const [showSidebar, setShowSidebar] = useState(true);
@@ -104,10 +61,6 @@ const Map: React.FC = () => {
 
   // map viewport
   const [viewport, setViewport] = useState<Viewport>(defaultValues.viewport);
-
-  useEffect(() => {
-    FetchMore();
-  }, [whatToShow]);
 
   return (
     <Layout
@@ -182,11 +135,7 @@ const Map: React.FC = () => {
                 <div className="absolute right-0 z-20 px-8 pt-2 w-[28vw]">
                   <TimeLine domain={[1000, new Date().getFullYear()]} />
                 </div>
-                <MapGL
-                  onMove={async (bounds) => {
-                    setBounds(bounds);
-                  }}
-                />
+                <MapGL />
               </div>
               <RightPanel />
             </motion.section>

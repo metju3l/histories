@@ -76,7 +76,8 @@ const AddToCollectionModal: React.FC<AddToCollectionModalProps> = ({
                         onClick={async () => {
                           try {
                             toast.success(
-                              t('post_saved_to') + ' ' + collection?.name ?? t('collection')
+                              t('post_saved_to') + ' ' + collection?.name ??
+                                t('collection')
                             );
                             await addToCollectionMutation({
                               variables: {
