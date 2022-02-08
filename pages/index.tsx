@@ -130,23 +130,20 @@ const Map: React.FC<{
           setFilteredPlaces,
         }}
       >
-        <div className="w-full bg-[#FAFBFB] dark:bg-[#171716]">
+        <div
+          className="w-full bg-[#FAFBFB] dark:bg-[#171716]"
+          style={{ height: 'calc(100vh - 64px)' }}
+        >
           <AnimatePresence>
             <motion.section
-              className="w-full grid"
-              initial={{
-                gridTemplateColumns: '1fr 1fr',
-              }}
-              animate={{
-                gridTemplateColumns: showSidebar ? '1fr 1fr' : '1fr 0fr',
-              }}
+              className={`w-full grid ${showSidebar
+                  ? 'grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1'
+                  : 'grid-cols-1 grid-rows-1'
+                } transition-all duration-500 ease-in-out h-screen`}
               transition={{
                 delay: !showSidebar ? 0 : 0.5,
                 duration: 0.25,
                 ease: 'easeInOut',
-              }}
-              style={{
-                height: 'calc(100vh - 56px)',
               }}
             >
               <div className="relative w-full p-2 col-span-1">

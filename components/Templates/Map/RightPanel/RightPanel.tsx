@@ -13,8 +13,8 @@ const RightPanel: React.FC = () => {
   const [sortBy, setSortBy] = useState('Hot');
 
   return (
-    <div className="relative h-full">
-      {mapContext.showSidebar && (
+    mapContext.showSidebar ? (
+      <div className="relative h-full w-full">
         <motion.div
           initial={{ opacity: 0, display: 'none' }}
           animate={{ opacity: 1, display: 'block' }}
@@ -27,11 +27,10 @@ const RightPanel: React.FC = () => {
         >
           <SubNav sortBy={sortBy} setSortBy={setSortBy} />
           <div
-            className={`p-4 pt-8 overflow-y-auto text-black dark:text-white ${
-              mapContext.sidebarPlace
-                ? ''
-                : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-4'
-            }`}
+            className={`p-4 pt-8 overflow-y-auto text-black dark:text-white ${mapContext.sidebarPlace
+              ? ''
+              : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-4'
+              }`}
             style={{ height: 'calc(100vh - 123px)' }}
           >
             {mapContext.sidebarPlace ? (
@@ -43,8 +42,8 @@ const RightPanel: React.FC = () => {
             )}
           </div>
         </motion.div>
-      )}
-    </div>
+      </div>
+    ) : null
   );
 };
 
