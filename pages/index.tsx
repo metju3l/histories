@@ -8,6 +8,7 @@ import { usePlacesQuery } from '@graphql/geo.graphql';
 import { usePostsQuery } from '@graphql/post.graphql';
 import Viewport from '@lib/types/viewport';
 import { AnimatePresence, motion } from 'framer-motion';
+import { GetServerSideProps } from 'next';
 import React, { useEffect, useState } from 'react';
 
 import { Maybe } from '../.cache/__types__';
@@ -30,7 +31,12 @@ export type SidebarPlaceType = {
   description?: Maybe<string>;
 };
 
-const Map: React.FC = () => {
+const Map: React.FC<{
+  lat?: number;
+  lng?: number;
+  zoom?: number;
+  place?: number;
+}> = ({ lat, lng, zoom, place }) => {
   const [bounds, setBounds] = useState(defaultValues.bounds);
   const [filteredPlaces, setFilteredPlaces] = useState<
     Array<{ latitude: number; longitude: number; id: number }>
@@ -63,7 +69,12 @@ const Map: React.FC = () => {
     useState<Maybe<SidebarPlaceType>>(null);
 
   // map viewport
-  const [viewport, setViewport] = useState<Viewport>(defaultValues.viewport);
+  const [viewport, setViewport] = useState<Viewport>({
+    ...defaultValues.viewport,
+    latitude: lat || defaultValues.viewport.latitude,
+    longitude: lng || defaultValues.viewport.longitude,
+    zoom: zoom || defaultValues.viewport.zoom,
+  });
 
   useEffect(() => {
     setFilteredPlaces(
@@ -166,6 +177,14 @@ const Map: React.FC = () => {
       </MapContext.Provider>
     </Layout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  if (ctx.req.url?.startsWith('_next')) return { props: {} };
+
+  return {
+    props: ctx.query,
+  };
 };
 
 export default Map;

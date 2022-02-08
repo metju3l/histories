@@ -10,13 +10,9 @@ const Places: React.FC = () => {
 
   return (
     <>
-      {mapContext.placesQuery?.data?.places
+      {mapContext.filteredPlaces
         .filter(
           (place) =>
-            place.latitude > mapContext.bounds.minLatitude &&
-            place.latitude < mapContext.bounds.maxLatitude &&
-            place.longitude > mapContext.bounds.minLongitude &&
-            place.longitude < mapContext.bounds.maxLongitude &&
             place?.preview?.hash &&
             place?.preview?.blurhash &&
             place?.preview?.height &&

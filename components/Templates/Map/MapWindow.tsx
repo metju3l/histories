@@ -101,7 +101,10 @@ const MapGL: React.FC = () => {
                 updateQuery: (prev, { fetchMoreResult }) => {
                   if (!fetchMoreResult) return prev; // if no new data, return prev data
                   const prevPlaces =
-                    prev.places.length === undefined ? [] : prev.places;
+                    prev.places === undefined ||
+                    prev.places.length === undefined
+                      ? []
+                      : prev.places;
                   // add new places
                   return {
                     places: [
