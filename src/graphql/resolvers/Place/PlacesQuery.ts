@@ -41,6 +41,12 @@ const PlacesQuery = async ({ filter, loggedId }: PlacesQueryInput) => {
       OPTIONAL MATCH (place:Place)<-[:IS_LOCATED]-(:Post)<-[:LIKE]-(like:User)
       RETURN COUNT(DISTINCT like) AS likeCount    
   }
+  // posts
+  CALL {
+      WITH place
+      OPTIONAL MATCH (author:User)-[:CREATED]->(post:Post)-[:IS_LOCATED]->(place)
+      RETURN COLLECT(DISTINCT post{.*, author: author{.*}}) AS posts
+  }
   
   // return places as an array of objects
   WITH place{.*,
@@ -50,6 +56,7 @@ const PlacesQuery = async ({ filter, loggedId }: PlacesQueryInput) => {
       icon: place.icon,
       postCount,
       likeCount,
+      posts,
       distance:  
           CASE
               // if radius in input is not defined return null

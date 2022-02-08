@@ -1,9 +1,10 @@
 query Places($input: PlacesInput) {
   places(input: $input) {
     id
-    name
-    longitude
     latitude
+    longitude
+    name
+    description
     icon
     preview {
       hash
@@ -11,7 +12,16 @@ query Places($input: PlacesInput) {
       width
       height
     }
-    description
+    posts {
+      postDate
+      createdAt
+      id
+      author {
+        username
+        firstName
+        lastName
+      }
+    }
   }
 }
 

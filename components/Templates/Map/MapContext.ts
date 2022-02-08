@@ -30,6 +30,19 @@ export const defaultValues = {
   },
 };
 
+type Place = {
+  id: number;
+  latitude: number;
+  longitude: number;
+  icon?: string | null;
+  preview?: Maybe<{
+    hash: string;
+    blurhash: string;
+    width: number;
+    height: number;
+  }>;
+};
+
 export type MapContextType = {
   bounds: Bounds;
   setBounds: React.Dispatch<React.SetStateAction<Bounds>>;
@@ -63,6 +76,8 @@ export type MapContextType = {
   setHoverPlaceId: React.Dispatch<React.SetStateAction<number | null>>;
   showSidebar: boolean;
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+  filteredPlaces: Array<Place>;
+  setFilteredPlaces: React.Dispatch<React.SetStateAction<Array<Place>>>;
 };
 
 export const MapContext = React.createContext<MapContextType>({
@@ -82,4 +97,6 @@ export const MapContext = React.createContext<MapContextType>({
   setHoverPlaceId: () => {},
   showSidebar: true,
   setShowSidebar: () => {},
+  filteredPlaces: [],
+  setFilteredPlaces: () => {},
 });

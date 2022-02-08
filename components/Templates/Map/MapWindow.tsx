@@ -6,11 +6,11 @@ import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import React, { useRef, useState } from 'react';
 import ReactMapGL, { ExtraState, MapRef, Marker } from 'react-map-gl';
-import UrlPrefix from 'shared/config/UrlPrefix';
 import useSupercluster from 'use-supercluster';
 
 import { Maybe } from '../../../.cache/__types__';
 import { Dark, Light, Satellite } from '../../../shared/config/MapStyles';
+import UrlPrefix from '../../../shared/config/UrlPrefix';
 import { MapContext } from './MapContext';
 
 const MapGL: React.FC = () => {
@@ -43,7 +43,7 @@ const MapGL: React.FC = () => {
     mapboxApiAccessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN, // MAPBOX API ACCESS TOKEN
   };
 
-  const points = mapContext.placesQuery?.data?.places.map((place) => ({
+  const points = mapContext.filteredPlaces.map((place) => ({
     type: 'Feature',
     properties: {
       cluster: false,
@@ -74,9 +74,9 @@ const MapGL: React.FC = () => {
     <ReactMapGL
       {...mapContext.viewport}
       {...mapProps}
-      onViewportChange={(viewport: React.SetStateAction<Viewport>) => {
-        mapContext.setViewport(viewport);
-      }}
+      onViewportChange={(viewport: React.SetStateAction<Viewport>) =>
+        mapContext.setViewport(viewport)
+      }
       onInteractionStateChange={async (state: ExtraState) => {
         if (!state.isDragging) {
           {
@@ -100,6 +100,22 @@ const MapGL: React.FC = () => {
               }
             }
           }
+        }
+      }}
+      onLoad={async () => {
+        try {
+          await mapContext.placesQuery?.refetch({
+            input: {
+              filter: {
+                maxLatitude: mapContext.bounds.maxLatitude,
+                minLatitude: mapContext.bounds.minLatitude,
+                maxLongitude: mapContext.bounds.maxLongitude,
+                minLongitude: mapContext.bounds.minLongitude,
+              },
+            },
+          });
+        } catch (error) {
+          console.log(error);
         }
       }}
       ref={(instance) => (mapRef.current = instance)}

@@ -158,7 +158,7 @@ export default gql`
     name: String
     preview: Photo
     icon: String
-    posts: [Post]!
+    posts: [Post!]!
     nearbyPlaces: [NearbyPlaces]!
     distance: Float
   }

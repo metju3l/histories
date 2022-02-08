@@ -8,7 +8,7 @@ import { usePlacesQuery } from '@graphql/geo.graphql';
 import { usePostsQuery } from '@graphql/post.graphql';
 import Viewport from '@lib/types/viewport';
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Maybe } from '../.cache/__types__';
 import ArrowIcon from '../components/Elements/Icons/ArrowIcon';
@@ -32,6 +32,9 @@ export type SidebarPlaceType = {
 
 const Map: React.FC = () => {
   const [bounds, setBounds] = useState(defaultValues.bounds);
+  const [filteredPlaces, setFilteredPlaces] = useState<
+    Array<{ latitude: number; longitude: number; id: number }>
+  >([]);
   const placesQuery = usePlacesQuery({
     variables: {
       input: {
@@ -53,7 +56,7 @@ const Map: React.FC = () => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [timeLimitation, setTimeLimitation] = useState<[number, number]>([
     1000,
-    new Date().getTime(),
+    new Date().getFullYear(),
   ]);
 
   const [sidebarPlace, setSidebarPlace] =
@@ -61,6 +64,39 @@ const Map: React.FC = () => {
 
   // map viewport
   const [viewport, setViewport] = useState<Viewport>(defaultValues.viewport);
+
+  useEffect(() => {
+    console.log(timeLimitation);
+    console.log(
+      placesQuery.data?.places.filter((place) => {
+        return (
+          place.latitude > bounds.minLatitude &&
+          place.latitude < bounds.maxLatitude &&
+          place.longitude > bounds.minLongitude &&
+          place.longitude < bounds.maxLongitude &&
+          place.posts.filter((post) => {
+            const postDate = new Date(post.postDate).getFullYear(); // get post year
+            // cooonsole.log(postDDDDDDDDDDDDDate)
+            return postDate > timeLimitation[0] && postDate < timeLimitation[1]; // compare year with timeline limitations
+          }).length > 0
+        );
+      }) ?? []
+    );
+    setFilteredPlaces(
+      placesQuery.data?.places.filter((place) => {
+        return (
+          place.latitude > bounds.minLatitude &&
+          place.latitude < bounds.maxLatitude &&
+          place.longitude > bounds.minLongitude &&
+          place.longitude < bounds.maxLongitude &&
+          place.posts.filter((post) => {
+            const postDate = new Date(post.postDate).getFullYear(); // get post year
+            postDate > timeLimitation[0] && postDate < timeLimitation[1]; // compare year with timeline limitations
+          }).length > 0
+        );
+      }) ?? []
+    );
+  }, [timeLimitation, bounds]);
 
   return (
     <Layout
@@ -95,6 +131,8 @@ const Map: React.FC = () => {
           setHoverPlaceId,
           showSidebar,
           setShowSidebar,
+          filteredPlaces,
+          setFilteredPlaces,
         }}
       >
         <div className="w-full bg-[#FAFBFB] dark:bg-[#171716]">
