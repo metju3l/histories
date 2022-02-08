@@ -38,7 +38,7 @@ const Map: React.FC = () => {
   const placesQuery = usePlacesQuery({
     variables: {
       input: {
-        filter: { take: 1 },
+        filter: { take: 25 },
       },
     },
   });
@@ -66,22 +66,6 @@ const Map: React.FC = () => {
   const [viewport, setViewport] = useState<Viewport>(defaultValues.viewport);
 
   useEffect(() => {
-    console.log(timeLimitation);
-    console.log(
-      placesQuery.data?.places.filter((place) => {
-        return (
-          place.latitude > bounds.minLatitude &&
-          place.latitude < bounds.maxLatitude &&
-          place.longitude > bounds.minLongitude &&
-          place.longitude < bounds.maxLongitude &&
-          place.posts.filter((post) => {
-            const postDate = new Date(post.postDate).getFullYear(); // get post year
-            // cooonsole.log(postDDDDDDDDDDDDDate)
-            return postDate > timeLimitation[0] && postDate < timeLimitation[1]; // compare year with timeline limitations
-          }).length > 0
-        );
-      }) ?? []
-    );
     setFilteredPlaces(
       placesQuery.data?.places.filter((place) => {
         return (
@@ -91,12 +75,12 @@ const Map: React.FC = () => {
           place.longitude < bounds.maxLongitude &&
           place.posts.filter((post) => {
             const postDate = new Date(post.postDate).getFullYear(); // get post year
-            postDate > timeLimitation[0] && postDate < timeLimitation[1]; // compare year with timeline limitations
+            return postDate > timeLimitation[0] && postDate < timeLimitation[1]; // compare year with timeline limitations
           }).length > 0
         );
       }) ?? []
     );
-  }, [timeLimitation, bounds]);
+  }, [timeLimitation, placesQuery]);
 
   return (
     <Layout

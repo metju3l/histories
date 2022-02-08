@@ -81,41 +81,67 @@ const MapGL: React.FC = () => {
         if (!state.isDragging) {
           {
             if (mapRef.current) {
-              mapContext.setBounds(
-                ConvertBounds(mapRef.current.getMap().getBounds())
-              );
-              try {
-                await mapContext.placesQuery?.refetch({
+              const bounds = ConvertBounds(mapRef.current.getMap().getBounds());
+              mapContext.setBounds(bounds);
+
+              await mapContext.placesQuery?.fetchMore({
+                variables: {
                   input: {
                     filter: {
-                      maxLatitude: mapContext.bounds.maxLatitude,
-                      minLatitude: mapContext.bounds.minLatitude,
-                      maxLongitude: mapContext.bounds.maxLongitude,
-                      minLongitude: mapContext.bounds.minLongitude,
+                      maxLatitude: bounds.maxLatitude,
+                      maxLongitude: bounds.maxLongitude,
+                      minLatitude: bounds.minLatitude,
+                      minLongitude: bounds.minLongitude,
+                      exclude: mapContext.filteredPlaces.map(
+                        (place) => place.id
+                      ),
                     },
                   },
-                });
-              } catch (error) {
-                console.log(error);
-              }
+                },
+                updateQuery: (prev, { fetchMoreResult }) => {
+                  if (!fetchMoreResult) return prev; // if no new data, return prev data
+                  const prevPlaces =
+                    prev.places.length === undefined ? [] : prev.places;
+                  // add new places
+                  return {
+                    places: [
+                      ...prevPlaces,
+                      ...fetchMoreResult.places.filter(
+                        (place) => !prevPlaces.find((p) => p.id === place.id) // filter out duplicates
+                      ),
+                    ],
+                  };
+                },
+              });
+
+              await mapContext.postsQuery?.fetchMore({
+                variables: {
+                  input: {
+                    filter: {
+                      maxLatitude: bounds.maxLatitude,
+                      maxLongitude: bounds.maxLongitude,
+                      minLatitude: bounds.minLatitude,
+                      minLongitude: bounds.minLongitude,
+                    },
+                  },
+                },
+                updateQuery: (prev, { fetchMoreResult }) => {
+                  if (!fetchMoreResult) return prev; // if no new data, return prev data
+                  const prevPosts =
+                    prev.posts.length === undefined ? [] : prev.posts;
+                  // add new posts
+                  return {
+                    posts: [
+                      ...prevPosts,
+                      ...fetchMoreResult.posts.filter(
+                        (post) => !prevPosts.find((p) => p.id === post.id) // filter out duplicates
+                      ),
+                    ],
+                  };
+                },
+              });
             }
           }
-        }
-      }}
-      onLoad={async () => {
-        try {
-          await mapContext.placesQuery?.refetch({
-            input: {
-              filter: {
-                maxLatitude: mapContext.bounds.maxLatitude,
-                minLatitude: mapContext.bounds.minLatitude,
-                maxLongitude: mapContext.bounds.maxLongitude,
-                minLongitude: mapContext.bounds.minLongitude,
-              },
-            },
-          });
-        } catch (error) {
-          console.log(error);
         }
       }}
       ref={(instance) => (mapRef.current = instance)}

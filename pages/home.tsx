@@ -8,7 +8,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 const Index: React.FC = () => {
   const logged = useMeQuery();
 
-  if (logged.loading) return <div>logged loading</div>;
+  if (logged.loading) return <div>loading</div>;
   if (logged.error) {
     console.log(logged.error);
     return <div>logged error</div>;

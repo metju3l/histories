@@ -30,7 +30,7 @@ const RightPanel: React.FC = () => {
             className={`p-4 pt-8 overflow-y-auto text-black dark:text-white ${
               mapContext.sidebarPlace
                 ? ''
-                : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
+                : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 grid-flow-row gap-4'
             }`}
             style={{ height: 'calc(100vh - 123px)' }}
           >
