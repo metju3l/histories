@@ -3,11 +3,11 @@ import MapLayerMenu from '@components/Modules/Map/LayerMenu';
 import { ConvertBounds } from '@lib/functions';
 import Viewport from '@lib/types/viewport';
 import Image from 'next/image';
+import Router from 'next/router';
 import { useTheme } from 'next-themes';
 import React, { useRef, useState } from 'react';
 import ReactMapGL, { ExtraState, MapRef, Marker } from 'react-map-gl';
 import useSupercluster from 'use-supercluster';
-import Router from 'next/router';
 
 import { Maybe } from '../../../.cache/__types__';
 import { Dark, Light, Satellite } from '../../../shared/config/MapStyles';

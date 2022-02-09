@@ -68,7 +68,7 @@ const Places: React.FC = () => {
                 </div>
               </motion.div>
             )
-        ) ?? <></>}
+        ) ?? null}
     </>
   );
 };

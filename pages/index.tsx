@@ -117,32 +117,27 @@ const Map: React.FC<{
         >
           <AnimatePresence>
             <motion.section
-              className={`w-full grid ${
+              className={`w-full h-full grid ${
                 showSidebar
                   ? 'grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1'
                   : 'grid-cols-1 grid-rows-1'
-              } transition-all duration-500 ease-in-out h-screen`}
+              } `}
               transition={{
                 delay: !showSidebar ? 0 : 0.5,
                 duration: 0.25,
                 ease: 'easeInOut',
               }}
             >
-              <div className="relative w-full p-2 col-span-1">
+              <div className="relative w-full h-full p-2 col-span-1">
                 <button
                   onClick={() => setShowSidebar(!showSidebar)}
                   className="absolute z-50 flex items-center h-8 py-1 text-gray-500 bg-white border border-gray-200 top-4 right-4 hover:text-black hover:border-gray-400 rounded-xl"
                 >
-                  <motion.span
-                    animate={{ rotate: showSidebar ? '180deg' : '0deg' }}
-                    transition={{
-                      delay: 0.3,
-                      duration: 0.2,
-                      ease: 'easeInOut',
-                    }}
-                  >
-                    <ArrowIcon className={'w-8 py-1 h-8'} />
-                  </motion.span>
+                  <ArrowIcon
+                    className={`w-8 py-1 h-8 ${
+                      showSidebar ? 'rotate-180' : 'rotate-0'
+                    } transition-all duration-500 ease-in-out`}
+                  />
                 </button>
                 <div className="absolute left-0 z-20 px-8 pt-2 w-[28vw]">
                   <TimeLine domain={[1000, new Date().getFullYear()]} />
