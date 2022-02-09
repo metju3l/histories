@@ -21,7 +21,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-2">
-      <div className='flex gap-3 flex-col sm:flex-row'>
+      <div className="flex flex-col gap-3 sm:flex-row">
         <Input
           label={t('first_name')}
           register={register}
@@ -37,7 +37,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           autoComplete="family-name"
         />
       </div>
-
 
       <Input
         label={t('username')}

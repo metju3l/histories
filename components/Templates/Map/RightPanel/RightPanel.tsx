@@ -14,7 +14,7 @@ const RightPanel: React.FC = () => {
 
   return mapContext.showSidebar ? (
     <motion.div
-      className="h-full w-full bg-white overflow-y-auto relative"
+      className="relative w-full h-full overflow-y-auto bg-white"
       initial={{ opacity: 0, display: 'none' }}
       animate={{ opacity: 1, display: 'inline' }}
       exit={{ opacity: 0, display: 'none' }}

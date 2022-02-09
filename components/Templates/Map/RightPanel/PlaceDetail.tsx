@@ -51,38 +51,43 @@ const PlaceDetail: React.FC<{
           <div>error</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {data?.posts.map((post) => {
-              return (
-                <div
-                  key={post.id}
-                  className="flex flex-col w-full h-64 text-left bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-sm"
-                >
-                  {post.photos && (
-                    <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
-                      <Image
-                        src={UrlPrefix + post.photos[0].hash}
-                        layout="fill"
-                        objectFit="cover"
-                        objectPosition="center"
-                        className="rounded-t-lg"
-                        alt=""
-                        quality={60}
-                      />
+            {data?.posts
+              .filter((post) => post.photos[0]?.hash)
+              .map((post) => {
+                return (
+                  <div
+                    key={post.id}
+                    className="flex flex-col w-full h-64 text-left bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-sm"
+                  >
+                    {post.photos && (
+                      <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
+                        <Image
+                          src={UrlPrefix + post.photos[0].hash}
+                          layout="fill"
+                          objectFit="cover"
+                          objectPosition="center"
+                          className="rounded-t-lg"
+                          alt=""
+                          quality={60}
+                        />
+                      </div>
+                    )}
+                    <div className="px-4 py-2">
+                      <Link href={`/user/${post.author.username}`} passHref>
+                        <h2 className="text-lg font-medium cursor-pointer">
+                          {post.author.firstName} {post.author.lastName}
+                        </h2>
+                      </Link>
+                      <h3
+                        className="text-gray-600"
+                        style={{ fontSize: '12px' }}
+                      >
+                        {post.description}
+                      </h3>
                     </div>
-                  )}
-                  <div className="px-4 py-2">
-                    <Link href={`/user/${post.author.username}`} passHref>
-                      <h2 className="text-lg font-medium cursor-pointer">
-                        {post.author.firstName} {post.author.lastName}
-                      </h2>
-                    </Link>
-                    <h3 className="text-gray-600" style={{ fontSize: '12px' }}>
-                      {post.description}
-                    </h3>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         )}
       </div>

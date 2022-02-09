@@ -1,14 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { AiFillAndroid } from 'react-icons/ai';
 
 import NavbarItem from '../components/Modules/Navbar/NavbarItem';
 import CityImage from '../public/assets/city.png';
-import IphoneImage from '../public/assets/iphone.png';
-import NotebookImage from '../public/assets/notebook.png';
-import AndroidImage from '../public/assets/pixel.png';
-import TabletImage from '../public/assets/tablet.png';
 import LogoBlack from '../public/logo/big-black.svg';
 
 const AboutPage: React.FC = () => {
@@ -53,97 +48,28 @@ const AboutPage: React.FC = () => {
             <a className="text-brand">map</a>
           </Link>
           . If you have more questions about this project you can also check a{' '}
-          <Link href="/faq">
+          <Link href="https://docs-histories.netlify.app/docs/intro/">
             <a className="text-brand">documentation</a>
           </Link>
           .
         </p>
-        {/* DOWNLAOD */}
+
+        {/* ABOUT */}
         <div className="flex flex-col items-center pt-20 text-6xl gap-6">
-          <h1 className="text-6xl font-semibold">Download</h1>
-          <h3 className="text-4xl">Use Histories anytime anywhere</h3>
+          <h1 className="text-6xl font-semibold">Source code</h1>
         </div>
-        {/* DOWNLOAD GRID */}
-        <div className="pt-20 grid md:grid-cols-3 grid-cols-1 gap-4">
-          {/* WEB APP */}
-          <div className="flex flex-col items-center gap-8">
-            {/* HEADING */}
-            <h2 className="text-4xl">Web App</h2>
-
-            {/* IAMGE */}
-            <div className="relative w-full h-80">
-              <Image
-                src={TabletImage}
-                alt="tablet"
-                placeholder="blur"
-                layout="fill"
-                objectFit="contain"
-              />
-            </div>
-
-            {/* BUTTON */}
-            <Link href="/" passHref>
-              <button className="px-6 py-2 text-lg font-semibold text-white bg-gradient-to-br from-[#ff9a00] to-[#ff7300] rounded-xl min-w-[150px]">
-                Go to website
-              </button>
-            </Link>
-          </div>
-
-          {/* DESKTOP */}
-          <div className="flex flex-col items-center gap-8">
-            {/* HEADING */}
-            <h2 className="text-4xl">Desktop</h2>
-
-            {/* IAMGE */}
-            <div className="relative w-full h-80">
-              <Image
-                src={NotebookImage}
-                alt="tablet"
-                placeholder="blur"
-                layout="fill"
-                objectFit="contain"
-              />
-            </div>
-
-            {/* BUTTON */}
-            <button className="px-6 py-2 text-lg font-semibold text-white bg-gradient-to-br from-[#ff9a00] to-[#ff7300] rounded-xl min-w-[150px]">
-              Install
-            </button>
-          </div>
-
-          {/* MOBILE */}
-          <div className="flex flex-col items-center gap-8">
-            {/* HEADING */}
-            <h2 className="text-4xl">Mobile</h2>
-
-            {/* IAMGE */}
-            <div className="w-full grid grid-cols-2 h-80">
-              <div className="relative w-full h-80">
-                <Image
-                  placeholder="blur"
-                  src={IphoneImage}
-                  alt="tablet"
-                  layout="fill"
-                  objectFit="contain"
-                />
-              </div>
-              <div className="relative w-full h-80">
-                <Image
-                  src={AndroidImage}
-                  placeholder="blur"
-                  alt="tablet"
-                  layout="fill"
-                  objectFit="contain"
-                />
-              </div>
-            </div>
-
-            {/* BUTTON */}
-            <button className="flex items-center px-6 py-2 text-lg font-semibold text-white gap-1 bg-gradient-to-br from-[#ff9a00] to-[#ff7300] rounded-xl min-w-[150px]">
-              <AiFillAndroid className="w-6 h-6" /> In progress
-            </button>
-          </div>
-        </div>
+        <p className="pt-4 text-xl">
+          Histories is entirely open source. You can find the{' '}
+          <Link href="https://github.com/histories-cc/histories">
+            <a className="text-brand">source code</a>
+          </Link>{' '}
+          on Github. If you want to report bug or request some feature, you can
+          do it{' '}
+          <Link href="https://github.com/histories-cc/histories/issues/new/choose">
+            <a className="text-brand">here</a>
+          </Link>
+          .
+        </p>
       </div>
     </div>
   );

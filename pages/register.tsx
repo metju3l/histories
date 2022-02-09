@@ -17,7 +17,7 @@ const Register: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { },
+    formState: {},
   } = useForm<RegisterFormInputs>();
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
@@ -74,7 +74,6 @@ const Register: React.FC = () => {
         register={register}
         loading={loading}
       />
-
     </AuthLayout>
   );
 };

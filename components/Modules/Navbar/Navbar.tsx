@@ -29,11 +29,6 @@ const Navbar: React.FC = () => {
             active={router.pathname === '/home'}
           />
           <NavbarItem
-            text={t('explore')}
-            href="/explore"
-            active={router.pathname === '/explore'}
-          />
-          <NavbarItem
             text={t('map')}
             href="/"
             active={router.pathname === '/'}
