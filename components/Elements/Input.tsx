@@ -14,7 +14,7 @@ export type InputProps = {
 
 const Input: React.FC<InputProps> = ({
   register,
-  type,
+  type = 'text',
   name,
   options,
   autoComplete,
@@ -23,9 +23,9 @@ const Input: React.FC<InputProps> = ({
   placeholder,
 }) => {
   return (
-    <label htmlFor={name}>
+    <label htmlFor={name} className="pb-2">
       {/* LABEL */}
-      <h4 className="pt-0 pb-2 font-medium text-gray-600">{label}</h4>
+      <h4 className="pt-0 font-medium text-gray-600">{label}</h4>
 
       {/* INPUT */}
       <input
@@ -36,7 +36,7 @@ const Input: React.FC<InputProps> = ({
         className={
           type === 'checkbox'
             ? ''
-            : 'w-full h-10 px-3 mt-2 mb-1 leading-tight text-gray-700 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline'
+            : 'w-full h-10 px-3 leading-tight text-gray-700 rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline'
         }
         {...register(name, options)}
         autoComplete={autoComplete}

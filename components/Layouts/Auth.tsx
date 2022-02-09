@@ -8,7 +8,7 @@ export type AuthLayoutProps = { head: HeadProps };
 const AuthLayout: React.FC<AuthLayoutProps> = ({ head, children }) => {
   return (
     <Main head={head}>
-      <div className="p-10 m-auto max-w-[27rem]">{children}</div>
+      <section className="px-2 pt-6 m-auto max-w-[28rem]">{children}</section>
     </Main>
   );
 };

@@ -17,7 +17,7 @@ const Register: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: {},
+    formState: { },
   } = useForm<RegisterFormInputs>();
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
@@ -69,13 +69,12 @@ const Register: React.FC = () => {
         },
       }}
     >
-      <div className="p-10 m-auto max-w-[27rem]">
-        <RegisterForm
-          onSubmit={handleSubmit(onSubmit)}
-          register={register}
-          loading={loading}
-        />
-      </div>
+      <RegisterForm
+        onSubmit={handleSubmit(onSubmit)}
+        register={register}
+        loading={loading}
+      />
+
     </AuthLayout>
   );
 };

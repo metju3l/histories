@@ -21,21 +21,23 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-2">
-      <Input
-        label={t('first_name')}
-        register={register}
-        name="firstName"
-        options={{ required: true, maxLength: 50 }}
-        autoComplete="given-name"
-      />
+      <div className='flex gap-3 flex-col sm:flex-row'>
+        <Input
+          label={t('first_name')}
+          register={register}
+          name="firstName"
+          options={{ required: true, maxLength: 50 }}
+          autoComplete="given-name"
+        />
+        <Input
+          label={t('last_name')}
+          register={register}
+          name="lastName"
+          options={{ required: true, maxLength: 50 }}
+          autoComplete="family-name"
+        />
+      </div>
 
-      <Input
-        label={t('last_name')}
-        register={register}
-        name="lastName"
-        options={{ required: true, maxLength: 50 }}
-        autoComplete="family-name"
-      />
 
       <Input
         label={t('username')}
@@ -82,9 +84,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         </span>
       </label>
 
-      <div className="mt-2 mb-2">
-        <Button loading={loading}>{t('register')}</Button>
-      </div>
+      <Button style="primary_solid" loading={loading}>
+        {t(loading ? 'loading' : 'register')}
+      </Button>
+
       <GoogleAuthButton text={t('google_register')} />
       <Link href="/login">
         <a className="pl-2 underline">{t('log_in_to_existing_account')}</a>
