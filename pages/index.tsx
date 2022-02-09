@@ -32,11 +32,13 @@ export type SidebarPlaceType = {
 };
 
 const Map: React.FC<{
-  lat?: number;
-  lng?: number;
-  zoom?: number;
+  lat: number | null;
+  lng: number | null;
+  zoom: number | null;
+  minDate: number | null;
+  maxDate: number | null;
   place?: number;
-}> = ({ lat, lng, zoom, place }) => {
+}> = ({ lat, lng, zoom, minDate, maxDate }) => {
   const [bounds, setBounds] = useState(defaultValues.bounds);
 
   const placesQuery = usePlacesQuery({
@@ -142,7 +144,7 @@ const Map: React.FC<{
                     <ArrowIcon className={'w-8 py-1 h-8'} />
                   </motion.span>
                 </button>
-                <div className="absolute right-0 z-20 px-8 pt-2 w-[28vw]">
+                <div className="absolute left-0 z-20 px-8 pt-2 w-[28vw]">
                   <TimeLine domain={[1000, new Date().getFullYear()]} />
                 </div>
                 <MapGL />
@@ -160,7 +162,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (ctx.req.url?.startsWith('_next')) return { props: {} };
 
   return {
-    props: ctx.query,
+    props: {
+      lat: typeof ctx.query.lat === 'string' ? parseFloat(ctx.query.lat) : null,
+      lng: typeof ctx.query.lng === 'string' ? parseFloat(ctx.query.lng) : null,
+      zoom:
+        typeof ctx.query.zoom === 'string' ? parseFloat(ctx.query.zoom) : null,
+      maxTime:
+        typeof ctx.query.maxTime === 'string'
+          ? parseFloat(ctx.query.maxTime)
+          : null,
+      minTime:
+        typeof ctx.query.minTime === 'string'
+          ? parseFloat(ctx.query.minTime)
+          : null,
+    },
   };
 };
 

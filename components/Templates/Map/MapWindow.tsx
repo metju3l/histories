@@ -7,6 +7,7 @@ import { useTheme } from 'next-themes';
 import React, { useRef, useState } from 'react';
 import ReactMapGL, { ExtraState, MapRef, Marker } from 'react-map-gl';
 import useSupercluster from 'use-supercluster';
+import Router from 'next/router';
 
 import { Maybe } from '../../../.cache/__types__';
 import { Dark, Light, Satellite } from '../../../shared/config/MapStyles';
@@ -46,10 +47,6 @@ const MapGL: React.FC = () => {
   const points = mapContext.placesQuery?.data?.places
     ?.filter(
       (place) =>
-        place.latitude > mapContext.bounds.minLatitude &&
-        place.latitude < mapContext.bounds.maxLatitude &&
-        place.longitude > mapContext.bounds.minLongitude &&
-        place.longitude < mapContext.bounds.maxLongitude &&
         place.posts.filter((post) => {
           const postDate = new Date(post.postDate).getFullYear(); // get post year
           return (
@@ -162,6 +159,15 @@ const MapGL: React.FC = () => {
                       ),
                     ],
                   };
+                },
+              });
+
+              Router.replace({
+                pathname: '/',
+                query: {
+                  lat: mapContext.viewport.latitude.toFixed(4),
+                  lng: mapContext.viewport.longitude.toFixed(4),
+                  zoom: mapContext.viewport.zoom.toFixed(4),
                 },
               });
             }
