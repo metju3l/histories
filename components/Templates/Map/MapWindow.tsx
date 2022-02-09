@@ -43,19 +43,34 @@ const MapGL: React.FC = () => {
     mapboxApiAccessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN, // MAPBOX API ACCESS TOKEN
   };
 
-  const points = mapContext.filteredPlaces.map((place) => ({
-    type: 'Feature',
-    properties: {
-      cluster: false,
-      id: place.id,
-      icon: place.icon,
-      preview: place?.preview?.hash,
-    },
-    geometry: {
-      type: 'Point',
-      coordinates: [place.longitude, place.latitude],
-    },
-  }));
+  const points = mapContext.placesQuery?.data?.places
+    ?.filter(
+      (place) =>
+        place.latitude > mapContext.bounds.minLatitude &&
+        place.latitude < mapContext.bounds.maxLatitude &&
+        place.longitude > mapContext.bounds.minLongitude &&
+        place.longitude < mapContext.bounds.maxLongitude &&
+        place.posts.filter((post) => {
+          const postDate = new Date(post.postDate).getFullYear(); // get post year
+          return (
+            postDate > mapContext.timeLimitation[0] &&
+            postDate < mapContext.timeLimitation[1]
+          ); // compare year with timeline limitations
+        }).length > 0
+    )
+    .map((place) => ({
+      type: 'Feature',
+      properties: {
+        cluster: false,
+        id: place.id,
+        icon: place.icon,
+        preview: place?.preview?.hash,
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [place.longitude, place.latitude],
+      },
+    }));
 
   // get clusters
   const { clusters, supercluster } = useSupercluster({
@@ -92,9 +107,15 @@ const MapGL: React.FC = () => {
                       maxLongitude: bounds.maxLongitude,
                       minLatitude: bounds.minLatitude,
                       minLongitude: bounds.minLongitude,
-                      exclude: mapContext.filteredPlaces.map(
-                        (place) => place.id
-                      ),
+                      exclude: mapContext.placesQuery.data?.places
+                        .filter(
+                          (place) =>
+                            place.latitude > bounds.minLatitude &&
+                            place.latitude < bounds.maxLatitude &&
+                            place.longitude > bounds.minLongitude &&
+                            place.longitude < bounds.maxLongitude
+                        )
+                        .map((place) => place.id),
                     },
                   },
                 },

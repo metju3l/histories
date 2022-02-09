@@ -10,9 +10,20 @@ const Places: React.FC = () => {
 
   return (
     <>
-      {mapContext.filteredPlaces
+      {mapContext.placesQuery?.data?.places
         .filter(
           (place) =>
+            place.latitude > mapContext.bounds.minLatitude &&
+            place.latitude < mapContext.bounds.maxLatitude &&
+            place.longitude > mapContext.bounds.minLongitude &&
+            place.longitude < mapContext.bounds.maxLongitude &&
+            place.posts.filter((post) => {
+              const postDate = new Date(post.postDate).getFullYear(); // get post year
+              return (
+                postDate > mapContext.timeLimitation[0] &&
+                postDate < mapContext.timeLimitation[1]
+              ); // compare year with timeline limitations
+            }).length > 0 &&
             place?.preview?.hash &&
             place?.preview?.blurhash &&
             place?.preview?.height &&

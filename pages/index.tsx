@@ -9,7 +9,7 @@ import { usePostsQuery } from '@graphql/post.graphql';
 import Viewport from '@lib/types/viewport';
 import { AnimatePresence, motion } from 'framer-motion';
 import { GetServerSideProps } from 'next';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Maybe } from '../.cache/__types__';
 import ArrowIcon from '../components/Elements/Icons/ArrowIcon';
@@ -38,9 +38,7 @@ const Map: React.FC<{
   place?: number;
 }> = ({ lat, lng, zoom, place }) => {
   const [bounds, setBounds] = useState(defaultValues.bounds);
-  const [filteredPlaces, setFilteredPlaces] = useState<
-    Array<{ latitude: number; longitude: number; id: number }>
-  >([]);
+
   const placesQuery = usePlacesQuery({
     variables: {
       input: {
@@ -76,23 +74,6 @@ const Map: React.FC<{
     zoom: zoom || defaultValues.viewport.zoom,
   });
 
-  useEffect(() => {
-    setFilteredPlaces(
-      placesQuery.data?.places.filter((place) => {
-        return (
-          place.latitude > bounds.minLatitude &&
-          place.latitude < bounds.maxLatitude &&
-          place.longitude > bounds.minLongitude &&
-          place.longitude < bounds.maxLongitude &&
-          place.posts.filter((post) => {
-            const postDate = new Date(post.postDate).getFullYear(); // get post year
-            return postDate > timeLimitation[0] && postDate < timeLimitation[1]; // compare year with timeline limitations
-          }).length > 0
-        );
-      }) ?? []
-    );
-  }, [timeLimitation, placesQuery]);
-
   return (
     <Layout
       head={{
@@ -126,8 +107,6 @@ const Map: React.FC<{
           setHoverPlaceId,
           showSidebar,
           setShowSidebar,
-          filteredPlaces,
-          setFilteredPlaces,
         }}
       >
         <div
@@ -136,10 +115,11 @@ const Map: React.FC<{
         >
           <AnimatePresence>
             <motion.section
-              className={`w-full grid ${showSidebar
+              className={`w-full grid ${
+                showSidebar
                   ? 'grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1'
                   : 'grid-cols-1 grid-rows-1'
-                } transition-all duration-500 ease-in-out h-screen`}
+              } transition-all duration-500 ease-in-out h-screen`}
               transition={{
                 delay: !showSidebar ? 0 : 0.5,
                 duration: 0.25,
