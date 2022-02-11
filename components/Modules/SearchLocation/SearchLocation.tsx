@@ -6,7 +6,7 @@ import {
   ComboboxOption,
   ComboboxPopover,
 } from '@reach/combobox';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HiSearch } from 'react-icons/hi';
 import usePlacesAutocomplete, {
@@ -24,19 +24,8 @@ const SearchLocation: React.FC<SearchLocationProps> = ({
   setViewport,
 }) => {
   const { t } = useTranslation<string>(); // i18n
-  const [searchCoordinates, setSearchCoordinates] = useState({
-    lat: 50,
-    lng: 15,
-  }); // coordinates of the selected search result
+
   const [showList, setShowList] = useState<boolean>(false); // show list of results
-  useEffect(() => {
-    setViewport({
-      ...viewport,
-      longitude: searchCoordinates.lng,
-      latitude: searchCoordinates.lat,
-      zoom: 14,
-    });
-  }, [searchCoordinates]); // update viewport on search result change
 
   const {
     ready,
@@ -51,7 +40,9 @@ const SearchLocation: React.FC<SearchLocationProps> = ({
 
     getGeocode({ address: val }) // get coordinates of the selected search result
       .then((results) => getLatLng(results[0])) // get coordinates
-      .then(({ lat, lng }) => setSearchCoordinates({ lat, lng })) // set coordinates
+      .then(({ lat, lng }) =>
+        setViewport({ ...viewport, latitude: lat, longitude: lng, zoom: 14 })
+      ) // set coordinates
       .catch((error) => console.log('😱 Error: ', error)); // error handling
   }
 
