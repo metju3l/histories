@@ -93,5 +93,6 @@
   "log_in_to_existing_account": "Log in to existing account",
   "send_reset_password_link": "Send reset password link",
   "edit_collection": "Edit collection",
-  "delete_collection": "Delete collection"
+  "delete_collection": "Delete collection",
+  "search_place": "Search place"
 }

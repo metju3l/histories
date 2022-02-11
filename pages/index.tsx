@@ -10,6 +10,7 @@ import Viewport from '@lib/types/viewport';
 import { AnimatePresence, motion } from 'framer-motion';
 import { GetServerSideProps } from 'next';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Maybe } from '../.cache/__types__';
 import ArrowIcon from '../components/Elements/Icons/ArrowIcon';
@@ -39,6 +40,7 @@ const Map: React.FC<{
   maxDate: number | null;
   place?: number;
 }> = ({ lat, lng, zoom, minDate, maxDate }) => {
+  const { t } = useTranslation<string>();
   const [bounds, setBounds] = useState(defaultValues.bounds);
 
   const placesQuery = usePlacesQuery({
@@ -116,10 +118,11 @@ const Map: React.FC<{
           style={{ height: 'calc(100vh - 64px)' }}
         >
           <AnimatePresence>
+            {/* MAIN GRID */}
             <motion.section
               className={`w-full h-full grid ${
                 showSidebar
-                  ? 'grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1'
+                  ? 'grid-cols-1 grid-rows-2 lg:grid-cols-[auto_48.25em] xl:grid-cols-[auto_62.25em] md:grid-cols-[auto_32.25em] md:grid-rows-1'
                   : 'grid-cols-1 grid-rows-1'
               } `}
               transition={{
@@ -128,7 +131,21 @@ const Map: React.FC<{
                 ease: 'easeInOut',
               }}
             >
+              {/* MAP */}
               <div className="relative w-full h-full p-2 col-span-1">
+                {/* SEARCH */}
+                {/*   <div className="absolute left-4 z-40 top-4 w-96 flex rounded-lg bg-white items-center px-4">
+                  <input
+                    className="w-full h-12 text-lg font-medium placeholder-gray-300 rounded-lg focus:outline-none focus:shadow-outline"
+                    placeholder={t('search_place')}
+                  />
+                  <button>
+                    <HiSearch className="h-8 w-8 text-gray-300" />
+                  </button>
+                </div>
+              */}
+
+                {/* HIDE SIDEBAR ARROW ICON */}
                 <button
                   onClick={() => setShowSidebar(!showSidebar)}
                   className="absolute z-50 flex items-center h-8 py-1 text-gray-500 bg-white border border-gray-200 top-4 right-4 hover:text-black hover:border-gray-400 rounded-xl"
@@ -139,11 +156,13 @@ const Map: React.FC<{
                     } transition-all duration-500 ease-in-out`}
                   />
                 </button>
-                <div className="absolute left-0 z-20 px-8 pt-2 w-[28vw]">
+                <div className="absolute bottom-0 left-0 z-20 px-8 pt-2 w-[28vw]">
                   <TimeLine domain={[1000, new Date().getFullYear()]} />
                 </div>
                 <MapGL />
               </div>
+
+              {/* RIGHT PANEL */}
               <RightPanel />
             </motion.section>
           </AnimatePresence>

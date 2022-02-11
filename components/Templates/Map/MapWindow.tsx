@@ -1,5 +1,6 @@
 import { PhotoMarkerIcon } from '@components/icons';
 import MapLayerMenu from '@components/Modules/Map/LayerMenu';
+import { SearchLocation } from '@components/Modules/SearchLocation';
 import { ConvertBounds } from '@lib/functions';
 import Viewport from '@lib/types/viewport';
 import Image from 'next/image';
@@ -83,152 +84,163 @@ const MapGL: React.FC = () => {
   });
 
   return (
-    <ReactMapGL
-      {...mapContext.viewport}
-      {...mapProps}
-      onViewportChange={(viewport: React.SetStateAction<Viewport>) =>
-        mapContext.setViewport(viewport)
-      }
-      onInteractionStateChange={async (state: ExtraState) => {
-        if (!state.isDragging) {
-          {
-            if (mapRef.current) {
-              const bounds = ConvertBounds(mapRef.current.getMap().getBounds());
-              mapContext.setBounds(bounds);
-
-              await mapContext.placesQuery?.fetchMore({
-                variables: {
-                  input: {
-                    filter: {
-                      maxLatitude: bounds.maxLatitude,
-                      maxLongitude: bounds.maxLongitude,
-                      minLatitude: bounds.minLatitude,
-                      minLongitude: bounds.minLongitude,
-                      exclude: mapContext.placesQuery.data?.places
-                        .filter(
-                          (place) =>
-                            place.latitude > bounds.minLatitude &&
-                            place.latitude < bounds.maxLatitude &&
-                            place.longitude > bounds.minLongitude &&
-                            place.longitude < bounds.maxLongitude
-                        )
-                        .map((place) => place.id),
-                    },
-                  },
-                },
-                updateQuery: (prev, { fetchMoreResult }) => {
-                  if (!fetchMoreResult) return prev; // if no new data, return prev data
-                  const prevPlaces =
-                    prev.places === undefined ||
-                    prev.places.length === undefined
-                      ? []
-                      : prev.places;
-                  // add new places
-                  return {
-                    places: [
-                      ...prevPlaces,
-                      ...fetchMoreResult.places.filter(
-                        (place) => !prevPlaces.find((p) => p.id === place.id) // filter out duplicates
-                      ),
-                    ],
-                  };
-                },
-              });
-
-              await mapContext.postsQuery?.fetchMore({
-                variables: {
-                  input: {
-                    filter: {
-                      maxLatitude: bounds.maxLatitude,
-                      maxLongitude: bounds.maxLongitude,
-                      minLatitude: bounds.minLatitude,
-                      minLongitude: bounds.minLongitude,
-                    },
-                  },
-                },
-                updateQuery: (prev, { fetchMoreResult }) => {
-                  if (!fetchMoreResult) return prev; // if no new data, return prev data
-                  const prevPosts =
-                    prev.posts.length === undefined ? [] : prev.posts;
-                  // add new posts
-                  return {
-                    posts: [
-                      ...prevPosts,
-                      ...fetchMoreResult.posts.filter(
-                        (post) => !prevPosts.find((p) => p.id === post.id) // filter out duplicates
-                      ),
-                    ],
-                  };
-                },
-              });
-
-              Router.replace({
-                pathname: '/',
-                query: {
-                  lat: mapContext.viewport.latitude.toFixed(4),
-                  lng: mapContext.viewport.longitude.toFixed(4),
-                  zoom: mapContext.viewport.zoom.toFixed(4),
-                },
-              });
-            }
-          }
-        }
-      }}
-      ref={(instance) => (mapRef.current = instance)}
-    >
-      {clusters.map((cluster) => {
-        const [longitude, latitude] = cluster.geometry.coordinates;
-        const { cluster: isCluster, point_count: pointCount } =
-          cluster.properties;
-
-        const filteredPlace = mapContext.placesQuery?.data?.places.find(
-          (place) => place.id == cluster.id
-        );
-
-        return (
-          <MapMarker
-            key={cluster.id}
-            place={{
-              id: cluster.id,
-              longitude,
-              latitude,
-              icon: isCluster ? undefined : filteredPlace?.icon, // return icon only if it's place (not cluster)
-              preview: {
-                hash:
-                  filteredPlace?.preview?.hash ?? cluster.properties.preview,
-              },
-            }}
-            numberOfPlaces={pointCount}
-            onClick={() => {
-              if (!isCluster) {
-                // if it's not a cluster open place in sidebar and end function
-                mapContext.setSidebarPlace(cluster);
-                return;
-              }
-              // if it's a cluster zoom to see all places
-              const expansionZoom = Math.min(
-                supercluster.getClusterExpansionZoom(cluster.id),
-                20
-              );
-
-              mapContext.setViewport({
-                ...mapContext.viewport,
-                latitude,
-                longitude,
-                zoom: expansionZoom,
-              });
-            }}
-          />
-        );
-      })}
-
-      <div className="absolute z-40 right-2 bottom-2">
-        <MapLayerMenu
-          setMapStyle={setMapStyle}
+    <>
+      {/* SEARCH */}
+      <div className="absolute z-40 top-4 left-4 w-96">
+        <SearchLocation
           viewport={mapContext.viewport}
+          setViewport={mapContext.setViewport}
         />
       </div>
-    </ReactMapGL>
+      <ReactMapGL
+        {...mapContext.viewport}
+        {...mapProps}
+        onViewportChange={(viewport: React.SetStateAction<Viewport>) =>
+          mapContext.setViewport(viewport)
+        }
+        onInteractionStateChange={async (state: ExtraState) => {
+          if (!state.isDragging) {
+            {
+              if (mapRef.current) {
+                const bounds = ConvertBounds(
+                  mapRef.current.getMap().getBounds()
+                );
+                mapContext.setBounds(bounds);
+
+                await mapContext.placesQuery?.fetchMore({
+                  variables: {
+                    input: {
+                      filter: {
+                        maxLatitude: bounds.maxLatitude,
+                        maxLongitude: bounds.maxLongitude,
+                        minLatitude: bounds.minLatitude,
+                        minLongitude: bounds.minLongitude,
+                        exclude: mapContext.placesQuery.data?.places
+                          .filter(
+                            (place) =>
+                              place.latitude > bounds.minLatitude &&
+                              place.latitude < bounds.maxLatitude &&
+                              place.longitude > bounds.minLongitude &&
+                              place.longitude < bounds.maxLongitude
+                          )
+                          .map((place) => place.id),
+                      },
+                    },
+                  },
+                  updateQuery: (prev, { fetchMoreResult }) => {
+                    if (!fetchMoreResult) return prev; // if no new data, return prev data
+                    const prevPlaces =
+                      prev.places === undefined ||
+                      prev.places.length === undefined
+                        ? []
+                        : prev.places;
+                    // add new places
+                    return {
+                      places: [
+                        ...prevPlaces,
+                        ...fetchMoreResult.places.filter(
+                          (place) => !prevPlaces.find((p) => p.id === place.id) // filter out duplicates
+                        ),
+                      ],
+                    };
+                  },
+                });
+
+                await mapContext.postsQuery?.fetchMore({
+                  variables: {
+                    input: {
+                      filter: {
+                        maxLatitude: bounds.maxLatitude,
+                        maxLongitude: bounds.maxLongitude,
+                        minLatitude: bounds.minLatitude,
+                        minLongitude: bounds.minLongitude,
+                      },
+                    },
+                  },
+                  updateQuery: (prev, { fetchMoreResult }) => {
+                    if (!fetchMoreResult) return prev; // if no new data, return prev data
+                    const prevPosts =
+                      prev.posts.length === undefined ? [] : prev.posts;
+                    // add new posts
+                    return {
+                      posts: [
+                        ...prevPosts,
+                        ...fetchMoreResult.posts.filter(
+                          (post) => !prevPosts.find((p) => p.id === post.id) // filter out duplicates
+                        ),
+                      ],
+                    };
+                  },
+                });
+
+                Router.replace({
+                  pathname: '/',
+                  query: {
+                    lat: mapContext.viewport.latitude.toFixed(4),
+                    lng: mapContext.viewport.longitude.toFixed(4),
+                    zoom: mapContext.viewport.zoom.toFixed(4),
+                  },
+                });
+              }
+            }
+          }
+        }}
+        ref={(instance) => (mapRef.current = instance)}
+      >
+        {clusters.map((cluster) => {
+          const [longitude, latitude] = cluster.geometry.coordinates;
+          const { cluster: isCluster, point_count: pointCount } =
+            cluster.properties;
+
+          const filteredPlace = mapContext.placesQuery?.data?.places.find(
+            (place) => place.id == cluster.id
+          );
+
+          return (
+            <MapMarker
+              key={cluster.id}
+              place={{
+                id: cluster.id,
+                longitude,
+                latitude,
+                icon: isCluster ? undefined : filteredPlace?.icon, // return icon only if it's place (not cluster)
+                preview: {
+                  hash:
+                    filteredPlace?.preview?.hash ?? cluster.properties.preview,
+                },
+              }}
+              numberOfPlaces={pointCount}
+              onClick={() => {
+                if (!isCluster) {
+                  // if it's not a cluster open place in sidebar and end function
+                  mapContext.setSidebarPlace(cluster);
+                  return;
+                }
+                // if it's a cluster zoom to see all places
+                const expansionZoom = Math.min(
+                  supercluster.getClusterExpansionZoom(cluster.id),
+                  20
+                );
+
+                mapContext.setViewport({
+                  ...mapContext.viewport,
+                  latitude,
+                  longitude,
+                  zoom: expansionZoom,
+                });
+              }}
+            />
+          );
+        })}
+
+        <div className="absolute z-40 right-2 bottom-2">
+          <MapLayerMenu
+            setMapStyle={setMapStyle}
+            viewport={mapContext.viewport}
+          />
+        </div>
+      </ReactMapGL>
+    </>
   );
 };
 
