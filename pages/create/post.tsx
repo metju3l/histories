@@ -1,8 +1,8 @@
 import { Input, Separator } from '@components/Elements';
-import Button from '@components/Elements/Buttons/Button';
+import Button from '@components/Elements/buttons/Button';
 import ArrowIcon from '@components/Elements/Icons/ArrowIcon';
 import { Layout } from '@components/Layouts';
-import { Search } from '@components/Templates/MainPage';
+import Search from '@components/modules/Search';
 import { useCreatePostMutation } from '@graphql/post.graphql';
 import { useMeQuery } from '@graphql/user.graphql';
 import { RedirectAnonymous } from '@lib/functions/ServerSideProps';

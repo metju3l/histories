@@ -1,5 +1,5 @@
 import MainLayout from '@components/Layouts/Main';
-import PageNotFoundTemplate from '@components/Templates/PageNotFound';
+import PageNotFoundTemplate from '@components/templates/PageNotFound';
 import React from 'react';
 
 const PageNotFound: React.FC = () => {

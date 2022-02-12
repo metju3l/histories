@@ -1,4 +1,4 @@
-import DeletePostModal from '@components/Modules/modals/DeletePostModal';
+import DeletePostModal from '@components/modules/modals/DeletePostModal';
 import { useDeleteMutation } from '@graphql/post.graphql';
 import { useUnfollowMutation } from '@graphql/relations.graphql';
 import { Menu, Transition } from '@headlessui/react';

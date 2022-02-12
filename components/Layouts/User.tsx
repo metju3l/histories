@@ -1,5 +1,5 @@
-import { LeftPanel } from '@components/Modules/UserPage/LeftPanel';
-import { SubNav } from '@components/Modules/UserPage/Subnav';
+import { LeftPanel } from '@components/modules/UserPage/LeftPanel';
+import { SubNav } from '@components/modules/UserPage/Subnav';
 import HeadProps from '@lib/types/head';
 import React, { useState } from 'react';
 

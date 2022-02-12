@@ -1,7 +1,4 @@
-import MapStyleMenu from '@components/Modules/map/MapStyleMenu';
-import { SearchLocation } from '@components/Modules/SearchLocation';
-import { ConvertBounds } from '@lib/functions';
-import GetMapStyle from '@lib/functions/map/GetMapStyle';
+import { ConvertBounds, GetMapStyle } from '@lib/functions/map';
 import { IViewport, MapStyles } from '@lib/types/map';
 import { useTheme } from 'next-themes';
 import React, { useRef, useState } from 'react';
@@ -9,12 +6,16 @@ import ReactMapGL, { ExtraState, MapRef } from 'react-map-gl';
 import useSupercluster from 'use-supercluster';
 
 import { Maybe } from '../../../.cache/__types__';
-import { MapContext } from '../../Templates/Map/MapContext';
-import Clusters from './Clusters';
-import FetchMore from './FetchMore';
-import GetPoints from './GetPoints';
+import { MapContext } from '../../templates/map/MapContext';
+import {
+  Clusters,
+  FetchMore,
+  GetPoints,
+  MapStyleMenu,
+  SearchLocation,
+} from './index';
 
-const MapGL: React.FC = () => {
+const Map: React.FC = () => {
   const mapContext = React.useContext(MapContext); // get map context
   const [mapStyle, setMapStyle] = useState<MapStyles>('theme'); // possible map styles, defaults to theme
   const { resolvedTheme } = useTheme(); // get current theme
@@ -87,4 +88,4 @@ const MapGL: React.FC = () => {
   );
 };
 
-export default MapGL;
+export default Map;

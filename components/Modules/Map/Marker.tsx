@@ -1,5 +1,5 @@
 import { PhotoMarkerIcon } from '@components/icons';
-import { MapContext } from '@components/Templates/Map/MapContext';
+import { MapContext } from '@components/templates/map/MapContext';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { Marker as MapGLMarker } from 'react-map-gl';

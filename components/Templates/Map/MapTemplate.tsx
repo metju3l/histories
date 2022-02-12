@@ -1,5 +1,5 @@
 import ArrowIcon from '@components/Elements/Icons/ArrowIcon';
-import { TimeLine } from '@components/Modules/TimeLine';
+import { TimeLine } from '@components/modules/TimeLine';
 import { usePlacesQuery } from '@graphql/geo.graphql';
 import { usePostsQuery } from '@graphql/post.graphql';
 import { IViewport } from '@lib/types/map';
@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { SidebarPlaceType } from 'pages';
 import React, { useState } from 'react';
 
-import MapGL from '../../Modules/map/MapWindow';
+import Map from '../../modules/map/Map';
 import { defaultValues, MapContext } from './MapContext';
 import RightPanel from './RightPanel/RightPanel';
 import { Maybe } from '.cache/__types__';
@@ -121,7 +121,7 @@ const MapTemplate: React.FC<MapTemplateProps> = ({
               <div className="absolute bottom-0 left-0 z-20 px-8 pt-2 w-[28vw]">
                 <TimeLine domain={[1000, new Date().getFullYear()]} />
               </div>
-              <MapGL />
+              <Map />
             </div>
 
             {/* RIGHT PANEL */}

@@ -4,10 +4,9 @@ import {
   InMemoryCache,
   QueryResult,
 } from '@apollo/client';
-import { PlusIcon } from '@components/icons';
 import UserLayout from '@components/Layouts/User';
-import { Post } from '@components/Modules/Post';
-import Card from '@components/Modules/UserPage/Card';
+import { Post } from '@components/modules/Post';
+import Card from '@components/modules/UserPage/Card';
 import {
   PostsDocument,
   PostsQuery,
@@ -22,6 +21,7 @@ import {
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import React from 'react';
+import { HiPlus } from 'react-icons/hi';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Exact, InputMaybe, PostsInput } from '../../../.cache/__types__';
@@ -85,7 +85,7 @@ const PostsPage: React.FC<{
         <div className="flex justify-end w-full">
           <Link href="/create/post" passHref>
             <button className="flex items-center px-3 py-1 text-xs font-semibold text-gray-500 border border-gray-500 rounded-full gap-2 space-x-1.5 shadown-sm w-max">
-              <PlusIcon className="w-2 h-2" /> Create post
+              <HiPlus className="w-2 h-2" /> Create post
             </button>
           </Link>
         </div>

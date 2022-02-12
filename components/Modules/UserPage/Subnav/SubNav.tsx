@@ -1,13 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import {
-  BarsIcon,
-  CollectionsIcon,
-  GridIcon,
-  MapIcon,
-  PostsIcon,
-} from '../../../icons';
+  HiFolderOpen,
+  HiOutlineCollection,
+  HiOutlineMap,
+} from 'react-icons/hi';
+
+import { BarsIcon, GridIcon } from '../../../icons';
 import UserSubNavItem from './SubNavItem';
 
 export type UserSubNavProps = {
@@ -33,7 +32,7 @@ const SubNav: React.FC<UserSubNavProps> = ({
           currentTab={currentTab}
           name="posts"
         >
-          <PostsIcon />
+          <HiOutlineCollection />
           {t('posts')}
         </UserSubNavItem>
         <UserSubNavItem
@@ -41,7 +40,7 @@ const SubNav: React.FC<UserSubNavProps> = ({
           currentTab={currentTab}
           name="collections"
         >
-          <CollectionsIcon className="w-4 h-4" />
+          <HiFolderOpen className="w-4 h-4" />
           {t('collections')}
         </UserSubNavItem>
         <UserSubNavItem
@@ -49,7 +48,7 @@ const SubNav: React.FC<UserSubNavProps> = ({
           currentTab={currentTab}
           name="map"
         >
-          <MapIcon />
+          <HiOutlineMap className="w-5 h-5" />
           {`${user.firstName}'s ${t('map')}`}
         </UserSubNavItem>
       </div>

@@ -1,4 +1,4 @@
-import AddToCollectionModal from '@components/Modules/modals/AddToCollectionModal';
+import AddToCollectionModal from '@components/modules/modals/AddToCollectionModal';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';

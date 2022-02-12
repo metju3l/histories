@@ -1,4 +1,4 @@
-import { MapContext } from '@components/Templates/Map/MapContext';
+import { MapContext } from '@components/templates/map/MapContext';
 import React from 'react';
 import { Handles, Rail, Slider, Ticks, Tracks } from 'react-compound-slider';
 

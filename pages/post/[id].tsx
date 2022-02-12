@@ -1,4 +1,4 @@
-import PostDetail from '@components/Templates/PostDetail';
+import PostDetail from '@components/templates/PostDetail';
 import { NextPageContext } from 'next';
 import React from 'react';
 

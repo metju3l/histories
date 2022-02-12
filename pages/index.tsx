@@ -1,5 +1,5 @@
 import Main from '@components/Layouts/Main';
-import MapTemplate from '@components/Templates/Map/MapTemplate';
+import MapTemplate from '@components/templates/map/MapTemplate';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 

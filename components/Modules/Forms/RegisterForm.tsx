@@ -1,5 +1,5 @@
 import { Button, Input } from '@components/Elements';
-import GoogleAuthButton from '@components/Elements/Buttons/GoogleAuth';
+import GoogleAuthButton from '@components/Elements/buttons/GoogleAuth';
 import RegisterFormInputs from '@lib/types/forms/registerFormInputs';
 import Link from 'next/link';
 import React from 'react';

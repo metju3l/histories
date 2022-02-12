@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-import NavbarItem from '../components/Modules/Navbar/NavbarItem';
+import NavbarItem from '../components/modules/Navbar/NavbarItem';
 import CityImage from '../public/assets/city.png';
 import LogoBlack from '../public/logo/big-black.svg';
 

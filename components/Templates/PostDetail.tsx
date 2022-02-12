@@ -1,5 +1,5 @@
 import { Layout } from '@components/Layouts';
-import { Minimap } from '@components/Modules/Minimap';
+import { Minimap } from '@components/modules/Minimap';
 import { usePostQuery } from '@graphql/post.graphql';
 import Image from 'next/image';
 import Link from 'next/link';
