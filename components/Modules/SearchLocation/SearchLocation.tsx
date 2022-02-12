@@ -1,4 +1,4 @@
-import Viewport from '@lib/types/viewport';
+import { IViewport } from '@lib/types/map';
 import {
   Combobox,
   ComboboxInput,
@@ -15,8 +15,8 @@ import usePlacesAutocomplete, {
 } from 'use-places-autocomplete';
 
 interface SearchLocationProps {
-  viewport: Viewport;
-  setViewport: React.Dispatch<React.SetStateAction<Viewport>>;
+  viewport: IViewport;
+  setViewport: React.Dispatch<React.SetStateAction<IViewport>>;
 }
 
 const SearchLocation: React.FC<SearchLocationProps> = ({

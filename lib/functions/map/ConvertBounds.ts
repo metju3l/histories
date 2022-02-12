@@ -1,9 +1,9 @@
-import Bounds from 'types/Bounds';
+import { IBounds } from '@lib/types/map';
 
 function ConvertBounds(bounds: {
   _ne: { lat: number; lng: number };
   _sw: { lat: number; lng: number };
-}): Bounds {
+}): IBounds {
   return {
     maxLatitude: bounds._ne.lat,
     minLatitude: bounds._sw.lat,

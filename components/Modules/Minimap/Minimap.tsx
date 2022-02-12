@@ -1,4 +1,4 @@
-import Viewport from '@lib/types/viewport';
+import { IViewport } from '@lib/types/map';
 import React, { useState } from 'react';
 import ReactMapGL from 'react-map-gl';
 
@@ -9,7 +9,7 @@ export type MinimapProps = {
 };
 
 const Minimap: React.FC<MinimapProps> = ({ coordinates }) => {
-  const [viewport, setViewport] = useState<Viewport>({
+  const [viewport, setViewport] = useState<IViewport>({
     latitude: coordinates[0],
     longitude: coordinates[1],
     zoom: 9,

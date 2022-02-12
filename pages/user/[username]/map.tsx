@@ -1,6 +1,6 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import UserLayout from '@components/Layouts/User';
-import MapLayerMenu from '@components/Modules/Map/LayerMenu';
+import MapStyleMenu from '@components/Modules/Map/MapStyleMenu';
 import Marker from '@components/Modules/Minimap/Marker';
 import Card from '@components/Modules/UserPage/Card';
 import { PostsDocument } from '@graphql/post.graphql';
@@ -10,14 +10,14 @@ import {
   IsJwtValid,
   SSRRedirect,
 } from '@lib/functions';
-import Viewport from '@lib/types/viewport';
+import GetMapStyle from '@lib/functions/map/GetMapStyle';
+import { IViewport, MapStyles } from '@lib/types/map';
 import { GetServerSidePropsContext } from 'next';
 import { useTheme } from 'next-themes';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactMapGL from 'react-map-gl';
 
-import { Dark, Light, Satellite } from '../../../shared/config/MapStyles';
 import UrlPrefix from '../../../shared/config/UrlPrefix';
 import { ValidateUsername } from '../../../shared/validation';
 
@@ -27,7 +27,7 @@ const UserMapPage: React.FC<{
 }> = ({ userQuery, postsTmp }) => {
   const user = userQuery.user;
 
-  const [viewport, setViewport] = useState<Viewport>({
+  const [viewport, setViewport] = useState<IViewport>({
     latitude: 50,
     longitude: 15,
     zoom: 9,
@@ -36,9 +36,7 @@ const UserMapPage: React.FC<{
   });
   const { t } = useTranslation();
 
-  const [mapStyle, setMapStyle] = React.useState<
-    'theme' | 'light' | 'dark' | 'satellite'
-  >('theme');
+  const [mapStyle, setMapStyle] = useState<MapStyles>('theme');
 
   const { resolvedTheme } = useTheme();
 
@@ -83,17 +81,7 @@ const UserMapPage: React.FC<{
             height: '100%',
             className: 'rounded-lg relative',
             // default map style by theme
-            mapStyle:
-              mapStyle === 'theme'
-                ? resolvedTheme === 'dark'
-                  ? Dark
-                  : Light
-                : // explicit map styles
-                mapStyle === 'dark'
-                ? Dark
-                : mapStyle === 'satellite'
-                ? Satellite
-                : Light, // MAPBOX STYLE
+            mapStyle: GetMapStyle(mapStyle, resolvedTheme),
             mapboxApiAccessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN, // MAPBOX API ACCESS TOKEN
           }}
           onViewportChange={setViewport}
@@ -120,7 +108,7 @@ const UserMapPage: React.FC<{
             ))
           }
           <div className="absolute z-40 right-2 bottom-2">
-            <MapLayerMenu setMapStyle={setMapStyle} viewport={viewport} />
+            <MapStyleMenu setMapStyle={setMapStyle} viewport={viewport} />
           </div>
         </ReactMapGL>
       </div>

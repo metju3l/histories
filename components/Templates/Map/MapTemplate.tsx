@@ -2,13 +2,13 @@ import ArrowIcon from '@components/Elements/Icons/ArrowIcon';
 import { TimeLine } from '@components/Modules/TimeLine';
 import { usePlacesQuery } from '@graphql/geo.graphql';
 import { usePostsQuery } from '@graphql/post.graphql';
-import Viewport from '@lib/types/viewport';
+import { IViewport } from '@lib/types/map';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SidebarPlaceType } from 'pages';
 import React, { useState } from 'react';
 
+import MapGL from '../../Modules/Map/MapWindow';
 import { defaultValues, MapContext } from './MapContext';
-import MapGL from './MapWindow';
 import RightPanel from './RightPanel/RightPanel';
 import { Maybe } from '.cache/__types__';
 
@@ -59,7 +59,7 @@ const MapTemplate: React.FC<MapTemplateProps> = ({
     useState<Maybe<SidebarPlaceType>>(null);
 
   // map viewport
-  const [viewport, setViewport] = useState<Viewport>({
+  const [viewport, setViewport] = useState<IViewport>({
     ...defaultValues.viewport,
     latitude: lat || defaultValues.viewport.latitude,
     longitude: lng || defaultValues.viewport.longitude,

@@ -1,18 +1,5 @@
-import { QueryResult } from '@apollo/client';
-import { PlacesQuery } from '@graphql/geo.graphql';
-import { PostsQuery } from '@graphql/post.graphql';
-import Viewport from '@lib/types/viewport';
-import { SidebarPlaceType } from 'pages';
+import { IMapContext } from '@lib/types/map';
 import React from 'react';
-import Bounds from 'types/Bounds';
-
-import {
-  Exact,
-  InputMaybe,
-  Maybe,
-  PlacesInput,
-  PostsInput,
-} from '../../../.cache/__types__';
 
 export const defaultValues = {
   bounds: {
@@ -30,42 +17,7 @@ export const defaultValues = {
   },
 };
 
-export type MapContextType = {
-  bounds: Bounds;
-  setBounds: React.Dispatch<React.SetStateAction<Bounds>>;
-  whatToShow: 'places' | 'photos';
-  setWhatToShow: React.Dispatch<React.SetStateAction<'places' | 'photos'>>;
-  viewport: Viewport;
-  setViewport: React.Dispatch<React.SetStateAction<Viewport>>;
-  sidebarPlace: Maybe<SidebarPlaceType>;
-  setSidebarPlace: React.Dispatch<
-    React.SetStateAction<Maybe<SidebarPlaceType>>
-  >;
-  timeLimitation: [number, number];
-  setTimeLimitation: React.Dispatch<React.SetStateAction<[number, number]>>;
-  placesQuery:
-    | QueryResult<
-        PlacesQuery,
-        Exact<{
-          input?: InputMaybe<PlacesInput> | undefined;
-        }>
-      >
-    | undefined;
-  postsQuery:
-    | QueryResult<
-        PostsQuery,
-        Exact<{
-          input?: InputMaybe<PostsInput> | undefined;
-        }>
-      >
-    | undefined;
-  hoverPlaceId: number | null;
-  setHoverPlaceId: React.Dispatch<React.SetStateAction<number | null>>;
-  showSidebar: boolean;
-  setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export const MapContext = React.createContext<MapContextType>({
+export const MapContext = React.createContext<IMapContext>({
   bounds: defaultValues.bounds,
   setBounds: () => {},
   whatToShow: 'places',

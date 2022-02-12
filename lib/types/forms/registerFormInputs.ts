@@ -1,4 +1,4 @@
-type RegisterFormInputs = {
+interface RegisterFormInputs {
   firstName: string;
   lastName: string;
   username: string;
@@ -6,6 +6,6 @@ type RegisterFormInputs = {
   password: string;
   repeatPassword: string;
   notifications: boolean;
-};
+}
 
 export default RegisterFormInputs;

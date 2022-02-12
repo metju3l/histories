@@ -1,22 +1,17 @@
 import { Menu } from '@headlessui/react';
-import Viewport from '@lib/types/viewport';
+import { IViewport, MapStyles } from '@lib/types/map';
 import React from 'react';
 import ReactMapGL from 'react-map-gl';
 
 import { Dark, Light, Satellite } from '../../../shared/config/MapStyles';
 import { LayersIcon } from '../Minimap/icons';
 
-export type MapLayerMenuProps = {
-  viewport: Viewport;
-  setMapStyle: React.Dispatch<
-    React.SetStateAction<'light' | 'theme' | 'dark' | 'satellite'>
-  >;
-};
+interface IMapStyleMenu {
+  viewport: IViewport;
+  setMapStyle: React.Dispatch<React.SetStateAction<MapStyles>>;
+}
 
-const MapLayerMenu: React.FC<MapLayerMenuProps> = ({
-  viewport,
-  setMapStyle,
-}) => {
+const MapStyleMenu: React.FC<IMapStyleMenu> = ({ viewport, setMapStyle }) => {
   return (
     <Menu>
       <Menu.Button
@@ -79,4 +74,4 @@ const MapLayerMenu: React.FC<MapLayerMenuProps> = ({
   );
 };
 
-export default MapLayerMenu;
+export default MapStyleMenu;
