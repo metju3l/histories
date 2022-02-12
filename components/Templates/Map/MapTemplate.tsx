@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { SidebarPlaceType } from 'pages';
 import React, { useState } from 'react';
 
-import MapGL from '../../Modules/Map/MapWindow';
+import MapGL from '../../Modules/map/MapWindow';
 import { defaultValues, MapContext } from './MapContext';
 import RightPanel from './RightPanel/RightPanel';
 import { Maybe } from '.cache/__types__';

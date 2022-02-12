@@ -1,8 +1,8 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import UserLayout from '@components/Layouts/User';
 import DropdownTransition from '@components/Modules/Dropdown/DropdownTransition';
+import DeleteCollectionModal from '@components/Modules/modals/DeleteCollectionModal';
 import Card from '@components/Modules/UserPage/Card';
-import DeleteCollectionModal from '@components/Templates/Modals/DeleteCollectionModal';
 import {
   CollectionDocument,
   CollectionQuery,

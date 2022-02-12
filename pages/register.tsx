@@ -1,5 +1,5 @@
 import AuthLayout from '@components/Layouts/Auth';
-import RegisterForm from '@components/Modules/Forms/RegisterForm';
+import RegisterForm from '@components/Modules/forms/RegisterForm';
 import { useCreateUserMutation } from '@graphql/auth.graphql';
 import { RedirectLogged } from '@lib/functions/ServerSideProps';
 import RegisterFormInputs from '@lib/types/forms/registerFormInputs';

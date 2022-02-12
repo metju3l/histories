@@ -1,6 +1,6 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import UserLayout from '@components/Layouts/User';
-import MapStyleMenu from '@components/Modules/Map/MapStyleMenu';
+import MapStyleMenu from '@components/Modules/map/MapStyleMenu';
 import Marker from '@components/Modules/Minimap/Marker';
 import Card from '@components/Modules/UserPage/Card';
 import { PostsDocument } from '@graphql/post.graphql';
