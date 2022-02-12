@@ -4,7 +4,6 @@ import { SearchLocation } from '@components/Modules/SearchLocation';
 import { ConvertBounds } from '@lib/functions';
 import Viewport from '@lib/types/viewport';
 import Image from 'next/image';
-import Router from 'next/router';
 import { useTheme } from 'next-themes';
 import React, { useRef, useState } from 'react';
 import ReactMapGL, { ExtraState, MapRef, Marker } from 'react-map-gl';
@@ -170,15 +169,6 @@ const MapGL: React.FC = () => {
                         ),
                       ],
                     };
-                  },
-                });
-
-                Router.replace({
-                  pathname: '/',
-                  query: {
-                    lat: mapContext.viewport.latitude.toFixed(4),
-                    lng: mapContext.viewport.longitude.toFixed(4),
-                    zoom: mapContext.viewport.zoom.toFixed(4),
                   },
                 });
               }

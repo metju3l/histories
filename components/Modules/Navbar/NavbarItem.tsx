@@ -13,10 +13,8 @@ const NavbarItem: React.FC<{ text: string; href: string; active: boolean }> = ({
   return (
     <Link href={href}>
       <a
-        className={`cursor-pointer py-2 px-4 border-b-4 border-transparent transition ease-in-out font-semibold ${
-          active
-            ? 'text-black border-black dark:text-gray-200 dark:border-gray-200'
-            : 'text-gray-400 dark:text-gray-600 hover:border-gray-400 dark:hover:border-gray-600'
+        className={`block font-medium dark:text-gray-200 px-4 py-2 rounded-lg transition ease-in-out text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 ${
+          active ? 'bg-gray-100 dark:bg-gray-800' : ''
         }`}
       >
         {FirstLetterUppercase(t(text))}

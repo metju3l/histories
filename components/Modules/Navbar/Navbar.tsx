@@ -20,9 +20,9 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="fixed z-40 w-full bg-white border-b border-gray-200 dark:text-white dark:bg-[#171716] dark:border-gray-800">
-      <div className="flex items-center justify-between h-full max-w-4xl px-4 pt-4 m-auto">
+      <div className="flex items-center justify-between h-full max-w-4xl px-4 py-2 m-auto">
         {/* LEFT SIDE */}
-        <span className="flex">
+        <span className="flex items-center h-full gap-2">
           <NavbarItem
             text="Home"
             href="/home"

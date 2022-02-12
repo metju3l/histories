@@ -33,8 +33,8 @@ export const defaultValues = {
 export type MapContextType = {
   bounds: Bounds;
   setBounds: React.Dispatch<React.SetStateAction<Bounds>>;
-  whatToShow: Maybe<string>;
-  setWhatToShow: React.Dispatch<React.SetStateAction<Maybe<string>>>;
+  whatToShow: 'places' | 'photos';
+  setWhatToShow: React.Dispatch<React.SetStateAction<'places' | 'photos'>>;
   viewport: Viewport;
   setViewport: React.Dispatch<React.SetStateAction<Viewport>>;
   sidebarPlace: Maybe<SidebarPlaceType>;
