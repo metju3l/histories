@@ -2,13 +2,9 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@components/*": ["components/*"],
-      "@icons/*": ["public/icons/*"],
-      "@graphql/*": ["lib/graphql/*"],
-      "@hooks/*": ["lib/hooks/*"],
-      "@lib/*": ["lib/*"],
+      "@components/*": ["src/components/*"],
+      "@graphql/*": ["src/graphql/*"],
       "@src/*": ["src/*"],
-      "@validation/*": ["validation/*"],
       "@public/*": ["public/*"]
     },
     "target": "es5",

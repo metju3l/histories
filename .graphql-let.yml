@@ -1,4 +1,4 @@
-schema: './src/graphql/utils/type-defs.ts'
+schema: './backend/graphql/utils/type-defs.ts'
 documents: '**/*.graphql'
 plugins:
   - typescript-operations

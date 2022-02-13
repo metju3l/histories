@@ -9,7 +9,7 @@
 </div>
 <br>
 <div align="center">
-    <img src="https://github.com/hiStories-cc/histories/actions/workflows/build-node.yml/badge.svg" alt="build"/> 
+    <img src="https://github.com/histories-cc/histories/actions/workflows/CI-and-deploy.yml/badge.svg" alt="CI and build"/> 
     <img src="https://github.com/hiStories-cc/histories/actions/workflows/test-node.yml/badge.svg" alt="test"/>
     <a href="https://gitpod.io/#https://github.com/histories-cc/histories"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"/></a>
 </div>
@@ -53,8 +53,7 @@ yarn dev
 
 ```
 hiStories/
-├── pages (using nextjs routing)
-├── src (backend)
+├── backend
 │   ├── database
 │   ├── email
 │   ├── IPFS
@@ -64,17 +63,18 @@ hiStories/
 │           ├── apolloServer
 │           ├── schema
 │           └── type-defs
-├── shared (used by backend and frontend)
 ├── dist (compiled backend)
-├── lib (frontend)
+├── shared (used by backend and frontend)
+├── src (frontend)
 │   ├── graphql
 │   ├── hooks
-│   └── tranlation (i18n)
-├── components (inspired by atomic design principles)
-│   ├── elements (small building blocks)
-│   ├── layouts (wrappers for templates)
-│   ├── modules (more building blocks together)
-│   └── templates (page specific content)
+│   ├── tranlation (i18n)
+│   ├── pages (using nextjs routing)
+│   └── components (inspired by atomic design principles)
+│   │   ├── elements (small building blocks)
+│   │   ├── layouts (wrappers for templates)
+│   │   ├── modules (more building blocks together)
+│   │   └── templates (page specific content)
 └── public
 ```
 

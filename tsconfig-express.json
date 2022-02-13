@@ -11,6 +11,6 @@
     "removeComments": true
   },
   "compileOnSave": true,
-  "include": ["src", "shared"],
+  "include": ["backend", "shared"],
   "exclude": ["**/__test__"]
 }
