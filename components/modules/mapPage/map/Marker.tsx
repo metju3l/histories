@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { Marker as MapGLMarker } from 'react-map-gl';
 
-import UrlPrefix from '../../../lib/constants/IPFSUrlPrefix';
+import UrlPrefix from '../../../../lib/constants/IPFSUrlPrefix';
 
 interface MarkerProps {
   place: {

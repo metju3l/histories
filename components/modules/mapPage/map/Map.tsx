@@ -5,8 +5,8 @@ import React, { useRef, useState } from 'react';
 import ReactMapGL, { ExtraState, MapRef } from 'react-map-gl';
 import useSupercluster from 'use-supercluster';
 
-import { Maybe } from '../../../.cache/__types__';
-import { MapContext } from '../../../lib/contexts/MapContext';
+import { Maybe } from '../../../../.cache/__types__';
+import { MapContext } from '../../../../lib/contexts/MapContext';
 import {
   Clusters,
   FetchMore,
