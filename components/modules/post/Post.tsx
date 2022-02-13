@@ -1,4 +1,8 @@
 import AddToCollectionModal from '@components/modules/modals/AddToCollectionModal';
+import {
+  useLikeMutation,
+  useUnlikeMutation,
+} from '@graphql/mutations/relations.graphql';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,10 +14,6 @@ import { IoIosMore } from 'react-icons/io';
 import TimeAgo from 'react-timeago';
 
 import { Maybe, Photo } from '../../../.cache/__types__';
-import {
-  useLikeMutation,
-  useUnlikeMutation,
-} from '@graphql/mutations/relations.graphql';
 import { LoginContext } from '../../../pages/_app';
 import UrlPrefix from '../../../shared/config/UrlPrefix';
 import Card from '../userPage/Card';

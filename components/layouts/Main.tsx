@@ -1,11 +1,11 @@
 import { ApolloError, ApolloQueryResult } from '@apollo/client';
+import { MeQuery, useMeQuery } from '@graphql/queries/user.graphql';
 import HeadProps from '@lib/types/head';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 import React, { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 
-import { MeQuery, useMeQuery } from '@graphql/queries/user.graphql';
 import { LoginContext as AppLoginContext } from '../../pages/_app';
 import { orange_main } from '../../shared/config/colors';
 import { Navbar } from '../modules/navbar';

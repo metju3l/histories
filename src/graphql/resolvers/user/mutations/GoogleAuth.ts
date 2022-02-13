@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import RunCypherQuery from '../../../../database/RunCypherQuery';
 import SignJWT from '../../../../functions/SignJWT';
-import { UploadPhoto } from '../../../../IPFS';
+import { UploadPhoto } from '../../../../ipfs';
 import RegisteredWithGoogleEmail from '../../../../email/content/NewPassword';
 import { GenerateBlurhash } from '../../../../functions';
 

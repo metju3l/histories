@@ -15,7 +15,7 @@ import {
   SuggestedUsersQuery,
   UserQuery,
 } from '../../../graphql/resolvers';
-import FullTextSearch from '../../resolvers/Search/FullTextSearch';
+import FullTextSearch from '../../resolvers/search/FullTextSearch';
 import { contextType } from './resolvers';
 
 const queries = {

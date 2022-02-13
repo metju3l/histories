@@ -1,4 +1,4 @@
-import ForgotPassword from '../../resolvers/User/Mutation/ForgotPassword';
+import ForgotPassword from '../../resolvers/user/mutations/ForgotPassword';
 import sharp from 'sharp';
 import streamToPromise from 'stream-to-promise';
 
@@ -19,7 +19,7 @@ import {
   ValidatePassword,
   ValidateUsername,
 } from '../../../../shared/validation';
-import { UploadPhoto } from '../../../IPFS';
+import { UploadPhoto } from '../../../ipfs';
 import {
   AddPostToCollection,
   CreateCollection,
@@ -43,7 +43,7 @@ import {
 } from '../../resolvers';
 import LastPost from '../../resolvers/lastPost';
 import { contextType, OnlyLogged, Validate } from './resolvers';
-import ResetPassword from '../../resolvers/User/Mutation/ResetPassword';
+import ResetPassword from '../../resolvers/user/mutations/ResetPassword';
 import { GenerateBlurhash, NSFWCheck } from '../../../functions';
 import UrlPrefix from '../../../../shared/config/UrlPrefix';
 
