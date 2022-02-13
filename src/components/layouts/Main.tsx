@@ -1,12 +1,12 @@
+import MeContext from '@src/contexts/MeContext';
 import HeadProps from '@src/types/head';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 import React, { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 
-import { Navbar } from '../modules/navbar';
-import MeContext from '@src/contexts/MeContext';
 import { orange_main } from '../../../shared/constants/colors';
+import { Navbar } from '../modules/navbar';
 
 interface MainLayoutProps {
   head: HeadProps;

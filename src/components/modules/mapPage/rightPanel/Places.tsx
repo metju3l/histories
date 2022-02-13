@@ -1,9 +1,8 @@
+import UrlPrefix from '@src/constants/IPFSUrlPrefix';
+import { MapContext } from '@src/contexts/MapContext';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React from 'react';
-
-import UrlPrefix from '@src/constants/IPFSUrlPrefix';
-import { MapContext } from '@src/contexts/MapContext';
 
 const Places: React.FC = () => {
   const mapContext = React.useContext(MapContext);
@@ -25,14 +24,13 @@ const Places: React.FC = () => {
               ); // compare year with timeline limitations
             }).length > 0 &&
             place?.preview?.hash &&
-            place?.preview?.blurhash &&
-            place?.preview?.height &&
-            place?.preview?.width
+            place?.preview?.blurhash
         )
         .map(
           (place) =>
             place.preview && (
               <motion.div
+                key={place.id}
                 className={`flex flex-col w-full h-64 bg-white border border-gray-200 rounded-lg ${
                   mapContext.hoverPlaceId === place.id
                     ? 'border-black shadow-sm'
@@ -48,6 +46,7 @@ const Places: React.FC = () => {
                   ease: 'easeInOut',
                 }}
               >
+                {place.id}
                 {place.preview && (
                   <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
                     <Image

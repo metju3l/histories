@@ -3,6 +3,7 @@ import {
   useFollowMutation,
   useUnfollowMutation,
 } from '@graphql/mutations/relations.graphql';
+import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 import MeContext from '@src/contexts/MeContext';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,7 +12,6 @@ import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
 import { Maybe } from '../../../../../.cache/__types__';
-import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 
 export type UserLeftPanelProps = {
   user: {

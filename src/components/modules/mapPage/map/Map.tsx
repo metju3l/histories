@@ -1,3 +1,4 @@
+import { MapContext } from '@src/contexts/MapContext';
 import { ConvertBounds, GetMapStyle } from '@src/functions/map';
 import { IViewport, MapStyles } from '@src/types/map';
 import { useTheme } from 'next-themes';
@@ -6,7 +7,6 @@ import ReactMapGL, { ExtraState, MapRef } from 'react-map-gl';
 import useSupercluster from 'use-supercluster';
 
 import { Maybe } from '../../../../../.cache/__types__';
-import { MapContext } from '@src/contexts/MapContext';
 import {
   Clusters,
   FetchMore,
@@ -27,14 +27,14 @@ const Map: React.FC = () => {
       GetPoints({
         timeLimitation: mapContext.timeLimitation,
         places: mapContext.placesQuery?.data?.places,
-      }) ?? [],
+      }) ?? [], // get places from query in correct format
     zoom: mapContext.viewport.zoom,
     bounds: mapRef.current
       ? mapRef.current.getMap().getBounds().toArray().flat()
       : null,
     options: {
-      radius: 75,
-      maxZoom: 20,
+      radius: 75, // cluster radius
+      maxZoom: 20, // max zoom to cluster points on
     },
   }); // get clusters
 

@@ -13,6 +13,7 @@ import {
   usePostsQuery,
 } from '@graphql/queries/post.graphql';
 import { UserDocument, UserQuery } from '@graphql/queries/user.graphql';
+import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 import {
   GetCookieFromServerSideProps,
   IsJwtValid,
@@ -25,7 +26,6 @@ import { HiPlus } from 'react-icons/hi';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Exact, InputMaybe, PostsInput } from '../../../../.cache/__types__';
-import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 import { ValidateUsername } from '../../../../shared/validation';
 
 const PostsPage: React.FC<{

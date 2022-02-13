@@ -4,6 +4,7 @@ import MapStyleMenu from '@components/modules/mapPage/map/MapStyleMenu';
 import Card from '@components/modules/userPage/Card';
 import { PostsDocument } from '@graphql/queries/post.graphql';
 import { UserDocument, UserQuery } from '@graphql/queries/user.graphql';
+import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 import {
   GetCookieFromServerSideProps,
   IsJwtValid,
@@ -18,7 +19,6 @@ import { useTranslation } from 'react-i18next';
 import { HiLocationMarker } from 'react-icons/hi';
 import ReactMapGL, { Marker } from 'react-map-gl';
 
-import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 import { ValidateUsername } from '../../../../shared/validation';
 
 const UserMapPage: React.FC<{

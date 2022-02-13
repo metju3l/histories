@@ -3,6 +3,7 @@ import {
   useLikeMutation,
   useUnlikeMutation,
 } from '@graphql/mutations/relations.graphql';
+import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 import MeContext from '@src/contexts/MeContext';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -18,7 +19,6 @@ import { Maybe, Photo } from '../../../../.cache/__types__';
 import Card from '../userPage/Card';
 import { LikePost, PostTimeline, UnlikePost } from '.';
 import OptionsMenu from './OptionsMenu';
-import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 
 type PostProps = {
   author: {

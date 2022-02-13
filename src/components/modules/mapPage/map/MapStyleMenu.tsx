@@ -1,10 +1,9 @@
 import { Menu } from '@headlessui/react';
+import { Dark, Light, Satellite } from '@src/constants/MapStyles';
 import { IViewport, MapStyles } from '@src/types/map';
 import React from 'react';
 import { BiLayer } from 'react-icons/bi';
 import ReactMapGL from 'react-map-gl';
-
-import { Dark, Light, Satellite } from '@src/constants/MapStyles';
 
 interface IMapStyleMenu {
   viewport: IViewport;

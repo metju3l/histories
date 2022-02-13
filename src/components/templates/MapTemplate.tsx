@@ -5,11 +5,11 @@ import {
   boundsPlaceholder,
   viewportPlaceholder,
 } from '@src/constants/MapPlaceholderValues';
-import { IViewport } from '@src/types/map';
+import { MapContext } from '@src/contexts/MapContext';
 import { SidebarPlaceType } from '@src/pages';
+import { IViewport } from '@src/types/map';
 import React, { useState } from 'react';
 
-import { MapContext } from '@src/contexts/MapContext';
 import { Maybe } from '.cache/__types__';
 
 interface MapTemplateProps {

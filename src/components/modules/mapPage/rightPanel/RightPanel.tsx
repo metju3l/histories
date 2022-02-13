@@ -1,7 +1,7 @@
+import { MapContext } from '@src/contexts/MapContext';
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 
-import { MapContext } from '@src/contexts/MapContext';
 import Photos from './Photos';
 import PlaceDetail from './PlaceDetail';
 import Places from './Places';

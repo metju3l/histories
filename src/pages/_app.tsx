@@ -4,13 +4,13 @@ import 'src/styles/main.css';
 import { ApolloProvider } from '@apollo/client';
 import { useMeQuery } from '@graphql/queries/user.graphql';
 import MeContext from '@src/contexts/MeContext';
+import { useApollo } from '@src/utils/apollo';
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
 import NextNprogress from 'nextjs-progressbar';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useApollo } from '@src/utils/apollo';
 import { orange_main } from '../../shared/constants/colors';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
