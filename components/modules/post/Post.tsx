@@ -16,7 +16,7 @@ import {
 } from '../../../lib/graphql/relations.graphql';
 import { LoginContext } from '../../../pages/_app';
 import UrlPrefix from '../../../shared/config/UrlPrefix';
-import Card from '../UserPage/Card';
+import Card from '../userPage/Card';
 import { LikePost, PostTimeline, UnlikePost } from '.';
 import OptionsMenu from './OptionsMenu';
 

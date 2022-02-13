@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import UrlPrefix from 'shared/config/UrlPrefix';
 
 import { LoginContext } from '../../layouts';
-import DropdownTransition from '../Dropdown/DropdownTransition';
+import DropdownTransition from '../dropdown/DropdownTransition';
 
 const UserDropdown: React.FC = () => {
   const loginContext = React.useContext(LoginContext);

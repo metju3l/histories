@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 
 import { MapContext } from '../MapContext';
-import { SubNav } from '../SubNav';
+import { SubNav } from '../subNav';
 import Photos from './Photos';
 import PlaceDetail from './PlaceDetail';
 import Places from './Places';

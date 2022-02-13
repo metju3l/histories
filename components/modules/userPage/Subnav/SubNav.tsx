@@ -4,9 +4,10 @@ import {
   HiFolderOpen,
   HiOutlineCollection,
   HiOutlineMap,
+  HiViewGrid,
+  HiViewList,
 } from 'react-icons/hi';
 
-import { BarsIcon, GridIcon } from '../../../icons';
 import UserSubNavItem from './SubNavItem';
 
 export type UserSubNavProps = {
@@ -54,9 +55,9 @@ const SubNav: React.FC<UserSubNavProps> = ({
       </div>
       <div onClick={() => setView(view === 'list' ? 'grid' : 'list')}>
         {view === 'list' ? (
-          <GridIcon className="w-4 h-4" />
+          <HiViewGrid className="w-4 h-4" />
         ) : (
-          <BarsIcon className="w-4 h-4" />
+          <HiViewList className="w-4 h-4" />
         )}
       </div>
     </div>

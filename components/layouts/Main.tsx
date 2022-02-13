@@ -8,7 +8,7 @@ import { Toaster } from 'react-hot-toast';
 import { MeQuery, useMeQuery } from '../../lib/graphql/user.graphql';
 import { LoginContext as AppLoginContext } from '../../pages/_app';
 import { orange_main } from '../../shared/config/colors';
-import { Navbar } from '../modules/Navbar';
+import { Navbar } from '../modules/navbar';
 
 type LayoutProps = {
   head: HeadProps;

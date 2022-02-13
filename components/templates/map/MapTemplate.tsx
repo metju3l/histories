@@ -9,7 +9,7 @@ import { HiOutlineChevronLeft } from 'react-icons/hi';
 
 import Map from '../../modules/map/Map';
 import { defaultValues, MapContext } from './MapContext';
-import RightPanel from './RightPanel/RightPanel';
+import RightPanel from './rightPanel/RightPanel';
 import { Maybe } from '.cache/__types__';
 
 interface MapTemplateProps {

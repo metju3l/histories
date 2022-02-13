@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
 import { LoginContext } from '../../../pages/_app';
-import DropdownTransition from '../Dropdown/DropdownTransition';
+import DropdownTransition from '../dropdown/DropdownTransition';
 
 export type OptionsMenuProps = {
   id: number;

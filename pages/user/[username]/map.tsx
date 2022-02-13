@@ -1,7 +1,7 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import UserLayout from '@components/layouts/User';
 import MapStyleMenu from '@components/modules/map/MapStyleMenu';
-import Card from '@components/modules/UserPage/Card';
+import Card from '@components/modules/userPage/Card';
 import { PostsDocument } from '@graphql/post.graphql';
 import { UserDocument, UserQuery } from '@graphql/user.graphql';
 import {

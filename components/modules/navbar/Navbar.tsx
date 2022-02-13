@@ -6,7 +6,7 @@ import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LoginContext } from '../../layouts';
-import DropdownTransition from '../Dropdown/DropdownTransition';
+import DropdownTransition from '../dropdown/DropdownTransition';
 import { NavbarItem, UserDropdown } from './index';
 
 const Navbar: React.FC = () => {

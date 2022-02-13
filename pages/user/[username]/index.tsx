@@ -5,8 +5,8 @@ import {
   QueryResult,
 } from '@apollo/client';
 import UserLayout from '@components/layouts/User';
-import { Post } from '@components/modules/Post';
-import Card from '@components/modules/UserPage/Card';
+import { Post } from '@components/modules/post';
+import Card from '@components/modules/userPage/Card';
 import {
   PostsDocument,
   PostsQuery,
