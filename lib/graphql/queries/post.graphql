@@ -1,31 +1,3 @@
-mutation delete($id: Int!) {
-  delete(id: $id)
-}
-
-mutation createComment($target: Int!, $content: String!) {
-  createComment(input: { target: $target, content: $content })
-}
-
-mutation createPost(
-  $description: String
-  $hashtags: String
-  $photoDate: String!
-  $latitude: Float!
-  $longitude: Float!
-  $photo: [Upload!]!
-) {
-  createPost(
-    input: {
-      description: $description
-      hashtags: $hashtags
-      photoDate: $photoDate
-      latitude: $latitude
-      longitude: $longitude
-      photo: $photo
-    }
-  )
-}
-
 query personalizedPosts($skip: Int!, $take: Int!) {
   personalizedPosts(input: { skip: $skip, take: $take }) {
     id

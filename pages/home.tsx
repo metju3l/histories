@@ -1,7 +1,7 @@
 import { Layout } from '@components/layouts';
 import { Post } from '@components/modules/post';
-import { usePersonalizedPostsQuery } from '@graphql/post.graphql';
-import { useMeQuery } from '@graphql/user.graphql';
+import { usePersonalizedPostsQuery } from '@graphql/queries/post.graphql';
+import { useMeQuery } from '@graphql/queries/user.graphql';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 

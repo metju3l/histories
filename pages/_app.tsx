@@ -2,7 +2,7 @@ import '../lib/translation/i18n';
 import '../lib/styles/main.css';
 
 import { ApolloError, ApolloProvider, ApolloQueryResult } from '@apollo/client';
-import { MeQuery, useMeQuery } from '@graphql/user.graphql';
+import { MeQuery, useMeQuery } from '@graphql/queries/user.graphql';
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
 import NextNprogress from 'nextjs-progressbar';

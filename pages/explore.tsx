@@ -1,5 +1,8 @@
 import { Layout } from '@components/layouts';
-import { usePersonalizedPostsQuery, usePostQuery } from '@graphql/post.graphql';
+import {
+  usePersonalizedPostsQuery,
+  usePostQuery,
+} from '@graphql/queries/post.graphql';
 import Image from 'next/image';
 import React from 'react';
 import UrlPrefix from 'shared/config/UrlPrefix';

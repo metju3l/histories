@@ -1,7 +1,7 @@
 import { Input } from '@components/elements';
 import Button from '@components/elements/buttons/Button';
 import AuthLayout from '@components/layouts/Auth';
-import { useResetPasswordMutation } from '@graphql/auth.graphql';
+import { useResetPasswordMutation } from '@graphql/mutations/auth.graphql';
 import { RedirectInvalidToken } from '@lib/functions/ServerSideProps';
 import NewPasswordFormInputs from '@lib/types/forms/newPasswordFormInputs';
 import { useRouter } from 'next/router';

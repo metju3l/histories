@@ -2,7 +2,7 @@ import { Button, Tooltip } from '@components/elements';
 import {
   useFollowMutation,
   useUnfollowMutation,
-} from '@graphql/relations.graphql';
+} from '@graphql/mutations/relations.graphql';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';

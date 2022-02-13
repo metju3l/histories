@@ -13,7 +13,7 @@ import { Maybe, Photo } from '../../../.cache/__types__';
 import {
   useLikeMutation,
   useUnlikeMutation,
-} from '../../../lib/graphql/relations.graphql';
+} from '@graphql/mutations/relations.graphql';
 import { LoginContext } from '../../../pages/_app';
 import UrlPrefix from '../../../shared/config/UrlPrefix';
 import Card from '../userPage/Card';

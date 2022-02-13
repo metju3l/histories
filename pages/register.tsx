@@ -1,6 +1,6 @@
 import AuthLayout from '@components/layouts/Auth';
 import RegisterForm from '@components/modules/forms/RegisterForm';
-import { useCreateUserMutation } from '@graphql/auth.graphql';
+import { useCreateUserMutation } from '@graphql/mutations/auth.graphql';
 import { RedirectLogged } from '@lib/functions/ServerSideProps';
 import RegisterFormInputs from '@lib/types/forms/registerFormInputs';
 import Cookie from 'js-cookie';

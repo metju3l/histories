@@ -1,6 +1,6 @@
 import { Button } from '@components/elements';
 import { LoginContext } from '@components/layouts';
-import { useAddToCollectionMutation } from '@graphql/relations.graphql';
+import { useAddToCollectionMutation } from '@graphql/mutations/relations.graphql';
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { toast } from 'react-hot-toast';

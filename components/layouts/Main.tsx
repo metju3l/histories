@@ -5,7 +5,7 @@ import { NextSeo } from 'next-seo';
 import React, { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 
-import { MeQuery, useMeQuery } from '../../lib/graphql/user.graphql';
+import { MeQuery, useMeQuery } from '@graphql/queries/user.graphql';
 import { LoginContext as AppLoginContext } from '../../pages/_app';
 import { orange_main } from '../../shared/config/colors';
 import { Navbar } from '../modules/navbar';

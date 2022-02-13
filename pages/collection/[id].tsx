@@ -6,9 +6,9 @@ import Card from '@components/modules/userPage/Card';
 import {
   CollectionDocument,
   CollectionQuery,
-} from '@graphql/collection.graphql';
-import { usePostsQuery } from '@graphql/post.graphql';
-import { UserDocument, UserQuery } from '@graphql/user.graphql';
+} from '@graphql/queries/collection.graphql';
+import { usePostsQuery } from '@graphql/queries/post.graphql';
+import { UserDocument, UserQuery } from '@graphql/queries/user.graphql';
 import { Menu, Transition } from '@headlessui/react';
 import {
   GetCookieFromServerSideProps,

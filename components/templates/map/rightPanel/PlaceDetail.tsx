@@ -1,5 +1,5 @@
 import { Loading } from '@components/elements';
-import { usePostsQuery } from '@graphql/post.graphql';
+import { usePostsQuery } from '@graphql/queries/post.graphql';
 import Image from 'next/image';
 import Link from 'next/link';
 import { SidebarPlaceType } from 'pages';

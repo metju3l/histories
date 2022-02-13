@@ -1,6 +1,6 @@
 import { QueryResult } from '@apollo/client';
-import { PlacesQuery } from '@graphql/geo.graphql';
-import { PostsQuery } from '@graphql/post.graphql';
+import { PlacesQuery } from '@graphql/queries/place.graphql';
+import { PostsQuery } from '@graphql/queries/post.graphql';
 import { SidebarPlaceType } from 'pages';
 import React from 'react';
 

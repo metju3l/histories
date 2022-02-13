@@ -1,6 +1,6 @@
 import { TimeLine } from '@components/modules/map/timeLine';
-import { usePlacesQuery } from '@graphql/geo.graphql';
-import { usePostsQuery } from '@graphql/post.graphql';
+import { usePlacesQuery } from '@graphql/queries/place.graphql';
+import { usePostsQuery } from '@graphql/queries/post.graphql';
 import { IViewport } from '@lib/types/map';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SidebarPlaceType } from 'pages';
