@@ -1,16 +1,16 @@
 import { Menu, Transition } from '@headlessui/react';
+import UrlPrefix from '@lib/constants/IPFSUrlPrefix';
+import MeContext from '@lib/contexts/MeContext';
 import LogOut from '@lib/functions/LogOut';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import UrlPrefix from 'shared/config/UrlPrefix';
 
-import { LoginContext } from '../../layouts';
 import DropdownTransition from '../dropdown/DropdownTransition';
 
 const UserDropdown: React.FC = () => {
-  const loginContext = React.useContext(LoginContext);
+  const meContext = React.useContext(MeContext);
 
   const { t } = useTranslation();
 
@@ -24,9 +24,9 @@ const UserDropdown: React.FC = () => {
           className="rounded-full gray-400"
           src={
             // if user has a profile picture add IPFS gateway to hash
-            loginContext.data!.me!.profile.startsWith('http')
-              ? loginContext.data!.me!.profile
-              : UrlPrefix + loginContext.data!.me!.profile
+            meContext.data!.me!.profile.startsWith('http')
+              ? meContext.data!.me!.profile
+              : UrlPrefix + meContext.data!.me!.profile
           }
           layout="fill"
           objectFit="contain"
@@ -37,9 +37,9 @@ const UserDropdown: React.FC = () => {
       </Menu.Button>
       <Transition as={Fragment} {...DropdownTransition}>
         <Menu.Items as="div" className="dropdown">
-          <Link href={`/user/${loginContext.data!.me!.username}`} passHref>
+          <Link href={`/user/${meContext.data!.me!.username}`} passHref>
             <Menu.Item as="div" className="rounded-t-lg dropdown-item">
-              {loginContext.data!.me!.username}
+              {meContext.data!.me!.username}
             </Menu.Item>
           </Link>
 

@@ -1,5 +1,5 @@
 import Main from '@components/layouts/Main';
-import MapTemplate from '@components/templates/map/MapTemplate';
+import MapTemplate from '@components/templates/MapTemplate';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 
@@ -20,7 +20,7 @@ export type SidebarPlaceType = {
   description?: Maybe<string>;
 };
 
-const Map: React.FC<{
+const MapPage: React.FC<{
   lat: number | null;
   lng: number | null;
   zoom: number | null;
@@ -65,4 +65,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 };
 
-export default Map;
+export default MapPage;

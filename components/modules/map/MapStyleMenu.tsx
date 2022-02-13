@@ -4,7 +4,7 @@ import React from 'react';
 import { BiLayer } from 'react-icons/bi';
 import ReactMapGL from 'react-map-gl';
 
-import { Dark, Light, Satellite } from '../../../shared/config/MapStyles';
+import { Dark, Light, Satellite } from '../../../lib/constants/MapStyles';
 
 interface IMapStyleMenu {
   viewport: IViewport;

@@ -1,21 +1,21 @@
 import { Menu, Transition } from '@headlessui/react';
+import MeContext from '@lib/contexts/MeContext';
 import FirstLetterUppercase from '@lib/functions/FirstLetterUppercase';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LoginContext } from '../../layouts';
 import DropdownTransition from '../dropdown/DropdownTransition';
 import { NavbarItem, UserDropdown } from './index';
 
 const Navbar: React.FC = () => {
   const router = useRouter();
-  const loginContext = React.useContext(LoginContext);
+  const meContext = React.useContext(MeContext);
   const { t } = useTranslation();
-  const userIsLogged = loginContext.data?.me?.id;
+  const userIsLogged = meContext.data?.me?.id;
 
-  if (loginContext.error) console.error(loginContext.error);
+  if (meContext.error) console.error(meContext.error);
 
   return (
     <nav className="fixed z-40 w-full bg-white border-b border-gray-200 dark:text-white dark:bg-[#171716] dark:border-gray-800">

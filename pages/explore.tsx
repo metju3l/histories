@@ -3,9 +3,9 @@ import {
   usePersonalizedPostsQuery,
   usePostQuery,
 } from '@graphql/queries/post.graphql';
+import UrlPrefix from '@lib/constants/IPFSUrlPrefix';
 import Image from 'next/image';
 import React from 'react';
-import UrlPrefix from 'shared/config/UrlPrefix';
 
 const Explore: React.FC = () => {
   const { data, loading, error } = usePersonalizedPostsQuery({

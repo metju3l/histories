@@ -1,24 +1,27 @@
-import { TimeLine } from '@components/modules/map/timeLine';
 import { usePlacesQuery } from '@graphql/queries/place.graphql';
 import { usePostsQuery } from '@graphql/queries/post.graphql';
+import {
+  boundsPlaceholder,
+  viewportPlaceholder,
+} from '@lib/constants/MapPlaceholderValues';
 import { IViewport } from '@lib/types/map';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SidebarPlaceType } from 'pages';
 import React, { useState } from 'react';
 import { HiOutlineChevronLeft } from 'react-icons/hi';
 
-import Map from '../../modules/map/Map';
-import { defaultValues, MapContext } from './MapContext';
-import RightPanel from './rightPanel/RightPanel';
+import { MapContext } from '../../lib/contexts/MapContext';
+import Map from '../modules/map/Map';
+import RightPanel from './map/rightPanel/RightPanel';
 import { Maybe } from '.cache/__types__';
 
 interface MapTemplateProps {
-  lat: number | null;
-  lng: number | null;
-  zoom: number | null;
-  minDate: number | null;
-  maxDate: number | null;
-  place: number | null;
+  lat: Maybe<number>;
+  lng: Maybe<number>;
+  zoom: Maybe<number>;
+  minDate: Maybe<number>;
+  maxDate: Maybe<number>;
+  place: Maybe<number>;
 }
 
 const MapTemplate: React.FC<MapTemplateProps> = ({
@@ -29,7 +32,7 @@ const MapTemplate: React.FC<MapTemplateProps> = ({
   maxDate,
   place,
 }) => {
-  const [bounds, setBounds] = useState(defaultValues.bounds); // viewport bounds
+  const [bounds, setBounds] = useState(boundsPlaceholder); // viewport bounds
 
   const placesQuery = usePlacesQuery({
     variables: {
@@ -60,10 +63,10 @@ const MapTemplate: React.FC<MapTemplateProps> = ({
 
   // map viewport
   const [viewport, setViewport] = useState<IViewport>({
-    ...defaultValues.viewport,
-    latitude: lat || defaultValues.viewport.latitude,
-    longitude: lng || defaultValues.viewport.longitude,
-    zoom: zoom || defaultValues.viewport.zoom,
+    ...viewportPlaceholder,
+    latitude: lat || viewportPlaceholder.latitude,
+    longitude: lng || viewportPlaceholder.longitude,
+    zoom: zoom || viewportPlaceholder.zoom,
   });
 
   return (
@@ -99,13 +102,8 @@ const MapTemplate: React.FC<MapTemplateProps> = ({
                 ? 'grid-cols-1 grid-rows-2 lg:grid-cols-[auto_48.25em] xl:grid-cols-[auto_62.25em] md:grid-cols-[auto_32.25em] md:grid-rows-1'
                 : 'grid-cols-1 grid-rows-1'
             } `}
-            transition={{
-              delay: !showSidebar ? 0 : 0.5,
-              duration: 0.25,
-              ease: 'easeInOut',
-            }}
           >
-            {/* MAP */}
+            {/* LEFT PANEL */}
             <div className="relative w-full h-full p-2 col-span-1">
               {/* HIDE SIDEBAR ARROW ICON */}
               <button
@@ -113,14 +111,12 @@ const MapTemplate: React.FC<MapTemplateProps> = ({
                 className="absolute z-50 flex items-center h-8 py-1 text-gray-500 bg-white border border-gray-200 top-4 right-4 hover:text-black hover:border-gray-400 rounded-xl"
               >
                 <HiOutlineChevronLeft
-                  className={`w-8 py-1 h-8 ${
+                  className={`w-8 py-1 h-8 transition-all duration-500 ease-in-out ${
                     showSidebar ? 'rotate-180' : 'rotate-0'
-                  } transition-all duration-500 ease-in-out`}
+                  }`}
                 />
               </button>
-              <div className="absolute bottom-0 left-0 z-20 px-8 pt-2 w-[28vw]">
-                <TimeLine domain={[1000, new Date().getFullYear()]} />
-              </div>
+              {/* MAP */}
               <Map />
             </div>
 

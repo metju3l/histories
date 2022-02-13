@@ -1,4 +1,5 @@
-import { IBounds, IMapContext } from '@lib/types/map';
+import IMapContext from '@lib/types/contexts/MapContext';
+import { IBounds } from '@lib/types/map';
 
 interface FetchMoreProps {
   mapContext: IMapContext;

@@ -1,9 +1,9 @@
 import { Layout } from '@components/layouts';
 import { usePostQuery } from '@graphql/queries/post.graphql';
+import UrlPrefix from '@lib/constants/IPFSUrlPrefix';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import UrlPrefix from 'shared/config/UrlPrefix';
 
 const PostDetail: React.FC<{ id: number }> = ({ id }) => {
   const { data, loading, error } = usePostQuery({ variables: { id } });

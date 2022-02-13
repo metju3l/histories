@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { HiLocationMarker } from 'react-icons/hi';
 import ReactMapGL, { Marker } from 'react-map-gl';
 
-import UrlPrefix from '../../../shared/config/UrlPrefix';
+import UrlPrefix from '../../../lib/constants/IPFSUrlPrefix';
 import { ValidateUsername } from '../../../shared/validation';
 
 const UserMapPage: React.FC<{

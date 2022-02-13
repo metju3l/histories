@@ -1,10 +1,10 @@
 import { PhotoMarkerIcon } from '@components/icons';
-import { MapContext } from '@components/templates/map/MapContext';
+import { MapContext } from '@lib/contexts/MapContext';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { Marker as MapGLMarker } from 'react-map-gl';
 
-import UrlPrefix from '../../../shared/config/UrlPrefix';
+import UrlPrefix from '../../../lib/constants/IPFSUrlPrefix';
 
 interface MarkerProps {
   place: {

@@ -3,6 +3,7 @@ import {
   useFollowMutation,
   useUnfollowMutation,
 } from '@graphql/mutations/relations.graphql';
+import MeContext from '@lib/contexts/MeContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -10,8 +11,7 @@ import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
 import { Maybe } from '../../../../.cache/__types__';
-import { LoginContext } from '../../../../pages/_app';
-import UrlPrefix from '../../../../shared/config/UrlPrefix';
+import UrlPrefix from '../../../../lib/constants/IPFSUrlPrefix';
 
 export type UserLeftPanelProps = {
   user: {
@@ -43,7 +43,7 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
   const followerCountWithoutMe =
     user.followerCount - (user.isFollowing ? 1 : 0);
 
-  const loginContext = React.useContext(LoginContext);
+  const meContext = React.useContext(MeContext);
   const { t } = useTranslation();
 
   return (
@@ -130,14 +130,14 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
         <p className="mt-4 font-medium text-black dark:text-white">
           {user.bio}
         </p>
-        {loginContext.data?.me?.id === user.id ? (
+        {meContext.data?.me?.id === user.id ? (
           <Link href="/settings" passHref>
             <button className="items-center block px-3 py-1 mt-6 text-xs font-semibold text-gray-500 border border-gray-500 rounded-full space-x-1.5 shadown-sm w-max">
               {t('edit_profile')}
             </button>
           </Link>
         ) : (
-          loginContext.data?.me?.id && (
+          meContext.data?.me?.id && (
             <Button
               onClick={async () => {
                 try {

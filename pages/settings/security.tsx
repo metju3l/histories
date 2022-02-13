@@ -1,15 +1,14 @@
 import { Button } from '@components/elements';
 import SettingsLayout from '@components/layouts/Settings';
+import MeContext from '@lib/contexts/MeContext';
 import { RedirectAnonymous } from '@lib/functions/ServerSideProps';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LoginContext } from '../../pages/_app';
-
-const Account = () => {
+const SecuritySettingsPage = () => {
   const { t } = useTranslation();
 
-  const { data: loginContext } = React.useContext(LoginContext);
+  const { data: loginContext } = React.useContext(MeContext);
 
   return (
     <SettingsLayout
@@ -59,4 +58,4 @@ const Account = () => {
 
 export const getServerSideProps = RedirectAnonymous;
 
-export default Account;
+export default SecuritySettingsPage;

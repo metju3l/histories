@@ -3,6 +3,7 @@ import {
   useLikeMutation,
   useUnlikeMutation,
 } from '@graphql/mutations/relations.graphql';
+import MeContext from '@lib/contexts/MeContext';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,8 +15,7 @@ import { IoIosMore } from 'react-icons/io';
 import TimeAgo from 'react-timeago';
 
 import { Maybe, Photo } from '../../../.cache/__types__';
-import { LoginContext } from '../../../pages/_app';
-import UrlPrefix from '../../../shared/config/UrlPrefix';
+import UrlPrefix from '../../../lib/constants/IPFSUrlPrefix';
 import Card from '../userPage/Card';
 import { LikePost, PostTimeline, UnlikePost } from '.';
 import OptionsMenu from './OptionsMenu';
@@ -51,7 +51,7 @@ const Post: React.FC<PostProps> = ({
   liked,
   id,
 }) => {
-  const loginContext = React.useContext(LoginContext);
+  const meContext = React.useContext(MeContext);
 
   const [visible, setVisible] = useState<null | 'deleted'>(null); // show deleted card instead of post if post is deleted
   const [collectionSelectModal, setCollectionSelectModal] = useState(false);
@@ -65,7 +65,7 @@ const Post: React.FC<PostProps> = ({
 
   const onLike = async (type: string) => {
     // allow only when user is logged in
-    if (loginContext.data?.me?.id)
+    if (meContext.data?.me?.id)
       // runs like mutation and changes local states
       await LikePost({
         localLikeState,
@@ -77,7 +77,7 @@ const Post: React.FC<PostProps> = ({
 
   const onUnlike = async () => {
     // allow only when user is logged in
-    if (loginContext.data?.me?.id)
+    if (meContext.data?.me?.id)
       // runs unlike mutation and changes local states
       await UnlikePost({
         localLikeState,

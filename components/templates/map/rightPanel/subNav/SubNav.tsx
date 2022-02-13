@@ -1,7 +1,7 @@
 import React from 'react';
 import { HiOutlineChevronLeft } from 'react-icons/hi';
 
-import { MapContext } from '../MapContext';
+import { MapContext } from '../../../../../lib/contexts/MapContext';
 import SortByDropdown from './SortByDropdown';
 
 export type SubNavProps = {

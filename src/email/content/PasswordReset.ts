@@ -1,4 +1,4 @@
-import { orange_main } from '../../../shared/config/colors';
+import { orange_main } from '../../../shared/constants/colors';
 import { Layout } from './Components';
 
 export type VerificationEmail = {

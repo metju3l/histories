@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 
-import { MapContext } from '../MapContext';
-import { SubNav } from '../subNav';
+import { MapContext } from '../../../../lib/contexts/MapContext';
 import Photos from './Photos';
 import PlaceDetail from './PlaceDetail';
 import Places from './Places';
+import { SubNav } from './subNav';
 
 const RightPanel: React.FC = () => {
   const mapContext = React.useContext(MapContext);

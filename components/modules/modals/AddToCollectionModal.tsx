@@ -1,7 +1,7 @@
 import { Button } from '@components/elements';
-import { LoginContext } from '@components/layouts';
 import { useAddToCollectionMutation } from '@graphql/mutations/relations.graphql';
 import { Dialog, Transition } from '@headlessui/react';
+import MeContext from '@lib/contexts/MeContext';
 import React, { Fragment } from 'react';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,7 @@ const AddToCollectionModal: React.FC<AddToCollectionModalProps> = ({
   isOpen,
   setOpenState,
 }) => {
-  const loginContext = React.useContext(LoginContext);
+  const meContext = React.useContext(MeContext);
   const [addToCollectionMutation] = useAddToCollectionMutation();
   const { t } = useTranslation();
   function OnClose() {
@@ -70,7 +70,7 @@ const AddToCollectionModal: React.FC<AddToCollectionModalProps> = ({
               <div className="mt-2">
                 <p className="text-sm text-gray-500">
                   <div className="px-4 mb-5 overflow-x-hidden overflow-y-auto grid grid-cols-3 gap-4">
-                    {loginContext.data?.me?.collections?.map((collection) => (
+                    {meContext.data?.me?.collections?.map((collection) => (
                       <div
                         key={collection?.name}
                         onClick={async () => {

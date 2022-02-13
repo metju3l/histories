@@ -2,12 +2,12 @@ import DeletePostModal from '@components/modules/modals/DeletePostModal';
 import { useDeleteMutation } from '@graphql/mutations/post.graphql';
 import { useUnfollowMutation } from '@graphql/mutations/relations.graphql';
 import { Menu, Transition } from '@headlessui/react';
+import MeContext from '@lib/contexts/MeContext';
 import Link from 'next/link';
 import React, { Fragment, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
-import { LoginContext } from '../../../pages/_app';
 import DropdownTransition from '../dropdown/DropdownTransition';
 
 export type OptionsMenuProps = {
@@ -24,7 +24,7 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
   setVisible,
   children,
 }) => {
-  const loginContext = React.useContext(LoginContext);
+  const loginContext = React.useContext(MeContext);
   const { t } = useTranslation();
 
   const [deleteMutation] = useDeleteMutation();

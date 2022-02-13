@@ -45,7 +45,7 @@ import LastPost from '../../resolvers/lastPost';
 import { contextType, OnlyLogged, Validate } from './resolvers';
 import ResetPassword from '../../resolvers/user/mutations/ResetPassword';
 import { GenerateBlurhash, NSFWCheck } from '../../../functions';
-import UrlPrefix from '../../../../shared/config/UrlPrefix';
+import UrlPrefix from '../../../../lib/constants/IPFSUrlPrefix';
 
 const mutations = {
   googleAuth: async (

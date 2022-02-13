@@ -1,8 +1,9 @@
 import '../lib/translation/i18n';
 import '../lib/styles/main.css';
 
-import { ApolloError, ApolloProvider, ApolloQueryResult } from '@apollo/client';
-import { MeQuery, useMeQuery } from '@graphql/queries/user.graphql';
+import { ApolloProvider } from '@apollo/client';
+import { useMeQuery } from '@graphql/queries/user.graphql';
+import MeContext from '@lib/contexts/MeContext';
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
 import NextNprogress from 'nextjs-progressbar';
@@ -10,48 +11,10 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useApollo } from '../lib/utils/apollo';
-import { orange_main } from '../shared/config/colors';
+import { orange_main } from '../shared/constants/colors';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const apolloClient = useApollo(null);
-
-  return (
-    <ApolloProvider client={apolloClient}>
-      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-      <script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
-      />
-      <ThemeProvider attribute="class" defaultTheme="light">
-        <NextNprogress
-          color={orange_main}
-          height={2}
-          options={{ showSpinner: false }}
-          showOnShallow
-        />
-        <LoginProvider>
-          <Component {...pageProps} />
-        </LoginProvider>
-      </ThemeProvider>
-    </ApolloProvider>
-  );
-}
-
-export type LoginContextType = {
-  data: MeQuery | undefined;
-  loading: boolean;
-  error: ApolloError | undefined;
-  refetch: (() => Promise<ApolloQueryResult<MeQuery>>) | undefined;
-};
-
-export const LoginContext = React.createContext<LoginContextType>({
-  data: undefined,
-  loading: true,
-  error: undefined,
-  refetch: undefined,
-});
-
-const LoginProvider: React.FC = ({ children }) => {
-  const { data, loading, error, refetch } = useMeQuery();
   const { i18n } = useTranslation();
 
   useEffect(() => {
@@ -62,9 +25,39 @@ const LoginProvider: React.FC = ({ children }) => {
   // todo: use language from database
 
   return (
-    <LoginContext.Provider value={{ data, loading, error, refetch }}>
+    <ApolloProvider client={apolloClient}>
+      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+      <script
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
+      />
+      <NextNprogress
+        color={orange_main}
+        height={2}
+        options={{ showSpinner: false }}
+        showOnShallow
+      />
+      <MeProvider>
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </MeProvider>
+    </ApolloProvider>
+  );
+}
+
+interface MeProviderProps {
+  children: React.ReactNode;
+}
+
+// this needs to be component, because query can only be used inside AppoloProvider
+const MeProvider: React.FC<MeProviderProps> = ({ children }) => {
+  // fetch me data
+  const { data, loading, error, refetch } = useMeQuery();
+
+  return (
+    <MeContext.Provider value={{ data, loading, error, refetch }}>
       {children}
-    </LoginContext.Provider>
+    </MeContext.Provider>
   );
 };
 

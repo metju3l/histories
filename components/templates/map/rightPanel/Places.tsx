@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React from 'react';
 
-import UrlPrefix from '../../../../shared/config/UrlPrefix';
-import { MapContext } from '../MapContext';
+import UrlPrefix from '../../../../lib/constants/IPFSUrlPrefix';
+import { MapContext } from '../../../../lib/contexts/MapContext';
 
 const Places: React.FC = () => {
   const mapContext = React.useContext(MapContext);

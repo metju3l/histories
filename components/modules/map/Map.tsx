@@ -6,7 +6,7 @@ import ReactMapGL, { ExtraState, MapRef } from 'react-map-gl';
 import useSupercluster from 'use-supercluster';
 
 import { Maybe } from '../../../.cache/__types__';
-import { MapContext } from '../../templates/map/MapContext';
+import { MapContext } from '../../../lib/contexts/MapContext';
 import {
   Clusters,
   FetchMore,
@@ -14,6 +14,7 @@ import {
   MapStyleMenu,
   SearchLocation,
 } from './index';
+import { TimeLine } from './timeLine';
 
 const Map: React.FC = () => {
   const mapContext = React.useContext(MapContext); // get map context
@@ -39,18 +40,12 @@ const Map: React.FC = () => {
 
   return (
     <>
-      {/* SEARCH */}
-      <div className="absolute z-40 top-4 left-4 w-96">
-        <SearchLocation
-          viewport={mapContext.viewport}
-          setViewport={mapContext.setViewport}
-        />
-      </div>
+      {/* MAP */}
       <ReactMapGL
         {...mapContext.viewport}
         width="100%"
         height="100%"
-        className="rounded-lg"
+        className="relative rounded-lg"
         mapStyle={GetMapStyle(mapStyle, resolvedTheme)}
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
         onViewportChange={(viewport: React.SetStateAction<IViewport>) =>
@@ -75,15 +70,27 @@ const Map: React.FC = () => {
           supercluster={supercluster}
           mapContext={mapContext}
         />
-
-        {/* MAP STYLE */}
-        <div className="absolute z-40 right-2 bottom-2">
-          <MapStyleMenu
-            setMapStyle={setMapStyle}
-            viewport={mapContext.viewport}
-          />
-        </div>
       </ReactMapGL>
+      {/* SEARCH */}
+      <div className="absolute z-40 top-4 left-4 w-96">
+        <SearchLocation
+          viewport={mapContext.viewport}
+          setViewport={mapContext.setViewport}
+        />
+      </div>
+
+      {/* MAP STYLE */}
+      <div className="absolute z-40 right-2 bottom-2">
+        <MapStyleMenu
+          setMapStyle={setMapStyle}
+          viewport={mapContext.viewport}
+        />
+      </div>
+
+      {/* TIME LINE */}
+      <div className="absolute bottom-0 left-0 z-20 px-8 pt-2 w-[28vw]">
+        <TimeLine domain={[1000, new Date().getFullYear()]} />
+      </div>
     </>
   );
 };

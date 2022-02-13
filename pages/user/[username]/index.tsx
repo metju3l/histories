@@ -25,7 +25,7 @@ import { HiPlus } from 'react-icons/hi';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Exact, InputMaybe, PostsInput } from '../../../.cache/__types__';
-import UrlPrefix from '../../../shared/config/UrlPrefix';
+import UrlPrefix from '../../../lib/constants/IPFSUrlPrefix';
 import { ValidateUsername } from '../../../shared/validation';
 
 const PostsPage: React.FC<{

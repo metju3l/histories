@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { HiOutlineChevronDown } from 'react-icons/hi';
 
 import { Maybe } from '../../.cache/__types__';
-import UrlPrefix from '../../shared/config/UrlPrefix';
+import UrlPrefix from '../../lib/constants/IPFSUrlPrefix';
 
 const CheckPost: React.FC<{
   collection: {

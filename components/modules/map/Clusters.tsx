@@ -1,4 +1,4 @@
-import { IMapContext } from '@lib/types/map';
+import IMapContext from '@lib/types/contexts/MapContext';
 import React from 'react';
 
 import Marker from './Marker';

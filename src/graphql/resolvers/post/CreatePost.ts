@@ -1,5 +1,5 @@
 import PostPhoto from '../../../../types/PostPhoto';
-import UrlPrefix from '../../../../shared/config/UrlPrefix';
+import UrlPrefix from '../../../../lib/constants/IPFSUrlPrefix';
 import DbConnector from '../../../database/driver';
 import { NSFWCheck } from '../../../functions';
 import RunCypherQuery from '../../../database/RunCypherQuery';

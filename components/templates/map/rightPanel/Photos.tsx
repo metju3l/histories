@@ -1,9 +1,9 @@
+import UrlPrefix from '@lib/constants/IPFSUrlPrefix';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React from 'react';
-import UrlPrefix from 'shared/config/UrlPrefix';
 
-import { MapContext } from '../MapContext';
+import { MapContext } from '../../../../lib/contexts/MapContext';
 
 const Photos = () => {
   const mapContext = React.useContext(MapContext);

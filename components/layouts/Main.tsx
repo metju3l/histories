@@ -1,61 +1,43 @@
-import { ApolloError, ApolloQueryResult } from '@apollo/client';
-import { MeQuery, useMeQuery } from '@graphql/queries/user.graphql';
 import HeadProps from '@lib/types/head';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 import React, { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 
-import { LoginContext as AppLoginContext } from '../../pages/_app';
-import { orange_main } from '../../shared/config/colors';
+import MeContext from '../../lib/contexts/MeContext';
+import { orange_main } from '../../shared/constants/colors';
 import { Navbar } from '../modules/navbar';
 
-type LayoutProps = {
+interface MainLayoutProps {
   head: HeadProps;
 
   redirectLogged?: boolean;
   redirectNotLogged?: boolean;
   children: React.ReactNode;
-};
+}
 
-export type LoginContextType = {
-  data: MeQuery | undefined;
-  loading: boolean;
-  error: ApolloError | undefined;
-  refetch: (() => Promise<ApolloQueryResult<MeQuery>>) | undefined;
-};
-
-export const LoginContext = React.createContext<LoginContextType>({
-  data: undefined,
-  loading: true,
-  error: undefined,
-  refetch: undefined,
-});
-
-const Layout: React.FC<LayoutProps> = ({
+const Layout: React.FC<MainLayoutProps> = ({
   head,
   redirectLogged,
   redirectNotLogged,
   children,
 }) => {
-  const appLoginContext = React.useContext(AppLoginContext);
+  const meContext = React.useContext(MeContext);
 
   const router = useRouter();
 
-  const { data, loading, error, refetch } = useMeQuery();
-
   useEffect(() => {
     if (
-      (redirectLogged && appLoginContext.data?.me?.id) ||
+      (redirectLogged && meContext.data?.me?.id) ||
       (redirectNotLogged &&
-        (appLoginContext.data?.me?.id === undefined ||
-          appLoginContext.data?.me?.id === null))
+        (meContext.data?.me?.id === undefined ||
+          meContext.data?.me?.id === null))
     )
       router.push('/');
-  }, [appLoginContext.data]);
+  }, [meContext.data]);
 
   return (
-    <LoginContext.Provider value={{ data, loading, error, refetch }}>
+    <>
       <NextSeo
         title={head.title}
         description={head.description}
@@ -125,14 +107,12 @@ const Layout: React.FC<LayoutProps> = ({
           },
         ]}
       />
-
       <Toaster position="top-center" reverseOrder={true} />
-
       <Navbar />
       <div className="min-h-screen pt-16 bg-[#FAFBFB] dark:bg-[#171716]">
         {children}
       </div>
-    </LoginContext.Provider>
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 import { MapStyles } from '@lib/types/map';
 
-import { Dark, Light, Satellite } from '../../../shared/config/MapStyles';
+import { Dark, Light, Satellite } from '../../constants/MapStyles';
 
 function GetMapStyle(style: MapStyles, theme?: string) {
   return style === 'theme'
