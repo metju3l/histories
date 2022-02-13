@@ -4,16 +4,10 @@ import { IViewport, MapStyles } from '@src/types/map';
 import { useTheme } from 'next-themes';
 import React, { useRef, useState } from 'react';
 import ReactMapGL, { ExtraState, MapRef } from 'react-map-gl';
-import useSupercluster from 'use-supercluster';
 
 import { Maybe } from '../../../../../.cache/__types__';
-import {
-  Clusters,
-  FetchMore,
-  GetPoints,
-  MapStyleMenu,
-  SearchLocation,
-} from './index';
+import { FetchMore, MapStyleMenu, SearchLocation } from './index';
+import Clusters from './markers/Clusters';
 import { TimeLine } from './timeLine';
 
 const Map: React.FC = () => {
@@ -21,22 +15,6 @@ const Map: React.FC = () => {
   const [mapStyle, setMapStyle] = useState<MapStyles>('theme'); // possible map styles, defaults to theme
   const { resolvedTheme } = useTheme(); // get current theme
   const mapRef = useRef<Maybe<MapRef>>(null); // map ref to get map instance
-
-  const { clusters, supercluster } = useSupercluster({
-    points:
-      GetPoints({
-        timeLimitation: mapContext.timeLimitation,
-        places: mapContext.placesQuery?.data?.places,
-      }) ?? [], // get places from query in correct format
-    zoom: mapContext.viewport.zoom,
-    bounds: mapRef.current
-      ? mapRef.current.getMap().getBounds().toArray().flat()
-      : null,
-    options: {
-      radius: 75, // cluster radius
-      maxZoom: 20, // max zoom to cluster points on
-    },
-  }); // get clusters
 
   return (
     <>
@@ -65,11 +43,7 @@ const Map: React.FC = () => {
         ref={(instance) => (mapRef.current = instance)}
       >
         {/* CLUSTERS AND PLACES ON MAP */}
-        <Clusters
-          clusters={clusters}
-          supercluster={supercluster}
-          mapContext={mapContext}
-        />
+        <Clusters mapRef={mapRef} />
       </ReactMapGL>
       {/* SEARCH */}
       <div className="absolute z-40 top-4 left-4 w-96">

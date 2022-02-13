@@ -1,6 +1,11 @@
-import IMapContext from '@src/types/contexts/MapContext';
+import { MapContext } from '@src/contexts/MapContext';
+import { GetDistance } from '@src/functions/map';
 import React from 'react';
+import { MapRef } from 'react-map-gl';
+import useSupercluster from 'use-supercluster';
 
+import { Maybe } from '../../../../../../.cache/__types__';
+import GetPoints from './GetPoints';
 import Marker from './Marker';
 
 interface ILeaf {
@@ -21,19 +26,27 @@ interface ICluster {
 }
 
 interface ClustersProps {
-  clusters: Array<ICluster>;
-  supercluster: any;
-  mapContext: IMapContext;
+  mapRef: React.MutableRefObject<Maybe<MapRef>>;
 }
 
-const Clusters: React.FC<ClustersProps> = ({
-  clusters,
-  supercluster,
-  mapContext,
-}) => {
+const Clusters: React.FC<ClustersProps> = ({ mapRef }) => {
+  const mapContext = React.useContext(MapContext);
+
+  const { clusters, supercluster } = useSupercluster({
+    points: GetPoints(), // get places from query in correct format
+    zoom: mapContext.viewport.zoom,
+    bounds: mapRef.current
+      ? mapRef.current.getMap().getBounds().toArray().flat()
+      : null,
+    options: {
+      radius: 75, // cluster radius
+      maxZoom: 20, // max zoom to cluster points on
+    },
+  }); // get clusters
+
   return (
     <>
-      {clusters.map((cluster) => {
+      {clusters.map((cluster: ICluster) => {
         const { cluster: isCluster, point_count: pointCount } =
           cluster.properties;
 
@@ -50,15 +63,10 @@ const Clusters: React.FC<ClustersProps> = ({
             // if point does not have preview skip it
             if (leaf.properties.preview == null) return;
             // get coordinates difference between point and center of cluster
-            const distance: number =
-              Math.abs(
-                Math.abs(leaf.geometry.coordinates[0]) -
-                  Math.abs(cluster.geometry.coordinates[0])
-              ) +
-              Math.abs(
-                Math.abs(leaf.geometry.coordinates[0]) -
-                  Math.abs(cluster.geometry.coordinates[0])
-              );
+            const distance: number = GetDistance(
+              cluster.geometry.coordinates,
+              leaf.geometry.coordinates
+            );
 
             if (
               closestPointDistance === null ||
