@@ -1,5 +1,5 @@
-import { Button } from '@components/Elements';
-import { LoginContext } from '@components/Layouts';
+import { Button } from '@components/elements';
+import { LoginContext } from '@components/layouts';
 import { useAddToCollectionMutation } from '@graphql/relations.graphql';
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';

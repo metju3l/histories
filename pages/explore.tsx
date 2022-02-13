@@ -1,4 +1,4 @@
-import { Layout } from '@components/Layouts';
+import { Layout } from '@components/layouts';
 import { usePersonalizedPostsQuery, usePostQuery } from '@graphql/post.graphql';
 import Image from 'next/image';
 import React from 'react';

@@ -1,7 +1,6 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
-import UserLayout from '@components/Layouts/User';
+import UserLayout from '@components/layouts/User';
 import MapStyleMenu from '@components/modules/map/MapStyleMenu';
-import Marker from '@components/modules/Minimap/Marker';
 import Card from '@components/modules/UserPage/Card';
 import { PostsDocument } from '@graphql/post.graphql';
 import { UserDocument, UserQuery } from '@graphql/user.graphql';
@@ -16,7 +15,8 @@ import { GetServerSidePropsContext } from 'next';
 import { useTheme } from 'next-themes';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ReactMapGL from 'react-map-gl';
+import { HiLocationMarker } from 'react-icons/hi';
+import ReactMapGL, { Marker } from 'react-map-gl';
 
 import UrlPrefix from '../../../shared/config/UrlPrefix';
 import { ValidateUsername } from '../../../shared/validation';
@@ -88,23 +88,14 @@ const UserMapPage: React.FC<{
         >
           {
             // postsQuery.loading ?
-            postsTmp.map((post: any) => (
+            postsTmp.map((post: any, key: number) => (
               <Marker
-                key={post.id}
+                key={key}
                 latitude={post.place.latitude}
                 longitude={post.place.longitude}
-                onClick={
-                  // on click set viewport to marker location
-                  () =>
-                    setViewport({
-                      latitude: post.place.latitude,
-                      longitude: post.place.longitude,
-                      zoom: 14,
-                      bearing: 0,
-                      pitch: 0,
-                    })
-                }
-              />
+              >
+                <HiLocationMarker className="w-8 h-8 text-brand" />
+              </Marker>
             ))
           }
           <div className="absolute z-40 right-2 bottom-2">

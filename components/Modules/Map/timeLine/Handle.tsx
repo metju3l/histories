@@ -1,10 +1,15 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { GetHandleProps, SliderItem } from 'react-compound-slider';
 
-const Handle: FC<{
+interface HandleProps {
   handle: SliderItem;
   getHandleProps: GetHandleProps;
-}> = ({ handle: { id, value, percent }, getHandleProps }) => {
+}
+
+const Handle: React.FC<HandleProps> = ({
+  handle: { id, value, percent },
+  getHandleProps,
+}) => {
   return (
     <div
       className="absolute mt-12 text-white"

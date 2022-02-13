@@ -1,7 +1,6 @@
-import { Input, Separator } from '@components/Elements';
-import Button from '@components/Elements/buttons/Button';
-import ArrowIcon from '@components/Elements/Icons/ArrowIcon';
-import { Layout } from '@components/Layouts';
+import { Input, Separator } from '@components/elements';
+import Button from '@components/elements/buttons/Button';
+import { Layout } from '@components/layouts';
 import Search from '@components/modules/Search';
 import { useCreatePostMutation } from '@graphql/post.graphql';
 import { useMeQuery } from '@graphql/user.graphql';
@@ -13,6 +12,7 @@ import { useDropzone } from 'react-dropzone';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import { HiOutlineChevronLeft } from 'react-icons/hi';
 import MapGL, {
   GeolocateControl,
   Marker,
@@ -252,7 +252,7 @@ const Login: FC = () => {
                         ease: 'easeInOut',
                       }}
                     >
-                      <ArrowIcon className={'w-5 h-5 text-black'} />
+                      <HiOutlineChevronLeft className="w-5 h-5 text-black" />
                     </motion.span>
                     <a className="font-medium text-black">Select on map</a>
                   </div>

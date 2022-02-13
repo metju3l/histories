@@ -1,5 +1,5 @@
-import { Button, Input } from '@components/Elements';
-import { Layout } from '@components/Layouts';
+import { Button, Input } from '@components/elements';
+import { Layout } from '@components/layouts';
 import { useCreateCollectionMutation } from '@graphql/collection.graphql';
 import Router from 'next/router';
 import React, { useState } from 'react';

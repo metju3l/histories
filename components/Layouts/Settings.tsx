@@ -1,5 +1,5 @@
-import { Separator } from '@components/Elements';
-import { Layout } from '@components/Layouts';
+import { Separator } from '@components/elements';
+import { Layout } from '@components/layouts';
 import HeadProps from '@lib/types/head';
 import Link from 'next/link';
 import React from 'react';

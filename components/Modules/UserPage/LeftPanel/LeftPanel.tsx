@@ -1,4 +1,4 @@
-import { Button, Tooltip } from '@components/Elements';
+import { Button, Tooltip } from '@components/elements';
 import {
   useFollowMutation,
   useUnfollowMutation,

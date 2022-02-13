@@ -4,7 +4,7 @@ import {
   InMemoryCache,
   QueryResult,
 } from '@apollo/client';
-import UserLayout from '@components/Layouts/User';
+import UserLayout from '@components/layouts/User';
 import { Post } from '@components/modules/Post';
 import Card from '@components/modules/UserPage/Card';
 import {

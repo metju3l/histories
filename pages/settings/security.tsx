@@ -1,5 +1,5 @@
-import { Button } from '@components/Elements';
-import SettingsLayout from '@components/Layouts/Settings';
+import { Button } from '@components/elements';
+import SettingsLayout from '@components/layouts/Settings';
 import { RedirectAnonymous } from '@lib/functions/ServerSideProps';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

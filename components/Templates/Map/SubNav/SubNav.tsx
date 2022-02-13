@@ -1,6 +1,6 @@
 import React from 'react';
+import { HiOutlineChevronLeft } from 'react-icons/hi';
 
-import ArrowIcon from '../../../Elements/Icons/ArrowIcon';
 import { MapContext } from '../MapContext';
 import SortByDropdown from './SortByDropdown';
 
@@ -19,7 +19,7 @@ const SubNav: React.FC<SubNavProps> = ({ sortBy, setSortBy }) => {
         {mapContext.sidebarPlace ? (
           <>
             <button onClick={() => mapContext.setSidebarPlace(null)}>
-              <ArrowIcon className="w-8 h-8 py-1 text-gray-500 border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl" />
+              <HiOutlineChevronLeft className="w-8 h-8 py-1 text-gray-500 border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl" />
             </button>
             <div className="px-4 py-1 text-gray-600 border border-gray-200 min-w-24 rounded-xl">
               Place detail

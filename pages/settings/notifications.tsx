@@ -1,5 +1,5 @@
-import { CheckboxElement } from '@components/Elements';
-import SettingsLayout from '@components/Layouts/Settings';
+import { CheckboxElement } from '@components/elements';
+import SettingsLayout from '@components/layouts/Settings';
 import { useUpdateProfileMutation } from '@graphql/user.graphql';
 import { RedirectAnonymous } from '@lib/functions/ServerSideProps';
 import React from 'react';

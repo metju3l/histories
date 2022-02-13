@@ -1,10 +1,12 @@
-import React, { FC } from 'react';
+import React from 'react';
 
-const Track: FC<{ source: any; target: any; getTrackProps: any }> = ({
-  source,
-  target,
-  getTrackProps,
-}) => {
+interface TrackProps {
+  source: any;
+  target: any;
+  getTrackProps: any;
+}
+
+const Track: React.FC<TrackProps> = ({ source, target, getTrackProps }) => {
   return (
     <div
       className="absolute bg-blue-500"

@@ -1,4 +1,4 @@
-import { Button } from '@components/Elements';
+import { Button } from '@components/elements';
 import { Dialog, Transition } from '@headlessui/react';
 import { t } from 'i18next';
 import React, { Fragment } from 'react';

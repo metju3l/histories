@@ -1,11 +1,11 @@
-import ArrowIcon from '@components/Elements/Icons/ArrowIcon';
-import { TimeLine } from '@components/modules/TimeLine';
+import { TimeLine } from '@components/modules/map/timeLine';
 import { usePlacesQuery } from '@graphql/geo.graphql';
 import { usePostsQuery } from '@graphql/post.graphql';
 import { IViewport } from '@lib/types/map';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SidebarPlaceType } from 'pages';
 import React, { useState } from 'react';
+import { HiOutlineChevronLeft } from 'react-icons/hi';
 
 import Map from '../../modules/map/Map';
 import { defaultValues, MapContext } from './MapContext';
@@ -112,7 +112,7 @@ const MapTemplate: React.FC<MapTemplateProps> = ({
                 onClick={() => setShowSidebar(!showSidebar)}
                 className="absolute z-50 flex items-center h-8 py-1 text-gray-500 bg-white border border-gray-200 top-4 right-4 hover:text-black hover:border-gray-400 rounded-xl"
               >
-                <ArrowIcon
+                <HiOutlineChevronLeft
                   className={`w-8 py-1 h-8 ${
                     showSidebar ? 'rotate-180' : 'rotate-0'
                   } transition-all duration-500 ease-in-out`}

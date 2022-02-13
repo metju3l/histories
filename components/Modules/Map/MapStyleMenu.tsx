@@ -1,10 +1,10 @@
 import { Menu } from '@headlessui/react';
 import { IViewport, MapStyles } from '@lib/types/map';
 import React from 'react';
+import { BiLayer } from 'react-icons/bi';
 import ReactMapGL from 'react-map-gl';
 
 import { Dark, Light, Satellite } from '../../../shared/config/MapStyles';
-import { LayersIcon } from '../Minimap/icons';
 
 interface IMapStyleMenu {
   viewport: IViewport;
@@ -18,7 +18,7 @@ const MapStyleMenu: React.FC<IMapStyleMenu> = ({ viewport, setMapStyle }) => {
         as="button"
         className="flex items-center h-8 py-1 text-gray-500 bg-white border border-gray-200 hover:text-black hover:border-gray-400 rounded-xl"
       >
-        <LayersIcon className="w-8 h-8 p-2 text-black rounded-lg" />
+        <BiLayer className="w-8 h-8 p-1 text-black rounded-lg" />
       </Menu.Button>
       <Menu.Items
         as="div"

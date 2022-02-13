@@ -1,4 +1,4 @@
-import { Loading } from '@components/Elements';
+import { Loading } from '@components/elements';
 import { usePostsQuery } from '@graphql/post.graphql';
 import Image from 'next/image';
 import Link from 'next/link';

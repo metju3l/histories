@@ -2,13 +2,11 @@ import { MapContext } from '@components/templates/map/MapContext';
 import React from 'react';
 import { Handles, Rail, Slider, Ticks, Tracks } from 'react-compound-slider';
 
-import Handle from './Handle';
-import Tick from './Tick';
-import Track from './Track';
+import { Handle, Tick, Track } from './index';
 
-type TimelineProps = {
+interface TimelineProps {
   domain: [number, number];
-};
+}
 
 const TimeLine: React.FC<TimelineProps> = ({ domain }) => {
   const mapContext = React.useContext(MapContext);

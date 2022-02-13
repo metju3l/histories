@@ -1,4 +1,4 @@
-import Button from '@components/Elements/buttons/Button';
+import Button from '@components/elements/buttons/Button';
 import { useVerifyTokenMutation } from '@graphql/auth.graphql';
 import { useMeQuery } from '@graphql/user.graphql';
 import { RedirectInvalidToken } from '@lib/functions/ServerSideProps';

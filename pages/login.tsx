@@ -1,7 +1,7 @@
-import { Input } from '@components/Elements';
-import Button from '@components/Elements/buttons/Button';
-import GoogleAuthButton from '@components/Elements/buttons/GoogleAuth';
-import AuthLayout from '@components/Layouts/Auth';
+import { Input } from '@components/elements';
+import Button from '@components/elements/buttons/Button';
+import GoogleAuthButton from '@components/elements/buttons/GoogleAuth';
+import AuthLayout from '@components/layouts/Auth';
 import { useLoginMutation } from '@graphql/auth.graphql';
 import { RedirectLogged } from '@lib/functions/ServerSideProps';
 import LoginFormInputs from '@lib/types/forms/loginFormInputs';

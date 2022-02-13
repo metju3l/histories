@@ -1,6 +1,6 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
-import { Button, Input } from '@components/Elements';
-import SettingsLayout from '@components/Layouts/Settings';
+import { Button, Input } from '@components/elements';
+import SettingsLayout from '@components/layouts/Settings';
 import {
   MeDocument,
   MeQuery,

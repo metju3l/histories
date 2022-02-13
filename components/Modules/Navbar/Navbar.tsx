@@ -5,10 +5,9 @@ import { useRouter } from 'next/router';
 import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LoginContext } from '../../Layouts';
+import { LoginContext } from '../../layouts';
 import DropdownTransition from '../Dropdown/DropdownTransition';
-import NavbarItem from './NavbarItem';
-import UserDropdown from './UserDropdown';
+import { NavbarItem, UserDropdown } from './index';
 
 const Navbar: React.FC = () => {
   const router = useRouter();
@@ -20,7 +19,7 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="fixed z-40 w-full bg-white border-b border-gray-200 dark:text-white dark:bg-[#171716] dark:border-gray-800">
-      <div className="flex items-center justify-between h-full max-w-4xl px-4 py-2 m-auto">
+      <div className="flex items-center justify-between h-full max-w-6xl px-4 py-2 m-auto">
         {/* LEFT SIDE */}
         <span className="flex items-center h-full gap-2">
           <NavbarItem

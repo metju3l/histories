@@ -1,6 +1,6 @@
-import { Input } from '@components/Elements';
-import Button from '@components/Elements/buttons/Button';
-import AuthLayout from '@components/Layouts/Auth';
+import { Input } from '@components/elements';
+import Button from '@components/elements/buttons/Button';
+import AuthLayout from '@components/layouts/Auth';
 import { useForgotPasswordMutation } from '@graphql/auth.graphql';
 import { RedirectLogged } from '@lib/functions/ServerSideProps';
 import ForgotPasswordFormInputs from '@lib/types/forms/forgotPasswordFormInputs';

@@ -1,10 +1,12 @@
 import React from 'react';
 import { SliderItem } from 'react-compound-slider';
 
-const Tick: React.FC<{ tick: SliderItem; count: number }> = ({
-  tick,
-  count,
-}) => {
+interface TickProps {
+  tick: SliderItem;
+  count: number;
+}
+
+const Tick: React.FC<TickProps> = ({ tick, count }) => {
   return (
     <div>
       <div

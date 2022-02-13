@@ -6,7 +6,7 @@ import React, { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import UrlPrefix from 'shared/config/UrlPrefix';
 
-import { LoginContext } from '../../Layouts';
+import { LoginContext } from '../../layouts';
 import DropdownTransition from '../Dropdown/DropdownTransition';
 
 const UserDropdown: React.FC = () => {

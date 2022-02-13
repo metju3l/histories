@@ -24,9 +24,7 @@ const SearchLocation: React.FC<SearchLocationProps> = ({
   setViewport,
 }) => {
   const { t } = useTranslation<string>(); // i18n
-
   const [showList, setShowList] = useState<boolean>(false); // show list of results
-
   const {
     ready,
     value,

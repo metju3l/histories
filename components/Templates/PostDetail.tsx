@@ -1,5 +1,4 @@
-import { Layout } from '@components/Layouts';
-import { Minimap } from '@components/modules/Minimap';
+import { Layout } from '@components/layouts';
 import { usePostQuery } from '@graphql/post.graphql';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -79,14 +78,7 @@ const PostDetail: React.FC<{ id: number }> = ({ id }) => {
               <div className="w-full">{data.post.description}</div>
 
               {/* MINIMAP */}
-              <div className="w-full h-[40vh]">
-                <Minimap
-                  coordinates={[
-                    data.post.place.latitude,
-                    data.post.place.longitude,
-                  ]}
-                />
-              </div>
+              <div className="w-full h-[40vh]"></div>
             </div>
           </div>
         )}
