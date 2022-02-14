@@ -94,5 +94,6 @@
   "send_reset_password_link": "Send reset password link",
   "edit_collection": "Edit collection",
   "delete_collection": "Delete collection",
-  "search_place": "Search place"
+  "search_place": "Search place",
+  "coordinates_copied": "Coordinates copied"
 }

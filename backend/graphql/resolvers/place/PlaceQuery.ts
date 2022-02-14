@@ -29,19 +29,25 @@ CALL {
 CALL {
   WITH place
     MATCH (photo:Photo)<-[:CONTAINS]-(post:Post)-[:IS_LOCATED]->(place), (n)-->(post)
+    OPTIONAL MATCH (place)-[:HAS_PREVIEW]->(preview:Photo)
 RETURN  COLLECT(n) AS photoRelations,
- COLLECT(photo) AS placePreview
+ photo AS placePreview, preview
 ORDER BY SIZE(photoRelations) DESC
-LIMIT 6
+LIMIT 1
 }
 
-RETURN place{.*,    
-  latitude: place.location.y,           
-  longitude: place.location.x,          
+RETURN 
+    place{.*,    
+        preview:    CASE
+                    WHEN preview IS NOT NULL 
+                        THEN preview{.*}        // if there is a place preview
+                        ELSE placePreview{.*}       // else select most popular photo
+                    END,  
+        latitude: place.location.y,           
+        longitude: place.location.x,          
    posts: COLLECT(DISTINCT post{.*,               
          author: author{.*}
        }),
-            preview: {hash: CASE WHEN SIZE(place.preview) > 0 THEN place.preview ELSE placePreview[0].hash END},  
    nearbyPlaces: COLLECT(DISTINCT nearby{.*,  
    preview: CASE WHEN SIZE(nearby.preview) > 0 THEN nearby.preview ELSE automaticPreview[0].url[0] END,                    
          distance                             
