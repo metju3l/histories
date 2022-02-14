@@ -47,6 +47,16 @@ const PlacesQuery = async ({ filter, loggedId }: PlacesQueryInput) => {
       OPTIONAL MATCH (author:User)-[:CREATED]->(post:Post)-[:IS_LOCATED]->(place)
       RETURN COLLECT(DISTINCT post{.*, author: author{.*}}) AS posts
   }
+
+  CALL {
+  WITH place
+    MATCH (photo:Photo)<-[:CONTAINS]-(post:Post)-[:IS_LOCATED]->(place), (n)-->(post)
+    OPTIONAL MATCH (place)-[:HAS_PREVIEW]->(preview:Photo)
+RETURN  COLLECT(n) AS photoRelations,
+ photo AS placePreview, preview
+ORDER BY SIZE(photoRelations) DESC
+LIMIT 1
+}
   
   // return places as an array of objects
   WITH place{.*,
@@ -64,13 +74,11 @@ const PlacesQuery = async ({ filter, loggedId }: PlacesQueryInput) => {
               // when searching in radius return distance from center
               ELSE distance(place.location, point($radius)) 
           END,
-      preview: 
-          CASE
-              // if place has preview return place preview
-              WHEN (place.preview IS NOT NULL) THEN place.preview
-              // else if place has post with photos, return photos as preview otherwise return null
-              ELSE photo{.*}
-          END
+        preview:    CASE
+                    WHEN preview IS NOT NULL 
+                        THEN preview{.*}        // if there is a place preview
+                        ELSE placePreview{.*}       // else select most popular photo
+                    END
   } AS placeObj
   ORDER BY placeObj.id ASC
   SKIP $skip

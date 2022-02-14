@@ -1,20 +1,20 @@
+import { Dialog } from '@headlessui/react';
 import { MapContext } from '@src/contexts/MapContext';
+import MeContext from '@src/contexts/MeContext';
 import { ConvertBounds, GetMapStyle } from '@src/functions/map';
 import { IViewport, MapStyles } from '@src/types/map';
+import Link from 'next/link';
+import Router from 'next/router';
 import { useTheme } from 'next-themes';
 import React, { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import ReactMapGL, { ExtraState, MapEvent, MapRef } from 'react-map-gl';
 
 import { Maybe } from '../../../../../.cache/__types__';
 import { FetchMore, MapStyleMenu, SearchLocation } from './index';
 import Clusters from './markers/Clusters';
 import { TimeLine } from './timeLine';
-import Router from 'next/router';
-import { Dialog } from '@headlessui/react';
-import Link from 'next/link';
-import MeContext from '@src/contexts/MeContext';
-import toast from 'react-hot-toast';
-import { useTranslation } from 'react-i18next';
 
 const Map: React.FC = () => {
   const mapContext = React.useContext(MapContext); // get map context
@@ -103,7 +103,7 @@ const Map: React.FC = () => {
         <div className="flex flex-col">
           {/* COORDINATES */}
           <button
-            className="hover:bg-gray-100 px-4 py-1"
+            className="px-4 py-1 hover:bg-gray-100"
             onClick={async () => {
               await navigator.clipboard.writeText(
                 `${contextMenu?.coordinates[0]}, ${contextMenu?.coordinates[1]}`
@@ -119,13 +119,13 @@ const Map: React.FC = () => {
               href={`/create/post?lat=${contextMenu?.coordinates[0]}&lng=${contextMenu?.coordinates[1]}`}
               passHref
             >
-              <button className="hover:bg-gray-100 px-4 py-1">
+              <button className="px-4 py-1 hover:bg-gray-100">
                 Add photo of this place
               </button>
             </Link>
           )}
           {/* SHOW NEARBY */}
-          <button className="hover:bg-gray-100 px-4 py-1">
+          <button className="px-4 py-1 hover:bg-gray-100">
             Show nearby places
           </button>
         </div>

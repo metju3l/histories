@@ -23,8 +23,7 @@ const Places: React.FC = () => {
                 postDate < mapContext.timeLimitation[1]
               ); // compare year with timeline limitations
             }).length > 0 &&
-            place?.preview?.hash &&
-            place?.preview?.blurhash
+            place?.preview?.hash
         )
         .map(
           (place) =>
@@ -46,7 +45,6 @@ const Places: React.FC = () => {
                   ease: 'easeInOut',
                 }}
               >
-                {place.id}
                 {place.preview && (
                   <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
                     <Image

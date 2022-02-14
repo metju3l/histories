@@ -34,9 +34,11 @@ const Marker: React.FC<MarkerProps> = ({ place, onClick, numberOfPlaces }) => {
               ${
                 hasIcon
                   ? 'border-transparent'
-                  : mapContext.hoverPlaceId === place.id
+                  : mapContext.hoverPlaceId === place.id && !loadingImage
                   ? 'border-brand'
-                  : 'border-white'
+                  : !loadingImage
+                  ? 'border-white'
+                  : ''
               }`}
           onMouseEnter={() =>
             !place.isCluster && mapContext.setHoverPlaceId(place.id)
@@ -58,11 +60,12 @@ const Marker: React.FC<MarkerProps> = ({ place, onClick, numberOfPlaces }) => {
           )}
 
           {/* PLACE ICON/PREVIEW */}
-          {loadingImage && ( // if image is loading show universal place icon
-            <div className="p-4 text-brand">
-              <PhotoMarkerIcon />
-            </div>
-          )}
+          {loadingImage &&
+            !hasIcon && ( // if image is loading show universal place icon
+              <div className="p-4 text-brand">
+                <PhotoMarkerIcon />
+              </div>
+            )}
           <Image
             src={preview}
             layout={hasIcon ? undefined : 'fill'}
