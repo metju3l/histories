@@ -21,7 +21,7 @@ const TimeLine: React.FC<TimelineProps> = ({ domain }) => {
       domain={domain}
       step={1}
       mode={2}
-      values={domain}
+      values={mapContext.timeLimitation}
       onUpdate={(limits) =>
         mapContext.setTimeLimitation(limits as [number, number])
       }

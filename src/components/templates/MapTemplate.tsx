@@ -15,8 +15,8 @@ interface MapTemplateProps {
   lat: Maybe<number>;
   lng: Maybe<number>;
   zoom: Maybe<number>;
-  minDate: Maybe<number>;
-  maxDate: Maybe<number>;
+  minYear: Maybe<number>;
+  maxYear: Maybe<number>;
   place: Maybe<number>;
 }
 
@@ -24,8 +24,8 @@ const MapTemplate: React.FC<MapTemplateProps> = ({
   lat,
   lng,
   zoom,
-  minDate,
-  maxDate,
+  minYear,
+  maxYear,
   place,
 }) => {
   const [bounds, setBounds] = useState(boundsPlaceholder); // viewport bounds
@@ -50,8 +50,8 @@ const MapTemplate: React.FC<MapTemplateProps> = ({
   const [whatToShow, setWhatToShow] = useState<'places' | 'photos'>('places'); // what to show on the right panel
   const [showSidebar, setShowSidebar] = useState<boolean>(true); // is sidebar visible
   const [timeLimitation, setTimeLimitation] = useState<[number, number]>([
-    1000,
-    new Date().getFullYear(),
+    minYear ?? 1000,
+    maxYear ?? new Date().getFullYear(),
   ]);
 
   const [sidebarPlace, setSidebarPlace] = useState<Maybe<number>>(place);

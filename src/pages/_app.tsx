@@ -13,10 +13,9 @@ import { useTranslation } from 'react-i18next';
 
 import { orange_main } from '../../shared/constants/colors';
 
-function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+function MyApp({ Component, pageProps, router }: AppProps): JSX.Element {
   const apolloClient = useApollo(null);
   const { i18n } = useTranslation();
-
   useEffect(() => {
     // on load get browser language
     i18n.changeLanguage(navigator.language);
@@ -30,12 +29,17 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       <script
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
       />
-      <NextNprogress
-        color={orange_main}
-        height={2}
-        options={{ showSpinner: false }}
-        showOnShallow
-      />
+      {
+        // don't show progress bar on map page, because of often changing url query params
+        !(router.pathname === '/') && (
+          <NextNprogress
+            color={orange_main}
+            height={2}
+            options={{ showSpinner: false }}
+            showOnShallow
+          />
+        )
+      }
       <MeProvider>
         <ThemeProvider attribute="class" defaultTheme="light">
           <Component {...pageProps} />

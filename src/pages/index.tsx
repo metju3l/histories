@@ -24,8 +24,8 @@ const MapPage: React.FC<{
   lat: number | null;
   lng: number | null;
   zoom: number | null;
-  minDate: number | null;
-  maxDate: number | null;
+  minYear: number | null;
+  maxYear: number | null;
   place: number | null;
 }> = (props) => {
   return (
@@ -52,7 +52,7 @@ const MapPage: React.FC<{
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (ctx.req.url?.startsWith('_next')) return { props: {} }; // for nextjs
 
-  const { lat, lng, zoom, minTime, maxTime, place } = ctx.query;
+  const { lat, lng, zoom, maxYear, minYear, place } = ctx.query;
   // check if values are valid
   return {
     props: {
@@ -60,8 +60,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       lng: typeof lng === 'string' ? parseFloat(lng) : null,
       zoom: typeof zoom === 'string' ? parseFloat(zoom) : null,
       place: typeof place === 'string' ? parseFloat(place) : null,
-      maxTime: typeof maxTime === 'string' ? parseFloat(maxTime) : null,
-      minTime: typeof minTime === 'string' ? parseFloat(minTime) : null,
+      minYear: typeof minYear === 'string' ? parseFloat(minYear) : null,
+      maxYear: typeof maxYear === 'string' ? parseFloat(maxYear) : null,
     },
   };
 };

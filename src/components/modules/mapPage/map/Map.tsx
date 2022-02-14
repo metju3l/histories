@@ -1,20 +1,40 @@
 import { MapContext } from '@src/contexts/MapContext';
 import { ConvertBounds, GetMapStyle } from '@src/functions/map';
-import { MapStyles } from '@src/types/map';
+import { IViewport, MapStyles } from '@src/types/map';
 import { useTheme } from 'next-themes';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactMapGL, { ExtraState, MapRef } from 'react-map-gl';
 
 import { Maybe } from '../../../../../.cache/__types__';
 import { FetchMore, MapStyleMenu, SearchLocation } from './index';
 import Clusters from './markers/Clusters';
 import { TimeLine } from './timeLine';
+import Router from 'next/router';
 
 const Map: React.FC = () => {
   const mapContext = React.useContext(MapContext); // get map context
   const [mapStyle, setMapStyle] = useState<MapStyles>('theme'); // possible map styles, defaults to theme
   const { resolvedTheme } = useTheme(); // get current theme
   const mapRef = useRef<Maybe<MapRef>>(null); // map ref to get map instance
+
+  useEffect(() => {
+    Router.replace({
+      pathname: '/',
+      query: {
+        lat: mapContext.viewport.latitude.toFixed(4),
+        lng: mapContext.viewport.longitude.toFixed(4),
+        zoom: mapContext.viewport.zoom.toFixed(4),
+        place: mapContext.sidebarPlace,
+        minYear: mapContext.timeLimitation[0],
+        maxYear: mapContext.timeLimitation[1],
+      },
+    });
+  }, [
+    mapContext.bounds,
+    mapContext.sidebarPlace,
+    mapContext.timeLimitation,
+    mapContext.timeLimitation,
+  ]);
 
   return (
     <>
@@ -28,7 +48,9 @@ const Map: React.FC = () => {
         className="relative rounded-lg"
         mapStyle={GetMapStyle(mapStyle, resolvedTheme)}
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-        onViewportChange={(viewport: any) => mapContext.setViewport(viewport)}
+        onViewportChange={(viewport: IViewport) =>
+          mapContext.setViewport(viewport)
+        }
         onInteractionStateChange={async (state: ExtraState) => {
           if (!state.isDragging) {
             // if user is not currently dragging
