@@ -13,7 +13,7 @@ const SubNav: React.FC<SubNavProps> = ({ sortBy, setSortBy }) => {
   const mapContext = React.useContext(MapContext);
 
   return (
-    <div className="sticky top-0 z-50 flex items-center justify-between w-full px-4 py-4 bg-white border-b border-gray-200 shadow-sm">
+    <div className="sticky top-0 z-20 flex items-center justify-between w-full px-4 py-4 bg-white border-b border-gray-200 shadow-sm">
       <SortByDropdown sortBy={sortBy} setSortBy={setSortBy} />
       <div className="flex gap-2">
         {mapContext.sidebarPlace ? (

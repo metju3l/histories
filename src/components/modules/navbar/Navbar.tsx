@@ -1,27 +1,86 @@
+import { useSearchQuery } from '@graphql/queries/search.graphql';
 import { Menu, Transition } from '@headlessui/react';
+import LogoBlack from '@public/logo/big-black.svg';
 import MeContext from '@src/contexts/MeContext';
 import FirstLetterUppercase from '@src/functions/FirstLetterUppercase';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { HiSearch } from 'react-icons/hi';
 
 import DropdownTransition from '../dropdown/DropdownTransition';
 import { NavbarItem, UserDropdown } from './index';
 
+interface SearchInput {
+  q: string;
+}
+
 const Navbar: React.FC = () => {
   const router = useRouter();
-  const meContext = React.useContext(MeContext);
-  const { t } = useTranslation();
-  const userIsLogged = meContext.data?.me?.id;
-
+  const meContext = React.useContext(MeContext); // me context
+  const { t } = useTranslation<string>(); // i18n
+  const userIsLogged = meContext.data?.me?.id; // if user is logged in
+  const { register } = useForm<SearchInput>(); // search input
+  const searchQuery = useSearchQuery({ variables: { input: { text: '' } } }); // search query for search input
+  const [searchFocused, setSearchFocused] = useState<boolean>(false);
   if (meContext.error) console.error(meContext.error);
 
   return (
-    <nav className="fixed z-40 w-full bg-white border-b border-gray-200 dark:text-white dark:bg-[#171716] dark:border-gray-800">
+    <nav className="fixed z-50 w-full bg-white border-b border-gray-200 dark:text-white dark:bg-[#171716] dark:border-gray-800 shadow-sm">
       <div className="flex items-center justify-between h-full max-w-6xl px-4 py-2 m-auto">
         {/* LEFT SIDE */}
         <span className="flex items-center h-full gap-2">
+          <Link href="/" passHref>
+            <div className="pr-4 sm:w-0 lg:w-40">
+              <Image
+                src={LogoBlack}
+                alt="Histories logo"
+                layout="responsive"
+                objectFit="scale-down"
+              />
+            </div>
+          </Link>
+
+          {/* SEARCH */}
+          <form
+            action="/search"
+            className="relative flex items-center w-full px-4 bg-white border border-gray-300 max-w-[240px] rounded-xl gap-2"
+          >
+            {/* SEARCH ICON */}
+            <button type="submit">
+              <HiSearch className="w-5 h-5 text-gray-600" />
+            </button>
+            <input
+              {...register('q')}
+              onFocus={() => setSearchFocused(true)} // when input is focused
+              onBlur={() => setSearchFocused(false)} // when input is not focused
+              onChange={
+                async (e) =>
+                  await searchQuery.refetch({ input: { text: e.target.value } }) // on input change refetch
+              }
+              className="inline-block w-full py-2 placeholder-gray-600 bg-transparent border-none outline-none rounded-xl text-light-text"
+              placeholder="Search histories"
+            />
+            {/* SEARCH RESULTS */}
+            <div
+              className="absolute left-0 w-full bg-white border border-gray-200 shadow-md top-12 rounded-xl max-w-[360px]"
+              style={{ zIndex: 120 }}
+            >
+              {searchFocused &&
+                searchQuery.data?.search.posts.map((post, index: number) => (
+                  <div
+                    key={index}
+                    className="px-1 py-2 border-b border-gray-200 hover:bg-gray-100"
+                  >
+                    {post?.description?.substring(0, 32)}...
+                  </div>
+                ))}
+            </div>
+          </form>
+
           <NavbarItem
             text="Home"
             href="/home"

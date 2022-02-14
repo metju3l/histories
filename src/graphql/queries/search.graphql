@@ -1,0 +1,13 @@
+query Search($input: SearchInput!) {
+  search(input: $input) {
+    users {
+      username
+      firstName
+      lastName
+      bio
+    }
+    posts {
+      description
+    }
+  }
+}

@@ -151,7 +151,6 @@ const Map: React.FC = () => {
       <div className="absolute bottom-0 left-0 z-20 px-8 pt-2 w-[28vw]">
         <TimeLine domain={[1000, new Date().getFullYear()]} />
       </div>
-      {JSON.stringify(contextMenu)}
     </>
   );
 };
