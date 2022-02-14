@@ -1,6 +1,6 @@
 import { MapContext } from '@src/contexts/MapContext';
 import { ConvertBounds, GetMapStyle } from '@src/functions/map';
-import { IViewport, MapStyles } from '@src/types/map';
+import { MapStyles } from '@src/types/map';
 import { useTheme } from 'next-themes';
 import React, { useRef, useState } from 'react';
 import ReactMapGL, { ExtraState, MapRef } from 'react-map-gl';
@@ -20,15 +20,15 @@ const Map: React.FC = () => {
     <>
       {/* MAP */}
       <ReactMapGL
-        {...mapContext.viewport}
+        latitude={mapContext.viewport.latitude}
+        longitude={mapContext.viewport.longitude}
+        zoom={mapContext.viewport.zoom}
         width="100%"
         height="100%"
         className="relative rounded-lg"
         mapStyle={GetMapStyle(mapStyle, resolvedTheme)}
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-        onViewportChange={(viewport: React.SetStateAction<IViewport>) =>
-          mapContext.setViewport(viewport)
-        }
+        onViewportChange={(viewport: any) => mapContext.setViewport(viewport)}
         onInteractionStateChange={async (state: ExtraState) => {
           if (!state.isDragging) {
             // if user is not currently dragging
