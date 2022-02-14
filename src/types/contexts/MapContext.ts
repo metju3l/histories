@@ -1,7 +1,6 @@
 import { QueryResult } from '@apollo/client';
-import { PlacesQuery } from '@graphql/queries/place.graphql';
+import { MapPlacesQuery } from '@graphql/queries/place.graphql';
 import { PostsQuery } from '@graphql/queries/post.graphql';
-import { SidebarPlaceType } from '@src/pages';
 import React from 'react';
 
 import {
@@ -20,15 +19,13 @@ interface IMapContext {
   setWhatToShow: React.Dispatch<React.SetStateAction<'places' | 'photos'>>;
   viewport: IViewport;
   setViewport: React.Dispatch<React.SetStateAction<IViewport>>;
-  sidebarPlace: Maybe<SidebarPlaceType>;
-  setSidebarPlace: React.Dispatch<
-    React.SetStateAction<Maybe<SidebarPlaceType>>
-  >;
+  sidebarPlace: Maybe<number>;
+  setSidebarPlace: React.Dispatch<React.SetStateAction<Maybe<number>>>;
   timeLimitation: [number, number];
   setTimeLimitation: React.Dispatch<React.SetStateAction<[number, number]>>;
   placesQuery:
     | QueryResult<
-        PlacesQuery,
+        MapPlacesQuery,
         Exact<{
           input?: InputMaybe<PlacesInput> | undefined;
         }>

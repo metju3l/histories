@@ -1,12 +1,11 @@
 import MapPageGrid from '@components/modules/mapPage/Grid';
-import { usePlacesQuery } from '@graphql/queries/place.graphql';
+import { useMapPlacesQuery } from '@graphql/queries/place.graphql';
 import { usePostsQuery } from '@graphql/queries/post.graphql';
 import {
   boundsPlaceholder,
   viewportPlaceholder,
 } from '@src/constants/MapPlaceholderValues';
 import { MapContext } from '@src/contexts/MapContext';
-import { SidebarPlaceType } from '@src/pages';
 import { IViewport } from '@src/types/map';
 import React, { useState } from 'react';
 
@@ -31,7 +30,7 @@ const MapTemplate: React.FC<MapTemplateProps> = ({
 }) => {
   const [bounds, setBounds] = useState(boundsPlaceholder); // viewport bounds
 
-  const placesQuery = usePlacesQuery({
+  const placesQuery = useMapPlacesQuery({
     variables: {
       input: {
         filter: { take: 25 },
@@ -55,8 +54,7 @@ const MapTemplate: React.FC<MapTemplateProps> = ({
     new Date().getFullYear(),
   ]);
 
-  const [sidebarPlace, setSidebarPlace] =
-    useState<Maybe<SidebarPlaceType>>(null);
+  const [sidebarPlace, setSidebarPlace] = useState<Maybe<number>>(place);
 
   // map viewport
   const [viewport, setViewport] = useState<IViewport>({

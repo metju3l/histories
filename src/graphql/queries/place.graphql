@@ -1,4 +1,4 @@
-query Places($input: PlacesInput) {
+query MapPlaces($input: PlacesInput) {
   places(input: $input) {
     id
     latitude
@@ -14,13 +14,6 @@ query Places($input: PlacesInput) {
     }
     posts {
       postDate
-      createdAt
-      id
-      author {
-        username
-        firstName
-        lastName
-      }
     }
   }
 }
@@ -34,25 +27,18 @@ query Place($id: Int!) {
     description
     preview {
       hash
-      blurhash
-      width
-      height
     }
-    posts {
-      id
-      photos {
-        hash
-        blurhash
-        width
-        height
-        index
-      }
-    }
-    nearbyPlaces {
-      id
-      preview
-      name
-      distance
+  }
+}
+
+query MapSidebarPlace($id: Int!) {
+  place(id: $id) {
+    latitude
+    longitude
+    name
+    description
+    preview {
+      hash
     }
   }
 }

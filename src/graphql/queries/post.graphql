@@ -109,3 +109,28 @@ query posts($input: PostsInput) {
     }
   }
 }
+
+query MapSidebarPosts($input: PostsInput) {
+  posts(input: $input) {
+    id
+    photos {
+      hash
+      blurhash
+      width
+      height
+      index
+    }
+    postDate
+    description
+    liked
+    likeCount
+    createdAt
+    author {
+      id
+      username
+      firstName
+      lastName
+      profile
+    }
+  }
+}

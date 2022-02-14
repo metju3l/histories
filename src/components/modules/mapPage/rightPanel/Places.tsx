@@ -36,7 +36,7 @@ const Places: React.FC = () => {
                     ? 'border-black shadow-sm'
                     : ''
                 }`}
-                onClick={() => mapContext.setSidebarPlace(place)}
+                onClick={() => mapContext.setSidebarPlace(place.id)}
                 onMouseEnter={() => mapContext.setHoverPlaceId(place.id)}
                 onMouseLeave={() => mapContext.setHoverPlaceId(null)}
                 initial={{ opacity: 0 }}

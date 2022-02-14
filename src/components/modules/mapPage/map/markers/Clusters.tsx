@@ -46,7 +46,7 @@ const Clusters: React.FC<ClustersProps> = ({ mapRef }) => {
 
   return (
     <>
-      {clusters.map((cluster: ICluster) => {
+      {clusters.map((cluster: ICluster, index: number) => {
         const { cluster: isCluster, point_count: pointCount } =
           cluster.properties;
 
@@ -83,11 +83,12 @@ const Clusters: React.FC<ClustersProps> = ({ mapRef }) => {
 
         return (
           <Marker
-            key={cluster.id}
+            key={index}
             place={{
-              id: cluster.id,
+              id: cluster.properties.id,
               longitude: cluster.geometry.coordinates[0],
               latitude: cluster.geometry.coordinates[1],
+              isCluster,
               icon: isCluster ? null : cluster?.properties?.icon ?? null, // return icon only if it's place (not cluster)
               preview,
             }}
@@ -95,8 +96,8 @@ const Clusters: React.FC<ClustersProps> = ({ mapRef }) => {
             onClick={() => {
               if (!isCluster) {
                 // if it's not a cluster open place in sidebar and end function
-                // @ts-ignore
-                mapContext.setSidebarPlace(cluster);
+                mapContext.setSidebarPlace(cluster.properties.id);
+                mapContext.setShowSidebar(true);
                 return;
               }
               // if it's a cluster zoom to see all places

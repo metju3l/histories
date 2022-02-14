@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 
 import Photos from './Photos';
-import PlaceDetail from './PlaceDetail';
+import Place from './Place';
 import Places from './Places';
 import { SubNav } from './subNav';
 
@@ -35,7 +35,7 @@ const RightPanel: React.FC = () => {
           }`}
         >
           {mapContext.sidebarPlace ? (
-            <PlaceDetail sidebarPlace={mapContext.sidebarPlace} />
+            <Place id={mapContext.sidebarPlace} />
           ) : mapContext.whatToShow === 'photos' ? (
             <Photos />
           ) : (

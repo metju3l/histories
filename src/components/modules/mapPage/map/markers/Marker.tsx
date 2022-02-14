@@ -12,6 +12,7 @@ interface MarkerProps {
     latitude: number;
     icon?: string | null;
     preview: string;
+    isCluster: boolean;
   };
   onClick?: () => void;
   numberOfPlaces?: number;
@@ -31,12 +32,18 @@ const Marker: React.FC<MarkerProps> = ({ place, onClick, numberOfPlaces }) => {
           className={`absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 
               ${hasIcon ? 'w-24 h-24' : 'w-16 h-16'}
               ${
-                !hasIcon && !loadingImage
-                  ? 'border-white hover:border-brand'
-                  : 'border-transparent'
+                hasIcon
+                  ? 'border-transparent'
+                  : mapContext.hoverPlaceId === place.id
+                  ? 'border-brand'
+                  : 'border-white'
               }`}
-          onMouseEnter={() => mapContext.setHoverPlaceId(place.id)}
-          onMouseLeave={() => mapContext.setHoverPlaceId(null)}
+          onMouseEnter={() =>
+            !place.isCluster && mapContext.setHoverPlaceId(place.id)
+          }
+          onMouseLeave={() =>
+            !place.isCluster && mapContext.setHoverPlaceId(null)
+          }
           onClick={onClick}
         >
           {/* PLACE COUNT IN CORNER */}

@@ -52,13 +52,14 @@ const MapPage: React.FC<{
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (ctx.req.url?.startsWith('_next')) return { props: {} }; // for nextjs
 
-  const { lat, lng, zoom, minTime, maxTime } = ctx.query;
+  const { lat, lng, zoom, minTime, maxTime, place } = ctx.query;
   // check if values are valid
   return {
     props: {
       lat: typeof lat === 'string' ? parseFloat(lat) : null,
       lng: typeof lng === 'string' ? parseFloat(lng) : null,
       zoom: typeof zoom === 'string' ? parseFloat(zoom) : null,
+      place: typeof place === 'string' ? parseFloat(place) : null,
       maxTime: typeof maxTime === 'string' ? parseFloat(maxTime) : null,
       minTime: typeof minTime === 'string' ? parseFloat(minTime) : null,
     },
