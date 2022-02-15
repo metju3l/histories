@@ -267,12 +267,33 @@ const mutations = {
     context: contextType
   ) => {
     OnlyLogged(context);
-    // check coordinates
-    const validateCoordinates = ValidateCoordinates([
-      input.latitude,
-      input.longitude,
-    ]).error;
-    if (validateCoordinates) throw new Error(validateCoordinates);
+
+    if (
+      input.placeID == undefined &&
+      (input.latitude == undefined || input.longitude == undefined)
+    )
+      throw new Error('You must provide a placeId or latitude and longitude');
+
+    if (!input.placeID) {
+      if (input.latitude == undefined || !input.longitude)
+        throw new Error('You must provide a placeId or latitude and longitude');
+      input.latitude;
+    }
+
+    if (
+      input.placeID == undefined &&
+      (input.latitude == undefined || input.longitude == undefined)
+    )
+      throw new Error('You must provide a placeId or latitude and longitude');
+
+    if (input.placeID == undefined) {
+      // check coordinates
+      const validateCoordinates = ValidateCoordinates([
+        input.latitude!,
+        input.longitude!,
+      ]).error;
+      if (validateCoordinates) throw new Error(validateCoordinates);
+    }
 
     // check description
     if (input.description) {
@@ -353,7 +374,12 @@ const mutations = {
     const containsNSFW = photos.some((photo) => photo.containsNSFW);
 
     return await CreatePost({
-      coordinates: { latitude: input.latitude, longitude: input.longitude },
+      // @ts-ignore // idk why this doesn't work
+      place: {
+        id: input.placeID ?? null,
+        latitude: input.latitude ?? null,
+        longitude: input.longitude ?? null,
+      },
       userID: context.decoded.id,
       nsfw: containsNSFW,
       photoDate: input.photoDate,

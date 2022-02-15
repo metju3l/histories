@@ -91,7 +91,7 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
           {meContext.data?.me && (
             <>
               <Link
-                href={`/create/post?place=${mapContext.sidebarPlace}`}
+                href={`/create/post?placeID=${mapContext.sidebarPlace}`}
                 passHref
               >
                 <button className="flex items-center px-4 py-2 border borer-gray-400 rounded-xl hover:bg-gray-100 gap-2">

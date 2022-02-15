@@ -4,10 +4,15 @@ import { Layout } from '@components/layouts';
 import Search from '@components/modules/Search';
 import { useCreatePostMutation } from '@graphql/mutations/post.graphql';
 import { useMeQuery } from '@graphql/queries/user.graphql';
-import { RedirectAnonymous } from '@src/functions/ServerSideProps';
+import {
+  GetCookieFromServerSideProps,
+  IsJwtValid,
+  SSRRedirect,
+} from '@src/functions';
 import { motion } from 'framer-motion';
+import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
@@ -72,7 +77,17 @@ const DropZoneComponent = ({
   );
 };
 
-const Login: FC = () => {
+interface CreatePostPageProps {
+  placeID: number | null;
+  latitude: number | null;
+  longitude: number | null;
+}
+
+const CreatePostPage: React.FC<CreatePostPageProps> = ({
+  placeID,
+  latitude,
+  longitude,
+}) => {
   // for reading coordinates from query params
   const router = useRouter();
 
@@ -88,8 +103,8 @@ const Login: FC = () => {
   const [tags, setTags] = useState<Array<string>>([]);
   const [newTag, setNewTag] = useState<string>('');
   const [searchCoordinates, setSearchCoordinates] = useState({
-    lat: 50,
-    lng: 15,
+    lat: latitude ?? 50,
+    lng: longitude ?? 15,
   });
   const [file, setFile] = useState<File[]>([]);
 
@@ -185,12 +200,15 @@ const Login: FC = () => {
     try {
       await createPostMutation({
         variables: {
-          description: data.description,
-          photoDate: Date.parse(data.photoDate).toString(),
-          hashtags: '',
-          latitude: marker.latitude,
-          longitude: marker.longitude,
-          photo: file,
+          input: {
+            placeID,
+            description: data.description,
+            photoDate: Date.parse(data.photoDate).toString(),
+            hashtags: '',
+            latitude: marker.latitude,
+            longitude: marker.longitude,
+            photo: file,
+          },
         },
       });
       router.push('/');
@@ -389,6 +407,29 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
   );
 };
 
-export const getServerSideProps = RedirectAnonymous;
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const { req, query } = ctx;
+  const cookies = req.headers.cookie; // get cookies
 
-export default Login;
+  const jwt = GetCookieFromServerSideProps(cookies, 'jwt');
+
+  // if JWT is null redirect
+  if (jwt === null) return SSRRedirect('/login');
+  // if there is JWT, verify it
+  else if (IsJwtValid(jwt)) {
+    const placeID =
+      typeof query.placeID === 'string' ? parseFloat(query.placeID) : null;
+    const latitude =
+      typeof query.latitude === 'string' ? parseFloat(query.latitude) : null;
+    const longitude =
+      typeof query.longitude === 'string' ? parseFloat(query.longitude) : null;
+    return {
+      props: {
+        placeID,
+        latitude,
+        longitude,
+      },
+    };
+  } else return SSRRedirect('/login');
+};
+export default CreatePostPage;

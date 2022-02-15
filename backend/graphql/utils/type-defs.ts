@@ -217,8 +217,9 @@ export default gql`
     description: String
     hashtags: String
     photoDate: String!
-    latitude: Float!
-    longitude: Float!
+    latitude: Float
+    longitude: Float
+    placeID: Int
     photo: [Upload!]!
   }
 

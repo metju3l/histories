@@ -6,22 +6,6 @@ mutation createComment($target: Int!, $content: String!) {
   createComment(input: { target: $target, content: $content })
 }
 
-mutation createPost(
-  $description: String
-  $hashtags: String
-  $photoDate: String!
-  $latitude: Float!
-  $longitude: Float!
-  $photo: [Upload!]!
-) {
-  createPost(
-    input: {
-      description: $description
-      hashtags: $hashtags
-      photoDate: $photoDate
-      latitude: $latitude
-      longitude: $longitude
-      photo: $photo
-    }
-  )
+mutation createPost($input: CreatePostInput!) {
+  createPost(input: $input)
 }

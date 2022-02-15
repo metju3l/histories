@@ -2,17 +2,17 @@ import { InputMaybe } from '../../../../.cache/__types__';
 import DbConnector from '../../../database/driver';
 import RunCypherQuery from '../../../database/RunCypherQuery';
 
-type CreatePostInput = {
+interface CreatePostInput {
+  place: {
+    latitude: InputMaybe<number>;
+    longitude: InputMaybe<number>;
+    id: InputMaybe<number>;
+  };
   userID: number;
   description?: InputMaybe<string>;
   hashtags?: InputMaybe<string>;
   photoDate: string;
   nsfw: boolean;
-
-  coordinates: {
-    longitude: number;
-    latitude: number;
-  };
 
   photos: Array<{
     width: number;
@@ -21,14 +21,14 @@ type CreatePostInput = {
     hash: string;
     blurhash: string;
   }>;
-};
+}
 
 async function CreatePost({
   userID,
   description,
   hashtags,
   photoDate,
-  coordinates,
+  place,
   nsfw,
   photos,
 }: CreatePostInput): Promise<string> {
@@ -47,7 +47,11 @@ async function CreatePost({
       public: $public
     })
     MERGE (place:Place {    
-      location: point({longitude: $longitude, latitude: $latitude, srid: 4326})
+    ${
+      place?.id
+        ? `id: ${place.id}`
+        : `location: point({longitude: ${place.longitude}}, latitude: ${place.latitude}, srid: 4326})`
+    }
     })
     MERGE (post)-[:IS_LOCATED]->(place)
     SET post.id = ID(post)
@@ -81,8 +85,6 @@ async function CreatePost({
       postDate: photoDate,
       nsfw,
       public: !nsfw,
-      longitude: coordinates.longitude,
-      latitude: coordinates.latitude,
       photos,
     },
   });
