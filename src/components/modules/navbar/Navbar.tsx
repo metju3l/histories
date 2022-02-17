@@ -1,9 +1,7 @@
 import { useSearchQuery } from '@graphql/queries/search.graphql';
 import { Menu, Transition } from '@headlessui/react';
-import LogoBlack from '@public/logo/big-black.svg';
 import MeContext from '@src/contexts/MeContext';
 import FirstLetterUppercase from '@src/functions/FirstLetterUppercase';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useState } from 'react';
@@ -33,17 +31,6 @@ const Navbar: React.FC = () => {
       <div className="flex items-center justify-between h-full max-w-6xl px-4 py-2 m-auto">
         {/* LEFT SIDE */}
         <span className="flex items-center h-full gap-2">
-          <Link href="/" passHref>
-            <div className="pr-4 sm:w-0 lg:w-40">
-              <Image
-                src={LogoBlack}
-                alt="Histories logo"
-                layout="responsive"
-                objectFit="scale-down"
-              />
-            </div>
-          </Link>
-
           {/* SEARCH */}
           <form
             action="/search"
@@ -108,7 +95,7 @@ const Navbar: React.FC = () => {
             <>
               <span className="hidden md:block">
                 <Link href="/login">
-                  <a className="px-4 py-1 font-medium text-gray-600 border border-gray-600 cursor-pointer rounded-md dark:text-gray-200 transition ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800">
+                  <a className="block px-4 py-1 font-semibold text-gray-600 border border-transparent hover:bg-gray-200 hover:border-gray-200 translate ease-in-out duration-200 rounded-md dark:text-gray-200">
                     {t('login')}
                   </a>
                 </Link>

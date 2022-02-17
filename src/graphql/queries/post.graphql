@@ -30,7 +30,6 @@ query post($id: Int!) {
     id
     liked
     likeCount
-    commentCount
     createdAt
     postDate
     description
@@ -53,14 +52,18 @@ query post($id: Int!) {
       profile
     }
     place {
+      id
       latitude
       longitude
-    }
-    likes {
-      id
-      username
-      firstName
-      lastName
+      name
+      description
+      preview {
+        hash
+        blurhash
+        width
+        height
+        index
+      }
     }
     comments {
       id

@@ -49,7 +49,7 @@ const SearchLocation: React.FC<SearchLocationProps> = ({
       onSelect={handleSelect}
       aria-labelledby="demo"
       openOnFocus={true}
-      className="h-auto px-2 py-2 leading-tight text-gray-700 bg-white border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
+      className="h-auto px-2 py-2 leading-tight text-gray-700 bg-white border appearance-none rounded-xl focus:outline-none focus:shadow-outline"
     >
       <div className="flex w-full">
         {/* INPUT */}
@@ -63,11 +63,11 @@ const SearchLocation: React.FC<SearchLocationProps> = ({
           onBlur={() => setTimeout(() => setShowList(false), 200)} // without delay the list will be hidden before click is registered
           disabled={!ready} // disable input field if suggestions are not ready
           placeholder={t('search_place')} // placeholder text
-          className="inline-block w-full px-2 font-medium placeholder-gray-400 border-none rounded-lg outline-none text-light-text"
+          className="inline-block w-full px-2 py-1 placeholder-gray-600 bg-transparent border-none outline-none rounded-xl"
         />
         {/* SEARCH ICON */}
         <button>
-          <HiSearch className="w-8 h-8 text-gray-300" />
+          <HiSearch className="w-6 h-6 text-gray-300" />
         </button>
       </div>
       {/* SEARCH RESULTS */}
