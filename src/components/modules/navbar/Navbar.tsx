@@ -52,12 +52,12 @@ const Navbar: React.FC = () => {
               placeholder="Search histories"
             />
             {/* SEARCH RESULTS */}
-            <div
-              className="absolute left-0 w-full bg-white border border-gray-200 shadow-md top-12 rounded-xl max-w-[360px]"
-              style={{ zIndex: 120 }}
-            >
-              {searchFocused &&
-                searchQuery.data?.search.posts.map((post, index: number) => (
+            {searchFocused && (
+              <div
+                className="absolute left-0 w-full bg-white border border-gray-200 shadow-md top-12 rounded-xl max-w-[360px]"
+                style={{ zIndex: 120 }}
+              >
+                {searchQuery.data?.search.posts.map((post, index: number) => (
                   <div
                     key={index}
                     className="px-1 py-2 border-b border-gray-200 hover:bg-gray-100"
@@ -65,7 +65,8 @@ const Navbar: React.FC = () => {
                     {post?.description?.substring(0, 32)}...
                   </div>
                 ))}
-            </div>
+              </div>
+            )}
           </form>
 
           <NavbarItem
