@@ -42,3 +42,17 @@ query MapSidebarPlace($id: Int!) {
     }
   }
 }
+
+query PlaceDetailModal($id: Int!) {
+  place(id: $id) {
+    id
+    latitude
+    longitude
+    name
+    description
+    preview {
+      hash
+      blurhash
+    }
+  }
+}

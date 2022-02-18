@@ -2,11 +2,12 @@ import { PostQuery } from '@graphql/queries/post.graphql';
 import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { Blurhash } from 'react-blurhash';
 import { useTranslation } from 'react-i18next';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 
+import PlaceDetailModal from '../modals/PlaceDetailModal/PlaceDetailModal';
 import PostDetailCommentSection from './Comments';
 
 interface PostDetailRightPanelProps {
@@ -18,20 +19,30 @@ const PostDetailRightPanel: React.FC<PostDetailRightPanelProps> = ({
 }) => {
   const { t } = useTranslation<string>(); // i18n
   const { place } = post; // post place
+  const [placeDetailModal, setPlaceDetailModal] = useState<boolean>(false); // open place detail modal
 
   return (
     <div className="flex flex-col w-full gap-2">
+      {/* PLACE DETAIL MODAL */}
+      <PlaceDetailModal
+        isOpen={placeDetailModal}
+        setIsOpen={setPlaceDetailModal}
+        id={place.id}
+        place={place}
+      />
       {/* PLACE */}
       <div className="gap-2 grid grid-cols-[15rem_auto]">
-        {/* PHOTO */}
-        <div className="relative border border-gray-300 w-60 h-60 rounded-xl shadow-sm">
+        {/* PLACE PHOTO */}
+        <div
+          className="relative border border-gray-300 w-60 h-60 rounded-xl shadow-sm"
+          onClick={() => setPlaceDetailModal(true)}
+        >
           <Blurhash
             hash={place.preview!.blurhash}
             height="100%"
             width="100%"
             className="rounded-xl blurhash"
             punch={1}
-            style={{ borderRadius: '50%' }}
           />
           <Image
             src={UrlPrefix + place.preview?.hash}
