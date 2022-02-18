@@ -6,6 +6,7 @@ import React from 'react';
 import { Blurhash } from 'react-blurhash';
 import { useTranslation } from 'react-i18next';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
+
 import PostDetailCommentSection from './Comments';
 
 interface PostDetailRightPanelProps {
@@ -41,7 +42,7 @@ const PostDetailRightPanel: React.FC<PostDetailRightPanelProps> = ({
           />
         </div>
         {/* DESCRIPTION */}
-        <div className="max-h-60 overflow-hidden">
+        <div className="overflow-hidden max-h-60">
           <h1>{place.name}</h1>
           <Link
             href={`/?lat=${place.latitude}&lng=${place.longitude}&zoom=18.5&place=${place.id}`}
@@ -51,7 +52,7 @@ const PostDetailRightPanel: React.FC<PostDetailRightPanelProps> = ({
               {t('show_on_map')}
             </a>
           </Link>
-          <p className="text-ellipsis pb-2 h-full">{place.description}</p>
+          <p className="h-full pb-2 text-ellipsis">{place.description}</p>
         </div>
       </div>
       {/* COMMENTS */}

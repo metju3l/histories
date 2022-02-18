@@ -75,6 +75,7 @@ query post($id: Int!) {
         username
         firstName
         lastName
+        profile
       }
     }
   }
