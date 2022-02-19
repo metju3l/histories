@@ -43,7 +43,10 @@ query user($input: UserInput!) {
         index
       }
       description
-      postDate
+      year
+      month
+      day
+      deviationDays
       createdAt
     }
   }

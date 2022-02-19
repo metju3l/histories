@@ -10,19 +10,19 @@ const Places: React.FC = () => {
   return (
     <>
       {mapContext.placesQuery?.data?.places
+        .filter((place) =>
+          place.years.filter(
+            (year) =>
+              year > mapContext.timeLimitation[0] &&
+              year < mapContext.timeLimitation[1]
+          )
+        )
         .filter(
           (place) =>
             place.latitude > mapContext.bounds.minLatitude &&
             place.latitude < mapContext.bounds.maxLatitude &&
             place.longitude > mapContext.bounds.minLongitude &&
             place.longitude < mapContext.bounds.maxLongitude &&
-            place.posts.filter((post) => {
-              const postDate = new Date(post.postDate).getFullYear(); // get post year
-              return (
-                postDate > mapContext.timeLimitation[0] &&
-                postDate < mapContext.timeLimitation[1]
-              ); // compare year with timeline limitations
-            }).length > 0 &&
             place?.preview?.hash
         )
         .map(
@@ -58,7 +58,7 @@ const Places: React.FC = () => {
                   </div>
                 )}
                 <div className="px-4 py-2">
-                  <h2 className="text-lg font-medium">{place.name}</h2>
+                  <h2 className="text-lg font-medium">{place?.name}</h2>
                   <h3 className="text-gray-600" style={{ fontSize: '12px' }}>
                     {place.description?.substring(0, 35)}...
                   </h3>

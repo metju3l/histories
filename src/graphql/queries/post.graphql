@@ -18,7 +18,10 @@ query personalizedPosts($skip: Int!, $take: Int!) {
       index
     }
     createdAt
-    postDate
+    year
+    month
+    day
+    deviationDays
     likeCount
     commentCount
     liked
@@ -31,8 +34,11 @@ query post($id: Int!) {
     liked
     likeCount
     createdAt
-    postDate
     description
+    year
+    month
+    day
+    deviationDays
     hashtags {
       name
     }
@@ -92,7 +98,10 @@ query posts($input: PostsInput) {
       id
       index
     }
-    postDate
+    year
+    month
+    day
+    deviationDays
     description
     liked
     likeCount
@@ -124,7 +133,10 @@ query MapSidebarPosts($input: PostsInput) {
       height
       index
     }
-    postDate
+    year
+    month
+    day
+    deviationDays
     description
     liked
     likeCount

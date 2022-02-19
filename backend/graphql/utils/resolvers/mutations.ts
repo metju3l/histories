@@ -12,7 +12,6 @@ import {
 import {
   ValidateComment,
   ValidateCoordinates,
-  ValidateDate,
   ValidateDescription,
   ValidateEmail,
   ValidateName,
@@ -274,18 +273,6 @@ const mutations = {
     )
       throw new Error('You must provide a placeId or latitude and longitude');
 
-    if (!input.placeID) {
-      if (input.latitude == undefined || !input.longitude)
-        throw new Error('You must provide a placeId or latitude and longitude');
-      input.latitude;
-    }
-
-    if (
-      input.placeID == undefined &&
-      (input.latitude == undefined || input.longitude == undefined)
-    )
-      throw new Error('You must provide a placeId or latitude and longitude');
-
     if (input.placeID == undefined) {
       // check coordinates
       const validateCoordinates = ValidateCoordinates([
@@ -300,10 +287,6 @@ const mutations = {
       const validateDescription = ValidateDescription(input.description).error;
       if (validateDescription) throw new Error(validateDescription);
     }
-
-    // check date
-    const validateDate = ValidateDate(Number(input.photoDate)).error;
-    if (validateDate) throw new Error(validateDate);
 
     // if last post / collection was created less than 10 seconds ago
     if (
@@ -320,56 +303,59 @@ const mutations = {
       height: number;
       index: number;
       containsNSFW: boolean;
-    }> = await Promise.all(
-      input.photo.map(async (photo, index: number) => {
-        const { createReadStream, mimetype } = await photo;
+    }> =
+      input?.photo == undefined
+        ? []
+        : await Promise.all(
+            input?.photo.map(async (photo, index: number) => {
+              const { createReadStream, mimetype } = await photo;
 
-        // check if file is image
-        if (!mimetype.startsWith('image/'))
-          throw new Error('file is not a image');
+              // check if file is image
+              if (!mimetype.startsWith('image/'))
+                throw new Error('file is not a image');
 
-        const originalBuffer: Buffer = await streamToPromise(
-          createReadStream()
-        ); // await upload stream
+              const originalBuffer: Buffer = await streamToPromise(
+                createReadStream()
+              ); // await upload stream
 
-        const newBuffer: Promise<Buffer> = sharp(originalBuffer)
-          .resize(2560, undefined, { withoutEnlargement: true })
-          .jpeg()
-          .toBuffer(); // downscale image and convert it to JPEG
+              const newBuffer: Promise<Buffer> = sharp(originalBuffer)
+                .resize(2560, undefined, { withoutEnlargement: true })
+                .jpeg()
+                .toBuffer(); // downscale image and convert it to JPEG
 
-        async function UploadToIPFSAndNSFWCheck(buffer: Buffer): Promise<{
-          hash: string;
-          width: number;
-          height: number;
-          containsNSFW: boolean;
-        }> {
-          const photoData = await UploadPhoto(buffer); // upload photo to IPFS and get hash
-          // only check if all photos so far are not NSFW
+              async function UploadToIPFSAndNSFWCheck(buffer: Buffer): Promise<{
+                hash: string;
+                width: number;
+                height: number;
+                containsNSFW: boolean;
+              }> {
+                const photoData = await UploadPhoto(buffer); // upload photo to IPFS and get hash
+                // only check if all photos so far are not NSFW
 
-          const res = await NSFWCheck(UrlPrefix + photoData.hash); //get result from API
-          console.log(res, UrlPrefix + photoData.hash);
-          const containsNSFW: boolean = res !== undefined && res > 0.8; // if NSFW probability is more than 0.8 out of 1 set NSFW to true
+                const res = await NSFWCheck(UrlPrefix + photoData.hash); //get result from API
+                console.log(res, UrlPrefix + photoData.hash);
+                const containsNSFW: boolean = res !== undefined && res > 0.8; // if NSFW probability is more than 0.8 out of 1 set NSFW to true
 
-          return { ...photoData, containsNSFW };
-        }
+                return { ...photoData, containsNSFW };
+              }
 
-        // run blurhash generation and upload to IPFS concurrently
-        const [blurhash, photoData]: [
-          string,
-          {
-            hash: string;
-            width: number;
-            height: number;
-            containsNSFW: boolean;
-          }
-        ] = await Promise.all([
-          GenerateBlurhash(originalBuffer),
-          UploadToIPFSAndNSFWCheck(await newBuffer),
-        ]);
+              // run blurhash generation and upload to IPFS concurrently
+              const [blurhash, photoData]: [
+                string,
+                {
+                  hash: string;
+                  width: number;
+                  height: number;
+                  containsNSFW: boolean;
+                }
+              ] = await Promise.all([
+                GenerateBlurhash(originalBuffer),
+                UploadToIPFSAndNSFWCheck(await newBuffer),
+              ]);
 
-        return { ...photoData, blurhash, index };
-      })
-    );
+              return { ...photoData, blurhash, index };
+            })
+          );
 
     const containsNSFW = photos.some((photo) => photo.containsNSFW);
 
@@ -380,11 +366,13 @@ const mutations = {
         latitude: input.latitude ?? null,
         longitude: input.longitude ?? null,
       },
+      description: input.description ?? '',
+      deviationDays: input.deviationDays ?? 0,
+      year: input.year,
+      day: input.day,
+      month: input.month,
       userID: context.decoded.id,
       nsfw: containsNSFW,
-      photoDate: input.photoDate,
-      description: input.description,
-      hashtags: input.hashtags,
       photos,
     });
   },

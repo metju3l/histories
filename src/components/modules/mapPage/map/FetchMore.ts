@@ -27,6 +27,7 @@ async function FetchMore({
                 place.longitude < bounds.maxLongitude
             )
             .map((place) => place.id),
+          take: 120,
         },
       },
     },

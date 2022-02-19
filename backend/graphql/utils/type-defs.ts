@@ -161,6 +161,7 @@ export default gql`
     posts: [Post!]!
     nearbyPlaces: [NearbyPlaces]!
     distance: Float
+    years: [Int!]!
   }
 
   type NearbyPlaces {
@@ -182,7 +183,6 @@ export default gql`
 
   type Post {
     createdAt: Float!
-    postDate: Float!
     description: String
     hashtags: [Hashtag]
     id: Int!
@@ -194,6 +194,10 @@ export default gql`
     liked: Boolean!
     place: Place!
     comments: [Comment]!
+    year: Int!
+    month: Int
+    day: Int
+    deviationDays: Int!
   }
 
   type Comment {
@@ -215,12 +219,15 @@ export default gql`
 
   input CreatePostInput {
     description: String
-    hashtags: String
-    photoDate: String!
+    hashtags: [String!]
     latitude: Float
     longitude: Float
     placeID: Int
-    photo: [Upload!]!
+    photo: [Upload!]
+    day: Int
+    month: Int
+    year: Int!
+    deviationDays: Int!
   }
 
   input UpdateProfileInput {

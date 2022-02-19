@@ -48,6 +48,13 @@ const PlacesQuery = async ({ filter, loggedId }: PlacesQueryInput) => {
       RETURN COLLECT(DISTINCT post{.*, author: author{.*}}) AS posts
   }
 
+  // place years
+  CALL {
+    WITH place
+    OPTIONAL MATCH (place:Place)<-[:IS_LOCATED]-(post:Post)
+    RETURN COLLECT(DISTINCT post.year) AS years
+  }
+
   CALL {
   WITH place
     MATCH (photo:Photo)<-[:CONTAINS]-(post:Post)-[:IS_LOCATED]->(place), (n)-->(post)
@@ -60,7 +67,7 @@ LIMIT 1
   
   // return places as an array of objects
   WITH place{.*,
-      id: ID(place),
+      years,
       latitude: place.location.latitude,  // latitude
       longitude: place.location.longitude,    // longitude
       icon: place.icon,

@@ -10,10 +10,11 @@ interface CreatePostInput {
   };
   userID: number;
   description?: InputMaybe<string>;
-  hashtags?: InputMaybe<string>;
-  photoDate: string;
   nsfw: boolean;
-
+  year: number;
+  month?: number | null;
+  day?: number | null;
+  deviationDays: number;
   photos: Array<{
     width: number;
     height: number;
@@ -26,67 +27,62 @@ interface CreatePostInput {
 async function CreatePost({
   userID,
   description,
-  hashtags,
-  photoDate,
+  year,
+  month,
+  day,
+  deviationDays,
   place,
   nsfw,
   photos,
 }: CreatePostInput): Promise<string> {
   const [result] = await RunCypherQuery({
     query: `
-    MATCH (user:User)         // match user
-    WHERE ID(user) = $userID
-  
+    MATCH (user:User {id: ${userID}})         // match user
+    
     CREATE (user)-[:CREATED]->(post:Post
     {
-      description: $description,
-      createdAt: $createdAt, // date of post creation
-      postDate: $postDate,  
-      nsfw: $nsfw, 
+      description: "${description}",
+      createdAt: ${new Date().getTime()}, // date of post creation
+      year: ${year},  
+      month: ${month},  
+      day: ${day},  
+      deviationDays: ${deviationDays},  
+      nsfw: ${nsfw}, 
       edited: false,
-      public: $public
+      public: ${!nsfw}
     })
     MERGE (place:Place {    
     ${
       place?.id
         ? `id: ${place.id}`
-        : `location: point({longitude: ${place.longitude}}, latitude: ${place.latitude}, srid: 4326})`
+        : `location: point({longitude: ${place.longitude}, latitude: ${place.latitude}, srid: 4326})`
     }
     })
-    MERGE (post)-[:IS_LOCATED]->(place)
+    CREATE (post)-[:IS_LOCATED]->(place)
     SET post.id = ID(post)
     SET place.id = ID(place)
-  
+    
     ${
       // connect properties from array to one string
       photos
         .map(
-          (photo) => `
+          (photo, index) => `
         // create photos and connect to post
-        MERGE (post)-[:CONTAINS]->(photo:Photo {
+        MERGE (post)-[:CONTAINS]->(photo${index}:Photo {
           index: ${photo.index},
           hash: "${photo.hash}",
           blurhash: "${photo.blurhash}",
           width: ${photo.width},
           height: ${photo.height}
         })
-        SET photo.id = ID(photo)
+        SET photo${index}.id = ID(photo${index})
       `
         )
-        .join('\n')
+        .join(' ')
     }
-  
-    RETURN post{.*, id: ID(post)} as post
+    
+    RETURN post{.*} as post
     `,
-    params: {
-      userID,
-      description,
-      createdAt: new Date().getTime(),
-      postDate: photoDate,
-      nsfw,
-      public: !nsfw,
-      photos,
-    },
   });
 
   const driver = DbConnector();

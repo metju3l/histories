@@ -20,15 +20,12 @@ function GetPoints(): GetPointsType {
 
   return (
     mapContext.placesQuery?.data?.places
-      ?.filter(
-        (place) =>
-          place.posts.filter((post) => {
-            const postDate = new Date(post.postDate).getFullYear(); // get post year
-            return (
-              postDate > mapContext.timeLimitation[0] &&
-              postDate < mapContext.timeLimitation[1]
-            ); // compare year with timeline limitations
-          }).length > 0
+      ?.filter((place) =>
+        place.years.filter(
+          (year) =>
+            year > mapContext.timeLimitation[0] &&
+            year < mapContext.timeLimitation[1]
+        )
       )
       .map((place) => ({
         type: 'Feature',

@@ -12,9 +12,7 @@ query MapPlaces($input: PlacesInput) {
       width
       height
     }
-    posts {
-      postDate
-    }
+    years
   }
 }
 

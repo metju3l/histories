@@ -25,7 +25,9 @@ import MapGL, {
 } from 'react-map-gl';
 
 type CreatePostInput = {
-  photoDate: string;
+  year: string;
+  month: string;
+  day: string;
   description: string;
 };
 
@@ -203,8 +205,10 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
           input: {
             placeID,
             description: data.description,
-            photoDate: Date.parse(data.photoDate).toString(),
-            hashtags: '',
+            year: parseInt(data.year),
+            month: parseInt(data.month),
+            day: parseInt(data.day),
+            deviationDays: 0,
             latitude: marker.latitude,
             longitude: marker.longitude,
             photo: file,
@@ -213,7 +217,7 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
       });
       router.push('/');
     } catch (error) {
-      toast.error(t('error.createCollection'));
+      toast.error(t('create_post_error'));
     }
     setIsLoading(false);
   };
@@ -337,16 +341,31 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
               <div className="w-full p-2">
                 <div>
                   <label>Photo date</label>
-
                   <Input
-                    label={t('photo_date')}
+                    label={t('year')}
                     register={register}
-                    name="photoDate"
+                    name="year"
                     options={{}}
-                    type="date"
+                    type="number"
+                    // max={new Date().toISOString().split('T')[0]}
+                  />
+                  <Input
+                    label={t('month')}
+                    register={register}
+                    name="month"
+                    options={{}}
+                    type="number"
                     // max={new Date().toISOString().split('T')[0]}
                   />
 
+                  <Input
+                    label={t('day')}
+                    register={register}
+                    name="day"
+                    options={{}}
+                    type="number"
+                    // max={new Date().toISOString().split('T')[0]}
+                  />
                   <br />
                 </div>
                 <div>

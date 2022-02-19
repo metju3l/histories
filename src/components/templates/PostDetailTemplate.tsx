@@ -14,11 +14,9 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
       {/* PHOTO DATE */}
       <h2 className="flex items-center gap-2">
         <HiOutlineCalendar />
-        {new Date(post.postDate).toLocaleDateString('cs', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        })}
+        {post.day && `${post.day}.`}
+        {post.month && `${post.month}.`}
+        {post.year}
       </h2>
       <div className="flex w-full gap-2">
         {/* PHOTO */}
