@@ -43,7 +43,9 @@ const Navbar: React.FC = () => {
             <input
               {...register('q')}
               onFocus={() => setSearchFocused(true)} // when input is focused
-              onBlur={() => setSearchFocused(false)} // when input is not focused
+              onBlur={
+                () => setTimeout(() => setSearchFocused(false), 500) // timeout so click on result is registered before blur
+              } // when input is not focused
               onChange={
                 async (e) =>
                   await searchQuery.refetch({ input: { text: e.target.value } }) // on input change refetch
@@ -53,17 +55,13 @@ const Navbar: React.FC = () => {
             />
             {/* SEARCH RESULTS */}
             {searchFocused && (
-              <div
-                className="absolute left-0 w-full bg-white border border-gray-200 shadow-md top-12 rounded-xl max-w-[360px]"
-                style={{ zIndex: 120 }}
-              >
-                {searchQuery.data?.search.posts.map((post, index: number) => (
-                  <div
-                    key={index}
-                    className="px-1 py-2 border-b border-gray-200 hover:bg-gray-100"
-                  >
-                    {post?.description?.substring(0, 32)}...
-                  </div>
+              <div className="absolute left-0 w-full bg-white border border-gray-200 shadow-md top-12 rounded-xl max-w-[360px]">
+                {searchQuery.data?.search.posts.map((post) => (
+                  <Link href={`/post/${post.id}`} key={post.id} passHref>
+                    <div className="block px-1 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-400">
+                      {post?.description?.substring(0, 32)}...
+                    </div>
+                  </Link>
                 ))}
               </div>
             )}

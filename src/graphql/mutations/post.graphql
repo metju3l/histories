@@ -2,10 +2,6 @@ mutation delete($id: Int!) {
   delete(id: $id)
 }
 
-mutation createComment($target: Int!, $content: String!) {
-  createComment(input: { target: $target, content: $content })
-}
-
 mutation createPost($input: CreatePostInput!) {
   createPost(input: $input)
 }

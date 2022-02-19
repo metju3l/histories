@@ -59,7 +59,16 @@ const MeProvider: React.FC<MeProviderProps> = ({ children }) => {
   const { data, loading, error, refetch } = useMeQuery();
 
   return (
-    <MeContext.Provider value={{ data, loading, error, refetch }}>
+    <MeContext.Provider
+      value={{
+        isLoggedIn: data?.me != undefined,
+        me: data?.me,
+        data,
+        loading,
+        error,
+        refetch,
+      }}
+    >
       {children}
     </MeContext.Provider>
   );

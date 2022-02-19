@@ -11,10 +11,17 @@ const CreateComment = async ({
 }): Promise<void> => {
   const query = `
   MATCH (target),(author:User)
-  WHERE ID(target) = $targetId
-    AND ID(author) = $authorId
-    AND (target:Post OR target:Comment)
-  CREATE (author)-[:CREATED]->(:Comment { createdAt:$createdAt,edited:false,content:$content })-[:BELONGS_TO]->(target)`;
+  WHERE target.id = $targetId
+    AND author.id = $authorId
+    // if target is post or comment connected to post
+    AND (target:Post OR (target:Comment AND EXISTS((target)-[:BELONGS_TO]->(:Post))))
+  CREATE (author)-[:CREATED]->(comment:Comment {
+    createdAt: $createdAt,
+    edited: false,
+    content: $content
+  })-[:BELONGS_TO]->(target)
+  SET comment.id = ID(comment)
+  `;
 
   await RunCypherQuery({
     query,
