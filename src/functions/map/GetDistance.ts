@@ -1,3 +1,4 @@
+// this function is just to get the nearest place to the center of the cluster, it doesn't need to be geographically accurate
 function GetDistance(
   place0: [number, number],
   place1: [number, number]
