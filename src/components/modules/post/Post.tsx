@@ -11,7 +11,8 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { Blurhash } from 'react-blurhash';
 import { useTranslation } from 'react-i18next';
-import { HiHeart, HiOutlineHeart } from 'react-icons/hi';
+import { BiMessage } from 'react-icons/bi';
+import { HiOutlineHeart } from 'react-icons/hi';
 import { IoIosMore } from 'react-icons/io';
 import TimeAgo from 'react-timeago';
 
@@ -176,42 +177,30 @@ const Post: React.FC<PostProps> = ({
         )}
         <div className={`px-4 relative ${photos ? '' : 'pt-4 '}`}>
           <div className="flex items-center justify-around w-full pt-1 pb-2 border-t border-gray-300">
-            <div>
+            <div className="flex items-center text-base gap-1">
               <motion.button
-                whileTap={{ scale: 0.95 }}
+                whileTap={{ scale: 0.8 }}
+                whileHover={{ scale: 1.05 }}
                 onClick={async () => {
                   if (localLikeState) await onUnlike();
                   else await onLike('like');
                 }}
               >
-                <a className="flex items-center text-base gap-1">
-                  <span className="text-red-500">
-                    {localLikeState ? <HiHeart /> : <HiOutlineHeart />}
-                  </span>
-                  {likeCountWithoutMe + (localLikeState ? 1 : 0)}{' '}
-                  {t('likes_count')}
-                </a>
+                <HiOutlineHeart
+                  className={`w-5 h-5 ${
+                    localLikeState
+                      ? 'fill-red-500 stroke-red-500'
+                      : 'stroke-black'
+                  }`}
+                />
               </motion.button>
+              {likeCountWithoutMe + (localLikeState ? 1 : 0)} {t('likes_count')}
             </div>
             <div className="flex items-center text-base gap-2">
-              <span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                  focusable="false"
-                  data-prefix="far"
-                  data-icon="comment-alt"
-                  className="w-4 h-4"
-                  role="img"
-                  viewBox="0 0 512 512"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M448 0H64C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h96v84c0 7.1 5.8 12 12 12 2.4 0 4.9-.7 7.1-2.4L304 416h144c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64zm16 352c0 8.8-7.2 16-16 16H288l-12.8 9.6L208 428v-60H64c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16h384c8.8 0 16 7.2 16 16v288z"
-                  />
-                </svg>
-              </span>
-              <span>{`${commentCount} ${t('comments_count')}`} </span>
+              <Link href={`/post/${id}`} passHref>
+                <BiMessage className="w-5 h-5 cursor-pointer" />
+              </Link>
+              <a>{`${commentCount} ${t('comments_count')}`} </a>
             </div>
             <div className="flex items-center text-base gap-2">
               <span onClick={() => setCollectionSelectModal(true)}>

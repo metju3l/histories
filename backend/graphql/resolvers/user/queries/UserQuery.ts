@@ -136,7 +136,8 @@ CALL {
 CALL {
   WITH user
   OPTIONAL MATCH (user)-[:CREATED]->(post:Post) // get all users posts
-  RETURN COUNT(DISTINCT post) AS postCount      // count them
+  OPTIONAL MATCH (comment:Comment)-[:BELONGS_TO]->(post)
+  RETURN COUNT(DISTINCT post) AS postCount, COUNT(DISTINCT comment) AS commentCount // count them
 }
 
 CALL {
@@ -194,11 +195,9 @@ CALL {
 
 RETURN user{.*, id: ID(user),
   posts: COLLECT(DISTINCT post{.*,
-      photos,
-      id: ID(post),
-      author: user{.*,
-          id: ID(user)
-      },
+      photos, 
+      author: user{.*},
+      commentCount,
       place:place{.*,
           latitude: place.location.latitude,
           longitude: place.location.longitude,

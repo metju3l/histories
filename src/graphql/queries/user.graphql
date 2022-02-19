@@ -48,6 +48,7 @@ query user($input: UserInput!) {
       day
       deviationDays
       createdAt
+      commentCount
     }
   }
 }

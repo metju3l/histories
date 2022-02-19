@@ -21,10 +21,10 @@ WHERE (place.location.latitude >= $minLatitude OR $minLatitude IS NULL)         
   AND (place.location.longitude >= $minLongitude OR $minLongitude IS NULL)              // min longitude
   AND (place.location.longitude <= $maxLongitude OR $maxLongitude IS NULL)              // max longitude
   AND (distance(place.location, point($radius)) <= $radius.distance OR $radius IS NULL) // radius 
-  AND (ID(place) = $placeId OR $placeId IS NULL)                                        // place id
+  AND (place.id = $placeId OR $placeId IS NULL)                                        // place id
   AND (author.id = $authorId OR $authorId IS NULL)                                      // author id
   AND (author.username =~ $authorUsername OR $authorUsername IS NULL)                   // author id
-  AND NOT ID(place) IN $exclude                                                         // object id is not in exclude
+  AND NOT place.id IN $exclude                                                         // object id is not in exclude
 
 OPTIONAL MATCH(logged:User {id: loggedID}) // optionally match logged use
 
@@ -34,13 +34,16 @@ CALL {
     OPTIONAL MATCH (author)-[:FOLLOW]->(following:User)  // match users who are followed by author
     OPTIONAL MATCH (follower:User)-[:FOLLOW]->(author)  // match users who follow author
     OPTIONAL MATCH (userLiked:User)-[:LIKE]->(post)  // match users who liked post
+    OPTIONAL MATCH (commentAuthor:User)-[:CREATED]->(comment:Comment)-[:BELONGS_TO]->(post)  // match comments of post
 
     RETURN  following,
             follower,
             COUNT(follower) AS followerCount,
             COUNT(following) AS followingCount,
             COLLECT(DISTINCT userLiked{.*}) AS likes,
-            COUNT(userLiked) AS likeCount  // return number
+            COUNT(userLiked) AS likeCount,  // return number
+            COUNT(comment) AS commentCount,  // return number
+            COLLECT(DISTINCT comment{.*, author: commentAuthor{.*}}) AS comments
 }    
   
 // post photos
@@ -60,14 +63,15 @@ WITH post{.*,
             END,
     followerCount,
     followingCount,
+    commentCount,   // number of comments on post
+    comments,
     author: author{.*}, // author object
     photos, // post photos array
     place: place{.*,
         latitude: place.location.latitude,  // latitude
         longitude: place.location.longitude // longitude
     }
-} AS postObject
-${''}
+} AS postObject 
 SKIP $skip
 LIMIT $take
 

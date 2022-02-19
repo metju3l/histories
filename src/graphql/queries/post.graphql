@@ -106,6 +106,7 @@ query posts($input: PostsInput) {
     liked
     likeCount
     createdAt
+    commentCount
     author {
       id
       username

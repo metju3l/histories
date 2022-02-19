@@ -128,24 +128,13 @@ const PostsPage: React.FC<{
           }}
         >
           {loading
-            ? postsTmp.data?.posts.map((post: any) => (
-                <Post
-                  timeline
-                  {...post}
-                  key={post.id}
-                  refetch={refetch}
-                  photos={post.photos}
-                />
+            ? postsTmp.data?.posts.map((post) => (
+                <Post {...post} key={post.id} photos={post.photos} />
               ))
-            : data?.posts.map((post: any) => (
-                <Post
-                  timeline
-                  {...post}
-                  key={post.id}
-                  refetch={refetch}
-                  photos={post.photos}
-                />
-              ))}
+            : data?.posts.map((post) => {
+                console.log(post);
+                return <Post {...post} key={post.id} photos={post.photos} />;
+              })}
           {data?.posts.length == 0 && (
             <Card>
               <div>
