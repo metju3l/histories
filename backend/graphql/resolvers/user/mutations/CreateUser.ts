@@ -1,11 +1,11 @@
-import { hash } from 'bcryptjs';
+import { hash } from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
 
 import { CreateUserInput } from '../../../../../.cache/__types__';
 import RunCypherQuery from '../../../../database/RunCypherQuery';
 import VerificationEmail from '../../../../email/content/EmailVerification';
 import SendEmail from '../../../../email/SendEmail';
 import SignJWT from '../../../../functions/SignJWT';
-import { v4 as uuidv4 } from 'uuid';
 
 const CreateUser = async ({
   username,

@@ -1,5 +1,5 @@
 import RunCypherQuery from '../../../../database/RunCypherQuery';
-import { hash } from 'bcryptjs';
+import { hash } from 'bcrypt';
 import { validate } from 'uuid';
 
 const ResetPassword = async (wholeToken: string, newPassword: string) => {

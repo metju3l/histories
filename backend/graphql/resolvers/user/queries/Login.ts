@@ -1,4 +1,4 @@
-import { compareSync } from 'bcryptjs';
+import { compareSync } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 
 import { LoginInput } from '../../../../../.cache/__types__';
