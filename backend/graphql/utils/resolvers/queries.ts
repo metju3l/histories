@@ -1,4 +1,5 @@
 import {
+  CommentsInput,
   PersonalizedPostsInput,
   PlacesInput,
   PostsInput,
@@ -15,6 +16,7 @@ import {
   SuggestedUsersQuery,
   UserQuery,
 } from '../../../graphql/resolvers';
+import CommentsQuery from '../../resolvers/comment/CommentsQuery';
 import FullTextSearch from '../../resolvers/search/FullTextSearch';
 import { contextType } from './resolvers';
 
@@ -109,6 +111,10 @@ const queries = {
       logged: context.validToken ? context.decoded.id : undefined,
       ...input,
     }),
+
+  // COMMENTS
+  comments: async (_parent: undefined, { input }: { input: CommentsInput }) =>
+    await CommentsQuery(input),
 
   // COLLECTION QUERY
   collection: async (

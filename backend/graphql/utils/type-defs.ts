@@ -32,6 +32,8 @@ export default gql`
 
     "Returns collection detail information"
     collection(id: Int!): Collection!
+
+    comments(input: CommentsInput): [Comment!]!
   }
 
   type Mutation {
@@ -79,6 +81,14 @@ export default gql`
     followingUserPost: Boolean
     followingPlacePost: Boolean
     newsletter: Boolean
+  }
+
+  input CommentsInput {
+    targetID: Int
+    "ASC or DESC"
+    sort: String
+    skip: Int
+    take: Int
   }
 
   type SearchResult {
@@ -200,12 +210,17 @@ export default gql`
     deviationDays: Int!
   }
 
+  type CommentTarget {
+    id: Int!
+  }
+
   type Comment {
     id: Int!
     createdAt: Float!
     content: String!
     liked: Boolean!
     author: User!
+    target: CommentTarget!
   }
 
   type Hashtag {
