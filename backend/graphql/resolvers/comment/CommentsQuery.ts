@@ -7,7 +7,10 @@ async function CommentsQuery(input: CommentsInput) {
     input.sort?.toUpperCase() === 'ASC' || input.sort?.toUpperCase() === 'DESC'
       ? input.sort.toUpperCase()
       : 'ASC';
-
+  const sortBy =
+    input.sortBy?.toLocaleLowerCase() === 'popularity'
+      ? 'popularity'
+      : 'createdAt';
   const query = ` 
 MATCH (author:User)-[:CREATED]->(comment:Comment)-[:BELONGS_TO]->(target)<-[:CREATED]-(targetAuthor:User)
 WHERE (target :Comment OR target :Post) // target has to be post or comment
@@ -20,7 +23,7 @@ WITH comment{.*,
     }
 } AS comment
 
-ORDER BY comment.createdAt ${sort}
+ORDER BY comment.${sortBy} ${sort}
 
 SKIP ${input.skip ?? 0}
 LIMIT ${input.take ?? 10}

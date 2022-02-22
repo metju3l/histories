@@ -1,0 +1,16 @@
+query PostComments($input: CommentsInput) {
+  comments(input: $input) {
+    id
+    createdAt
+    content
+    author {
+      username
+      firstName
+      lastName
+      profile
+    }
+    target {
+      id
+    }
+  }
+}

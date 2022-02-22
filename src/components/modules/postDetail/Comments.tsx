@@ -1,10 +1,10 @@
+import { Loading } from '@components/elements';
 import { useCreateCommentMutation } from '@graphql/mutations/comment.graphql';
-import { PostQuery } from '@graphql/queries/post.graphql';
+import { usePostCommentsQuery } from '@graphql/queries/comment.graphql';
 import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 import MeContext from '@src/contexts/MeContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
@@ -12,7 +12,17 @@ import { useTranslation } from 'react-i18next';
 import { HiPaperAirplane } from 'react-icons/hi';
 
 interface PostDetailCommentSectionProps {
-  post: PostQuery['post'];
+  post: {
+    author: {
+      profile: string;
+      username: string;
+      firstName: string;
+      lastName: string;
+    };
+    description?: string | null;
+    createdAt: number;
+    id: number;
+  };
 }
 
 interface CreateCommentFormInput {
@@ -27,7 +37,12 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
     useForm<CreateCommentFormInput>(); // create comment form
   const [createCommentMutation] = useCreateCommentMutation(); // create comment mutation
   const { t } = useTranslation<string>(); // i18n
-  const router = useRouter();
+
+  const commentsQuery = usePostCommentsQuery({
+    variables: {
+      input: { skip: 0, take: 1000, sort: 'ASC', targetID: post.id },
+    },
+  });
 
   async function OnSubmit(data: CreateCommentFormInput) {
     try {
@@ -35,7 +50,7 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
         variables: { input: { content: data.text, target: post.id } },
       });
       reset();
-      router.reload(); // this is too bad and needs to be fixed ASAP
+      commentsQuery.refetch();
     } catch (error: any) {
       toast.error(t('something went wrong'));
     }
@@ -77,30 +92,37 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
       {/* DESCRIPTION */}
       <p className="pb-2"> {post.description}</p>
       {/* COMMENTS */}
-      {post.comments.map((comment) => {
-        return (
-          <div key={comment?.id} className="flex mb-4 gap-2">
-            <Link href={`/user/${comment?.author.username}`} passHref>
-              <div className="relative w-10 h-10 rounded-full">
-                <Image
-                  src={
-                    comment?.author?.profile.startsWith('http')
-                      ? comment.author.profile
-                      : UrlPrefix + comment?.author.profile
-                  }
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-full"
-                  alt="Profile picture"
-                />
+      {/* TBD: infinite scroll */}
+      <div className="w-full h-full overflow-y-scroll max-h-[40vh]">
+        {commentsQuery.loading || commentsQuery.error ? (
+          <Loading color="black" />
+        ) : (
+          commentsQuery.data?.comments.map((comment) => {
+            return (
+              <div key={comment?.id} className="flex mb-4 gap-2">
+                <Link href={`/user/${comment?.author.username}`} passHref>
+                  <div className="relative w-10 h-10 rounded-full">
+                    <Image
+                      src={
+                        comment?.author?.profile.startsWith('http')
+                          ? comment.author.profile
+                          : UrlPrefix + comment?.author.profile
+                      }
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-full"
+                      alt="Profile picture"
+                    />
+                  </div>
+                </Link>
+                <div className="p-2 bg-gray-200 rounded-t-lg rounded-r-lg w-fit">
+                  {comment?.content}
+                </div>
               </div>
-            </Link>
-            <div className="p-2 bg-gray-200 rounded-t-lg rounded-r-lg w-fit">
-              {comment?.content}
-            </div>
-          </div>
-        );
-      })}
+            );
+          })
+        )}
+      </div>
       {/* CREATE COMMENT FORM */}
       {meContext.isLoggedIn && (
         <form onSubmit={handleSubmit(OnSubmit)}>

@@ -85,8 +85,10 @@ export default gql`
 
   input CommentsInput {
     targetID: Int
-    "ASC or DESC"
+    "ASC | DESC"
     sort: String
+    "popularity | createdAt"
+    sortBy: String
     skip: Int
     take: Int
   }
