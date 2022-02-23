@@ -14,7 +14,7 @@ async function CommentsQuery(input: CommentsInput) {
   const query = ` 
 MATCH (author:User)-[:CREATED]->(comment:Comment)-[:BELONGS_TO]->(target)<-[:CREATED]-(targetAuthor:User)
 WHERE (target :Comment OR target :Post) // target has to be post or comment
-${input.targetID ? `AND (target.id = ${input.targetID})` : ''}
+${input.targetID != undefined ? `AND (target.id = ${input.targetID})` : ''}
 
 WITH comment{.*,
     author: author{.*}, // post author

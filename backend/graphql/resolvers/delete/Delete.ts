@@ -1,4 +1,3 @@
-import DbConnector from '../../../database/driver';
 import RunCypherQuery from '../../../database/RunCypherQuery';
 
 const Delete = async ({
@@ -7,39 +6,19 @@ const Delete = async ({
 }: {
   logged: number;
   id: number;
-}): Promise<void> => {
-  const query = `MATCH (user:User), (target)
-  WHERE ID(user) = ${logged}
-  AND ID(target) = ${id}
-  AND ((user)-[:CREATED]->(target) OR user :Admin)
-  AND labels(target) in [["Post"],["Comment"],["Collection"]]
-  OPTIONAL MATCH (comment:Comment)-[:BELONGS_TO]->(target)
-  WHERE ID(user) = ${logged}
-  AND ID(target) = ${id}
-  AND ((user)-[:CREATED]->(target) OR user :Admin)
-  AND labels(target) in [["Post"],["Comment"],["Collection"]]
-  DETACH DELETE comment, target`;
+}): Promise<string> => {
+  const query = `WITH ${id} AS targetID, ${logged} AS userID
+  OPTIONAL MATCH (comment:Comment)-[:BELONGS_TO*1..2]->({id: targetID}) 
+  OPTIONAL MATCH ({id: targetID})-[:CONTAINS]->(photo:Photo)
+  MATCH (user:User {id: userID}), (target {id: targetID})
+  WHERE ((user)-[:CREATED]->(target) OR user :Admin)
+    AND (target :Post OR target :Comment OR target :Collection)
+  DETACH DELETE target, comment, photo
+  `;
 
-  const [labels] = await RunCypherQuery({
-    query: `MATCH (user:User), (target)
-WHERE ID(user) = ${logged} AND ID(target) = ${id}
-AND ((user)-[:CREATED]->(target) OR user :Admin)
-AND labels(target) in [["Post"],["Comment"],["Collection"]]
-RETURN labels(target) AS labels`,
-  });
+  await RunCypherQuery({ query });
 
-  const driver = DbConnector();
-  const session = driver.session();
-
-  if (labels.records[0].get('labels')[0] === 'Post') {
-    const fileAddress =
-      await session.run(`MATCH (user:User)-[:CREATED]->(post:Post)
-WHERE ID(user) = ${logged} AND ID(post) = ${id}
-RETURN post.url as urls`);
-  }
-  await session.run(query);
-
-  driver.close();
+  return 'deleted';
 };
 
 export default Delete;
