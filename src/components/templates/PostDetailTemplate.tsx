@@ -14,9 +14,9 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
       {/* PHOTO DATE */}
       <h2 className="flex items-center gap-2">
         <HiOutlineCalendar />
-        {post.day && `${post.day}.`}
-        {post.month && `${post.month}.`}
-        {post.year}
+        {post.startDay && `${post.startDay}.`}
+        {post.startMonth && `${post.startMonth}.`}
+        {post.startYear}
       </h2>
       <div className="flex w-full gap-2">
         {/* PHOTO */}

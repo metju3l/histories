@@ -206,10 +206,14 @@ export default gql`
     liked: Boolean!
     place: Place!
     comments: [Comment]!
-    year: Int!
-    month: Int
-    day: Int
-    deviationDays: Int!
+
+    startDay: Int
+    startMonth: Int
+    startYear: Int!
+
+    endDay: Int
+    endMonth: Int
+    endYear: Int!
   }
 
   type CommentTarget {
@@ -241,10 +245,14 @@ export default gql`
     longitude: Float
     placeID: Int
     photo: [Upload!]
-    day: Int
-    month: Int
-    year: Int!
-    deviationDays: Int!
+
+    startDay: Int
+    startMonth: Int
+    startYear: Int!
+
+    endDay: Int
+    endMonth: Int
+    endYear: Int!
   }
 
   input UpdateProfileInput {

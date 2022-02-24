@@ -11,10 +11,15 @@ interface CreatePostInput {
   userID: number;
   description?: InputMaybe<string>;
   nsfw: boolean;
-  year: number;
-  month?: number | null;
-  day?: number | null;
-  deviationDays: number;
+
+  startYear: number;
+  startMonth?: number | null;
+  startDay?: number | null;
+
+  endYear: number;
+  endMonth?: number | null;
+  endDay?: number | null;
+
   photos: Array<{
     width: number;
     height: number;
@@ -27,10 +32,13 @@ interface CreatePostInput {
 async function CreatePost({
   userID,
   description,
-  year,
-  month,
-  day,
-  deviationDays,
+  startYear,
+  startMonth,
+
+  startDay,
+  endYear,
+  endMonth,
+  endDay,
   place,
   nsfw,
   photos,
@@ -43,10 +51,12 @@ async function CreatePost({
     {
       description: "${description}",
       createdAt: ${new Date().getTime()}, // date of post creation
-      year: ${year},  
-      month: ${month},  
-      day: ${day},  
-      deviationDays: ${deviationDays},  
+      startYear: ${startYear},  
+      startMonth: ${startMonth},  
+      startDay: ${startDay},  
+      endYear: ${endYear},  
+      endMonth: ${endMonth},  
+      endDay: ${endDay},  
       nsfw: ${nsfw}, 
       edited: false,
       public: ${!nsfw}

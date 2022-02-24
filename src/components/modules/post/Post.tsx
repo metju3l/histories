@@ -35,10 +35,9 @@ type PostProps = {
   description?: Maybe<string>;
   likeCount: number;
   commentCount: number;
-  year: number;
-  month?: number | null;
-  day?: number | null;
-  deviationDays: number;
+  startYear: number;
+  startMonth?: number | null;
+  startDay?: number | null;
   liked: boolean;
   id: number;
 };
@@ -51,10 +50,9 @@ const Post: React.FC<PostProps> = ({
   description,
   likeCount,
   commentCount,
-  year,
-  month,
-  day,
-  deviationDays,
+  startYear,
+  startMonth,
+  startDay,
   liked,
   id,
 }) => {

@@ -43,10 +43,14 @@ query user($input: UserInput!) {
         index
       }
       description
-      year
-      month
-      day
-      deviationDays
+      startDay
+      startMonth
+      startYear
+
+      endDay
+      endMonth
+      endYear
+
       createdAt
       commentCount
     }

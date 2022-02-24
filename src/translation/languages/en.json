@@ -96,5 +96,6 @@
   "delete_collection": "Delete collection",
   "search_place": "Search place",
   "coordinates_copied": "Coordinates copied",
-  "show_on_map": "Show on map"
+  "show_on_map": "Show on map",
+  "i_dont_know": "I don't know"
 }

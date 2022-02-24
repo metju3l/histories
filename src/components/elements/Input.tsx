@@ -10,6 +10,8 @@ export type InputProps = {
   label?: string;
   disabled?: boolean;
   placeholder?: string;
+  inputProps?: any;
+  children?: React.ReactNode;
 };
 
 const Input: React.FC<InputProps> = ({
@@ -21,6 +23,8 @@ const Input: React.FC<InputProps> = ({
   label,
   disabled,
   placeholder,
+  inputProps,
+  children,
 }) => {
   return (
     <label htmlFor={name} className="pb-2">
@@ -29,6 +33,7 @@ const Input: React.FC<InputProps> = ({
 
       {/* INPUT */}
       <input
+        {...inputProps}
         id={name}
         type={type}
         disabled={disabled}
@@ -40,7 +45,9 @@ const Input: React.FC<InputProps> = ({
         }
         {...register(name, options)}
         autoComplete={autoComplete}
-      />
+      >
+        {children}
+      </input>
     </label>
   );
 };

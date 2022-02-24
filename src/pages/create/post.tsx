@@ -24,12 +24,12 @@ import MapGL, {
   NavigationControl,
 } from 'react-map-gl';
 
-type CreatePostInput = {
+interface ICreatePostInput {
   year: string;
-  month: string;
-  day: string;
+  month: string | null;
+  day: string | null;
   description: string;
-};
+}
 
 const DropZoneComponent = ({
   setFiles,
@@ -97,10 +97,7 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
   const { data, loading, error } = useMeQuery();
   const [createPostMutation] = useCreatePostMutation();
   const [coordinates, setCoordinates] = useState([21, 20]);
-  const [marker, setMarker] = useState({
-    latitude: 40,
-    longitude: -100,
-  });
+
   const [events, logEvents] = useState({});
   const [tags, setTags] = useState<Array<string>>([]);
   const [newTag, setNewTag] = useState<string>('');
@@ -109,22 +106,6 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
     lng: longitude ?? 15,
   });
   const [file, setFile] = useState<File[]>([]);
-
-  const onMarkerDragStart = useCallback((event) => {
-    logEvents((_events) => ({ ..._events, onDragStart: event.lngLat }));
-  }, []);
-
-  const onMarkerDrag = useCallback((event) => {
-    logEvents((_events) => ({ ..._events, onDrag: event.lngLat }));
-  }, []);
-
-  const onMarkerDragEnd = useCallback((event) => {
-    logEvents((_events) => ({ ..._events, onDragEnd: event.lngLat }));
-    setMarker({
-      longitude: event.lngLat[0],
-      latitude: event.lngLat[1],
-    });
-  }, []);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(function (position) {
@@ -147,10 +128,6 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
       latitude: searchCoordinates.lat,
       zoom: 14,
     });
-    setMarker({
-      longitude: searchCoordinates.lng,
-      latitude: searchCoordinates.lat,
-    });
   }, [searchCoordinates]);
 
   // on load read set marker & viewport coordinates by query params
@@ -162,12 +139,6 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
       // @ts-ignore
       latitude: parseFloat(router.query?.lat ?? 50),
       zoom: 14,
-    });
-    setMarker({
-      // @ts-ignore
-      longitude: parseFloat(router.query?.lng ?? 15),
-      // @ts-ignore
-      latitude: parseFloat(router.query?.lat ?? 50),
     });
   }, []);
   const [collapsed, setCollapsed] = useState(true);
@@ -189,7 +160,9 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
     handleSubmit,
     formState: {},
     setValue,
-  } = useForm<CreatePostInput>();
+
+    watch,
+  } = useForm<ICreatePostInput>();
 
   const { t } = useTranslation();
   if (loading) return <div>loading xxx</div>;
@@ -197,7 +170,7 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
 
   if (data?.me === null) router.replace('/');
 
-  const onSubmit: SubmitHandler<CreatePostInput> = async (data) => {
+  const onSubmit: SubmitHandler<ICreatePostInput> = async (data) => {
     setIsLoading(true);
     try {
       await createPostMutation({
@@ -205,12 +178,14 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
           input: {
             placeID,
             description: data.description,
-            year: parseInt(data.year),
-            month: parseInt(data.month),
-            day: parseInt(data.day),
-            deviationDays: 0,
-            latitude: marker.latitude,
-            longitude: marker.longitude,
+            startYear: parseInt(data.year),
+            startMonth: data?.month ? parseInt(data.month) : null,
+            startDay: data?.day ? parseInt(data.day) : null,
+            endYear: parseInt(data.year),
+            endMonth: data?.month ? parseInt(data.month) : null,
+            endDay: data?.day ? parseInt(data.day) : null,
+            latitude: viewport.latitude,
+            longitude: viewport.longitude,
             photo: file,
           },
         },
@@ -221,6 +196,13 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
     }
     setIsLoading(false);
   };
+
+  let months: string[] = [];
+  for (let i = 1; i <= 12; i++) {
+    months.push(
+      new Date(0, i, 0).toLocaleString(navigator.language, { month: 'long' })
+    );
+  }
 
   return (
     <Layout
@@ -300,14 +282,10 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
                         positionOptions={{ enableHighAccuracy: true }}
                       />
                       <Marker
-                        longitude={marker.longitude}
-                        latitude={marker.latitude}
+                        longitude={viewport.longitude}
+                        latitude={viewport.latitude}
                         offsetTop={-20}
                         offsetLeft={-10}
-                        draggable
-                        onDragStart={onMarkerDragStart}
-                        onDrag={onMarkerDrag}
-                        onDragEnd={onMarkerDragEnd}
                       >
                         <svg
                           height={20}
@@ -342,34 +320,50 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
                 <div>
                   <label>Photo date</label>
                   <Input
-                    label={t('year')}
                     register={register}
-                    name="year"
-                    options={{}}
-                    type="number"
-                    // max={new Date().toISOString().split('T')[0]}
-                  />
-                  <Input
-                    label={t('month')}
-                    register={register}
-                    name="month"
-                    options={{}}
-                    type="number"
-                    // max={new Date().toISOString().split('T')[0]}
-                  />
-
-                  <Input
                     label={t('day')}
-                    register={register}
                     name="day"
                     options={{}}
                     type="number"
-                    // max={new Date().toISOString().split('T')[0]}
+                    inputProps={{
+                      min: 1,
+                      max: 31,
+                    }}
                   />
-                  <br />
+
+                  <label className="pb-2">
+                    {/* LABEL */}
+                    <h4 className="pt-0 font-medium text-gray-600">
+                      {t('month')}
+                    </h4>
+
+                    <select
+                      className="w-full h-10 px-3 leading-tight text-gray-700 rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
+                      {...register('month')}
+                    >
+                      <option value={undefined} />
+                      {months.map((month, index) => (
+                        <option key={index} value={index + 1}>
+                          {month}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <Input
+                    label={`${t('year')} *`}
+                    register={register}
+                    name="year"
+                    options={{}}
+                    inputProps={{ max: new Date().getFullYear() }}
+                    type="number"
+                  />
+
+                  <p className="pb-2 text-gray-600">
+                    Fields with * are required
+                  </p>
                 </div>
                 <div>
-                  <label>Description</label>
                   <Input
                     label={t('description')}
                     register={register}
