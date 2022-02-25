@@ -103,7 +103,11 @@ const PostDetailMainSection: React.FC<PostDetailMainSectionProps> = ({
               }`}
             />
           </motion.button>
-          {likeCountWithoutMe + (localLikeState ? 1 : 0)}
+          <span>
+            {t('likes', {
+              number: likeCountWithoutMe + (localLikeState ? 1 : 0),
+            })}
+          </span>
         </div>
         {/* NEXT AND PREVIOUS POST */}
         <div className="flex items-center">

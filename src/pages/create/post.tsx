@@ -97,6 +97,14 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
   latitude,
   longitude,
 }) => {
+  // months
+  let months: string[] = [];
+  for (let i = 1; i <= 12; i++) {
+    months.push(
+      new Date(0, i, 0).toLocaleString(navigator.language, { month: 'long' })
+    );
+  }
+
   // for reading coordinates from query params
   const router = useRouter();
 
@@ -105,7 +113,7 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
   const [createPostMutation] = useCreatePostMutation();
   const [coordinates, setCoordinates] = useState([21, 20]);
 
-  const [timeSelectMode, setTimeSelectMode] = useState<number>();
+  const [timeSelectMode, setTimeSelectMode] = useState<number>(0);
 
   const [events, logEvents] = useState({});
   const [tags, setTags] = useState<Array<string>>([]);
@@ -225,13 +233,6 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
     }
     setIsLoading(false);
   };
-
-  let months: string[] = [];
-  for (let i = 1; i <= 12; i++) {
-    months.push(
-      new Date(0, i, 0).toLocaleString(navigator.language, { month: 'long' })
-    );
-  }
 
   return (
     <Layout

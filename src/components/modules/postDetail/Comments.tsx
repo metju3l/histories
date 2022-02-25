@@ -1,4 +1,4 @@
-import { Loading } from '@components/elements';
+import { Input, Loading } from '@components/elements';
 import { useCreateCommentMutation } from '@graphql/mutations/comment.graphql';
 import { usePostCommentsQuery } from '@graphql/queries/comment.graphql';
 import UrlPrefix from '@src/constants/IPFSUrlPrefix';
@@ -26,14 +26,14 @@ interface PostDetailCommentSectionProps {
 }
 
 interface CreateCommentFormInput {
-  text: string;
+  content: string;
 }
 
 const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
   post,
 }) => {
   const meContext = useContext(MeContext); // me context
-  const { register, watch, handleSubmit, reset } =
+  const { register, handleSubmit, reset, watch, setValue } =
     useForm<CreateCommentFormInput>(); // create comment form
   const [createCommentMutation] = useCreateCommentMutation(); // create comment mutation
   const { t } = useTranslation<string>(); // i18n
@@ -45,16 +45,16 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
   });
 
   async function OnSubmit(data: CreateCommentFormInput) {
+    console.log(data);
     try {
       await createCommentMutation({
-        variables: { input: { content: data.text, target: post.id } },
+        variables: { input: { content: data.content, target: post.id } },
       });
       reset();
       commentsQuery.refetch();
     } catch (error: any) {
       toast.error(t('something went wrong'));
     }
-    console.log(data);
   }
 
   return (
@@ -126,16 +126,17 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
       {/* CREATE COMMENT FORM */}
       {meContext.isLoggedIn && (
         <form onSubmit={handleSubmit(OnSubmit)}>
-          <div> Create comment:</div>
-          <div className="flex items-center px-4 bg-white border border-gray-200 rounded-xl gap-4 shadow-sm">
-            <input
-              {...register('text')}
-              className="w-full py-2 border-none outline-none"
-            />
-            <button type="submit">
-              <HiPaperAirplane className="-mt-1 text-blue-500 transform rotate-45 w-7 h-7 hover:scale-95 ease-in-out hover:text-blue-600" />
-            </button>
-          </div>
+          <Input
+            register={register}
+            name="content"
+            options={{ required: true }}
+            label={t('create_comment')}
+            rightIcon={
+              <button type="submit">
+                <HiPaperAirplane className="-mt-2 text-blue-500 transform rotate-45 w-7 h-7 hover:scale-95 ease-in-out hover:text-blue-600" />
+              </button>
+            }
+          />
         </form>
       )}
     </div>

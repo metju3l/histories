@@ -5,13 +5,16 @@ import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 export type InputProps = {
   register: UseFormRegister<any>;
   type?: React.HTMLInputTypeAttribute;
-  options: RegisterOptions;
+  options?: RegisterOptions;
   name: string;
   autoComplete?: string;
   label?: string;
   disabled?: boolean;
   placeholder?: string;
-  inputProps?: any;
+  inputProps?: React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  >;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   error?: string;
@@ -21,12 +24,12 @@ const Input: React.FC<InputProps> = ({
   register,
   type = 'text',
   name,
-  options,
+  options = {},
   autoComplete,
   label,
   disabled,
   placeholder,
-  inputProps,
+  inputProps = {},
   leftIcon,
   rightIcon,
   error,

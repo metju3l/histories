@@ -368,10 +368,10 @@ const mutations = {
       },
       description: input.description ?? '',
       startDay: input.startDay,
-      startMonth: input.startDay,
+      startMonth: input.startMonth,
       startYear: input.startYear,
       endDay: input.endDay,
-      endMonth: input.endDay,
+      endMonth: input.endMonth,
       endYear: input.endYear,
 
       userID: context.decoded.id,
