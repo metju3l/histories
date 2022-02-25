@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { RegisterOptions, UseFormRegister } from 'react-hook-form';
+import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 
 export type InputProps = {
   register: UseFormRegister<any>;
@@ -11,7 +12,9 @@ export type InputProps = {
   disabled?: boolean;
   placeholder?: string;
   inputProps?: any;
-  children?: React.ReactNode;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  error?: string;
 };
 
 const Input: React.FC<InputProps> = ({
@@ -24,31 +27,72 @@ const Input: React.FC<InputProps> = ({
   disabled,
   placeholder,
   inputProps,
-  children,
+  leftIcon,
+  rightIcon,
+  error,
 }) => {
-  return (
-    <label htmlFor={name} className="pb-2">
-      {/* LABEL */}
-      <h4 className="pt-0 font-medium text-gray-600">{label}</h4>
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [hasRightIcon, setHasRightIcon] = useState<boolean>(
+    type === 'password' ? true : rightIcon !== undefined
+  );
+  const hasLeftIcon = leftIcon !== undefined;
 
-      {/* INPUT */}
-      <input
-        {...inputProps}
-        id={name}
-        type={type}
-        disabled={disabled}
-        placeholder={placeholder}
-        className={
-          type === 'checkbox'
-            ? ''
-            : 'w-full h-10 px-3 leading-tight text-gray-700 rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline'
-        }
-        {...register(name, options)}
-        autoComplete={autoComplete}
+  // to avoid too complicated and unreadable ifs in classNames
+  useEffect(() => {
+    setHasRightIcon(type === 'password' ? true : rightIcon !== undefined);
+  }, [showPassword]);
+
+  return (
+    <div className="">
+      {/* LABEL */}
+      <label
+        htmlFor={name}
+        className={error === undefined ? 'formInputLabel' : 'text-red-500'}
       >
-        {children}
-      </input>
-    </label>
+        {label}
+      </label>
+
+      <div className="relative text-gray-700">
+        {/* LEFT ICON */}
+        {hasLeftIcon && (
+          <span className="absolute inset-y-0 right-0 flex items-center pr-3">
+            {leftIcon}
+          </span>
+        )}
+        {/* INPUT */}
+        <input
+          {...inputProps}
+          id={name}
+          type={
+            type === 'password' ? (showPassword ? 'text' : 'password') : type
+          }
+          disabled={disabled}
+          placeholder={placeholder}
+          className={`${type === 'checkbox' ? '' : 'formInput'}
+            ${error === undefined ? 'border-gray-300 ' : 'border-red-500'} ${
+            hasLeftIcon ? 'pl-8' : ''
+          } ${hasRightIcon ? 'pr-8' : ''}`}
+          {...register(name, options)}
+          autoComplete={autoComplete}
+        />
+
+        {/* RIGHT ICON */}
+        {hasRightIcon && (
+          <span className="absolute inset-y-0 right-0 flex items-center pr-3">
+            {type === 'password' ? (
+              showPassword ? (
+                <HiOutlineEyeOff onClick={() => setShowPassword(false)} />
+              ) : (
+                <HiOutlineEye onClick={() => setShowPassword(true)} />
+              )
+            ) : (
+              rightIcon
+            )}
+          </span>
+        )}
+      </div>
+      <span className="text-red-500"> {error}</span>
+    </div>
   );
 };
 export default Input;

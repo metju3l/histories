@@ -4,6 +4,7 @@ import { Layout } from '@components/layouts';
 import Search from '@components/modules/Search';
 import { useCreatePostMutation } from '@graphql/mutations/post.graphql';
 import { useMeQuery } from '@graphql/queries/user.graphql';
+import { Tab } from '@headlessui/react';
 import {
   GetCookieFromServerSideProps,
   IsJwtValid,
@@ -28,6 +29,12 @@ interface ICreatePostInput {
   year: string;
   month: string | null;
   day: string | null;
+  startDay: string | null;
+  startMonth: string | null;
+  startYear: string;
+  endDay: string | null;
+  endMonth: string | null;
+  endYear: string;
   description: string;
 }
 
@@ -97,6 +104,8 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
   const { data, loading, error } = useMeQuery();
   const [createPostMutation] = useCreatePostMutation();
   const [coordinates, setCoordinates] = useState([21, 20]);
+
+  const [timeSelectMode, setTimeSelectMode] = useState<number>();
 
   const [events, logEvents] = useState({});
   const [tags, setTags] = useState<Array<string>>([]);
@@ -172,18 +181,38 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
 
   const onSubmit: SubmitHandler<ICreatePostInput> = async (data) => {
     setIsLoading(true);
-    try {
-      await createPostMutation({
-        variables: {
-          input: {
-            placeID,
-            description: data.description,
+
+    console.log(timeSelectMode);
+
+    const date =
+      timeSelectMode === 0
+        ? {
             startYear: parseInt(data.year),
             startMonth: data?.month ? parseInt(data.month) : null,
             startDay: data?.day ? parseInt(data.day) : null,
             endYear: parseInt(data.year),
             endMonth: data?.month ? parseInt(data.month) : null,
             endDay: data?.day ? parseInt(data.day) : null,
+          }
+        : {
+            startYear: parseInt(data.startYear),
+            startMonth: data?.startMonth ? parseInt(data.startMonth) : null,
+            startDay: data?.startDay ? parseInt(data.startDay) : null,
+            endYear: parseInt(data.endYear),
+            endMonth: data?.endMonth ? parseInt(data.endMonth) : null,
+            endDay: data?.endDay ? parseInt(data.endDay) : null,
+          };
+
+    console.log(date);
+
+    try {
+      await createPostMutation({
+        variables: {
+          input: {
+            ...date,
+
+            placeID,
+            description: data.description,
             latitude: viewport.latitude,
             longitude: viewport.longitude,
             photo: file,
@@ -319,49 +348,152 @@ C20.1,15.8,20.2,15.8,20.2,15.7z"
               <div className="w-full p-2">
                 <div>
                   <label>Photo date</label>
-                  <Input
-                    register={register}
-                    label={t('day')}
-                    name="day"
-                    options={{}}
-                    type="number"
-                    inputProps={{
-                      min: 1,
-                      max: 31,
-                    }}
-                  />
-
-                  <label className="pb-2">
-                    {/* LABEL */}
-                    <h4 className="pt-0 font-medium text-gray-600">
-                      {t('month')}
-                    </h4>
-
-                    <select
-                      className="w-full h-10 px-3 leading-tight text-gray-700 rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline"
-                      {...register('month')}
-                    >
-                      <option value={undefined} />
-                      {months.map((month, index) => (
-                        <option key={index} value={index + 1}>
-                          {month}
-                        </option>
+                  <Tab.Group
+                    selectedIndex={timeSelectMode}
+                    onChange={setTimeSelectMode}
+                  >
+                    <Tab.List className="flex gap-2">
+                      {['date', 'timespan'].map((name, index) => (
+                        <Tab
+                          key={index}
+                          className={({ selected }) =>
+                            `px-4 py-1 rounded-lg shadow ${
+                              selected
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-white text-black hover:bg-gray-200'
+                            }`
+                          }
+                        >
+                          {t(name)}
+                        </Tab>
                       ))}
-                    </select>
-                  </label>
+                    </Tab.List>
+                    <Tab.Panels>
+                      <Tab.Panel>
+                        <div className="pt-4 grid grid-cols-[5em_12em_6em] gap-2">
+                          <Input
+                            register={register}
+                            label={t('day')}
+                            name="day"
+                            options={{}}
+                            type="number"
+                            inputProps={{
+                              min: 1,
+                              max: 31,
+                            }}
+                          />
 
-                  <Input
-                    label={`${t('year')} *`}
-                    register={register}
-                    name="year"
-                    options={{}}
-                    inputProps={{ max: new Date().getFullYear() }}
-                    type="number"
-                  />
+                          <label className="pb-2">
+                            {/* LABEL */}
+                            <span className="formInputLabel">{t('month')}</span>
 
-                  <p className="pb-2 text-gray-600">
-                    Fields with * are required
-                  </p>
+                            <select
+                              className="formInput"
+                              {...register('month')}
+                            >
+                              <option value={undefined} />
+                              {months.map((month, index) => (
+                                <option key={index} value={index + 1}>
+                                  {month}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
+
+                          <Input
+                            label={`${t('year')} *`}
+                            register={register}
+                            name="year"
+                            options={{}}
+                            inputProps={{ max: new Date().getFullYear() }}
+                            type="number"
+                          />
+                        </div>
+
+                        <p className="pb-2 text-gray-600">
+                          Fields with * are required
+                        </p>
+                      </Tab.Panel>
+                      <Tab.Panel>
+                        <div className="pt-4 grid grid-cols-[2.5em_5em_12em_6em] gap-x-2">
+                          <div className="flex items-center">From</div>
+                          <Input
+                            register={register}
+                            label={t('day')}
+                            name="startDay"
+                            options={{}}
+                            type="number"
+                            inputProps={{
+                              min: 1,
+                              max: 31,
+                            }}
+                          />
+                          <label className="pb-2">
+                            {/* LABEL */}
+                            <span className="formInputLabel">{t('month')}</span>
+
+                            <select
+                              className="formInput"
+                              {...register('startMonth')}
+                            >
+                              <option value={undefined} />
+                              {months.map((month, index) => (
+                                <option key={index} value={index + 1}>
+                                  {month}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
+                          <Input
+                            label={`${t('year')} *`}
+                            register={register}
+                            name="startYear"
+                            options={{}}
+                            inputProps={{ max: new Date().getFullYear() }}
+                            type="number"
+                          />{' '}
+                          <div className="flex items-center pb-1">To</div>
+                          <Input
+                            register={register}
+                            name="endDay"
+                            options={{}}
+                            type="number"
+                            inputProps={{
+                              min: 1,
+                              max: 31,
+                            }}
+                          />
+                          <label className="pb-2">
+                            <select
+                              className="formInput"
+                              {...register('endMonth')}
+                            >
+                              <option value={undefined} />
+                              {months.map((month, index) => (
+                                <option key={index} value={index + 1}>
+                                  {month}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
+                          <Input
+                            register={register}
+                            name="endYear"
+                            options={{}}
+                            inputProps={{
+                              min: parseInt(watch('startYear') ?? '0'),
+                              max: new Date().getFullYear(),
+                            }}
+                            type="number"
+                          />
+                        </div>
+
+                        <p className="pb-2 text-gray-600">
+                          Fields with * are required
+                        </p>
+                      </Tab.Panel>
+                    </Tab.Panels>
+                  </Tab.Group>
                 </div>
                 <div>
                   <Input
