@@ -33,10 +33,9 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
   post,
 }) => {
   const meContext = useContext(MeContext); // me context
-  const { register, handleSubmit, reset, watch, setValue } =
-    useForm<CreateCommentFormInput>(); // create comment form
+  const { register, handleSubmit, reset } = useForm<CreateCommentFormInput>(); // create comment form
   const [createCommentMutation] = useCreateCommentMutation(); // create comment mutation
-  const { t } = useTranslation<string>(); // i18n
+  const { t } = useTranslation(); // i18n
 
   const commentsQuery = usePostCommentsQuery({
     variables: {
@@ -58,11 +57,11 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
   }
 
   return (
-    <div className="h-full p-2">
+    <div className="p-2">
       {/* AUTHOR */}
       <div className="flex items-center gap-2">
         <Link href={`/user/${post.author.username}`} passHref>
-          <div className="relative w-10 h-10 rounded-full">
+          <div className="relative w-10 rounded-full aspect-square">
             <Image
               src={
                 post.author.profile.startsWith('http')
@@ -92,16 +91,17 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
       {/* DESCRIPTION */}
       <p className="pb-2"> {post.description}</p>
       {/* COMMENTS */}
+      <div className="pb-2 text-gray-900 font-sm">{t('comments')}:</div>
       {/* TBD: infinite scroll */}
-      <div className="w-full h-full overflow-y-scroll max-h-[40vh]">
+      <div className="w-full overflow-y-auto">
         {commentsQuery.loading || commentsQuery.error ? (
           <Loading color="black" />
         ) : (
           commentsQuery.data?.comments.map((comment) => {
             return (
-              <div key={comment?.id} className="flex mb-4 gap-2">
+              <div key={comment?.id} className="flex pb-4 gap-2">
                 <Link href={`/user/${comment?.author.username}`} passHref>
-                  <div className="relative w-10 h-10 rounded-full">
+                  <div className="relative w-10 rounded-full aspect-square">
                     <Image
                       src={
                         comment?.author?.profile.startsWith('http')

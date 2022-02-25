@@ -40,5 +40,5 @@
 }
 
 .formInput {
-  @apply transition-all duration-200 ease-in-out focus:border-blue-500 w-full shadow-sm h-10 px-3 border bg-white leading-tight rounded-lg border-gray-300;
+  @apply transition-all duration-200 ease-in-out focus:border-blue-500 w-full shadow-sm h-10 px-3 border bg-white leading-tight rounded-xl border-gray-300;
 }
