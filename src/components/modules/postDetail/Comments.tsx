@@ -1,4 +1,5 @@
 import { Input, Loading } from '@components/elements';
+import StringWithMentions from '@components/elements/StringWithMentions';
 import { useCreateCommentMutation } from '@graphql/mutations/comment.graphql';
 import { usePostCommentsQuery } from '@graphql/queries/comment.graphql';
 import UrlPrefix from '@src/constants/IPFSUrlPrefix';
@@ -116,7 +117,7 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
                   </div>
                 </Link>
                 <div className="p-2 bg-gray-200 rounded-t-lg rounded-r-lg w-fit">
-                  {comment?.content}
+                  <StringWithMentions text={comment?.content} />
                 </div>
               </div>
             );
