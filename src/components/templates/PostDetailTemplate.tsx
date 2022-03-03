@@ -40,6 +40,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
   const [unlikeMutation] = useUnlikeMutation();
 
   async function OnLike(id: number, type: string) {
+    if (!meContext.isLoggedIn) return;
     // runs like mutation and changes local states
     // try
     try {
@@ -57,6 +58,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
   }
 
   async function OnUnlike(id: number) {
+    if (!meContext.isLoggedIn) return;
     // try
     try {
       if (!localLikeState) return; // if user didn't like post before return
