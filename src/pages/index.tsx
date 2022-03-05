@@ -1,5 +1,7 @@
 import Main from '@components/layouts/Main';
-import MapTemplate from '@components/templates/MapTemplate';
+import MapTemplate, {
+  IMapUrlQueryParams,
+} from '@components/templates/MapTemplate';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 
@@ -20,14 +22,7 @@ export type SidebarPlaceType = {
   description?: Maybe<string>;
 };
 
-const MapPage: React.FC<{
-  lat: number | null;
-  lng: number | null;
-  zoom: number | null;
-  minYear: number | null;
-  maxYear: number | null;
-  place: number | null;
-}> = (props) => {
+const MapPage: React.FC<IMapUrlQueryParams> = (props) => {
   return (
     <Main
       head={{
@@ -50,9 +45,11 @@ const MapPage: React.FC<{
 
 // get parameters from url
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  if (ctx.req.url?.startsWith('_next')) return { props: {} }; // for nextjs
+  const { req, query } = ctx;
 
-  const { lat, lng, zoom, maxYear, minYear, place } = ctx.query;
+  if (req.url?.startsWith('_next')) return { props: {} }; // for nextjs
+
+  const { lat, lng, zoom, maxYear, minYear, place } = query;
   // check if values are valid
   return {
     props: {

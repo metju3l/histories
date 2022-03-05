@@ -7,20 +7,18 @@ import {
 } from '@src/constants/MapPlaceholderValues';
 import { MapContext } from '@src/contexts/MapContext';
 import { IViewport } from '@src/types/map';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Maybe } from '.cache/__types__';
-
-interface MapTemplateProps {
-  lat: Maybe<number>;
-  lng: Maybe<number>;
-  zoom: Maybe<number>;
-  minYear: Maybe<number>;
-  maxYear: Maybe<number>;
-  place: Maybe<number>;
+export interface IMapUrlQueryParams {
+  lat: number | null;
+  lng: number | null;
+  zoom: number | null;
+  minYear: number | null;
+  maxYear: number | null;
+  place: number | null;
 }
 
-const MapTemplate: React.FC<MapTemplateProps> = ({
+const MapTemplate: React.FC<IMapUrlQueryParams> = ({
   lat,
   lng,
   zoom,
@@ -54,7 +52,7 @@ const MapTemplate: React.FC<MapTemplateProps> = ({
     maxYear ?? new Date().getFullYear(),
   ]);
 
-  const [sidebarPlace, setSidebarPlace] = useState<Maybe<number>>(place);
+  const [sidebarPlace, setSidebarPlace] = useState<number | null>(place);
 
   // map viewport
   const [viewport, setViewport] = useState<IViewport>({
@@ -63,6 +61,20 @@ const MapTemplate: React.FC<MapTemplateProps> = ({
     longitude: lng || viewportPlaceholder.longitude,
     zoom: zoom || viewportPlaceholder.zoom,
   });
+
+  // if there isn't coordinates in url query, use client coordinates
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      if (lat !== null || lng !== null) return;
+
+      setViewport({
+        ...viewport,
+        latitude: position.coords.latitude || viewportPlaceholder.latitude,
+        longitude: position.coords.longitude || viewportPlaceholder.longitude,
+        zoom: 14,
+      });
+    });
+  }, []);
 
   return (
     <MapContext.Provider
