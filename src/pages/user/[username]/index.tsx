@@ -57,11 +57,11 @@ const PostsPage: React.FC<{
       user={user}
       currentTab="posts"
       head={{
-        title: `${user.firstName} ${user.lastName} | hiStories`,
-        description: `${user.firstName} ${user.lastName}'s profile on HiStories`,
+        title: `${user.firstName} ${user?.lastName} | hiStories`,
+        description: `${user.firstName} ${user?.lastName}'s profile on HiStories`,
         canonical: `https://www.histories.cc/user/${user.username}`,
         openGraph: {
-          title: `${user.firstName} ${user.lastName} | HiStories`,
+          title: `${user.firstName} ${user?.lastName} | HiStories`,
           type: 'website',
           images: [
             {
@@ -74,9 +74,9 @@ const PostsPage: React.FC<{
             },
           ],
           url: `https://www.histories.cc/user/${user.username}`,
-          description: `${user.firstName} ${user.lastName}'s profile`,
+          description: `${user.firstName} ${user?.lastName}'s profile`,
           site_name: 'Profil page',
-          profile: user,
+          profile: { ...user, lastName: user.lastName || undefined },
         },
       }}
     >

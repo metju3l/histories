@@ -18,7 +18,7 @@ interface PostDetailCommentSectionProps {
       profile: string;
       username: string;
       firstName: string;
-      lastName: string;
+      lastName?: string | null;
     };
     description?: string | null;
     createdAt: number;
@@ -78,7 +78,7 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
         </Link>
         <div className="flex flex-col">
           <Link href={`/user/${post.author.username}`}>
-            <a className="text-lg font-semibold">{`${post.author.firstName} ${post.author.lastName}`}</a>
+            <a className="text-lg font-semibold">{`${post.author.firstName} ${post.author?.lastName}`}</a>
           </Link>
           <a className="text-gray-600 font-xs">
             {new Date(post.createdAt).toLocaleDateString('cs', {

@@ -24,7 +24,7 @@ import OptionsMenu from './OptionsMenu';
 type PostProps = {
   author: {
     firstName: string;
-    lastName: string;
+    lastName?: string | null;
     username: string;
     profile: string;
     id: number;

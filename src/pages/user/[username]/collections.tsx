@@ -30,7 +30,9 @@ const CollectionsPage: React.FC<{
         description: '',
         canonical: undefined,
         // @ts-ignore
-        openGraph: undefined,
+        openGraph: {
+          profile: { ...user, lastName: user.lastName || undefined },
+        },
       }}
     >
       <div className="flex justify-end w-full">

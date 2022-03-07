@@ -18,7 +18,7 @@ export type UserLeftPanelProps = {
     id: number;
     username: string;
     firstName: string;
-    lastName: string;
+    lastName?: string | null;
     profile: string;
     verified: boolean;
 
@@ -70,7 +70,7 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
       <div className="pt-2 sm:pt-4 transition-all ease-in-out duration-400">
         {/* NAME */}
         <h1 className="flex items-center text-2xl font-bold gap-1.5">
-          {user.firstName} {user.lastName}
+          {user.firstName} {user?.lastName}
         </h1>
 
         <div className="flex items-center gap-2">

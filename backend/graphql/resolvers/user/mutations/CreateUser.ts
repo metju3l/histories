@@ -54,14 +54,14 @@ const CreateUser = async ({
 
   const profile = `https://avatars.dicebear.com/api/initials/${encodeURIComponent(
     firstName
-  )}%20${encodeURIComponent(lastName)}.svg`;
+  )}%20${lastName ? encodeURIComponent(lastName) : ''}.svg`;
 
   const [user] = await RunCypherQuery({
     query,
     params: {
       username,
       firstName,
-      lastName,
+      lastName: lastName ?? null,
       email,
       hashedPassword,
       authorizationToken,

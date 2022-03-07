@@ -203,8 +203,10 @@ const mutations = {
     if (validateFirstName) throw new Error('First name ' + validateFirstName);
 
     // check last name
-    const validateLastName = ValidateName(input.lastName).error;
-    if (validateLastName) throw new Error('Last name ' + validateLastName);
+    if (input.lastName) {
+      const validateLastName = ValidateName(input.lastName).error;
+      if (validateLastName) throw new Error('Last name ' + validateLastName);
+    }
 
     // check password
     const validatePassword = ValidatePassword(input.password).error;

@@ -294,7 +294,7 @@ export default gql`
     username: String!
     email: String!
     firstName: String!
-    lastName: String!
+    lastName: String
     bio: String
     profile: String!
     verified: Boolean!
@@ -316,7 +316,7 @@ export default gql`
     username: String!
     email: String!
     firstName: String!
-    lastName: String!
+    lastName: String
     bio: String
     profile: String!
     verified: Boolean!
@@ -358,7 +358,7 @@ export default gql`
     email: String!
     emailSubscription: Boolean!
     firstName: String!
-    lastName: String!
+    lastName: String
     password: String!
     locale: String
   }

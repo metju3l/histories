@@ -64,7 +64,7 @@ const UserMapPage: React.FC<{
           url: `https://www.histories.cc/user/${user.username}/map`,
           description: `${user.firstName}'s map of posts on HiStories`,
           site_name: 'Profil map page',
-          profile: user,
+          profile: { ...user, lastName: user.lastName || undefined },
         },
       }}
     >
