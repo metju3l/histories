@@ -149,7 +149,7 @@ const Map: React.FC = () => {
 
       {/* TIME LINE */}
       <div className="absolute bottom-4 left-0 h-full max-h-64 z-20 px-8 pt-2 w-[28vw]">
-        <TimeLine domain={[1000, new Date().getFullYear()]} />
+        <TimeLine />
       </div>
     </>
   );

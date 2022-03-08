@@ -9,7 +9,7 @@ interface TrackProps {
 const Track: React.FC<TrackProps> = ({ source, target, getTrackProps }) => {
   return (
     <div
-      className="absolute bg-blue-500 z-10 w-2"
+      className="absolute z-10 w-2 bg-blue-500"
       style={{
         top: `${source.percent}%`,
         height: `${target.percent - source.percent}%`,

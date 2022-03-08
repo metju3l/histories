@@ -9,6 +9,7 @@ import { MapContext } from '@src/contexts/MapContext';
 import { IViewport } from '@src/types/map';
 import React, { useEffect, useState } from 'react';
 
+import { minYearConstant } from '../../../shared/constants/constants';
 export interface IMapUrlQueryParams {
   lat: number | null;
   lng: number | null;
@@ -48,7 +49,7 @@ const MapTemplate: React.FC<IMapUrlQueryParams> = ({
   const [whatToShow, setWhatToShow] = useState<'places' | 'photos'>('places'); // what to show on the right panel
   const [showSidebar, setShowSidebar] = useState<boolean>(true); // is sidebar visible
   const [timeLimitation, setTimeLimitation] = useState<[number, number]>([
-    minYear ?? 1000,
+    minYear ?? minYearConstant,
     maxYear ?? new Date().getFullYear(),
   ]);
 

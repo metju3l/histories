@@ -1,27 +1,22 @@
 import { MapContext } from '@src/contexts/MapContext';
 import React from 'react';
-import { Handles, Rail, Slider, Ticks, Tracks } from 'react-compound-slider';
+import { Handles, Rail, Slider, Tracks } from 'react-compound-slider';
+import { minYearConstant } from 'shared/constants/constants';
 
-import { Tick, Track } from './index';
-
-interface TimelineProps {
-  domain: [number, number];
-}
-
-const TimeLine: React.FC<TimelineProps> = ({ domain }) => {
+const TimeLine: React.FC = ({}) => {
   const mapContext = React.useContext(MapContext);
 
   return (
     <Slider
       vertical
       reversed
-      mode={3}
+      mode={2}
       rootStyle={{
         position: 'relative',
         width: '100%',
         height: '100%',
       }}
-      domain={domain}
+      domain={[minYearConstant, new Date().getFullYear()]}
       step={1}
       values={mapContext.timeLimitation}
       onUpdate={(limits) =>
@@ -31,18 +26,18 @@ const TimeLine: React.FC<TimelineProps> = ({ domain }) => {
       <Rail>
         {({ getRailProps }) => (
           <div
-            className="absolute rounded h-full w-2 bg-white border border-gray-400"
+            className="absolute w-2 h-full bg-white border border-gray-400 rounded -translate-x-1/2"
             {...getRailProps()}
           />
         )}
       </Rail>
       <Handles>
         {({ handles, getHandleProps }) => (
-          <div className="slider-handles">
+          <>
             {handles.map(({ id, value, percent }) => (
               <div
                 key={id}
-                className={`absolute px-2 cursor-pointer py-1 border border-gray-400 bg-white text-black text-xs rounded-xl -translate-x-1/2 z-20`}
+                className={`absolute px-2 cursor-pointer py-1 border border-gray-400 bg-white text-xs rounded-xl -translate-x-1/2 z-20 font-bold text-indigo-500`}
                 style={{
                   top: `${percent}%`,
                 }}
@@ -51,33 +46,25 @@ const TimeLine: React.FC<TimelineProps> = ({ domain }) => {
                 {value}
               </div>
             ))}
-          </div>
+          </>
         )}
       </Handles>
       <Tracks left={false} right={false}>
-        {({ tracks, getTrackProps }) => (
+        {({ tracks }) => (
           <div className="slider-tracks">
             {tracks.map(({ id, source, target }) => (
-              <Track
+              <div
                 key={id}
-                source={source}
-                target={target}
-                getTrackProps={getTrackProps}
+                className="absolute z-10 w-2 bg-indigo-500 -translate-x-1/2"
+                style={{
+                  top: `${source.percent}%`,
+                  height: `${target.percent - source.percent}%`,
+                }}
               />
             ))}
           </div>
         )}
       </Tracks>
-      {/*   <Ticks count={6}>
-        {({ ticks }) => (
-          <div className="slider-ticks">
-            {ticks.map((tick) => (
-              <Tick key={tick.id} tick={tick} count={ticks.length} />
-            ))}
-          </div>
-        )}
-      </Ticks>
-      */}
     </Slider>
   );
 };

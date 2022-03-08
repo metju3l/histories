@@ -57,6 +57,7 @@ const NewPassword: React.FC<{ token: string }> = ({ token }) => {
 
   return (
     <AuthLayout
+      heading={t('create_new_password')}
       head={{
         title: `New password | HiStories`,
         description: `New password`,
