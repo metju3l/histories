@@ -38,6 +38,7 @@ const ForgotPassword: React.FC = () => {
 
   return (
     <AuthLayout
+      heading={t('forgot_password')}
       head={{
         title: `Forgot password | HiStories`,
         description: `Forgot password`,

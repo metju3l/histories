@@ -46,6 +46,7 @@ const Login: React.FC = () => {
 
   return (
     <AuthLayout
+      heading={t('login_to_your_account')}
       head={{
         title: `Log in | HiStories`,
         description: `Log in to your HiStories account`,

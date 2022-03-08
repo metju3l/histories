@@ -1,13 +1,13 @@
-import SendEmail from '../../../../email/SendEmail';
 import axios from 'axios';
 import { remove as removeDiacritics } from 'diacritics';
 import { v4 as uuidv4 } from 'uuid';
 
 import RunCypherQuery from '../../../../database/RunCypherQuery';
+import RegisteredWithGoogleEmail from '../../../../email/content/NewPassword';
+import SendEmail from '../../../../email/SendEmail';
+import { GenerateBlurhash } from '../../../../functions';
 import SignJWT from '../../../../functions/SignJWT';
 import { UploadPhoto } from '../../../../ipfs';
-import RegisteredWithGoogleEmail from '../../../../email/content/NewPassword';
-import { GenerateBlurhash } from '../../../../functions';
 
 async function RegisterWithGooge(googleJWT: string) {
   const passwordResetToken = `${new Date().getTime()}-${uuidv4()}`; // generate token for new password creation

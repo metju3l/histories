@@ -56,6 +56,7 @@ const Register: React.FC = () => {
 
   return (
     <AuthLayout
+      heading={t('create_new_account')}
       head={{
         title: `Sign up | HiStories`,
         description: `Create new HiStories account`,

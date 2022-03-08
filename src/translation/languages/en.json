@@ -101,5 +101,6 @@
   "create_comment": "Create comment",
   "likes": "{{number}} likes",
   "see_posts_from_this_time_period": "Show all posts from this time period",
-  "place_doesnt_have_name": "Place doesn't have name"
+  "place_doesnt_have_name": "Place doesn't have name",
+  "login_to_your_account": "Login to your account"
 }

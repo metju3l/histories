@@ -14,6 +14,7 @@ interface MainLayoutProps {
   redirectLogged?: boolean;
   redirectNotLogged?: boolean;
   children: React.ReactNode;
+  background?: string;
 }
 
 const Layout: React.FC<MainLayoutProps> = ({
@@ -21,6 +22,7 @@ const Layout: React.FC<MainLayoutProps> = ({
   redirectLogged,
   redirectNotLogged,
   children,
+  background,
 }) => {
   const meContext = React.useContext(MeContext);
 
@@ -109,7 +111,11 @@ const Layout: React.FC<MainLayoutProps> = ({
       />
       <Toaster position="top-center" reverseOrder={true} />
       <Navbar />
-      <div className="min-h-screen pt-16 bg-[#FAFBFB] dark:bg-[#171716]">
+      <div
+        className={
+          'min-h-screen pt-14 ' + background || 'bg-[#FAFBFB] dark:bg-[#171716]'
+        }
+      >
         {children}
       </div>
     </>
