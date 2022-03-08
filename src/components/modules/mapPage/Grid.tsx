@@ -19,7 +19,7 @@ const MapPageGrid: React.FC = () => {
         <motion.section
           className={`w-full h-full grid ${
             mapContext.showSidebar
-              ? 'grid-cols-1 grid-rows-2 lg:grid-cols-[auto_48.25em] xl:grid-cols-[auto_62.25em] md:grid-cols-[auto_32.25em] md:grid-rows-1'
+              ? 'grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1'
               : 'grid-cols-1 grid-rows-1'
           } `}
         >

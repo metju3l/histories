@@ -2,7 +2,7 @@ import { MapContext } from '@src/contexts/MapContext';
 import React from 'react';
 import { Handles, Rail, Slider, Ticks, Tracks } from 'react-compound-slider';
 
-import { Handle, Tick, Track } from './index';
+import { Tick, Track } from './index';
 
 interface TimelineProps {
   domain: [number, number];
@@ -13,14 +13,16 @@ const TimeLine: React.FC<TimelineProps> = ({ domain }) => {
 
   return (
     <Slider
+      vertical
+      reversed
+      mode={3}
       rootStyle={{
         position: 'relative',
         width: '100%',
-        height: 80,
+        height: '100%',
       }}
       domain={domain}
       step={1}
-      mode={2}
       values={mapContext.timeLimitation}
       onUpdate={(limits) =>
         mapContext.setTimeLimitation(limits as [number, number])
@@ -29,12 +31,7 @@ const TimeLine: React.FC<TimelineProps> = ({ domain }) => {
       <Rail>
         {({ getRailProps }) => (
           <div
-            className="absolute w-full bg-white border border-gray-400"
-            style={{
-              height: 10,
-              marginTop: 28,
-              borderRadius: 5,
-            }}
+            className="absolute rounded h-full w-2 bg-white border border-gray-400"
             {...getRailProps()}
           />
         )}
@@ -42,12 +39,17 @@ const TimeLine: React.FC<TimelineProps> = ({ domain }) => {
       <Handles>
         {({ handles, getHandleProps }) => (
           <div className="slider-handles">
-            {handles.map((handle) => (
-              <Handle
-                key={handle.id}
-                handle={handle}
-                getHandleProps={getHandleProps}
-              />
+            {handles.map(({ id, value, percent }) => (
+              <div
+                key={id}
+                className={`absolute px-2 cursor-pointer py-1 border border-gray-400 bg-white text-black text-xs rounded-xl -translate-x-1/2 z-20`}
+                style={{
+                  top: `${percent}%`,
+                }}
+                {...getHandleProps(id)}
+              >
+                {value}
+              </div>
             ))}
           </div>
         )}
@@ -66,7 +68,7 @@ const TimeLine: React.FC<TimelineProps> = ({ domain }) => {
           </div>
         )}
       </Tracks>
-      <Ticks count={6}>
+      {/*   <Ticks count={6}>
         {({ ticks }) => (
           <div className="slider-ticks">
             {ticks.map((tick) => (
@@ -75,6 +77,7 @@ const TimeLine: React.FC<TimelineProps> = ({ domain }) => {
           </div>
         )}
       </Ticks>
+      */}
     </Slider>
   );
 };
