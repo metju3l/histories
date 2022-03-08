@@ -64,7 +64,7 @@ const Login: React.FC = () => {
           label={t('username_or_email')}
           register={register}
           name="login"
-          options={{ required: true }}
+          options={{ required: true, minLength: 2, maxLength: 256 }}
           autoComplete="username"
         />
         <Input
@@ -72,7 +72,7 @@ const Login: React.FC = () => {
           type="password"
           register={register}
           name="password"
-          options={{ required: true }}
+          options={{ required: true, minLength: 8 }}
           autoComplete="password"
         />
         <Button style="primary_solid" loading={loading}>

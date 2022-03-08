@@ -2,6 +2,7 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-co
 import { ApolloServer } from 'apollo-server-express';
 import { verify } from 'jsonwebtoken';
 
+import { allowedErrors } from '../../constants/errors';
 import schema from './schema';
 
 const apolloServer = new ApolloServer({
@@ -24,6 +25,11 @@ const apolloServer = new ApolloServer({
     } catch (err) {
       return { validToken: false, decoded: null };
     }
+  },
+  formatError: (error) => {
+    return allowedErrors.includes(error.message)
+      ? new Error(error.message)
+      : new Error('Unknown error');
   },
 });
 

@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 const ValidateUsername = (
   username: string
 ): {
@@ -27,3 +29,11 @@ const ValidateUsername = (
 };
 
 export default ValidateUsername;
+
+export const IsValidUsername = (username: string): boolean => {
+  return (
+    validator.isAlphanumeric(username) &&
+    username.length > 2 &&
+    username.length < 256
+  );
+};

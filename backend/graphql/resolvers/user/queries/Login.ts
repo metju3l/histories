@@ -1,47 +1,50 @@
 import { compareSync } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
+import validator from 'validator';
 
 import { LoginInput } from '../../../../../.cache/__types__';
-import {
-  ValidateEmail,
-  ValidatePassword,
-  ValidateUsername,
-} from '../../../../../shared/validation';
+import { IsValidUsername } from '../../../../../shared/validation/inputValidation/ValidateUsername';
+import { allowedErrors } from '../../../../constants/errors';
 import RunCypherQuery from '../../../../database/RunCypherQuery';
 
 const Login = async ({
-  username,
+  username: user,
   password,
 }: LoginInput): Promise<any | null> => {
-  const query = `
-  MATCH (user:User) 
-  // where case insensitive username or email matches 
-  WHERE user.username =~ $name  
-    XOR user.email =~ $name  // using XOR to avoid checking both username and email at the same time (which would potentially make a brute force attack faster)
-  RETURN user{.*, id: ID(user)} as user
+  try {
+    const query = `
+      MATCH (user:User) 
+      // where case insensitive username or email matches 
+      WHERE user.username =~ $name  
+        XOR user.email =~ $name  // using XOR to avoid checking both username and email at the same time (which would potentially make a brute force attack faster)
+      RETURN user{.*, id: ID(user)} as user
   `;
 
-  // check user input
-  if (
-    (ValidateUsername(username).error && ValidateEmail(username).error) ||
-    ValidatePassword(password).error
-  )
-    throw new Error('Wrong credentials');
+    // validate user input & password
+    if (
+      (!validator.isEmail(user) && !IsValidUsername(user)) ||
+      password.length < 8
+    )
+      throw new Error('Wrong credentials');
 
-  // run query
-  const [userInfo] = await RunCypherQuery({
-    query,
-    params: {
-      name: `(?i)${username}`, // (?i) = case insensitive
-    },
-  });
+    // run query
+    const [userInfo] = await RunCypherQuery({
+      query,
+      params: {
+        name: `(?i)${user}`, // (?i) = case insensitive
+      },
+    });
+    console.log(userInfo.records[0].get('user').password == undefined);
 
-  // if user has been created with Google, and it doesn't have a password, he can't login
-  if (userInfo.records[0].get('user').password === undefined)
-    throw new Error('This account has not set a password yet');
+    // if user has been created with Google, and it doesn't have a password, he can't login
+    if (userInfo.records[0].get('user').password == undefined)
+      throw new Error('This account has not set a password yet');
 
-  // if password matches
-  if (compareSync(password, userInfo.records[0].get('user').password))
+    // check password
+    if (!compareSync(password, userInfo.records[0].get('user').password))
+      throw new Error('Wrong credentials');
+
+    // if password matches
     return sign(
       // JWT payload
       {
@@ -53,8 +56,14 @@ const Login = async ({
         expiresIn: '360min', // JWT token expiration
       }
     );
-  // else throw error
-  else throw new Error('Wrong credentials');
+  } catch (error: any) {
+    // if query fails, user doesn't exist, then throw error
+    throw new Error(
+      allowedErrors.includes(error.message)
+        ? error.message
+        : 'Wrong credentials'
+    );
+  }
 };
 
 export default Login;

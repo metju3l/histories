@@ -1,13 +1,12 @@
-import ForgotPassword from '../../resolvers/user/mutations/ForgotPassword';
 import sharp from 'sharp';
 import streamToPromise from 'stream-to-promise';
 
 import {
+  CreatePostInput,
   CreateUserInput,
   LoginInput,
-  UpdateProfileInput,
   ResetPasswordInput,
-  CreatePostInput,
+  UpdateProfileInput,
 } from '../../../../.cache/__types__';
 import {
   ValidateComment,
@@ -18,6 +17,8 @@ import {
   ValidatePassword,
   ValidateUsername,
 } from '../../../../shared/validation';
+import UrlPrefix from '../../../../src/constants/IPFSUrlPrefix';
+import { GenerateBlurhash, NSFWCheck } from '../../../functions';
 import { UploadPhoto } from '../../../ipfs';
 import {
   AddPostToCollection,
@@ -41,10 +42,9 @@ import {
   VerifyToken,
 } from '../../resolvers';
 import LastPost from '../../resolvers/lastPost';
-import { contextType, OnlyLogged, Validate } from './resolvers';
+import ForgotPassword from '../../resolvers/user/mutations/ForgotPassword';
 import ResetPassword from '../../resolvers/user/mutations/ResetPassword';
-import { GenerateBlurhash, NSFWCheck } from '../../../functions';
-import UrlPrefix from '../../../../src/constants/IPFSUrlPrefix';
+import { contextType, OnlyLogged, Validate } from './resolvers';
 
 const mutations = {
   googleAuth: async (

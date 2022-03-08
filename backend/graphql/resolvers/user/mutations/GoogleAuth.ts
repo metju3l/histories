@@ -93,7 +93,7 @@ async function RegisterWithGooge(googleJWT: string) {
             date.length - 6
           )}`, // generate unique username
           firstName: res.data.given_name,
-          lastName: res.data.family_name,
+          lastName: res.data.family_name || null,
           email: res.data.email,
           createdAt: new Date().getTime(),
           verified: true,
