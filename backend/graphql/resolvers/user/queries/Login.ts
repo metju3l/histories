@@ -3,7 +3,7 @@ import { sign } from 'jsonwebtoken';
 import validator from 'validator';
 
 import { LoginInput } from '../../../../../.cache/__types__';
-import { IsValidUsername } from '../../../../../shared/validation/inputValidation/ValidateUsername';
+import { IsValidUsername } from '../../../../../shared/validation/InputValidation';
 import { allowedErrors } from '../../../../constants/errors';
 import RunCypherQuery from '../../../../database/RunCypherQuery';
 

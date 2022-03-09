@@ -1,7 +1,12 @@
 import { hash } from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
+import validator from 'validator';
 
 import { CreateUserInput } from '../../../../../.cache/__types__';
+import {
+  IsValidName,
+  IsValidUsername,
+} from '../../../../../shared/validation/InputValidation';
 import RunCypherQuery from '../../../../database/RunCypherQuery';
 import VerificationEmail from '../../../../email/content/EmailVerification';
 import SendEmail from '../../../../email/SendEmail';
@@ -16,6 +21,16 @@ const CreateUser = async ({
   emailSubscription,
   locale,
 }: CreateUserInput) => {
+  if (!validator.isEmail(email)) throw new Error('Invalid email');
+
+  if (!IsValidUsername(username)) throw new Error('Invalid username');
+
+  if (!IsValidName(firstName)) throw new Error('Invalid first name');
+  if (lastName != null && !IsValidName(lastName))
+    throw new Error('Invalid last name');
+
+  if (password.length >= 8) throw new Error('Invalid password');
+
   // generate password hash
   const hashedPassword = await hash(
     password,

@@ -2,20 +2,18 @@ import sharp from 'sharp';
 import streamToPromise from 'stream-to-promise';
 
 import {
+  CreateCollectionInput,
+  CreateCommentInput,
   CreatePostInput,
   CreateUserInput,
   LoginInput,
+  Mutation,
   ResetPasswordInput,
   UpdateProfileInput,
 } from '../../../../.cache/__types__';
 import {
-  ValidateComment,
   ValidateCoordinates,
   ValidateDescription,
-  ValidateEmail,
-  ValidateName,
-  ValidatePassword,
-  ValidateUsername,
 } from '../../../../shared/validation';
 import UrlPrefix from '../../../../src/constants/IPFSUrlPrefix';
 import { GenerateBlurhash, NSFWCheck } from '../../../functions';
@@ -38,13 +36,12 @@ import {
   Report,
   Unfollow,
   Unlike,
-  UserQuery,
   VerifyToken,
 } from '../../resolvers';
 import LastPost from '../../resolvers/lastPost';
 import ForgotPassword from '../../resolvers/user/mutations/ForgotPassword';
 import ResetPassword from '../../resolvers/user/mutations/ResetPassword';
-import { contextType, OnlyLogged, Validate } from './resolvers';
+import { contextType, OnlyLogged } from './resolvers';
 
 const mutations = {
   googleAuth: async (
@@ -131,7 +128,7 @@ const mutations = {
       input: UpdateProfileInput;
     },
     context: contextType
-  ) => {
+  ): Promise<Mutation['updateProfile']> => {
     OnlyLogged(context);
 
     return await EditUser(input, context.decoded.id);
@@ -139,19 +136,16 @@ const mutations = {
 
   createComment: async (
     _parent: undefined,
-    {
-      input: { target, content },
-    }: { input: { target: number; content: string } },
+    { input: { target, content } }: { input: CreateCommentInput },
     context: contextType
-  ) => {
+  ): Promise<Mutation['createComment']> => {
     OnlyLogged(context);
 
-    await CreateComment({
+    return await CreateComment({
       targetID: target,
       authorID: context.decoded.id,
       content,
     });
-    return 0;
   },
 
   createUser: async (
@@ -161,42 +155,14 @@ const mutations = {
     }: {
       input: CreateUserInput;
     }
-  ) => {
-    // check email
-    const validateEmail = ValidateEmail(input.email).error;
-    if (validateEmail) throw new Error(validateEmail);
-
-    // check username
-    const validateUsername = ValidateUsername(input.username).error;
-    if (validateUsername) throw new Error(validateUsername);
-
-    // check first name
-    const validateFirstName = ValidateName(input.firstName).error;
-    if (validateFirstName) throw new Error('First name ' + validateFirstName);
-
-    // check last name
-    if (input.lastName) {
-      const validateLastName = ValidateName(input.lastName).error;
-      if (validateLastName) throw new Error('Last name ' + validateLastName);
-    }
-
-    // check password
-    const validatePassword = ValidatePassword(input.password).error;
-    if (validatePassword) throw new Error(validatePassword);
-
-    return await CreateUser(input);
-  },
+  ): Promise<Mutation['createUser']> => await CreateUser(input),
 
   createCollection: async (
     _parent: undefined,
     {
       input,
     }: {
-      input: {
-        name: string;
-        description: string;
-        isPrivate: boolean;
-      };
+      input: CreateCollectionInput;
     },
     context: contextType
   ) => {
@@ -238,7 +204,7 @@ const mutations = {
       input: CreatePostInput;
     },
     context: contextType
-  ) => {
+  ): Promise<Mutation['createPost']> => {
     OnlyLogged(context);
 
     if (

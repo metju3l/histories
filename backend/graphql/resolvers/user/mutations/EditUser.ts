@@ -1,9 +1,11 @@
 import validator from 'validator';
 
 import { UpdateProfileInput } from '../../../../../.cache/__types__';
-import { IsValidBio } from '../../../../../shared/validation/InputValidation';
-import { IsValidName } from '../../../../../shared/validation/inputValidation/ValidateName';
-import { IsValidUsername } from '../../../../../shared/validation/inputValidation/ValidateUsername';
+import {
+  IsValidBio,
+  IsValidName,
+  IsValidUsername,
+} from '../../../../../shared/validation/InputValidation';
 import RunCypherQuery from '../../../../database/RunCypherQuery';
 
 const EditUser = async (

@@ -9,7 +9,7 @@ const CreateCollection = async ({
 }: {
   userId: number;
   name: string;
-  description: string;
+  description?: string | null;
   isPrivate: boolean;
   preview: String;
 }): Promise<number> => {

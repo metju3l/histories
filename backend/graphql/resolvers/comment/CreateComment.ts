@@ -9,7 +9,7 @@ const CreateComment = async ({
   authorID: number;
   targetID: number;
   content: string;
-}): Promise<void> => {
+}): Promise<string> => {
   if (!IsValidComment(content)) throw new Error('Invalid comment');
 
   const query = `
@@ -35,6 +35,8 @@ const CreateComment = async ({
       authorId: authorID,
     },
   });
+
+  return 'success';
 };
 
 export default CreateComment;
