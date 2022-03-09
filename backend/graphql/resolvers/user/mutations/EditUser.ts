@@ -1,4 +1,9 @@
+import validator from 'validator';
+
 import { UpdateProfileInput } from '../../../../../.cache/__types__';
+import { IsValidBio } from '../../../../../shared/validation/InputValidation';
+import { IsValidName } from '../../../../../shared/validation/inputValidation/ValidateName';
+import { IsValidUsername } from '../../../../../shared/validation/inputValidation/ValidateUsername';
 import RunCypherQuery from '../../../../database/RunCypherQuery';
 
 const EditUser = async (
@@ -8,11 +13,25 @@ const EditUser = async (
     firstName,
     lastName,
     email,
-    password,
     notificationSettings,
   }: UpdateProfileInput,
   id: number
 ): Promise<string> => {
+  if (username != null && !IsValidUsername(username))
+    throw new Error('Invalid username');
+
+  if (email != null && !validator.isEmail(email))
+    throw new Error('Invalid email');
+
+  console.log(firstName);
+  if (firstName != null && !IsValidName(firstName))
+    throw new Error('Invalid first name');
+
+  if (lastName != null && !IsValidName(lastName))
+    throw new Error('Invalid last name');
+
+  if (!IsValidBio(bio)) throw new Error('Invalid bio');
+
   // generate query based on variables which are not null or undefined
   const query = `MATCH (user:User)
 WHERE ID(user) = $userId
@@ -20,9 +39,7 @@ WHERE ID(user) = $userId
   ${typeof bio === 'string' ? `SET user.bio = $bio\n` : ''}
   ${typeof firstName === 'string' ? `SET user.firstName = $firstName\n` : ''}
   ${typeof lastName === 'string' ? `SET user.lastName = $lastName\n` : ''}
-  ${typeof email === 'string' ? `SET user.email = $email\n` : ''}
-  ${typeof password === 'string' ? `SET user.password = $password\n` : ''}
-  ${typeof email === 'string' ? `SET user.email = $email\n` : ''} 
+  ${typeof email === 'string' ? `SET user.email = $email\n` : ''}  
   ${
     typeof notificationSettings?.newFollower === 'boolean'
       ? 'SET user.newFollowerNotification = $newFollower'
@@ -53,7 +70,6 @@ WHERE ID(user) = $userId
       firstName,
       lastName,
       email,
-      password,
       bio,
       userId: id,
     },

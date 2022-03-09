@@ -134,29 +134,7 @@ const mutations = {
   ) => {
     OnlyLogged(context);
 
-    const user = await UserQuery({
-      id: context.decoded.id,
-    });
-
-    if (input.username) Validate(ValidateUsername(input.username));
-
-    if (input.email) Validate(ValidateEmail(input.email));
-
-    // check first name
-    if (input.firstName) {
-      const validateFirstName = ValidateName(input.firstName).error;
-      if (validateFirstName) throw new Error('First name ' + validateFirstName);
-    }
-
-    // check last name
-    if (input.lastName) {
-      const validateLastName = ValidateName(input.lastName).error;
-      if (validateLastName) throw new Error('Last name ' + validateLastName);
-    }
-
-    if (input.bio) Validate(ValidateDescription(input.bio));
-
-    return EditUser(input, context.decoded.id);
+    return await EditUser(input, context.decoded.id);
   },
 
   createComment: async (
@@ -167,12 +145,6 @@ const mutations = {
     context: contextType
   ) => {
     OnlyLogged(context);
-
-    const validateComment = ValidateComment(content).error;
-
-    if (validateComment) {
-      throw new Error(validateComment);
-    }
 
     await CreateComment({
       targetID: target,

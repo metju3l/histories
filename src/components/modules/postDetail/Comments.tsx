@@ -12,6 +12,8 @@ import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { HiPaperAirplane } from 'react-icons/hi';
 
+import { IsValidComment } from '../../../../shared/validation/InputValidation';
+
 interface PostDetailCommentSectionProps {
   post: {
     author: {
@@ -45,7 +47,6 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
   });
 
   async function OnSubmit(data: CreateCommentFormInput) {
-    console.log(data);
     try {
       await createCommentMutation({
         variables: { input: { content: data.content, target: post.id } },
@@ -92,45 +93,54 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
       {/* DESCRIPTION */}
       <p className="pb-2"> {post.description}</p>
       {/* COMMENTS */}
-      <div className="pb-2 text-gray-900 font-sm">{t('comments')}:</div>
-      {/* TBD: infinite scroll */}
-      <div className="w-full overflow-y-auto">
-        {commentsQuery.loading || commentsQuery.error ? (
-          <Loading color="black" />
-        ) : (
-          commentsQuery.data?.comments.map((comment) => {
-            return (
-              <div key={comment?.id} className="flex pb-4 gap-2">
-                <Link href={`/user/${comment?.author.username}`} passHref>
-                  <div className="relative w-10 rounded-full aspect-square">
-                    <Image
-                      src={
-                        comment?.author?.profile.startsWith('http')
-                          ? comment.author.profile
-                          : UrlPrefix + comment?.author.profile
-                      }
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded-full"
-                      alt="Profile picture"
-                    />
+      {(commentsQuery.loading ||
+        (commentsQuery.data?.comments || []).length > 0) && (
+        <>
+          <div className="pb-2 text-gray-900 font-sm">{t('comments')}:</div>
+          {/* TBD: infinite scroll */}
+          <div className="w-full overflow-y-auto">
+            {commentsQuery.loading || commentsQuery.error ? (
+              <Loading color="black" />
+            ) : (
+              commentsQuery.data?.comments.map((comment) => {
+                return (
+                  <div key={comment?.id} className="flex pb-4 gap-2">
+                    <Link href={`/user/${comment?.author.username}`} passHref>
+                      <div className="relative w-10 rounded-full aspect-square">
+                        <Image
+                          src={
+                            comment?.author?.profile.startsWith('http')
+                              ? comment.author.profile
+                              : UrlPrefix + comment?.author.profile
+                          }
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-full"
+                          alt="Profile picture"
+                        />
+                      </div>
+                    </Link>
+                    <div className="p-2 bg-gray-200 rounded-t-lg rounded-r-lg w-fit">
+                      <StringWithMentions text={comment?.content} />
+                    </div>
                   </div>
-                </Link>
-                <div className="p-2 bg-gray-200 rounded-t-lg rounded-r-lg w-fit">
-                  <StringWithMentions text={comment?.content} />
-                </div>
-              </div>
-            );
-          })
-        )}
-      </div>
+                );
+              })
+            )}
+          </div>
+        </>
+      )}
       {/* CREATE COMMENT FORM */}
       {meContext.isLoggedIn && (
         <form onSubmit={handleSubmit(OnSubmit)}>
           <Input
             register={register}
             name="content"
-            options={{ required: true }}
+            options={{
+              required: true,
+              validate: (value) => IsValidComment(value),
+              maxLength: 1000,
+            }}
             label={t('create_comment')}
             rightIcon={
               <button type="submit">

@@ -1,3 +1,4 @@
+import { IsValidComment } from '../../../../shared/validation/InputValidation';
 import RunCypherQuery from '../../../database/RunCypherQuery';
 
 const CreateComment = async ({
@@ -9,6 +10,8 @@ const CreateComment = async ({
   targetID: number;
   content: string;
 }): Promise<void> => {
+  if (!IsValidComment(content)) throw new Error('Invalid comment');
+
   const query = `
   MATCH (target),(author:User)
   WHERE target.id = $targetId

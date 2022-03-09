@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 const ValidateName = (
   name: string
 ): {
@@ -17,3 +19,13 @@ const ValidateName = (
 };
 
 export default ValidateName;
+
+export const IsValidName = (name: string): boolean => {
+  return (
+    validator.isAlphaLocales.find((locale) =>
+      validator.isAlphanumeric(name, locale)
+    ) != null &&
+    name.length > 2 &&
+    name.length < 256
+  );
+};
