@@ -8,7 +8,7 @@ const AddPostToCollection = async ({
   userId: number;
   postId: number;
   collectionId: number;
-}): Promise<void> => {
+}) => {
   const query = `
   MATCH (user:User)-[:CREATED]->(collection:Collection), (post:Post)
   WHERE ID(user) = $userId
@@ -22,6 +22,8 @@ const AddPostToCollection = async ({
     query,
     params: { userId, postId, collectionId, createdAt: new Date().getTime() },
   });
+
+  return 'success';
 };
 
 export default AddPostToCollection;

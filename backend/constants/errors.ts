@@ -7,4 +7,5 @@ export const allowedErrors = [
   'Invalid last name',
   'Invalid bio',
   'Invalid comment',
+  'Invalid coordinates',
 ];

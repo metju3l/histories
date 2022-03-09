@@ -1,5 +1,6 @@
 import sharp from 'sharp';
 import streamToPromise from 'stream-to-promise';
+import validator from 'validator';
 
 import {
   CreateCollectionInput,
@@ -11,10 +12,11 @@ import {
   ResetPasswordInput,
   UpdateProfileInput,
 } from '../../../../.cache/__types__';
+import {} from '../../../../shared/validation';
 import {
-  ValidateCoordinates,
-  ValidateDescription,
-} from '../../../../shared/validation';
+  IsValidComment,
+  IsValidHistoricalDate,
+} from '../../../../shared/validation/InputValidation';
 import UrlPrefix from '../../../../src/constants/IPFSUrlPrefix';
 import { GenerateBlurhash, NSFWCheck } from '../../../functions';
 import { UploadPhoto } from '../../../ipfs';
@@ -57,8 +59,10 @@ const mutations = {
     { input }: { input: ResetPasswordInput }
   ) => ResetPassword(input.token, input.newPassword),
 
-  login: async (_parent: undefined, { input }: { input: LoginInput }) =>
-    await Login(input),
+  login: async (
+    _parent: undefined,
+    { input }: { input: LoginInput }
+  ): Promise<Mutation['login']> => await Login(input),
 
   like: async (
     _parent: undefined,
@@ -88,13 +92,12 @@ const mutations = {
     _parent: undefined,
     { input }: { input: { collectionId: number; postId: number } },
     context: contextType
-  ) => {
+  ): Promise<Mutation['addToCollection']> => {
     OnlyLogged(context);
-    await AddPostToCollection({
+    return await AddPostToCollection({
       ...input,
       userId: context.decoded.id,
     });
-    return 0;
   },
 
   removeFromCollection: async (
@@ -208,25 +211,15 @@ const mutations = {
     OnlyLogged(context);
 
     if (
-      input.placeID == undefined &&
-      (input.latitude == undefined || input.longitude == undefined)
+      input.placeID == null &&
+      !validator.isLatLong(`${input.latitude},${input.longitude}`)
     )
-      throw new Error('You must provide a placeId or latitude and longitude');
+      throw new Error('Invalid coordinates');
 
-    if (input.placeID == undefined) {
-      // check coordinates
-      const validateCoordinates = ValidateCoordinates([
-        input.latitude!,
-        input.longitude!,
-      ]).error;
-      if (validateCoordinates) throw new Error(validateCoordinates);
-    }
+    if (input.description && !IsValidComment(input.description))
+      throw new Error('Invalid description');
 
-    // check description
-    if (input.description) {
-      const validateDescription = ValidateDescription(input.description).error;
-      if (validateDescription) throw new Error(validateDescription);
-    }
+    const historicalDate = IsValidHistoricalDate(input);
 
     // if last post / collection was created less than 10 seconds ago
     if (
@@ -300,20 +293,13 @@ const mutations = {
     const containsNSFW = photos.some((photo) => photo.containsNSFW);
 
     return await CreatePost({
-      // @ts-ignore // idk why this doesn't work
+      ...historicalDate,
       place: {
         id: input.placeID ?? null,
         latitude: input.latitude ?? null,
         longitude: input.longitude ?? null,
       },
       description: input.description ?? '',
-      startDay: input.startDay,
-      startMonth: input.startMonth,
-      startYear: input.startYear,
-      endDay: input.endDay,
-      endMonth: input.endMonth,
-      endYear: input.endYear,
-
       userID: context.decoded.id,
       nsfw: containsNSFW,
       photos,
