@@ -148,7 +148,7 @@ const Map: React.FC = () => {
       </div>
 
       {/* TIME LINE */}
-      <div className="absolute left-4 z-20 h-full px-8 bottom-12 max-h-[60vh]">
+      <div className="absolute z-20 h-full px-8 left-4 bottom-12 max-h-[60vh]">
         <TimeLine />
       </div>
     </>

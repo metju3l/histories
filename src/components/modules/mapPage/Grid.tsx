@@ -17,11 +17,14 @@ const MapPageGrid: React.FC = () => {
       <AnimatePresence>
         {/* MAIN GRID */}
         <motion.section
-          className={`w-full h-full grid ${
-            mapContext.showSidebar
-              ? 'grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1'
-              : 'grid-cols-1 grid-rows-1'
-          } `}
+          initial={{
+            gridTemplateColumns: '50% 50%',
+          }}
+          animate={{
+            gridTemplateColumns: mapContext.showSidebar ? '50% 50%' : '100% 0%',
+          }}
+          transition={{ duration: 0.2, ease: 'easeInOut' }}
+          className={`w-full h-full grid grid-rows-1 ${''} `}
         >
           {/* LEFT PANEL */}
           <div className="relative w-full h-full p-2 col-span-1">

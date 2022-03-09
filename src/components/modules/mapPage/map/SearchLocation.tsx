@@ -1,11 +1,6 @@
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxList,
-  ComboboxOption,
-  ComboboxPopover,
-} from '@reach/combobox';
+import { Combobox, ComboboxInput, ComboboxOption } from '@reach/combobox';
 import { IViewport } from '@src/types/map';
+import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HiSearch } from 'react-icons/hi';
@@ -71,21 +66,25 @@ const SearchLocation: React.FC<SearchLocationProps> = ({
         </button>
       </div>
       {/* SEARCH RESULTS */}
-      {showList && (
-        <ComboboxPopover portal={false} onClick={() => setShowList(false)}>
-          <ComboboxList className="w-full">
-            {status === 'OK' &&
-              data.map(({ place_id, description }) => (
-                <ComboboxOption
-                  className="px-2 py-1 rounded-lg cursor-pointer hover:bg-[#242526] hover:text-white"
-                  key={place_id}
-                  value={description}
-                  draggable={false}
-                />
-              ))}
-          </ComboboxList>
-        </ComboboxPopover>
-      )}
+      <motion.div
+        initial={{ height: 0 }}
+        animate={{ height: data.length > 0 && showList ? 'auto' : 0 }}
+        exit={{ height: 0 }}
+        transition={{ duration: 0.2, ease: 'easeInOut' }}
+        className="flex flex-col w-full overflow-y-hidden divide-y"
+      >
+        {status === 'OK' &&
+          data.map(({ place_id, description }) => (
+            <div key={place_id} className="py-0.5">
+              <ComboboxOption
+                key={place_id}
+                className="px-2 text-black list-none rounded-lg cursor-pointer py-1.5 hover:bg-blue-500 hover:text-white"
+                value={description}
+                draggable={false}
+              />
+            </div>
+          ))}
+      </motion.div>
     </Combobox>
   );
 };

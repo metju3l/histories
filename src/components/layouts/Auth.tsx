@@ -16,8 +16,8 @@ const AuthLayout: React.FC<IAuthLayoutProps> = ({
 }) => {
   return (
     <Main head={head} background="bg-[#C9DEFF]">
-      <section className="px-4 sm:px-8 py-6 m-auto max-w-[28rem] bg-white rounded-2xl shadow-lg mt-24">
-        <h1 className="font-bold text-3xl pb-3">{heading}</h1>
+      <section className="px-4 py-6 m-auto mt-24 bg-white shadow-lg sm:px-8 max-w-[28rem] rounded-2xl">
+        <h1 className="pb-3 text-3xl font-bold">{heading}</h1>
         {children}
       </section>
     </Main>
