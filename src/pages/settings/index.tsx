@@ -37,7 +37,6 @@ const Account: React.FC<{
     register,
     handleSubmit,
     formState: {},
-    setValue,
   } = useForm<EditProfileInput>({
     defaultValues: me,
   });

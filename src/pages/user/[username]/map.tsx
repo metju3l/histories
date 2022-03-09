@@ -80,7 +80,7 @@ const UserMapPage: React.FC<{
           zoom={viewport.zoom}
           width="100%"
           height="100%"
-          className="rounded-lg relative"
+          className="relative rounded-lg"
           mapStyle={GetMapStyle(mapStyle, resolvedTheme)}
           mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
           onViewportChange={setViewport}

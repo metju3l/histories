@@ -293,7 +293,12 @@ const mutations = {
     const containsNSFW = photos.some((photo) => photo.containsNSFW);
 
     return await CreatePost({
-      ...historicalDate,
+      startDay: historicalDate.startDay,
+      startMonth: historicalDate.startMonth,
+      startYear: historicalDate.startYear,
+      endDay: historicalDate.endDay,
+      endMonth: historicalDate.endMonth,
+      endYear: historicalDate.endYear,
       place: {
         id: input.placeID ?? null,
         latitude: input.latitude ?? null,

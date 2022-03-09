@@ -100,9 +100,7 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
   // months
   let months: string[] = [];
   for (let i = 1; i <= 12; i++) {
-    months.push(
-      new Date(0, i, 0).toLocaleString(navigator.language, { month: 'long' })
-    );
+    months.push(new Date(0, i, 0).toLocaleString('en', { month: 'long' }));
   }
 
   // for reading coordinates from query params

@@ -27,6 +27,8 @@ const apolloServer = new ApolloServer({
     }
   },
   formatError: (error) => {
+    console.log(error);
+
     return allowedErrors.includes(error.message)
       ? new Error(error.message)
       : new Error('Unknown error');
