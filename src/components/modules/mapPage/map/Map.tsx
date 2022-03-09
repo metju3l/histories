@@ -9,7 +9,13 @@ import { useTheme } from 'next-themes';
 import React, { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
-import ReactMapGL, { ExtraState, MapEvent, MapRef } from 'react-map-gl';
+import ReactMapGL, {
+  ExtraState,
+  GeolocateControl,
+  MapEvent,
+  MapRef,
+  NavigationControl,
+} from 'react-map-gl';
 
 import { Maybe } from '../../../../../.cache/__types__';
 import { FetchMore, MapStyleMenu, SearchLocation } from './index';
@@ -40,12 +46,7 @@ const Map: React.FC = () => {
         maxYear: mapContext.timeLimitation[1],
       },
     });
-  }, [
-    mapContext.bounds,
-    mapContext.sidebarPlace,
-    mapContext.timeLimitation,
-    mapContext.timeLimitation,
-  ]);
+  }, [mapContext.bounds, mapContext.sidebarPlace, mapContext.timeLimitation]);
 
   return (
     <>
@@ -87,6 +88,21 @@ const Map: React.FC = () => {
       >
         {/* CLUSTERS AND PLACES ON MAP */}
         <Clusters mapRef={mapRef} />
+
+        <GeolocateControl
+          style={{
+            bottom: 116,
+            right: 10,
+          }}
+          positionOptions={{ enableHighAccuracy: true }}
+        />
+        <NavigationControl
+          style={{
+            bottom: 48,
+            right: 10,
+          }}
+          showCompass={false}
+        />
       </ReactMapGL>
 
       {/* CONTEXT MENU */}
@@ -148,7 +164,7 @@ const Map: React.FC = () => {
       </div>
 
       {/* TIME LINE */}
-      <div className="absolute z-20 h-full left-8 bottom-12 max-h-[60vh]">
+      <div className="absolute z-20 h-full left-8 bottom-4 max-h-[60vh]">
         <TimeLine />
       </div>
     </>

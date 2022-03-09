@@ -75,15 +75,14 @@ const UserMapPage: React.FC<{
           </Card>
         )}
         <ReactMapGL
-          {...viewport}
-          {...{
-            width: '100%',
-            height: '100%',
-            className: 'rounded-lg relative',
-            // default map style by theme
-            mapStyle: GetMapStyle(mapStyle, resolvedTheme),
-            mapboxApiAccessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN, // MAPBOX API ACCESS TOKEN
-          }}
+          latitude={viewport.latitude}
+          longitude={viewport.longitude}
+          zoom={viewport.zoom}
+          width="100%"
+          height="100%"
+          className="rounded-lg relative"
+          mapStyle={GetMapStyle(mapStyle, resolvedTheme)}
+          mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
           onViewportChange={setViewport}
         >
           {

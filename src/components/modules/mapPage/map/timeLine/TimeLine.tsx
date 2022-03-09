@@ -1,7 +1,8 @@
 import { MapContext } from '@src/contexts/MapContext';
 import React from 'react';
 import { Handles, Rail, Slider, Tracks } from 'react-compound-slider';
-import { minYearConstant } from 'shared/constants/constants';
+
+import { minYearConstant } from '../../../../../../shared/constants/constants';
 
 const TimeLine: React.FC = ({}) => {
   const mapContext = React.useContext(MapContext);

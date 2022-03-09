@@ -177,15 +177,12 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
     handleSubmit,
     formState: {},
     setValue,
-
     watch,
   } = useForm<ICreatePostInput>();
 
   const { t } = useTranslation();
   if (loading) return <div>loading xxx</div>;
   if (error) return <div>error</div>;
-
-  if (data?.me === null) router.replace('/');
 
   const onSubmit: SubmitHandler<ICreatePostInput> = async (data) => {
     setIsLoading(true);
@@ -210,15 +207,11 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
             endMonth: data?.endMonth ? parseInt(data.endMonth) : null,
             endDay: data?.endDay ? parseInt(data.endDay) : null,
           };
-
-    console.log(date);
-
     try {
       await createPostMutation({
         variables: {
           input: {
             ...date,
-
             placeID,
             description: data.description,
             latitude: viewport.latitude,
@@ -227,6 +220,7 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
           },
         },
       });
+      toast.success(t('post_created'));
       router.push('/');
     } catch (error) {
       toast.error(t('create_post_error'));
@@ -292,7 +286,9 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
                   </div>
                   {!collapsed && (
                     <MapGL
-                      {...viewport}
+                      latitude={viewport.latitude}
+                      longitude={viewport.longitude}
+                      zoom={viewport.zoom}
                       width="100%"
                       height="100%"
                       className="rounded-xl"
