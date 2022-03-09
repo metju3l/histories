@@ -26,9 +26,11 @@ const TimeLine: React.FC = ({}) => {
       <Rail>
         {({ getRailProps }) => (
           <div
-            className="absolute w-2 h-full bg-white border border-gray-400 rounded -translate-x-1/2"
+            className="absolute h-full px-4 py-4 bg-white rounded shadow -translate-x-1/2"
             {...getRailProps()}
-          />
+          >
+            <div className="h-full border border-gray-400" />
+          </div>
         )}
       </Rail>
       <Handles>
@@ -37,7 +39,7 @@ const TimeLine: React.FC = ({}) => {
             {handles.map(({ id, value, percent }) => (
               <div
                 key={id}
-                className={`absolute px-2 cursor-pointer py-1 border border-gray-400 bg-white text-xs rounded-xl -translate-x-1/2 z-20 font-bold text-indigo-500`}
+                className={`absolute px-2 cursor-pointer py-1 bg-white text-xs rounded shadow border border-gray-300 -translate-x-1/2 -translate-y-1/2 z-20 font-bold text-indigo-500`}
                 style={{
                   top: `${percent}%`,
                 }}
