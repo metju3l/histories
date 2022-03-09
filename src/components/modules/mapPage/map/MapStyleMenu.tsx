@@ -23,7 +23,8 @@ const MapStyleMenu: React.FC<IMapStyleMenu> = ({ viewport, setMapStyle }) => {
         as="div"
         className="absolute right-0 z-50 flex flex-row p-2 bg-white border border-gray-200 rounded-lg gap-2 -mt-9 transform -translate-y-full dark:bg-gray-900 focus:outline-none dark:border-gray-800 truncated"
       >
-        <button
+        <Menu.Item
+          as="button"
           className="block w-20 h-20 rounded"
           onClick={() => setMapStyle('light')}
         >
@@ -38,8 +39,12 @@ const MapStyleMenu: React.FC<IMapStyleMenu> = ({ viewport, setMapStyle }) => {
             mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
             mapStyle={Light}
           />
-        </button>
-        <button className="block w-20 h-20" onClick={() => setMapStyle('dark')}>
+        </Menu.Item>
+        <Menu.Item
+          as="button"
+          className="block w-20 h-20"
+          onClick={() => setMapStyle('dark')}
+        >
           <ReactMapGL
             {...{
               ...viewport,
@@ -51,8 +56,9 @@ const MapStyleMenu: React.FC<IMapStyleMenu> = ({ viewport, setMapStyle }) => {
             mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
             mapStyle={Dark}
           />
-        </button>
-        <button
+        </Menu.Item>
+        <Menu.Item
+          as="button"
           className="block w-20 h-20"
           onClick={() => setMapStyle('satellite')}
         >
@@ -67,7 +73,7 @@ const MapStyleMenu: React.FC<IMapStyleMenu> = ({ viewport, setMapStyle }) => {
             mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN} // MAPBOX API ACCESS TOKEN
             mapStyle={Satellite}
           />
-        </button>
+        </Menu.Item>
       </Menu.Items>
     </Menu>
   );

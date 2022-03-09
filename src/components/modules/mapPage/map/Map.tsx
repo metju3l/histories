@@ -140,7 +140,7 @@ const Map: React.FC = () => {
       </div>
 
       {/* MAP STYLE */}
-      <div className="absolute z-40 right-2 bottom-2">
+      <div className="absolute z-40 right-4 bottom-4">
         <MapStyleMenu
           setMapStyle={setMapStyle}
           viewport={mapContext.viewport}
@@ -148,7 +148,7 @@ const Map: React.FC = () => {
       </div>
 
       {/* TIME LINE */}
-      <div className="absolute z-20 h-full px-8 left-4 bottom-12 max-h-[60vh]">
+      <div className="absolute z-20 h-full left-8 bottom-12 max-h-[60vh]">
         <TimeLine />
       </div>
     </>

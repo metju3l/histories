@@ -12,7 +12,7 @@ const RightPanel: React.FC = () => {
   const [sortBy, setSortBy] = useState('Hot');
 
   return mapContext.showSidebar ? (
-    <div className="relative w-full h-full overflow-y-auto">
+    <div className="relative hidden w-0 h-0 overflow-y-auto md:w-full md:h-full md:block">
       {!mapContext.sidebarPlace && (
         <SubNav sortBy={sortBy} setSortBy={setSortBy} />
       )}

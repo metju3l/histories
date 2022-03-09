@@ -29,16 +29,15 @@ const Marker: React.FC<MarkerProps> = ({ place, onClick, numberOfPlaces }) => {
     <MapGLMarker latitude={place.latitude} longitude={place.longitude}>
       <div className="relative">
         <div
-          className={`absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-2 
+          className={`absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full 
               ${hasIcon ? 'w-24 h-24' : 'w-16 h-16'}
               ${
-                hasIcon
-                  ? 'border-transparent'
-                  : mapContext.hoverPlaceId === place.id && !loadingImage
+                !loadingImage ? 'border-2' : '' // don't show border when showing placeholder icon
+              }
+              ${
+                !hasIcon && mapContext.hoverPlaceId === place.id
                   ? 'border-brand'
-                  : !loadingImage
-                  ? 'border-white'
-                  : ''
+                  : 'border-white'
               }`}
           onMouseEnter={() =>
             !place.isCluster && mapContext.setHoverPlaceId(place.id)

@@ -12,7 +12,7 @@ const MapPageGrid: React.FC = () => {
   return (
     <div
       className="w-full bg-[#FAFBFB] dark:bg-[#171716]"
-      style={{ height: 'calc(100vh - 76px)' }}
+      style={{ height: 'calc(100vh - 56px)' }}
     >
       <AnimatePresence>
         {/* MAIN GRID */}
@@ -27,11 +27,11 @@ const MapPageGrid: React.FC = () => {
           className={`w-full h-full grid grid-rows-1 ${''} `}
         >
           {/* LEFT PANEL */}
-          <div className="relative w-full h-full p-2 col-span-1">
+          <div className="relative w-full h-full p-2 col-span-2 md:col-span-1">
             {/* HIDE SIDEBAR ARROW ICON */}
             <button
               onClick={() => mapContext.setShowSidebar(!mapContext.showSidebar)}
-              className="absolute z-40 flex items-center h-8 py-1 text-gray-500 bg-white border border-gray-200 top-4 right-4 hover:text-black hover:border-gray-400 rounded-xl"
+              className="absolute z-40 flex items-center invisible h-8 py-1 text-gray-500 bg-white border border-gray-200 top-4 right-4 hover:text-black hover:border-gray-400 rounded-xl md:visible"
             >
               <HiOutlineChevronLeft
                 className={`w-8 py-1 h-8 transition-all duration-500 ease-in-out ${

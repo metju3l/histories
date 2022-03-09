@@ -32,9 +32,11 @@ const Navbar: React.FC = () => {
         {/* LEFT SIDE */}
         <span className="flex items-center h-full gap-2">
           {/* SEARCH */}
+          <HiSearch className="block w-5 h-5 text-gray-600 md:hidden" />
+
           <form
             action="/search"
-            className="relative flex items-center w-full px-4 bg-white border border-gray-300 max-w-[240px] rounded-xl gap-2"
+            className="relative items-center hidden w-full px-4 bg-white border border-gray-300 max-w-[240px] rounded-xl gap-2 md:flex"
           >
             {/* SEARCH ICON */}
             <button type="submit">
