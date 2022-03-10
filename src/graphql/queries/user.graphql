@@ -65,6 +65,7 @@ query Me {
     username
     email
     hasPassword
+    isAdmin
     collections {
       id
       name

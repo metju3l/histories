@@ -22,6 +22,7 @@ async function RegisterWithGooge(googleJWT: string) {
       createdAt: $createdAt,
       verified: true, 
       locale: $locale,
+      isAdmin: false,
       newFollowerNotification: true,
       followingPlacePostNotification: true,
       followingUserPostNotification: true,

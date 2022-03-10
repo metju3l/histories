@@ -1,0 +1,3 @@
+mutation editPlace($input: EditPlaceInput!) {
+  editPlace(input: $input)
+}

@@ -7,6 +7,7 @@ import {
   CreateCommentInput,
   CreatePostInput,
   CreateUserInput,
+  EditPlaceInput,
   LoginInput,
   Mutation,
   ResetPasswordInput,
@@ -41,6 +42,7 @@ import {
   VerifyToken,
 } from '../../resolvers';
 import LastPost from '../../resolvers/lastPost';
+import EditPlaceMutation from '../../resolvers/place/mutations/EditPlaceMutation';
 import ForgotPassword from '../../resolvers/user/mutations/ForgotPassword';
 import ResetPassword from '../../resolvers/user/mutations/ResetPassword';
 import { contextType, OnlyLogged } from './resolvers';
@@ -354,6 +356,21 @@ const mutations = {
     if (context.decoded.id == userID)
       throw new Error('You cannot unfollow yourself');
     return Unfollow(context.decoded.id, userID);
+  },
+
+  editPlace: async (
+    _parent: undefined,
+    { input }: { input: EditPlaceInput },
+    context: contextType
+  ) => {
+    OnlyLogged(context);
+
+    return await EditPlaceMutation({
+      userId: context.decoded.id,
+      placeId: input.id,
+      name: input.name || '',
+      description: input.description || '',
+    });
   },
 };
 

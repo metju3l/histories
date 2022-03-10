@@ -65,6 +65,14 @@ export default gql`
     createComment(input: CreateCommentInput!): String!
     addToCollection(input: AddToCollectionInput!): String!
     removeFromCollection(input: AddToCollectionInput!): String!
+
+    editPlace(input: EditPlaceInput!): String!
+  }
+
+  input EditPlaceInput {
+    id: Int!
+    name: String
+    description: String
   }
 
   input SearchInput {
@@ -206,6 +214,7 @@ export default gql`
     liked: Boolean!
     place: Place!
     comments: [Comment]!
+    nsfw: Boolean!
 
     startDay: Int
     startMonth: Int
@@ -304,6 +313,7 @@ export default gql`
     followingCount: Int!
     postCount: Int!
     id: Float!
+    isAdmin: Boolean!
     hasPassword: Boolean!
     following: [User!]
     followers: [User!]

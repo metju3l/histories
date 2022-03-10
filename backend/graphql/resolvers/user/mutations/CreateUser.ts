@@ -57,6 +57,7 @@ const CreateUser = async ({
     profileBlurhash: "",
     
     locale: $locale,
+    isAdmin: false,
     
     newFollowerNotification: $notifications,
     followingPlacePostNotification: $notifications,
