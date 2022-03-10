@@ -94,14 +94,12 @@ const PostsPage: React.FC<{
             loading ? postsTmp.data?.posts.length ?? 0 : data!.posts.length
           } //This is important field to render the next data
           next={() => {
-            if (loading) return;
-
             fetchMore({
               variables: {
                 input: {
                   filter: {
                     authorUsername: user.username,
-                    skip: data!.posts.length,
+                    skip: data?.posts.length || 0,
                     take: 10,
                   },
                 },
@@ -117,7 +115,7 @@ const PostsPage: React.FC<{
               },
             });
           }}
-          hasMore={loading ? false : (data?.posts.length ?? 1) % 10 === 0}
+          hasMore={(data?.posts.length ?? 1) % 10 !== 0}
           loader={
             <p style={{ textAlign: 'center' }}>
               <b>loading</b>

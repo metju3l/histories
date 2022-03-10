@@ -220,6 +220,7 @@ const mutations = {
       throw new Error('Invalid description');
 
     const historicalDate = IsValidHistoricalDate(input);
+    console.log(historicalDate);
 
     // if last post / collection was created less than 10 seconds ago
     if (

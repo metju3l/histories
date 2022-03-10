@@ -1,5 +1,3 @@
-import neo4j from 'neo4j-driver';
-
 import { Maybe, PostsFilter } from '../../../../.cache/__types__';
 import RunCypherQuery from '../../../database/RunCypherQuery';
 
@@ -71,11 +69,15 @@ WITH post{.*,
         latitude: place.location.latitude,  // latitude
         longitude: place.location.longitude // longitude
     }
-} AS postObject 
-SKIP $skip
-LIMIT $take
+} AS postObject
 
-RETURN COLLECT(DISTINCT postObject) AS posts
+RETURN COLLECT(DISTINCT postObject)${
+    filter?.skip != null || filter?.take != null
+      ? `[${filter?.skip != null ? filter.skip : ''}..${
+          filter?.take != null ? filter?.skip || 0 + filter.take : ''
+        }]`
+      : ''
+  } AS posts
 `;
 
   const [result] = await RunCypherQuery({
@@ -88,8 +90,6 @@ RETURN COLLECT(DISTINCT postObject) AS posts
       maxLongitude: filter?.maxLongitude ?? null,
       minDate: filter?.minDate ?? null,
       maxDate: filter?.maxDate ?? null,
-      skip: neo4j.int(filter?.skip ?? 0),
-      take: neo4j.int(filter?.take ?? 5000),
       radius: filter?.radius ?? null,
       loggedId,
       authorId: filter?.authorId ?? null,

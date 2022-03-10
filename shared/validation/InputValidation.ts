@@ -53,7 +53,7 @@ export const IsValidHistoricalDate = ({
   if (
     (startMonth != null && (startMonth < 1 || startMonth > 12)) ||
     startYear < minYearConstant ||
-    startYear >= new Date().getFullYear()
+    startYear > new Date().getFullYear()
   )
     throw new Error('Invalid date');
 
@@ -67,19 +67,19 @@ export const IsValidHistoricalDate = ({
 
   if (
     newStartDay != null &&
-    isNaN(new Date(`${startDay}-${startMonth}-${startYear}`).valueOf())
+    isNaN(new Date(`${startMonth}-${startDay}-${startYear}`).valueOf())
   )
     throw new Error('Invalid date');
 
   if (
     newEndDay != null &&
-    isNaN(new Date(`${endDay}-${endMonth}-${endYear}`).valueOf())
+    isNaN(new Date(`${endMonth}-${endDay}-${endYear}`).valueOf())
   )
     throw new Error('Invalid date');
 
   if (
-    new Date(`${startDay}-${startMonth}-${startYear}`) >
-    new Date(`${endDay}-${endMonth}-${endYear}`)
+    new Date(`${startMonth}-${startDay}-${startYear}`) >
+    new Date(`${endMonth}-${endDay}-${endYear}`)
   )
     return {
       startDay: newEndDay,
