@@ -13,7 +13,7 @@ export const IsValidComment = (comment: string): boolean => {
 export const IsValidUsername = (username: string): boolean => {
   return (
     validator.isAlphanumeric(username) &&
-    username.length > 2 &&
+    username.length >= 1 &&
     username.length < 256
   );
 };

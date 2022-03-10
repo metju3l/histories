@@ -1,6 +1,6 @@
 import { Button, Input } from '@components/elements';
 import GoogleAuthButton from '@components/elements/buttons/GoogleAuth';
-import RegisterFormInputs from '@src/types/forms/registerFormInputs';
+import { RegisterFormInputs } from '@src/pages/register';
 import Link from 'next/link';
 import React from 'react';
 import { UseFormRegister } from 'react-hook-form';
@@ -26,14 +26,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           label={t('first_name')}
           register={register}
           name="firstName"
-          options={{ required: true, maxLength: 50 }}
+          options={{ required: true, maxLength: 256 }}
           autoComplete="given-name"
         />
         <Input
           label={t('last_name')}
           register={register}
           name="lastName"
-          options={{ required: true, maxLength: 50 }}
+          options={{ maxLength: 256 }}
           autoComplete="family-name"
         />
       </div>
@@ -42,7 +42,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         label={t('username')}
         register={register}
         name="username"
-        options={{ required: true, minLength: 3, maxLength: 50 }}
+        options={{ required: true, maxLength: 256 }}
         autoComplete="username"
       />
 
@@ -60,7 +60,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         name="password"
         type="password"
         options={{ required: true, minLength: 8 }}
-        autoComplete="new-password"
       />
 
       <Input
@@ -68,7 +67,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         register={register}
         name="repeatPassword"
         type="password"
-        options={{ required: true, minLength: 8 }}
+        options={{
+          required: true,
+          minLength: 8,
+        }}
         autoComplete="new-password"
       />
 

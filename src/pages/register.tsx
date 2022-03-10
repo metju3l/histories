@@ -2,13 +2,22 @@ import AuthLayout from '@components/layouts/Auth';
 import RegisterForm from '@components/modules/forms/RegisterForm';
 import { useCreateUserMutation } from '@graphql/mutations/auth.graphql';
 import { RedirectLogged } from '@src/functions/ServerSideProps';
-import RegisterFormInputs from '@src/types/forms/registerFormInputs';
 import Cookie from 'js-cookie';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+
+export interface RegisterFormInputs {
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  password: string;
+  repeatPassword: string;
+  notifications: boolean;
+}
 
 const Register: React.FC = () => {
   const [createAccount] = useCreateUserMutation(); // create new user mutation
@@ -18,6 +27,7 @@ const Register: React.FC = () => {
     register,
     handleSubmit,
     formState: {},
+    watch,
   } = useForm<RegisterFormInputs>();
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {

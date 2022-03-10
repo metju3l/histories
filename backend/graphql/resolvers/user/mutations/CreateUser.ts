@@ -29,7 +29,7 @@ const CreateUser = async ({
   if (lastName != null && !IsValidName(lastName))
     throw new Error('Invalid last name');
 
-  if (password.length >= 8) throw new Error('Invalid password');
+  if (password.length < 8) throw new Error('Invalid password');
 
   // generate password hash
   const hashedPassword = await hash(
