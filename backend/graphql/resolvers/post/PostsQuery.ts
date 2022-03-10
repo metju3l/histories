@@ -28,18 +28,12 @@ OPTIONAL MATCH(logged:User {id: loggedID}) // optionally match logged use
 
 // post author followers and following and likes
 CALL {
-    WITH post
-    OPTIONAL MATCH (author)-[:FOLLOW]->(following:User)  // match users who are followed by author
-    OPTIONAL MATCH (follower:User)-[:FOLLOW]->(author)  // match users who follow author
+    WITH post 
     OPTIONAL MATCH (userLiked:User)-[:LIKE]->(post)  // match users who liked post
     OPTIONAL MATCH (commentAuthor:User)-[:CREATED]->(comment:Comment)-[:BELONGS_TO]->(post)  // match comments of post
 
-    RETURN  following,
-            follower,
-            COUNT(follower) AS followerCount,
-            COUNT(following) AS followingCount,
-            COLLECT(DISTINCT userLiked{.*}) AS likes,
-            COUNT(userLiked) AS likeCount,  // return number
+    RETURN  COLLECT(DISTINCT userLiked{.*}) AS likes,
+            COUNT(DISTINCT userLiked) AS likeCount,  // return number
             COUNT(comment) AS commentCount,  // return number
             COLLECT(DISTINCT comment{.*, author: commentAuthor{.*}}) AS comments
 }    
@@ -59,10 +53,8 @@ WITH post{.*,
                     THEN false                              // when there is no logged user return false
                     ELSE EXISTS((logged)-[:LIKE]->(post))   // check if exists :LIKE relation
             END,
-    followerCount,
-    followingCount,
     commentCount,   // number of comments on post
-    comments,
+    // comments,
     author: author{.*}, // author object
     photos, // post photos array
     place: place{.*,

@@ -113,7 +113,6 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
 
   const [timeSelectMode, setTimeSelectMode] = useState<number>(0);
 
-  const [events, logEvents] = useState({});
   const [tags, setTags] = useState<Array<string>>([]);
   const [newTag, setNewTag] = useState<string>('');
   const [searchCoordinates, setSearchCoordinates] = useState({
@@ -174,7 +173,6 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
     register,
     handleSubmit,
     formState: {},
-    setValue,
     watch,
   } = useForm<ICreatePostInput>();
 

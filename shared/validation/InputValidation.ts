@@ -61,7 +61,7 @@ export const IsValidHistoricalDate = ({
   if (
     (endMonth != null && (endMonth < 1 || endMonth > 12)) ||
     endYear < minYearConstant ||
-    endYear >= new Date().getFullYear()
+    endYear > new Date().getFullYear()
   )
     throw new Error('Invalid date');
 

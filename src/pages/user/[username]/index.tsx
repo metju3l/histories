@@ -40,17 +40,20 @@ const PostsPage: React.FC<{
 }> = ({ userQuery, posts: postsTmp }) => {
   const user = userQuery.user;
 
-  const { data, loading, refetch, fetchMore } = usePostsQuery({
+  const { data, loading, refetch, fetchMore, error } = usePostsQuery({
     variables: {
       input: {
         filter: {
           authorUsername: user.username,
           skip: 0,
-          take: 10,
+          take: 20,
         },
       },
     },
   });
+
+  if (loading) return <div>post loading</div>;
+  if (error) return <div>{JSON.stringify(error)}</div>;
 
   return (
     <UserLayout
@@ -90,9 +93,7 @@ const PostsPage: React.FC<{
           </Link>
         </div>
         <InfiniteScroll
-          dataLength={
-            loading ? postsTmp.data?.posts.length ?? 0 : data!.posts.length
-          } //This is important field to render the next data
+          dataLength={data!.posts.length} //This is important field to render the next data
           next={() => {
             fetchMore({
               variables: {
@@ -100,7 +101,7 @@ const PostsPage: React.FC<{
                   filter: {
                     authorUsername: user.username,
                     skip: data?.posts.length || 0,
-                    take: 10,
+                    take: 20,
                   },
                 },
               },
@@ -115,24 +116,21 @@ const PostsPage: React.FC<{
               },
             });
           }}
-          hasMore={(data?.posts.length ?? 1) % 10 !== 0}
+          hasMore={(data?.posts.length ?? 1) % 20 == 0}
           loader={
             <p style={{ textAlign: 'center' }}>
               <b>loading</b>
             </p>
           }
-          refreshFunction={async () => {
-            await refetch();
-          }}
+          refreshFunction={async () => await refetch()}
         >
           {loading
             ? postsTmp.data?.posts.map((post) => (
                 <Post {...post} key={post.id} photos={post.photos} />
               ))
-            : data?.posts.map((post) => {
-                console.log(post);
-                return <Post {...post} key={post.id} photos={post.photos} />;
-              })}
+            : data?.posts.map((post) => (
+                <Post {...post} key={post.id} photos={post.photos} />
+              ))}
           {data?.posts.length == 0 && (
             <Card>
               <div>

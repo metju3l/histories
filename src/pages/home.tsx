@@ -9,10 +9,7 @@ const Index: React.FC = () => {
   const logged = useMeQuery();
 
   if (logged.loading) return <div>loading</div>;
-  if (logged.error) {
-    console.log(logged.error);
-    return <div>logged error</div>;
-  }
+  if (logged.error) return <div>logged error</div>;
 
   return (
     <Layout
@@ -61,7 +58,7 @@ const PersonalizedPosts = () => {
       dataLength={data!.personalizedPosts.length} //This is important field to render the next data
       next={() => {
         fetchMore({
-          variables: { skip: data!.personalizedPosts.length, take: 75 },
+          variables: { skip: data!.personalizedPosts.length, take: 20 },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             return {
               ...previousResult,
@@ -73,7 +70,7 @@ const PersonalizedPosts = () => {
           },
         });
       }}
-      hasMore={(data?.personalizedPosts.length ?? 1) % 10 === 0}
+      hasMore={(data?.personalizedPosts.length ?? 1) % 20 === 0}
       loader={
         <p style={{ textAlign: 'center' }}>
           <b>loading</b>

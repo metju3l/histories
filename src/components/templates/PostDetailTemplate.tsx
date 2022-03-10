@@ -84,15 +84,26 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
         place={post.place}
       />
 
-      <div className="grid grid-cols-[1fr_15rem_auto]">
+      <div className="grid grid-cols-[60%_auto]">
         {/* ROW 1 */}
         <div className="flex items-center col-span-full gap-2 col-start-1">
           {/* CALENDAR */}
-          <Link href="#" passHref>
-            <Tooltip text={t('see_posts_from_this_time_period')}>
+          <Tooltip text={t('see_posts_from_this_time_period')}>
+            <Link
+              href={`/?lat=49.3268&lng=15.2991&zoom=6.1771&minYear=${
+                post.startYear === post.endYear
+                  ? post.endYear - 20
+                  : post.startYear
+              }&maxYear=${
+                post.startYear === post.endYear
+                  ? post.endYear + 20
+                  : post.endYear
+              }&place=${post.place.id}`}
+              passHref
+            >
               <HiOutlineCalendar />
-            </Tooltip>
-          </Link>
+            </Link>
+          </Tooltip>
           {/* PHOTO DATE */}
           <span>
             {post.startDay && `${post.startDay}. `}
@@ -136,7 +147,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
           <Image
             src={UrlPrefix + post.photos[currentPhoto].hash}
             layout="fill"
-            objectFit="cover"
+            objectFit="contain"
             className="rounded-xl"
             alt="post image"
           />
@@ -214,39 +225,41 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
             </span>
           </div>
           {/* NEXT AND PREVIOUS POST */}
-          <div className="flex items-center">
-            {/* LEFT ARROW */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                if (currentPhoto > 0) setCurrentPhoto(currentPhoto - 1);
-              }}
-            >
-              <HiArrowSmLeft
-                className={`w-6 h-6 ${
-                  currentPhoto === 0 ? 'text-gray-400' : 'text-black'
-                }`}
-              />
-            </motion.button>
-            {/* POST INDEX */}
-            {currentPhoto + 1} / {post.photos.length}
-            {/* RIGHT ARROW */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                if (currentPhoto + 1 < post.photos.length)
-                  setCurrentPhoto(currentPhoto + 1);
-              }}
-            >
-              <HiArrowSmRight
-                className={`w-6 h-6 ${
-                  currentPhoto + 1 === post.photos.length
-                    ? 'text-gray-400'
-                    : 'text-black'
-                }`}
-              />
-            </motion.button>
-          </div>
+          {post.photos.length > 1 && (
+            <div className="flex items-center">
+              {/* LEFT ARROW */}
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  if (currentPhoto > 0) setCurrentPhoto(currentPhoto - 1);
+                }}
+              >
+                <HiArrowSmLeft
+                  className={`w-6 h-6 ${
+                    currentPhoto === 0 ? 'text-gray-400' : 'text-black'
+                  }`}
+                />
+              </motion.button>
+              {/* POST INDEX */}
+              {currentPhoto + 1} / {post.photos.length}
+              {/* RIGHT ARROW */}
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  if (currentPhoto + 1 < post.photos.length)
+                    setCurrentPhoto(currentPhoto + 1);
+                }}
+              >
+                <HiArrowSmRight
+                  className={`w-6 h-6 ${
+                    currentPhoto + 1 === post.photos.length
+                      ? 'text-gray-400'
+                      : 'text-black'
+                  }`}
+                />
+              </motion.button>
+            </div>
+          )}
           <span />
         </div>
       </div>

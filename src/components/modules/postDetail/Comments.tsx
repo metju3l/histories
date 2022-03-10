@@ -104,9 +104,9 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
             ) : (
               commentsQuery.data?.comments.map((comment) => {
                 return (
-                  <div key={comment?.id} className="flex pb-4 gap-2">
+                  <div key={comment?.id} className="flex items-end pb-4 gap-2">
                     <Link href={`/user/${comment?.author.username}`} passHref>
-                      <div className="relative w-10 rounded-full aspect-square">
+                      <div className="relative w-10 h-10 rounded-full aspect-square">
                         <Image
                           src={
                             comment?.author?.profile.startsWith('http')
@@ -120,7 +120,7 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
                         />
                       </div>
                     </Link>
-                    <div className="p-2 bg-gray-200 rounded-t-lg rounded-r-lg w-fit">
+                    <div className="p-2 break-all bg-gray-200 rounded-t-lg rounded-r-lg w-fit">
                       <StringWithMentions text={comment?.content} />
                     </div>
                   </div>
