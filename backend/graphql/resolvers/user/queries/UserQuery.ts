@@ -1,4 +1,4 @@
-import { ValidateUsername } from '../../../../../shared/validation';
+import { IsValidUsername } from '../../../../../shared/validation/InputValidation';
 import RunCypherQuery from '../../../../database/RunCypherQuery';
 
 type queryResult = {
@@ -42,14 +42,10 @@ const UserQuery = async ({
   id?: number;
 }) => {
   // if username and id are undefined
-  if (username === undefined && id === undefined)
+  if (username == null && id == undefined)
     throw new Error('Username or id required');
 
-  // if username is defined validate username
-  if (username) {
-    const validateUsername = ValidateUsername(username).error;
-    if (validateUsername) throw new Error(validateUsername);
-  }
+  if (!IsValidUsername(username || '')) throw new Error('Invalid username');
 
   const query = `WITH ${logged ?? 'null'} AS loggedID
 MATCH (user:User)

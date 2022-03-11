@@ -7,6 +7,12 @@ query suggestedUsers {
   }
 }
 
+query UserExists($input: UserInput!) {
+  user(input: $input) {
+    id
+  }
+}
+
 query user($input: UserInput!) {
   user(input: $input) {
     email
