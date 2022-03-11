@@ -22,10 +22,10 @@ import ReactMapGL, { Marker } from 'react-map-gl';
 import { ValidateUsername } from '../../../../shared/validation';
 
 const UserMapPage: React.FC<{
-  userQuery: UserQuery;
+  userQuery: NonNullable<UserQuery>;
   postsTmp: any;
 }> = ({ userQuery, postsTmp }) => {
-  const user = userQuery.user;
+  const user = userQuery.user as NonNullable<UserQuery['user']>;
 
   const [viewport, setViewport] = useState<IViewport>({
     latitude: 50,
@@ -139,6 +139,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         query: UserDocument,
         variables: { input: { username: ctx.query.username } },
       });
+
+      if (userQuery.user === undefined)
+        return SSRRedirect('/404?error=user_does_not_exist');
 
       const { data: postsData } = await client.query({
         query: PostsDocument,

@@ -43,7 +43,7 @@ const EditPlaceModal: React.FC<IEditPlaceModalProps> = ({
     });
 
     console.log(name, description);
-  }, []);
+  }, [name, description, preview]);
 
   return (
     <Transition appear show={isOpen} as={Fragment}>

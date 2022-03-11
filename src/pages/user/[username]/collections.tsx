@@ -19,8 +19,10 @@ const CollectionsPage: React.FC<{
   userQuery: UserQuery;
   anonymous: boolean;
 }> = ({ userQuery }) => {
-  const user = userQuery.user;
+  const user = userQuery.user as NonNullable<UserQuery['user']>;
+
   const { t } = useTranslation();
+
   return (
     <UserLayout
       user={user}
@@ -31,7 +33,7 @@ const CollectionsPage: React.FC<{
         canonical: undefined,
         // @ts-ignore
         openGraph: {
-          profile: { ...user, lastName: user.lastName || undefined },
+          profile: { ...user, lastName: user?.lastName || undefined },
         },
       }}
     >
@@ -42,14 +44,14 @@ const CollectionsPage: React.FC<{
           </button>
         </Link>
       </div>
-      {userQuery.user.collections?.length == 0 ? (
+      {userQuery.user?.collections?.length == 0 ? (
         <Card>
           <HiFolderOpen className="w-8 h-8" />
           <div>{t('no_collections')}</div>
         </Card>
       ) : (
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-          {userQuery.user.collections?.map((collection, index) => (
+          {userQuery.user?.collections?.map((collection, index) => (
             <Link key={index} href={`/collection/${collection?.id}`} passHref>
               <div className="flex items-center justify-center w-full h-64 border rounded-lg cursor-pointer dark:border-[#373638] dark:bg-[#2b2b2b] shadow-sm dark:shadow-md">
                 {collection?.name}
@@ -95,6 +97,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         query: UserDocument,
         variables: { input: { username: ctx.query.username } },
       });
+
+      if (userQuery.user === undefined)
+        return SSRRedirect('/404?error=user_does_not_exist');
 
       // return props
       return {

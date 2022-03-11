@@ -30,9 +30,13 @@ const StringWithMentions: React.FC<ITextWithMentionsProps> = ({ text }) => {
             <Link href={`/tag/${word.substring(1)}`}>
               <a className="text-blue-600">{' ' + word}</a>
             </Link>
+          ) : word[0] === '*' && word.at(-1) === '*' ? (
+            <span className="font-semibold">
+              {' ' + word.substring(1, word.length - 1) + ' '}
+            </span>
           ) : (
             // else just return word
-            ' ' + word
+            ' ' + word + ' '
           )
         )}
     </>

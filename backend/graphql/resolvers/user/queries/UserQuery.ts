@@ -40,7 +40,7 @@ const UserQuery = async ({
   logged?: number;
   username?: string;
   id?: number;
-}): Promise<queryResult> => {
+}) => {
   // if username and id are undefined
   if (username === undefined && id === undefined)
     throw new Error('Username or id required');
@@ -162,7 +162,7 @@ RETURN user{.*, id: ID(user),
   const [result] = await RunCypherQuery({ query });
 
   // If user doesn't exist
-  if (result.records[0] === undefined) throw new Error('User does not exist');
+  if (result.records[0] === undefined) return null;
   // else
   else return result.records[0].get('user') as queryResult;
 };

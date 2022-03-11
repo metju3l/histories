@@ -6,7 +6,7 @@ export default gql`
   type Query {
     "Example query"
     hello: String!
-    user(input: UserInput!): User!
+    user(input: UserInput!): User
 
     suggestedUsers: [User]!
 

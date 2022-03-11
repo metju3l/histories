@@ -38,7 +38,7 @@ const PostsPage: React.FC<{
   >;
   anonymous: boolean;
 }> = ({ userQuery, posts: postsTmp }) => {
-  const user = userQuery.user;
+  const user = userQuery.user as NonNullable<UserQuery['user']>;
 
   const { data, loading, refetch, fetchMore, error } = usePostsQuery({
     variables: {
@@ -194,6 +194,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         query: UserDocument,
         variables: { input: { username: ctx.query.username } },
       });
+
+      if (userQuery.user === undefined)
+        return SSRRedirect('/404?error=user_does_not_exist');
 
       const postsQuery = await client.query({
         query: PostsDocument,
