@@ -11,6 +11,11 @@ query Collection($id: Int!) {
       username
       firstName
       lastName
+      bio
+      followerCount
+      followingCount
+      isFollowing
+      profile
     }
     posts {
       id

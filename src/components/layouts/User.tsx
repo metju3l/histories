@@ -6,7 +6,7 @@ import React from 'react';
 import { Layout } from '.';
 
 type UserLayoutProps = {
-  user: any;
+  user: any
   currentTab: 'posts' | 'collections' | 'map';
   head: HeadProps;
   heading: string;

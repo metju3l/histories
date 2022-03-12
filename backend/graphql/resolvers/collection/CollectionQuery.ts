@@ -7,8 +7,9 @@ const UserQuery = async ({
   logged: number | null;
   id: number;
 }): Promise<any> => {
-  const query = `MATCH (author:User)-[:CREATED]->(collection:Collection)
-  WHERE ID(collection) = $id
+  const query = `
+  WITH ${logged || 'null'} AS loggedID
+  MATCH (author:User)-[:CREATED]->(collection:Collection {id:${id}})
 
   CALL {
       WITH collection
@@ -26,9 +27,10 @@ const UserQuery = async ({
   CALL {
       WITH postAuthor
       OPTIONAL MATCH (follower:User)-[:FOLLOW]->(postAuthor)
+      OPTIONAL MATCH (user)-[:FOLLOW]->(following:User)
       OPTIONAL MATCH (postAuthor)-[:FOLLOW]->(following:User)
-      RETURN COUNT(DISTINCT follower) AS postAuthorFollowerCount,
-          COUNT(DISTINCT following) AS postAuthorFollowingCount
+      RETURN  COUNT(DISTINCT follower) AS postAuthorFollowerCount,
+              COUNT(DISTINCT following) AS postAuthorFollowingCount
   }
    
   CALL {
@@ -39,31 +41,38 @@ const UserQuery = async ({
           COUNT(DISTINCT following) AS followingCount
   }
   
+  CALL {
+    WITH author, loggedID
+    OPTIONAL MATCH (logged:User)-[r:FOLLOW]->(author)
+    WHERE logged.id = loggedID
+    RETURN r AS isFollowing
+  }
   
   RETURN collection{.*, 
-          id: ID(collection),
           postCount,  
-          posts: COLLECT(DISTINCT post{.*,
-                  id: ID(post),
+          posts: COLLECT(DISTINCT post{.*, 
                   author:
                       postAuthor{.*,
-                      id: ID(postAuthor),
                       followerCount: postAuthorFollowerCount,
                       followingCount: postAuthorFollowingCount
                   }
               }),
           author: author{.*,
-              id: ID(author),
               followerCount,
-              followingCount
+              followingCount,
+              isFollowing: COUNT(DISTINCT isFollowing) > 0,
+              profile:  CASE WHEN (author.profile IS NOT NULL) 
+                          THEN author.profile
+                          ELSE "https://avatars.dicebear.com/api/initials/" + author.firstName + "%20" + author.lastName + ".svg"
+                        END
           }
       } AS collection`;
 
   const [result] = await RunCypherQuery({ query, params: { id } });
 
   // If Collection doesn't exist
-  if (result.records[0] === undefined)
-    throw new Error('Collection does not exist');
+  if (result.records[0] == undefined)
+    return null
   // else
   else return result.records[0].get('collection');
 };

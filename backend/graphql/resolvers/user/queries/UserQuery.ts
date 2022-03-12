@@ -47,15 +47,15 @@ const UserQuery = async ({
 
   if (!IsValidUsername(username || '')) throw new Error('Invalid username');
 
-  const query = `WITH ${logged ?? 'null'} AS loggedID
+  const query = `WITH ${logged || 'null'} AS loggedID
 MATCH (user:User)
 ${
-  // if id is defined match by id
-  // else if only username is defined match by username
-  id !== undefined
-    ? ` WHERE ID(user) = ${id} `
-    : ` WHERE user.username =~ "(?i)${username}" `
-}
+    // if id is defined match by id
+    // else if only username is defined match by username
+    id !== undefined
+      ? ` WHERE ID(user) = ${id} `
+      : ` WHERE user.username =~ "(?i)${username}" `
+    }
 
 CALL {
   WITH user

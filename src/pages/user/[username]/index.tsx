@@ -15,6 +15,7 @@ import {
 } from '@graphql/queries/post.graphql';
 import { UserDocument, UserQuery } from '@graphql/queries/user.graphql';
 import UrlPrefix from '@src/constants/IPFSUrlPrefix';
+import MeContext from '@src/contexts/MeContext';
 import {
   GetCookieFromServerSideProps,
   IsJwtValid,
@@ -22,7 +23,7 @@ import {
 } from '@src/functions';
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HiPlusCircle } from 'react-icons/hi';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -42,7 +43,7 @@ const PostsPage: React.FC<{
 }> = ({ userQuery, posts: postsTmp }) => {
   const user = userQuery.user as NonNullable<UserQuery['user']>;
   const { t } = useTranslation();
-
+  const meContext = useContext(MeContext)
   const { data, loading, refetch, fetchMore, error } = usePostsQuery({
     variables: {
       input: {
@@ -88,11 +89,11 @@ const PostsPage: React.FC<{
       }}
     >
       <div className="py-3">
-        <Link href="/create/collection" passHref>
+        {user.id == meContext.me?.id && <Link href="/create/collection" passHref>
           <Button size="sm">
             <HiPlusCircle className="w-5 h-5" /> {t('new_post')}
           </Button>
-        </Link>
+        </Link>}
       </div>
       <div className="w-full">
         <InfiniteScroll
@@ -129,11 +130,11 @@ const PostsPage: React.FC<{
         >
           {loading
             ? postsTmp.data?.posts.map((post) => (
-                <Post {...post} key={post.id} photos={post.photos} />
-              ))
+              <Post {...post} key={post.id} photos={post.photos} />
+            ))
             : data?.posts.map((post) => (
-                <Post {...post} key={post.id} photos={post.photos} />
-              ))}
+              <Post {...post} key={post.id} photos={post.photos} />
+            ))}
           {data?.posts.length == 0 && (
             <Card>
               <div>

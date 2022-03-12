@@ -31,7 +31,7 @@ export default gql`
     posts(input: PostsInput): [Post!]!
 
     "Returns collection detail information"
-    collection(id: Int!): Collection!
+    collection(id: Int!): Collection
 
     comments(input: CommentsInput): [Comment!]!
   }

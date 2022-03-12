@@ -3,6 +3,7 @@ import Button from '@components/elements/buttons/Button';
 import UserLayout from '@components/layouts/User';
 import Card from '@components/modules/userPage/Card';
 import { UserDocument, UserQuery } from '@graphql/queries/user.graphql';
+import MeContext from '@src/contexts/MeContext';
 import {
   GetCookieFromServerSideProps,
   IsJwtValid,
@@ -10,7 +11,7 @@ import {
 } from '@src/functions';
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HiFolderOpen, HiPlusCircle } from 'react-icons/hi';
 
@@ -21,6 +22,7 @@ const CollectionsPage: React.FC<{
   anonymous: boolean;
 }> = ({ userQuery }) => {
   const user = userQuery.user as NonNullable<UserQuery['user']>;
+  const meContext = useContext(MeContext)
 
   const { t } = useTranslation();
 
@@ -40,11 +42,11 @@ const CollectionsPage: React.FC<{
       }}
     >
       <div className="py-3">
-        <Link href="/create/collection" passHref>
+        {user.id == meContext.me?.id && <Link href="/create/collection" passHref>
           <Button size="sm">
             <HiPlusCircle className="w-5 h-5" /> {t('new_collection')}
           </Button>
-        </Link>
+        </Link>}
       </div>
 
       {userQuery.user?.collections?.length == 0 ? (

@@ -8,7 +8,6 @@ import {
   CollectionQuery,
 } from '@graphql/queries/collection.graphql';
 import { usePostsQuery } from '@graphql/queries/post.graphql';
-import { UserDocument, UserQuery } from '@graphql/queries/user.graphql';
 import { Menu, Transition } from '@headlessui/react';
 import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 import {
@@ -23,24 +22,10 @@ import { Blurhash } from 'react-blurhash';
 import { useTranslation } from 'react-i18next';
 import { HiOutlineChevronDown } from 'react-icons/hi';
 
-import { Maybe } from '../../../.cache/__types__';
 
 const CheckPost: React.FC<{
-  collection: {
-    name: string;
-    description?: Maybe<string>;
-    createdAt: number;
-    postCount: number;
-    id: number;
-    author: {
-      firstName: string;
-      lastName: string;
-      bio: string;
-      profile: string;
-    };
-  };
-  user: any;
-}> = ({ collection, user }) => {
+  collection: NonNullable<CollectionQuery['collection']>;
+}> = ({ collection, }) => {
   const { data, loading, error } = usePostsQuery({
     variables: { input: { filter: { collectionId: collection.id } } },
   });
@@ -49,7 +34,7 @@ const CheckPost: React.FC<{
     useState<boolean>(false);
   return (
     <UserLayout
-      user={user}
+      user={collection.author}
       currentTab="collections"
       heading={collection.name}
       head={{
@@ -74,10 +59,7 @@ const CheckPost: React.FC<{
         setIsOpen={setIsDeleteCollectionModalOpen}
       />
       <div className="flex items-center justify-between pr-4">
-        <div>
-          <h1 className="pt-4 text-3xl font-semibold">{collection.name}</h1>
-          <p className="pb-4">{collection.description}</p>
-        </div>
+        <p className="py-4">{collection.description}</p>
 
         <Menu as="div" className="relative">
           <Menu.Button className="flex items-center px-2 py-1 font-semibold text-gray-600 border border-gray-300 rounded-lg gap-2">
@@ -197,20 +179,15 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
           variables: { id: parseInt(query.id) },
         });
 
-      const { data: userData }: { data: UserQuery } = await client.query({
-        query: UserDocument,
-        variables: { input: { id: collectionData.collection.author.id } },
-      });
-
       // return props
       return {
         props: {
           collection: collectionData.collection,
-          user: userData.user,
           anonymous,
         },
       };
     } catch (e) {
+      console.log(e)
       return SSRRedirect('/404?error=collection_does_not_exist');
     }
   }
