@@ -51,6 +51,7 @@ const CheckPost: React.FC<{
     <UserLayout
       user={user}
       currentTab="collections"
+      heading={collection.name}
       head={{
         title: `${collection.name} | Histories`,
         description:

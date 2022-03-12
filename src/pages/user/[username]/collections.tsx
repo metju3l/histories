@@ -12,7 +12,7 @@ import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { HiFolderOpen,  HiPlusCircle } from 'react-icons/hi';
+import { HiFolderOpen, HiPlusCircle } from 'react-icons/hi';
 
 import { ValidateUsername } from '../../../../shared/validation';
 
@@ -45,7 +45,7 @@ const CollectionsPage: React.FC<{
             <HiPlusCircle className="w-5 h-5" /> {t('new_collection')}
           </Button>
         </Link>
-        </div>
+      </div>
 
       {userQuery.user?.collections?.length == 0 ? (
         <Card>

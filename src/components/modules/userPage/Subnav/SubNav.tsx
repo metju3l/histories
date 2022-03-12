@@ -3,20 +3,17 @@ import { useTranslation } from 'react-i18next';
 import {
   HiFolderOpen,
   HiOutlineCollection,
-  HiOutlineMap, 
+  HiOutlineMap,
 } from 'react-icons/hi';
 
 import UserSubNavItem from './SubNavItem';
 
 export type UserSubNavProps = {
   currentTab: 'posts' | 'collections' | 'map';
-  user: { username: string; firstName: string; id: number }; 
+  user: { username: string; firstName: string; id: number };
 };
 
-const SubNav: React.FC<UserSubNavProps> = ({
-  currentTab,
-  user, 
-}) => {
+const SubNav: React.FC<UserSubNavProps> = ({ currentTab, user }) => {
   const { t } = useTranslation();
 
   return (
@@ -46,7 +43,7 @@ const SubNav: React.FC<UserSubNavProps> = ({
           <HiOutlineMap className="w-5 h-5" />
           {`${user.firstName}'s ${t('map')}`}
         </UserSubNavItem>
-      </div> 
+      </div>
     </div>
   );
 };

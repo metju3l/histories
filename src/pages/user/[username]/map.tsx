@@ -44,7 +44,7 @@ const UserMapPage: React.FC<{
     <UserLayout
       user={user}
       currentTab="map"
-      heading={t("map")}
+      heading={t('map')}
       head={{
         title: `${user.firstName}'s map | hiStories`,
         description: `${user.firstName}'s map of posts on HiStories`,

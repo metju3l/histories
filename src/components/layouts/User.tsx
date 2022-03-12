@@ -1,7 +1,7 @@
 import { LeftPanel } from '@components/modules/userPage/LeftPanel';
 import { SubNav } from '@components/modules/userPage/Subnav';
 import HeadProps from '@src/types/head';
-import React, {   } from 'react';
+import React from 'react';
 
 import { Layout } from '.';
 
@@ -17,7 +17,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
   user,
   currentTab,
   children,
-  heading
+  heading,
 }) => {
   return (
     <Layout head={head}>
@@ -26,10 +26,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({
         <LeftPanel user={user} />
         <div className="h-full lg:col-span-8 md:col-span-12 col-span-12 space-y-2">
           {/* SUBNAV */}
-          <SubNav
-            currentTab={currentTab}
-            user={user} 
-          />
+          <SubNav currentTab={currentTab} user={user} />
           <main className="w-full" style={{ height: 'calc(100vh - 400px)' }}>
             <h1 className="pt-6 text-4xl font-semibold">{heading}</h1>
             {children}

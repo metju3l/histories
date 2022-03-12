@@ -24,7 +24,7 @@ import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { HiPlus, HiPlusCircle } from 'react-icons/hi';
+import { HiPlusCircle } from 'react-icons/hi';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Exact, InputMaybe, PostsInput } from '../../../../.cache/__types__';
@@ -87,15 +87,14 @@ const PostsPage: React.FC<{
         },
       }}
     >
-        <div className="py-3">
+      <div className="py-3">
         <Link href="/create/collection" passHref>
           <Button size="sm">
             <HiPlusCircle className="w-5 h-5" /> {t('new_post')}
           </Button>
         </Link>
-        </div>
+      </div>
       <div className="w-full">
-  
         <InfiniteScroll
           dataLength={data!.posts.length} //This is important field to render the next data
           next={() => {
