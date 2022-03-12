@@ -3,12 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  h1 {
-    @apply text-2xl;
-  }
-  h2 {
-    @apply text-xl;
-  }
   p {
     @apply text-base text-justify;
   }

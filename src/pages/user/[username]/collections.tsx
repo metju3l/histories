@@ -1,4 +1,5 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import Button from '@components/elements/buttons/Button';
 import UserLayout from '@components/layouts/User';
 import Card from '@components/modules/userPage/Card';
 import { UserDocument, UserQuery } from '@graphql/queries/user.graphql';
@@ -11,7 +12,7 @@ import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { HiFolderOpen, HiPlus } from 'react-icons/hi';
+import { HiFolderOpen,  HiPlusCircle } from 'react-icons/hi';
 
 import { ValidateUsername } from '../../../../shared/validation';
 
@@ -27,6 +28,7 @@ const CollectionsPage: React.FC<{
     <UserLayout
       user={user}
       currentTab="collections"
+      heading={t('collections')}
       head={{
         title: '',
         description: '',
@@ -37,13 +39,14 @@ const CollectionsPage: React.FC<{
         },
       }}
     >
-      <div className="flex justify-end w-full">
-        <Link href="/create/post" passHref>
-          <button className="flex items-center px-3 py-1 text-xs font-semibold text-gray-500 border border-gray-500 rounded-full gap-2 space-x-1.5 shadown-sm w-max">
-            <HiPlus className="w-2 h-2" /> {t('create_collection')}
-          </button>
+      <div className="py-3">
+        <Link href="/create/collection" passHref>
+          <Button size="sm">
+            <HiPlusCircle className="w-5 h-5" /> {t('new_collection')}
+          </Button>
         </Link>
-      </div>
+        </div>
+
       {userQuery.user?.collections?.length == 0 ? (
         <Card>
           <HiFolderOpen className="w-8 h-8" />

@@ -44,6 +44,7 @@ const UserMapPage: React.FC<{
     <UserLayout
       user={user}
       currentTab="map"
+      heading={t("map")}
       head={{
         title: `${user.firstName}'s map | hiStories`,
         description: `${user.firstName}'s map of posts on HiStories`,
@@ -68,6 +69,7 @@ const UserMapPage: React.FC<{
         },
       }}
     >
+      <p className="py-2">{t('user_places_map_description')}</p>
       <div className="flex flex-col w-full h-full gap-4">
         {postsTmp.length < 1 && (
           <Card warning>

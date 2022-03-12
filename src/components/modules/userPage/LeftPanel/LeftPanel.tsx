@@ -132,9 +132,9 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
         </p>
         {meContext.data?.me?.id === user.id ? (
           <Link href="/settings" passHref>
-            <button className="items-center block px-3 py-1 mt-6 text-xs font-semibold text-gray-500 border border-gray-500 rounded-full space-x-1.5 shadown-sm w-max">
+            <Button >
               {t('edit_profile')}
-            </button>
+            </Button>
           </Link>
         ) : (
           meContext.data?.me?.id && (

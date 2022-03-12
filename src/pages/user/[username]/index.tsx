@@ -4,6 +4,7 @@ import {
   InMemoryCache,
   QueryResult,
 } from '@apollo/client';
+import { Button } from '@components/elements';
 import UserLayout from '@components/layouts/User';
 import { Post } from '@components/modules/post';
 import Card from '@components/modules/userPage/Card';
@@ -22,7 +23,8 @@ import {
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import React from 'react';
-import { HiPlus } from 'react-icons/hi';
+import { useTranslation } from 'react-i18next';
+import { HiPlus, HiPlusCircle } from 'react-icons/hi';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Exact, InputMaybe, PostsInput } from '../../../../.cache/__types__';
@@ -39,6 +41,7 @@ const PostsPage: React.FC<{
   anonymous: boolean;
 }> = ({ userQuery, posts: postsTmp }) => {
   const user = userQuery.user as NonNullable<UserQuery['user']>;
+  const { t } = useTranslation();
 
   const { data, loading, refetch, fetchMore, error } = usePostsQuery({
     variables: {
@@ -59,6 +62,7 @@ const PostsPage: React.FC<{
     <UserLayout
       user={user}
       currentTab="posts"
+      heading={t('posts')}
       head={{
         title: `${user.firstName} ${user?.lastName} | hiStories`,
         description: `${user.firstName} ${user?.lastName}'s profile on HiStories`,
@@ -83,15 +87,15 @@ const PostsPage: React.FC<{
         },
       }}
     >
-      <div className="w-full">
-        {/* CREATE POST */}
-        <div className="flex justify-end w-full">
-          <Link href="/create/post" passHref>
-            <button className="flex items-center px-3 py-1 text-xs font-semibold text-gray-500 border border-gray-500 rounded-full gap-2 space-x-1.5 shadown-sm w-max">
-              <HiPlus className="w-2 h-2" /> Create post
-            </button>
-          </Link>
+        <div className="py-3">
+        <Link href="/create/collection" passHref>
+          <Button size="sm">
+            <HiPlusCircle className="w-5 h-5" /> {t('new_post')}
+          </Button>
+        </Link>
         </div>
+      <div className="w-full">
+  
         <InfiniteScroll
           dataLength={data!.posts.length} //This is important field to render the next data
           next={() => {

@@ -3,25 +3,19 @@ import { useTranslation } from 'react-i18next';
 import {
   HiFolderOpen,
   HiOutlineCollection,
-  HiOutlineMap,
-  HiViewGrid,
-  HiViewList,
+  HiOutlineMap, 
 } from 'react-icons/hi';
 
 import UserSubNavItem from './SubNavItem';
 
 export type UserSubNavProps = {
   currentTab: 'posts' | 'collections' | 'map';
-  user: { username: string; firstName: string; id: number };
-  view: 'grid' | 'list';
-  setView: React.Dispatch<React.SetStateAction<'grid' | 'list'>>;
+  user: { username: string; firstName: string; id: number }; 
 };
 
 const SubNav: React.FC<UserSubNavProps> = ({
   currentTab,
-  user,
-  view,
-  setView,
+  user, 
 }) => {
   const { t } = useTranslation();
 
@@ -52,14 +46,7 @@ const SubNav: React.FC<UserSubNavProps> = ({
           <HiOutlineMap className="w-5 h-5" />
           {`${user.firstName}'s ${t('map')}`}
         </UserSubNavItem>
-      </div>
-      <div onClick={() => setView(view === 'list' ? 'grid' : 'list')}>
-        {view === 'list' ? (
-          <HiViewGrid className="w-4 h-4" />
-        ) : (
-          <HiViewList className="w-4 h-4" />
-        )}
-      </div>
+      </div> 
     </div>
   );
 };

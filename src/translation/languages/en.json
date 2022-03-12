@@ -103,5 +103,8 @@
   "see_posts_from_this_time_period": "Show all posts from this time period",
   "place_doesnt_have_name": "Place doesn't have name",
   "login_to_your_account": "Login to your account",
-  "create_new_password": "Create new password"
+  "create_new_password": "Create new password",
+  "new_collection": "New collection",
+  "new_post": "New post",
+  "user_places_map_description": "This map shows all the places to which the user has added a post."
 }
