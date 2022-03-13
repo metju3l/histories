@@ -5,7 +5,7 @@ import { useMeQuery } from '@graphql/queries/user.graphql';
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-const Index: React.FC = () => {
+const HomePage: React.FC = () => {
   const logged = useMeQuery();
 
   if (logged.loading) return <div>loading</div>;
@@ -92,4 +92,4 @@ const PersonalizedPosts = () => {
   );
 };
 
-export default Index;
+export default HomePage;

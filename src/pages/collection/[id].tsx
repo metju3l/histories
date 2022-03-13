@@ -22,10 +22,9 @@ import { Blurhash } from 'react-blurhash';
 import { useTranslation } from 'react-i18next';
 import { HiOutlineChevronDown } from 'react-icons/hi';
 
-
 const CheckPost: React.FC<{
   collection: NonNullable<CollectionQuery['collection']>;
-}> = ({ collection, }) => {
+}> = ({ collection }) => {
   const { data, loading, error } = usePostsQuery({
     variables: { input: { filter: { collectionId: collection.id } } },
   });
@@ -187,7 +186,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         },
       };
     } catch (e) {
-      console.log(e)
+      console.log(e);
       return SSRRedirect('/404?error=collection_does_not_exist');
     }
   }

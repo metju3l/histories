@@ -25,6 +25,52 @@ interface PlaceProps {
   id: number;
 }
 
+const PlacePost: React.FC<{ post: any }> = ({ post }) => {
+  const { t } = useTranslation();
+
+  return (
+    <Link // this will eventually open the modal with the photo
+      href={`/post/${post.id}`}
+      key={post.id}
+      passHref
+    >
+      <div className="flex flex-col w-full h-64 text-left bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-sm">
+        {post.photos && (
+          <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
+            <Image
+              src={UrlPrefix + post.photos[0].hash}
+              layout="fill"
+              objectFit="cover"
+              objectPosition="center"
+              className="rounded-t-lg"
+              alt=""
+              quality={60}
+            />
+
+            {post.nsfw && (
+              <div className="absolute inset-0 flex items-center justify-center backdrop-blur-2xl bg-black/40">
+                <div className="text-center text-white">
+                  {t('nsfw_warning')}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        <div className="px-4 py-2">
+          <Link href={`/user/${post.author.username}`} passHref>
+            <h2 className="text-lg font-medium cursor-pointer">
+              {post.author.firstName} {post.author.lastName}
+            </h2>
+          </Link>
+          <h3 className="text-gray-600" style={{ fontSize: '12px' }}>
+            {post.description}
+          </h3>
+        </div>
+      </div>
+    </Link>
+  );
+};
+
 const Place: React.FC<PlaceProps> = ({ id }) => {
   const mapContext = React.useContext(MapContext); // get map context
   const meContext = React.useContext(MeContext); // get me context
@@ -54,7 +100,7 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
           className="flex items-center px-4 py-2 border borer-gray-400 rounded-xl hover:bg-gray-100 gap-2"
           onClick={() => mapContext.setSidebarPlace(null)}
         >
-          <HiOutlineChevronLeft /> Show all places
+          <HiOutlineChevronLeft /> {t('show_all_places')}
         </button>
         <div className="pt-2">
           <div className="relative w-full rounded-lg cursor-pointer h-52 md:h-72 bg-secondary">
@@ -96,7 +142,7 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
                 });
               }}
             >
-              <HiOutlineLocationMarker /> Show on map
+              <HiOutlineLocationMarker /> {t('show_on_map')}
             </button>
             <button
               className="flex items-center px-4 py-2 border borer-gray-400 rounded-xl hover:bg-gray-100 gap-2"
@@ -107,7 +153,7 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
                 toast.success(t('link_copied'));
               }}
             >
-              <HiOutlineShare /> Share
+              <HiOutlineShare /> {t('share')}
             </button>
             {meContext.data?.me && (
               <>
@@ -117,7 +163,7 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
                 >
                   <button className="flex items-center px-4 py-2 border borer-gray-400 rounded-xl hover:bg-gray-100 gap-2">
                     <HiOutlinePlusCircle />
-                    Add photo
+                    {t('add_photo')}
                   </button>
                 </Link>
                 <Link
@@ -126,7 +172,7 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
                 >
                   <button className="flex items-center px-4 py-2 border borer-gray-400 rounded-xl hover:bg-gray-100 gap-2">
                     <HiOutlineStar />
-                    Add to favorites
+                    {t('add_to_favorites')}
                   </button>
                 </Link>
               </>
@@ -134,7 +180,7 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
           </div>
           {/* DESCRIPTION */}
           <div className="px-4">
-            <h3 className="text-lg font-semibold">Description</h3>
+            <h3 className="text-lg font-semibold">{t('description')}</h3>
             <p className="pt-1 pb-4">{placeQuery.data?.place.description}</p>
           </div>
           <div className="w-full border-b border-gray-200 dark:border-gray-800" />
@@ -161,47 +207,9 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {postsQuery.data?.posts
                     .filter((post) => post.photos[0]?.hash)
-                    .map((post) => {
-                      return (
-                        <Link // this will eventually open the modal with the photo
-                          href={`/post/${post.id}`}
-                          key={post.id}
-                          passHref
-                        >
-                          <div className="flex flex-col w-full h-64 text-left bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-sm">
-                            {post.photos && (
-                              <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
-                                <Image
-                                  src={UrlPrefix + post.photos[0].hash}
-                                  layout="fill"
-                                  objectFit="cover"
-                                  objectPosition="center"
-                                  className="rounded-t-lg"
-                                  alt=""
-                                  quality={60}
-                                />
-                              </div>
-                            )}
-                            <div className="px-4 py-2">
-                              <Link
-                                href={`/user/${post.author.username}`}
-                                passHref
-                              >
-                                <h2 className="text-lg font-medium cursor-pointer">
-                                  {post.author.firstName} {post.author.lastName}
-                                </h2>
-                              </Link>
-                              <h3
-                                className="text-gray-600"
-                                style={{ fontSize: '12px' }}
-                              >
-                                {post.description}
-                              </h3>
-                            </div>
-                          </div>
-                        </Link>
-                      );
-                    })}
+                    .map((post) => (
+                      <PlacePost key={post.id} post={post} />
+                    ))}
                 </div>
               )}
             </div>

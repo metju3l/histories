@@ -43,7 +43,7 @@ const PostsPage: React.FC<{
 }> = ({ userQuery, posts: postsTmp }) => {
   const user = userQuery.user as NonNullable<UserQuery['user']>;
   const { t } = useTranslation();
-  const meContext = useContext(MeContext)
+  const meContext = useContext(MeContext);
   const { data, loading, refetch, fetchMore, error } = usePostsQuery({
     variables: {
       input: {
@@ -89,11 +89,13 @@ const PostsPage: React.FC<{
       }}
     >
       <div className="py-3">
-        {user.id == meContext.me?.id && <Link href="/create/collection" passHref>
-          <Button size="sm">
-            <HiPlusCircle className="w-5 h-5" /> {t('new_post')}
-          </Button>
-        </Link>}
+        {user.id == meContext.me?.id && (
+          <Link href="/create/post" passHref>
+            <Button size="sm">
+              <HiPlusCircle className="w-5 h-5" /> {t('new_post')}
+            </Button>
+          </Link>
+        )}
       </div>
       <div className="w-full">
         <InfiniteScroll
@@ -130,11 +132,11 @@ const PostsPage: React.FC<{
         >
           {loading
             ? postsTmp.data?.posts.map((post) => (
-              <Post {...post} key={post.id} photos={post.photos} />
-            ))
+                <Post {...post} key={post.id} photos={post.photos} />
+              ))
             : data?.posts.map((post) => (
-              <Post {...post} key={post.id} photos={post.photos} />
-            ))}
+                <Post {...post} key={post.id} photos={post.photos} />
+              ))}
           {data?.posts.length == 0 && (
             <Card>
               <div>

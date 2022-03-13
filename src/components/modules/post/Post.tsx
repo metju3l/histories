@@ -32,6 +32,7 @@ type PostProps = {
   timeline?: boolean;
   photos?: Array<Photo>;
   createdAt: number;
+  nsfw: boolean;
   description?: Maybe<string>;
   likeCount: number;
   commentCount: number;
@@ -54,6 +55,7 @@ const Post: React.FC<PostProps> = ({
   startMonth,
   startDay,
   liked,
+  nsfw,
   id,
 }) => {
   const meContext = React.useContext(MeContext);
@@ -63,6 +65,7 @@ const Post: React.FC<PostProps> = ({
   const [localLikeState, setLocalLikeState] = useState<boolean>(liked); // using local states to avoid refetching and provide faster response for user
   const { t } = useTranslation();
   const likeCountWithoutMe = likeCount - (liked ? 1 : 0); // number of likes without logged user
+  const [showImage, setShowImage] = useState<boolean>(false);
 
   // like and unlike mutations (they can only be created in the component (not in function))
   const [likeMutation] = useLikeMutation();
@@ -143,6 +146,7 @@ const Post: React.FC<PostProps> = ({
           </OptionsMenu>
         </div>
         <p className="px-4 pt-2 font-medium">{description}</p>
+
         {photos && (
           <div className="relative w-full bg-white cursor-pointer dark:bg-black h-[360px] bg-secondary">
             <div className="flex items-center justify-center w-full h-full">
@@ -161,7 +165,6 @@ const Post: React.FC<PostProps> = ({
                 punch={1}
               />
             </div>
-
             <Image
               src={UrlPrefix + photos[0].hash}
               layout="fill"
@@ -169,8 +172,35 @@ const Post: React.FC<PostProps> = ({
               placeholder="blur"
               blurDataURL={'https://ipfs.io/ipfs' + photos[0].hash}
               objectPosition="center"
-              alt="Profile picture"
+              alt="Post photo"
             />
+            {/* NSFW accept */}
+            {nsfw &&
+              (showImage ? (
+                <button
+                  className="absolute text-black right-4 bottom-4"
+                  onClick={() => setShowImage(false)}
+                >
+                  {t('hide')}
+                </button>
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center backdrop-blur-2xl bg-black/40">
+                  <div className="text-center text-white">
+                    <div className="text-2xl">{t('nsfw_warning')}</div>
+                    <div className="text-lg">
+                      {t('nsfw_warning_description')}
+                    </div>
+                    <div className="mt-4">
+                      <button
+                        className="px-4 py-2 font-semibold text-white rounded-full bg-secondary"
+                        onClick={() => setShowImage(true)}
+                      >
+                        {t('show_image')}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
           </div>
         )}
         <div className={`px-4 relative ${photos ? '' : 'pt-4 '}`}>

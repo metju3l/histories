@@ -22,7 +22,7 @@ const CollectionsPage: React.FC<{
   anonymous: boolean;
 }> = ({ userQuery }) => {
   const user = userQuery.user as NonNullable<UserQuery['user']>;
-  const meContext = useContext(MeContext)
+  const meContext = useContext(MeContext);
 
   const { t } = useTranslation();
 
@@ -42,11 +42,13 @@ const CollectionsPage: React.FC<{
       }}
     >
       <div className="py-3">
-        {user.id == meContext.me?.id && <Link href="/create/collection" passHref>
-          <Button size="sm">
-            <HiPlusCircle className="w-5 h-5" /> {t('new_collection')}
-          </Button>
-        </Link>}
+        {user.id == meContext.me?.id && (
+          <Link href="/create/collection" passHref>
+            <Button size="sm">
+              <HiPlusCircle className="w-5 h-5" /> {t('new_collection')}
+            </Button>
+          </Link>
+        )}
       </div>
 
       {userQuery.user?.collections?.length == 0 ? (

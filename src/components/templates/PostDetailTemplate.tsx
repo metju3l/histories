@@ -35,6 +35,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
   const likeCountWithoutMe = post.likeCount - (post.liked ? 1 : 0); // like count withou me
   const meContext = React.useContext(MeContext);
   const [placeDetailModal, setPlaceDetailModal] = useState<boolean>(false); // open place detail modal
+  const [showImage, setShowImage] = useState<boolean>(false);
 
   const [likeMutation] = useLikeMutation();
   const [unlikeMutation] = useUnlikeMutation();
@@ -149,8 +150,34 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
             layout="fill"
             objectFit="contain"
             className="rounded-xl"
-            alt="post image"
+            alt="photo"
           />
+
+          {/* NSFW accept */}
+          {post.nsfw &&
+            (showImage ? (
+              <button
+                className="absolute text-black right-4 bottom-4"
+                onClick={() => setShowImage(false)}
+              >
+                {t('hide')}
+              </button>
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center backdrop-blur-2xl bg-black/40">
+                <div className="text-center text-white">
+                  <div className="text-2xl">{t('nsfw_warning')}</div>
+                  <div className="text-lg">{t('nsfw_warning_description')}</div>
+                  <div className="mt-4">
+                    <button
+                      className="px-4 py-2 font-semibold text-white rounded-full bg-secondary"
+                      onClick={() => setShowImage(true)}
+                    >
+                      {t('show_image')}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
         {/* RIGHT PANEL */}
         {/* PLACE PHOTO */}

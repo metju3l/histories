@@ -106,5 +106,8 @@
   "create_new_password": "Create new password",
   "new_collection": "New collection",
   "new_post": "New post",
-  "user_places_map_description": "This map shows all the places to which the user has added a post."
+  "user_places_map_description": "This map shows all the places to which the user has added a post.",
+  "nsfw_warning": "This post is marked as NSFW",
+  "nsfw_warning_description": "Photos can contain nudity or violence.",
+  "show_image": "Show image"
 }
