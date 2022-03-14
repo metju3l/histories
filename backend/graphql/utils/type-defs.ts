@@ -52,8 +52,6 @@ export default gql`
     createUser(input: CreateUserInput!): String!
     verifyToken(token: String!): String!
 
-
-
     delete(id: Int!): String
     like(input: LikeInput!): String
     unlike(id: Int!): String
@@ -225,6 +223,7 @@ export default gql`
     endDay: Int
     endMonth: Int
     endYear: Int!
+    years: [Int!]!
   }
 
   type CommentTarget {

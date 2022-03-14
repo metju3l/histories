@@ -19,9 +19,9 @@ const TimeLine: React.FC = ({}) => {
       }}
       domain={[minYearConstant, new Date().getFullYear()]}
       step={1}
-      values={mapContext.timeLimitation}
+      values={[mapContext.timeLimitation[1], mapContext.timeLimitation[0]]}
       onUpdate={(limits) =>
-        mapContext.setTimeLimitation(limits as [number, number])
+        mapContext.setTimeLimitation([limits[1], limits[0]])
       }
     >
       <Rail>

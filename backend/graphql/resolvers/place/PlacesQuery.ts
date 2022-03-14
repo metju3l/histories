@@ -67,13 +67,13 @@ LIMIT 1
   
   // return places as an array of objects
   WITH place{.*,
-      years,
-      latitude: place.location.latitude,  // latitude
-      longitude: place.location.longitude,    // longitude
-      icon: place.icon,
-      postCount,
-      likeCount,
-      posts,
+    years,
+    latitude: place.location.latitude,  // latitude
+    longitude: place.location.longitude,    // longitude
+    icon: place.icon,
+    postCount,
+    likeCount,
+    posts,
       distance:  
           CASE
               // if radius in input is not defined return null
@@ -112,7 +112,20 @@ LIMIT 1
     },
   });
 
-  return result.records[0].get('places');
+  return result.records[0].get('places').map((place: any) => ({
+    ...place,
+    years: place.posts
+      .map((post: { startYear: number; endYear: number }) => {
+        let postYears = [];
+        for (let i = post.startYear; i <= post.endYear; i++) postYears.push(i);
+        return postYears;
+      })
+      .flat(2)
+      .filter(
+        (year: number, index: number, self: number[]) =>
+          self.indexOf(year) === index
+      ),
+  }));
 };
 
 export default PlacesQuery;

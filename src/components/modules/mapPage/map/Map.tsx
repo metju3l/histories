@@ -132,7 +132,7 @@ const Map: React.FC = () => {
           {/* CREATE POST */}
           {meContext.data?.me && (
             <Link
-              href={`/create/post?lat=${contextMenu?.coordinates[0]}&lng=${contextMenu?.coordinates[1]}`}
+              href={`/create/post?lat=${contextMenu?.coordinates[1]}&lng=${contextMenu?.coordinates[0]}`}
               passHref
             >
               <button className="px-4 py-1 hover:bg-gray-100">

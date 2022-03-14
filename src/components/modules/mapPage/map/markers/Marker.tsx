@@ -36,7 +36,7 @@ const Marker: React.FC<MarkerProps> = ({ place, onClick, numberOfPlaces }) => {
               }
               ${
                 !hasIcon && mapContext.hoverPlaceId === place.id
-                  ? 'border-brand'
+                  ? 'border-blue-500'
                   : 'border-white'
               }`}
           onMouseEnter={() =>
@@ -52,7 +52,7 @@ const Marker: React.FC<MarkerProps> = ({ place, onClick, numberOfPlaces }) => {
             <div
               className={`absolute ${
                 loadingImage ? 'top-0 right-0' : '-top-2 -right-2'
-              } w-6 h-6 text-white text-center bg-brand rounded-full z-20`}
+              } w-6 h-6 text-white text-center bg-blue-500 rounded-full z-20`}
             >
               {numberOfPlaces}
             </div>
@@ -61,7 +61,7 @@ const Marker: React.FC<MarkerProps> = ({ place, onClick, numberOfPlaces }) => {
           {/* PLACE ICON/PREVIEW */}
           {loadingImage &&
             !hasIcon && ( // if image is loading show universal place icon
-              <div className="p-4 text-brand">
+              <div className="p-4 text-blue-500">
                 <PhotoMarkerIcon />
               </div>
             )}
