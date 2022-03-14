@@ -15,22 +15,24 @@ const Error404Page: React.FC = () => {
   return (
     <Layout
       head={{
-        title: `${t('page_not_found')} | Histories`,
+        title: `${t('unexpected_server_error')} | Histories`,
         description: `Create new collection or post`,
         canonical: 'https://www.histories.cc/create/',
         openGraph: {
           title: `Create | Histories`,
           type: 'website',
-          url: 'https://www.histories.cc/create/',
+          url: 'https://www.histories.cc/500',
           description: `Create new collection or post`,
           site_name: 'Create page',
         },
       }}
     >
       <div className="absolute top-0 left-0 z-10 flex flex-col items-center justify-center w-full h-full bg-white/60 dark:bg-black/60 gap-6">
-        <h1 className="text-3xl font-semibold">{t('page_not_found')}</h1>
+        <h1 className="text-3xl font-semibold">
+          {t('unexpected_server_error')}
+        </h1>
         <Link href="/" passHref>
-          <Button>{t('go_to_map')}</Button>
+          <Button>{t('refresh')}</Button>
         </Link>
       </div>
       <div className="absolute top-0 left-0 w-full h-full bg-gray-200">

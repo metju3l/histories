@@ -20,6 +20,8 @@ const HomePage: React.FC = () => {
   const suggestedUsersQuery = useSuggestedUsersQuery();
   const { t } = useTranslation();
 
+  const suggestedUsersPlaceholder = new Array(8).fill(null);
+
   if (logged.loading) return <div>loading</div>;
   if (logged.error) return <div>logged error</div>;
 
@@ -54,38 +56,62 @@ const HomePage: React.FC = () => {
                 {t('people_you_may_know')}
               </div>
               <ul className="flex flex-col gap-2">
-                {suggestedUsersQuery.data?.suggestedUsers
-                  .slice(0, 8)
-                  .map((user) =>
-                    user == null ? null : (
-                      <li className="flex items-center gap-2" key={user.id}>
-                        <div className="relative w-10 h-10">
-                          <Image
-                            layout="fill"
-                            objectFit="cover"
-                            quality={60}
-                            className="rounded-full"
-                            src={
-                              user!.profile.startsWith('http')
-                                ? user!.profile
-                                : UrlPrefix + user!.profile
-                            }
-                            alt={t('profile_picture')}
+                {suggestedUsersQuery.loading
+                  ? suggestedUsersPlaceholder.map((_, index) => (
+                      <li className="flex items-center gap-2" key={index}>
+                        <div className="relative w-10 h-10 rounded-full dark:bg-gray-200  bg-gray-300 animate-pulse" />
+                        <div className="flex flex-col gap-2">
+                          <div
+                            style={{
+                              width: `${Math.floor(
+                                Math.random() * (160 - 70) + 1 + 70
+                              )}px`,
+                            }}
+                            className="dark:bg-gray-200 bg-gray-300 h-3 animate-pulse rounded-sm"
+                          />
+                          <div
+                            style={{
+                              width: `${Math.floor(
+                                Math.random() * (110 - 70) + 1 + 70
+                              )}px`,
+                            }}
+                            className="dark:bg-gray-200 bg-gray-300 h-3 animate-pulse rounded-sm"
                           />
                         </div>
-                        <div>
-                          <Link href={`/user/${user.username}`}>
-                            <a className="block font-semibold text-gray-700 cursor-pointer">{`${user.firstName} ${user.lastName}`}</a>
-                          </Link>
-                          <Link href={`/user/${user.username}`}>
-                            <a className="text-gray-600 cursor-pointer">
-                              @{user.username}
-                            </a>
-                          </Link>
-                        </div>
                       </li>
-                    )
-                  )}
+                    ))
+                  : suggestedUsersQuery.data?.suggestedUsers
+                      .slice(0, 8)
+                      .map((user) =>
+                        user == null ? null : (
+                          <li className="flex items-center gap-2" key={user.id}>
+                            <div className="relative w-10 h-10">
+                              <Image
+                                layout="fill"
+                                objectFit="cover"
+                                quality={60}
+                                className="rounded-full dark:bg-gray-200 bg-gray-300"
+                                src={
+                                  user!.profile.startsWith('http')
+                                    ? user!.profile
+                                    : UrlPrefix + user!.profile
+                                }
+                                alt={t('profile_picture')}
+                              />
+                            </div>
+                            <div>
+                              <Link href={`/user/${user.username}`}>
+                                <a className="block font-semibold text-gray-700 cursor-pointer">{`${user.firstName} ${user.lastName}`}</a>
+                              </Link>
+                              <Link href={`/user/${user.username}`}>
+                                <a className="text-gray-600 cursor-pointer">
+                                  @{user.username}
+                                </a>
+                              </Link>
+                            </div>
+                          </li>
+                        )
+                      )}
               </ul>
               {/* INTERESTING PLACES */}
               <div className="pt-4 font-semibold">

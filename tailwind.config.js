@@ -8,7 +8,7 @@ module.exports = {
         custom: '0px 3px 12px rgba(0, 0, 0, 0.48)',
       },
       colors: {
-        brand: '#FC6E47',
+        brand: '#3b82f6',
         dark: {
           text: {
             primary: '#FFFFFF',

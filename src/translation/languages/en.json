@@ -111,5 +111,11 @@
   "nsfw_warning_description": "Photos can contain nudity or violence.",
   "show_image": "Show image",
   "interesting_places": "Interesting places",
-  "people_you_may_know": "People you may know"
+  "create_collection": "Create collection",
+  "people_you_may_know": "People you may know",
+  "create_page_description": "You shouldn't get here. So you probably wanted to do one of these things:",
+  "error_404": "Error 404",
+  "page_not_found": "Page not found",
+  "go_to_map": "Go to map",
+  "unexpected_server_error": "Unexpected server error"
 }

@@ -1,7 +1,6 @@
 import { useSearchQuery } from '@graphql/queries/search.graphql';
 import { Menu, Transition } from '@headlessui/react';
 import MeContext from '@src/contexts/MeContext';
-import FirstLetterUppercase from '@src/functions/FirstLetterUppercase';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Fragment, useState } from 'react';
@@ -30,17 +29,17 @@ const Navbar: React.FC = () => {
     <nav className="fixed z-50 w-full bg-white border-b border-gray-200 dark:text-white dark:bg-[#171716] dark:border-gray-800 shadow-sm">
       <div className="flex items-center justify-between h-full max-w-6xl px-4 py-2 m-auto">
         {/* LEFT SIDE */}
-        <span className="flex items-center h-full gap-2">
+        <span className="flex items-center h-full gap-2 text-gray-600 dark:text-zinc-100">
           {/* SEARCH */}
-          <HiSearch className="block w-5 h-5 text-gray-600 md:hidden" />
+          <HiSearch className="block w-5 h-5 md:hidden" />
 
           <form
             action="/search"
-            className="relative items-center hidden w-full px-4 bg-white border border-gray-300 max-w-[240px] rounded-xl gap-2 md:flex"
+            className="relative items-center hidden w-full px-4 bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 max-w-[240px] rounded-xl gap-2 md:flex"
           >
             {/* SEARCH ICON */}
             <button type="submit">
-              <HiSearch className="w-5 h-5 text-gray-600" />
+              <HiSearch className="w-5 h-5 text-zinc-300" />
             </button>
             <input
               {...register('q')}
@@ -52,7 +51,7 @@ const Navbar: React.FC = () => {
                 async (e) =>
                   await searchQuery.refetch({ input: { text: e.target.value } }) // on input change refetch
               }
-              className="inline-block w-full py-2 placeholder-gray-600 bg-transparent border-none outline-none rounded-xl text-light-text"
+              className="inline-block w-full py-2 placeholder-gray-600 dark:placeholder-zinc-500 bg-transparent border-none outline-none rounded-xl"
               placeholder="Search histories"
             />
             {/* SEARCH RESULTS */}
@@ -83,13 +82,6 @@ const Navbar: React.FC = () => {
 
         {/* RIGHT SIDE */}
         <span className="flex items-center gap-2 pr-č">
-          <span className="hidden md:block">
-            <Link href="/about">
-              <a className="px-2 py-1 mr-2 font-medium text-gray-600 rounded-lg cursor-pointer dark:text-gray-200 transition ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800">
-                {FirstLetterUppercase(t('about'))}
-              </a>
-            </Link>
-          </span>
           {userIsLogged ? (
             <UserDropdown />
           ) : (
