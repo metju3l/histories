@@ -54,3 +54,20 @@ query PlaceDetailModal($id: Int!) {
     }
   }
 }
+
+query InterestingPlaces($input: PlacesInput) {
+  places(input: $input) {
+    id
+    latitude
+    longitude
+    name
+    description
+    preview {
+      hash
+      blurhash
+      width
+      height
+    }
+    years
+  }
+}

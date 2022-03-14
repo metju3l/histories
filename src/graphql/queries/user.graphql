@@ -4,6 +4,7 @@ query suggestedUsers {
     firstName
     lastName
     username
+    profile
   }
 }
 

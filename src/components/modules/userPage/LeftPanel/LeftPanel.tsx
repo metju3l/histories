@@ -132,11 +132,12 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
         </p>
         {meContext.data?.me?.id === user.id ? (
           <Link href="/settings" passHref>
-            <Button>{t('edit_profile')}</Button>
+            <Button size="sm">{t('edit_profile')}</Button>
           </Link>
         ) : (
           meContext.data?.me?.id && (
             <Button
+              size="sm"
               onClick={async () => {
                 try {
                   // if following, run unfollow mutation

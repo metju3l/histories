@@ -72,20 +72,7 @@ const Button: React.FC<ButtonProps> = ({
         className ?? ''
     }
   >
-    {loading ? (
-      <Loading
-        color={
-          style === 'primary_solid'
-            ? '#FFF'
-            : style === 'danger_solid'
-            ? '#f00'
-            : '#444'
-        }
-        size="base"
-      />
-    ) : (
-      children
-    )}
+    {loading ? <Loading size="base" /> : children}
   </button>
 );
 

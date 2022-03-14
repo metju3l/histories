@@ -201,7 +201,7 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
             <div>
               {postsQuery.loading ? (
                 <div className="flex justify-around w-full pt-24">
-                  <Loading color="#000000" size="xl" />
+                  <Loading size="xl" />
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

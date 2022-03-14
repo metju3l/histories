@@ -100,7 +100,7 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
           {/* TBD: infinite scroll */}
           <div className="w-full overflow-y-auto">
             {commentsQuery.loading || commentsQuery.error ? (
-              <Loading color="black" />
+              <Loading />
             ) : (
               commentsQuery.data?.comments.map((comment) => {
                 return (

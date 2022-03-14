@@ -109,5 +109,7 @@
   "user_places_map_description": "This map shows all the places to which the user has added a post.",
   "nsfw_warning": "This post is marked as NSFW",
   "nsfw_warning_description": "Photos can contain nudity or violence.",
-  "show_image": "Show image"
+  "show_image": "Show image",
+  "interesting_places": "Interesting places",
+  "people_you_may_know": "People you may know"
 }

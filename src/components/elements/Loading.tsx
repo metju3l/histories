@@ -2,10 +2,9 @@ import React from 'react';
 
 export type LoadingProps = {
   size?: 'sm' | 'base' | 'lg' | 'xl';
-  color: string;
 };
 
-const Loading: React.FC<LoadingProps> = ({ color, size }) => {
+const Loading: React.FC<LoadingProps> = ({ size }) => {
   // this sucks but enum was now working with eslint
   const actualSize =
     size == 'sm'
@@ -26,7 +25,12 @@ const Loading: React.FC<LoadingProps> = ({ color, size }) => {
         width={actualSize}
         height={actualSize}
       >
-        <g strokeWidth="200" strokeLinecap="round" stroke={color} fill="none">
+        <g
+          strokeWidth="200"
+          strokeLinecap="round"
+          stroke="currentColor"
+          fill="none"
+        >
           <path d="M1200 600V100" />
           <path opacity=".5" d="M1200 2300v-500" />
           <path opacity=".917" d="M900 680.4l-250-433" />

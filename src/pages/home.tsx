@@ -1,12 +1,24 @@
+import Loading from '@components/elements/Loading';
 import { Layout } from '@components/layouts';
 import { Post } from '@components/modules/post';
+import { useInterestingPlacesQuery } from '@graphql/queries/place.graphql';
 import { usePersonalizedPostsQuery } from '@graphql/queries/post.graphql';
-import { useMeQuery } from '@graphql/queries/user.graphql';
+import {
+  useMeQuery,
+  useSuggestedUsersQuery,
+} from '@graphql/queries/user.graphql';
+import UrlPrefix from '@src/constants/IPFSUrlPrefix';
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
+import { Blurhash } from 'react-blurhash';
+import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
-
 const HomePage: React.FC = () => {
   const logged = useMeQuery();
+  const interestingPlacesQuery = useInterestingPlacesQuery();
+  const suggestedUsersQuery = useSuggestedUsersQuery();
+  const { t } = useTranslation();
 
   if (logged.loading) return <div>loading</div>;
   if (logged.error) return <div>logged error</div>;
@@ -34,9 +46,97 @@ const HomePage: React.FC = () => {
           <PersonalizedPosts />
         </div>
         {/* RIGHT COLUMN */}
-        <div className="hidden w-[40%] xl:w-[30%] p-[1em] lg:block">
+        <div className="hidden w-[40%] xl:w-[30%] lg:block">
           <div className="sticky top-20">
-            <div className="w-full mb-8 rounded-lg p-[1em] text-text-light"></div>
+            <div className="w-full pt-2">
+              {/* SUGGESTED USERS */}
+              <div className="pb-2 font-semibold">
+                {t('people_you_may_know')}
+              </div>
+              <ul className="flex flex-col gap-2">
+                {suggestedUsersQuery.data?.suggestedUsers
+                  .slice(0, 8)
+                  .map((user) =>
+                    user == null ? null : (
+                      <li className="flex items-center gap-2" key={user.id}>
+                        <div className="relative w-10 h-10">
+                          <Image
+                            layout="fill"
+                            objectFit="cover"
+                            quality={60}
+                            className="rounded-full"
+                            src={
+                              user!.profile.startsWith('http')
+                                ? user!.profile
+                                : UrlPrefix + user!.profile
+                            }
+                            alt={t('profile_picture')}
+                          />
+                        </div>
+                        <div>
+                          <Link href={`/user/${user.username}`}>
+                            <a className="block font-semibold text-gray-700 cursor-pointer">{`${user.firstName} ${user.lastName}`}</a>
+                          </Link>
+                          <Link href={`/user/${user.username}`}>
+                            <a className="text-gray-600 cursor-pointer">
+                              @{user.username}
+                            </a>
+                          </Link>
+                        </div>
+                      </li>
+                    )
+                  )}
+              </ul>
+              {/* INTERESTING PLACES */}
+              <div className="pt-4 font-semibold">
+                {t('interesting_places')}
+              </div>
+              <div className="mt-4 grid grid-cols-3 h-52 gap-2">
+                {interestingPlacesQuery.loading ? (
+                  <>
+                    {[null, null, null].map((_, i) => (
+                      <div
+                        key={i}
+                        className="relative flex items-center justify-center text-gray-600 bg-gray-300 rounded-lg animate-pulse"
+                      >
+                        <Loading size="lg" />
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  interestingPlacesQuery.data?.places
+                    .filter((place) => place?.preview?.hash != undefined)
+                    .slice(0, 3)
+                    .map((place) => (
+                      <Link
+                        href={`/?lat=${place.latitude}&lng=${place.longitude}&zoom=11&place=${place.id}`}
+                        key={place.id}
+                      >
+                        <abbr
+                          title={place.name || ''}
+                          className="relative bg-gray-300 rounded-lg cursor-pointer"
+                        >
+                          <Blurhash
+                            className="blurhash"
+                            hash={place.preview!.blurhash}
+                            width="100%"
+                            height="100%"
+                            punch={1}
+                          />
+                          <Image
+                            className="w-full h-full rounded-lg"
+                            src={UrlPrefix + place.preview!.hash}
+                            layout="fill"
+                            objectFit="cover"
+                            quality={60}
+                            alt={place.name || t('place detail')}
+                          />
+                        </abbr>
+                      </Link>
+                    ))
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
