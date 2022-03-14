@@ -8,6 +8,7 @@ import {
   CreatePostInput,
   CreateUserInput,
   EditPlaceInput,
+  EditPostInput,
   LoginInput,
   Mutation,
   ResetPasswordInput,
@@ -46,6 +47,7 @@ import EditPlaceMutation from '../../resolvers/place/mutations/EditPlaceMutation
 import ForgotPassword from '../../resolvers/user/mutations/ForgotPassword';
 import ResetPassword from '../../resolvers/user/mutations/ResetPassword';
 import { contextType, OnlyLogged } from './resolvers';
+import EditPost from '../../resolvers/post/mutations/EditPost';
 
 const mutations = {
   googleAuth: async (
@@ -311,6 +313,22 @@ const mutations = {
       userID: context.decoded.id,
       nsfw: containsNSFW,
       photos,
+    });
+  },
+
+  editPost: async (
+    _parent: undefined,
+    {
+      input,
+    }: {
+      input: EditPostInput;
+    },
+    context: contextType
+  ): Promise<Mutation['editPost']> => {
+    OnlyLogged(context);
+    return await EditPost({
+      ...input,
+      userID: context.decoded.id,
     });
   },
 

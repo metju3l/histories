@@ -39,32 +39,34 @@ export default gql`
   type Mutation {
     "Returns JWT"
     login(input: LoginInput!): String!
-
     "Register and login with Google"
     googleAuth(googleJWT: String!): String!
-
+    deleteUser(input: DeleteUserInput!): String!
     "Sends password reset email"
     forgotPassword(login: String!): String
-
     "Reset password"
     resetPassword(input: ResetPasswordInput!): String
-
-    deleteUser(input: DeleteUserInput!): String!
-    delete(id: Int!): String
-    report(id: Int!): String
-    like(input: LikeInput!): String
-    unlike(id: Int!): String
     follow(userID: Int!): String
     unfollow(userID: Int!): String
-    createCollection(input: CreateCollectionInput!): String
-    editCollection(input: EditCollectionInput!): String
     updateProfile(input: UpdateProfileInput!): String!
-    createPost(input: CreatePostInput!): String!
     createUser(input: CreateUserInput!): String!
     verifyToken(token: String!): String!
-    createComment(input: CreateCommentInput!): String!
+
+
+
+    delete(id: Int!): String
+    like(input: LikeInput!): String
+    unlike(id: Int!): String
+    report(id: Int!): String
+
+    createCollection(input: CreateCollectionInput!): String
+    editCollection(input: EditCollectionInput!): String
     addToCollection(input: AddToCollectionInput!): String!
     removeFromCollection(input: AddToCollectionInput!): String!
+
+    createPost(input: CreatePostInput!): String!
+    editPost(input: EditPostInput!): String!
+    createComment(input: CreateCommentInput!): String!
 
     editPlace(input: EditPlaceInput!): String!
   }
@@ -262,6 +264,22 @@ export default gql`
     endDay: Int
     endMonth: Int
     endYear: Int!
+  }
+
+  input EditPostInput {
+    id: Int!
+    nsfw: Boolean
+    description: String
+    hashtags: [String!]
+    latitude: Float
+    longitude: Float
+    placeID: Int
+    startDay: Int
+    startMonth: Int
+    startYear: Int
+    endDay: Int
+    endMonth: Int
+    endYear: Int
   }
 
   input UpdateProfileInput {

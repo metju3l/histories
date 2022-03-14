@@ -66,6 +66,7 @@ const Post: React.FC<PostProps> = ({
   const { t } = useTranslation();
   const likeCountWithoutMe = likeCount - (liked ? 1 : 0); // number of likes without logged user
   const [showImage, setShowImage] = useState<boolean>(false);
+  const [isNsfw, setIsNsfw] = useState<boolean>(nsfw);
 
   // like and unlike mutations (they can only be created in the component (not in function))
   const [likeMutation] = useLikeMutation();
@@ -141,7 +142,13 @@ const Post: React.FC<PostProps> = ({
               </a>
             </div>
           </div>
-          <OptionsMenu id={id} author={author} setVisible={setVisible}>
+          <OptionsMenu
+            id={id}
+            author={author}
+            setVisible={setVisible}
+            nsfw={isNsfw}
+            setIsNsfw={setIsNsfw}
+          >
             <IoIosMore className="text-2xl" />
           </OptionsMenu>
         </div>
@@ -175,7 +182,7 @@ const Post: React.FC<PostProps> = ({
               alt="Post photo"
             />
             {/* NSFW accept */}
-            {nsfw &&
+            {isNsfw &&
               (showImage ? (
                 <button
                   className="absolute text-black right-4 bottom-4"

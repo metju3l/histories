@@ -1,5 +1,8 @@
 import DeletePostModal from '@components/modules/modals/DeletePostModal';
-import { useDeleteMutation } from '@graphql/mutations/post.graphql';
+import {
+  useDeleteMutation,
+  useEditPostMutation,
+} from '@graphql/mutations/post.graphql';
 import { useUnfollowMutation } from '@graphql/mutations/relations.graphql';
 import { Menu, Transition } from '@headlessui/react';
 import MeContext from '@src/contexts/MeContext';
@@ -15,20 +18,25 @@ export type OptionsMenuProps = {
   author: {
     id: number;
   };
+  nsfw: boolean;
   setVisible: React.Dispatch<React.SetStateAction<'deleted' | null>>;
+  setIsNsfw: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const OptionsMenu: React.FC<OptionsMenuProps> = ({
   author,
   id,
   setVisible,
+  nsfw,
+  setIsNsfw,
   children,
 }) => {
-  const loginContext = React.useContext(MeContext);
+  const meContext = React.useContext(MeContext);
   const { t } = useTranslation();
 
   const [deleteMutation] = useDeleteMutation();
   const [unfollowMutation] = useUnfollowMutation();
+  const [editPostMutation] = useEditPostMutation();
 
   const [isDeletePostModalOpen, setIsDeletePostModalOpen] =
     useState<boolean>(false);
@@ -59,7 +67,7 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
         </Menu.Button>
         <Transition as={Fragment} {...DropdownTransition}>
           <Menu.Items as="div" className="dropdown">
-            {loginContext.data?.me?.id === author.id ? (
+            {meContext.data?.me?.id === author.id ? (
               /* DELETE */
               <Menu.Item
                 as="div"
@@ -69,7 +77,7 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
                 {t('delete_post')}
               </Menu.Item>
             ) : (
-              loginContext.data?.me?.id && (
+              meContext.data?.me?.id && (
                 <>
                   {/* REPORT */}
                   <Menu.Item as="div" className="rounded-t-lg dropdown-item">
@@ -103,12 +111,37 @@ const OptionsMenu: React.FC<OptionsMenuProps> = ({
               <Menu.Item
                 as="div"
                 className={`${
-                  !loginContext.data?.me?.id ? 'rounded-t-lg' : ''
+                  !meContext.data?.me?.id ? 'rounded-t-lg' : ''
                 } dropdown-item`}
               >
                 {t('go_to_post')}
               </Menu.Item>
             </Link>
+
+            {meContext.me?.isAdmin && (
+              <Menu.Item
+                as="div"
+                className="rounded-t-lg dropdown-item"
+                onClick={async () => {
+                  try {
+                    await editPostMutation({
+                      variables: {
+                        input: {
+                          id,
+                          nsfw: !nsfw,
+                        },
+                      },
+                    });
+                    setIsNsfw(!nsfw);
+                    toast.success(t('post_edited'));
+                  } catch (error: any) {
+                    toast.error(error.message);
+                  }
+                }}
+              >
+                {nsfw ? t('unmark_nsfw') : t('mark_nsfw')}
+              </Menu.Item>
+            )}
 
             {/* COPY LINK */}
             <Menu.Item

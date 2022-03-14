@@ -5,3 +5,7 @@ mutation delete($id: Int!) {
 mutation createPost($input: CreatePostInput!) {
   createPost(input: $input)
 }
+
+mutation EditPost($input: EditPostInput!) {
+  editPost(input: $input)
+}
