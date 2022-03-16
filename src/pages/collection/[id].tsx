@@ -28,6 +28,7 @@ const CheckPost: React.FC<{
   const { data, loading, error } = usePostsQuery({
     variables: { input: { filter: { collectionId: collection.id } } },
   });
+  const [photoDetail, setPhotoDetail] = useState<number | null>(null);
   const { t } = useTranslation<string>();
   const [isDeleteCollectionModalOpen, setIsDeleteCollectionModalOpen] =
     useState<boolean>(false);

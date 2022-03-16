@@ -10,12 +10,13 @@ const Places: React.FC = () => {
   return (
     <>
       {mapContext.placesQuery?.data?.places
-        .filter((place) =>
-          place.years.filter(
-            (year) =>
-              year > mapContext.timeLimitation[0] &&
-              year < mapContext.timeLimitation[1]
-          )
+        .filter(
+          (place) =>
+            place.years.filter(
+              (year) =>
+                year >= mapContext.timeLimitation[0] &&
+                year <= mapContext.timeLimitation[1]
+            ).length > 0
         )
         .filter(
           (place) =>

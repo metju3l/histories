@@ -118,5 +118,7 @@
   "page_not_found": "Page not found",
   "go_to_map": "Go to map",
   "unexpected_server_error": "Unexpected server error",
-  "no_suggested_users": "There are no users you don't know yet 😉"
+  "no_suggested_users": "There are no users you don't know yet 😉",
+  "add_photo":"Add photo",
+  "show_all_places":"Show all places"
 }
