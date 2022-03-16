@@ -65,11 +65,11 @@ const PostsPage: React.FC<{
       currentTab="posts"
       heading={t('posts')}
       head={{
-        title: `${user.firstName} ${user?.lastName} | hiStories`,
+        title: `${user.firstName} ${user?.lastName || ''} | Histories`,
         description: `${user.firstName} ${user?.lastName}'s profile on HiStories`,
         canonical: `https://www.histories.cc/user/${user.username}`,
         openGraph: {
-          title: `${user.firstName} ${user?.lastName} | HiStories`,
+          title: `${user.firstName} ${user.lastName || ''}  | Histories`,
           type: 'website',
           images: [
             {
@@ -201,7 +201,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         variables: { input: { username: ctx.query.username } },
       });
 
-      if (userQuery.user === undefined)
+      if (userQuery.user == undefined)
         return SSRRedirect('/404?error=user_does_not_exist');
 
       const postsQuery = await client.query({

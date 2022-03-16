@@ -117,5 +117,6 @@
   "error_404": "Error 404",
   "page_not_found": "Page not found",
   "go_to_map": "Go to map",
-  "unexpected_server_error": "Unexpected server error"
+  "unexpected_server_error": "Unexpected server error",
+  "no_suggested_users": "There are no users you don't know yet 😉"
 }

@@ -1,12 +1,10 @@
 import { Button } from '@components/elements';
 import { Layout } from '@components/layouts';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
-import PragueCastlePhoto from 'public/assets/prague-castle.jpg';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import ReactMapGL, { Marker } from 'react-map-gl';
+import ReactMapGL from 'react-map-gl';
 
 const Error404Page: React.FC = () => {
   const { t } = useTranslation();
@@ -47,36 +45,7 @@ const Error404Page: React.FC = () => {
           longitude={14.4019565}
           zoom={16.71}
           mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-        >
-          <Marker latitude={50.091} longitude={14.4007}>
-            <div className="relative text-gray-100 bg-white border border-gray-200 rounded-lg shadow-xl w-[200px] h-[300px] -translate-x-1/2 -translate-y-full">
-              <Image
-                src={PragueCastlePhoto}
-                width="100%"
-                height="100%"
-                alt="Prague castle"
-                layout="fill"
-                objectFit="cover"
-                quality={10}
-                className="rounded-lg grayscale"
-              />
-              <svg
-                className="absolute -bottom-[27px] left-1/2 -translate-x-1/2"
-                width="72"
-                height="27"
-                viewBox="0 0 72 27"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M36 27L0.492958 0L71.507 0L36 27Z"
-                  stroke="rgb(229 231 235)"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-          </Marker>
-        </ReactMapGL>
+        ></ReactMapGL>
       </div>
     </Layout>
   );

@@ -34,7 +34,6 @@ const Login = async ({
         name: `(?i)${user}`, // (?i) = case insensitive
       },
     });
-    console.log(userInfo.records[0].get('user').password == undefined);
 
     // if user has been created with Google, and it doesn't have a password, he can't login
     if (userInfo.records[0].get('user').password == undefined)

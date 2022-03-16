@@ -59,7 +59,7 @@ const HomePage: React.FC = () => {
                 {suggestedUsersQuery.loading
                   ? suggestedUsersPlaceholder.map((_, index) => (
                       <li className="flex items-center gap-2" key={index}>
-                        <div className="relative w-10 h-10 rounded-full dark:bg-gray-200  bg-gray-300 animate-pulse" />
+                        <div className="relative w-10 h-10 bg-gray-300 rounded-full dark:bg-gray-200 animate-pulse" />
                         <div className="flex flex-col gap-2">
                           <div
                             style={{
@@ -67,7 +67,7 @@ const HomePage: React.FC = () => {
                                 Math.random() * (160 - 70) + 1 + 70
                               )}px`,
                             }}
-                            className="dark:bg-gray-200 bg-gray-300 h-3 animate-pulse rounded-sm"
+                            className="h-3 bg-gray-300 rounded-sm dark:bg-gray-200 animate-pulse"
                           />
                           <div
                             style={{
@@ -75,7 +75,7 @@ const HomePage: React.FC = () => {
                                 Math.random() * (110 - 70) + 1 + 70
                               )}px`,
                             }}
-                            className="dark:bg-gray-200 bg-gray-300 h-3 animate-pulse rounded-sm"
+                            className="h-3 bg-gray-300 rounded-sm dark:bg-gray-200 animate-pulse"
                           />
                         </div>
                       </li>
@@ -90,7 +90,7 @@ const HomePage: React.FC = () => {
                                 layout="fill"
                                 objectFit="cover"
                                 quality={60}
-                                className="rounded-full dark:bg-gray-200 bg-gray-300"
+                                className="bg-gray-300 rounded-full dark:bg-gray-200"
                                 src={
                                   user!.profile.startsWith('http')
                                     ? user!.profile
@@ -101,7 +101,9 @@ const HomePage: React.FC = () => {
                             </div>
                             <div>
                               <Link href={`/user/${user.username}`}>
-                                <a className="block font-semibold text-gray-700 cursor-pointer">{`${user.firstName} ${user.lastName}`}</a>
+                                <a className="block font-semibold text-gray-700 cursor-pointer">{`${
+                                  user.firstName
+                                } ${user?.lastName || ''}`}</a>
                               </Link>
                               <Link href={`/user/${user.username}`}>
                                 <a className="text-gray-600 cursor-pointer">
@@ -112,6 +114,11 @@ const HomePage: React.FC = () => {
                           </li>
                         )
                       )}
+                {suggestedUsersQuery.data?.suggestedUsers.length == 0 && (
+                  <div className="text-center text-gray-600">
+                    {t('no_suggested_users')}
+                  </div>
+                )}
               </ul>
               {/* INTERESTING PLACES */}
               <div className="pt-4 font-semibold">

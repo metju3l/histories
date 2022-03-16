@@ -32,12 +32,14 @@ const CollectionsPage: React.FC<{
       currentTab="collections"
       heading={t('collections')}
       head={{
-        title: '',
+        title: `${user.firstName} ${user.lastName || ''} - ${t(
+          'collections'
+        )} | Histories`,
         description: '',
         canonical: undefined,
         // @ts-ignore
         openGraph: {
-          profile: { ...user, lastName: user?.lastName || undefined },
+          profile: { ...user, lastName: user?.lastName || '' },
         },
       }}
     >
@@ -105,7 +107,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         variables: { input: { username: ctx.query.username } },
       });
 
-      if (userQuery.user === undefined)
+      if (userQuery.user == undefined)
         return SSRRedirect('/404?error=user_does_not_exist');
 
       // return props

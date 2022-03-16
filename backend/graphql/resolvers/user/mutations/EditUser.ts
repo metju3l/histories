@@ -25,7 +25,6 @@ const EditUser = async (
   if (email != null && !validator.isEmail(email))
     throw new Error('Invalid email');
 
-  console.log(firstName);
   if (firstName != null && !IsValidName(firstName))
     throw new Error('Invalid first name');
 

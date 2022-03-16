@@ -183,8 +183,6 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
   const onSubmit: SubmitHandler<ICreatePostInput> = async (data) => {
     setIsLoading(true);
 
-    console.log(timeSelectMode);
-
     const date =
       timeSelectMode === 0
         ? {

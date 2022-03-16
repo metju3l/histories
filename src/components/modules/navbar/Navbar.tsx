@@ -29,13 +29,13 @@ const Navbar: React.FC = () => {
     <nav className="fixed z-50 w-full bg-white border-b border-gray-200 dark:text-white dark:bg-[#171716] dark:border-gray-800 shadow-sm">
       <div className="flex items-center justify-between h-full max-w-6xl px-4 py-2 m-auto">
         {/* LEFT SIDE */}
-        <span className="flex items-center h-full gap-2 text-gray-600 dark:text-zinc-100">
+        <span className="flex items-center h-full text-gray-600 gap-2 dark:text-zinc-100">
           {/* SEARCH */}
           <HiSearch className="block w-5 h-5 md:hidden" />
 
           <form
             action="/search"
-            className="relative items-center hidden w-full px-4 bg-white dark:bg-zinc-700 border border-gray-300 dark:border-zinc-600 max-w-[240px] rounded-xl gap-2 md:flex"
+            className="relative items-center hidden w-full px-4 bg-white border border-gray-300 dark:bg-zinc-700 dark:border-zinc-600 max-w-[240px] rounded-xl gap-2 md:flex"
           >
             {/* SEARCH ICON */}
             <button type="submit">
@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
                 async (e) =>
                   await searchQuery.refetch({ input: { text: e.target.value } }) // on input change refetch
               }
-              className="inline-block w-full py-2 placeholder-gray-600 dark:placeholder-zinc-500 bg-transparent border-none outline-none rounded-xl"
+              className="inline-block w-full py-2 placeholder-gray-600 bg-transparent border-none outline-none dark:placeholder-zinc-500 rounded-xl"
               placeholder="Search histories"
             />
             {/* SEARCH RESULTS */}

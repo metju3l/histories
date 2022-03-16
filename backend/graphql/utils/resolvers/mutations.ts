@@ -224,7 +224,6 @@ const mutations = {
       throw new Error('Invalid description');
 
     const historicalDate = IsValidHistoricalDate(input);
-    console.log(historicalDate);
 
     // if last post / collection was created less than 10 seconds ago
     if (
@@ -245,7 +244,7 @@ const mutations = {
       input?.photo == undefined
         ? []
         : await Promise.all(
-            input?.photo.map(async (photo, index: number) => {
+            input?.photo.slice(0, 5).map(async (photo, index: number) => {
               const { createReadStream, mimetype } = await photo;
 
               // check if file is image
@@ -271,7 +270,6 @@ const mutations = {
                 // only check if all photos so far are not NSFW
 
                 const res = await NSFWCheck(UrlPrefix + photoData.hash); //get result from API
-                console.log(res, UrlPrefix + photoData.hash);
                 const containsNSFW: boolean = res !== undefined && res > 0.8; // if NSFW probability is more than 0.8 out of 1 set NSFW to true
 
                 return { ...photoData, containsNSFW };

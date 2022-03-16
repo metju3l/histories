@@ -27,7 +27,7 @@ const TimeLine: React.FC = ({}) => {
       <Rail>
         {({ getRailProps }) => (
           <div
-            className="absolute h-full px-4 py-4 bg-white dark:bg-zinc-700 rounded shadow -translate-x-1/2"
+            className="absolute h-full px-4 py-4 bg-white rounded shadow dark:bg-zinc-700 -translate-x-1/2"
             {...getRailProps()}
           >
             <div className="h-full border border-gray-400" />

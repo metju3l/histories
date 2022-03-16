@@ -46,7 +46,10 @@ const UserMapPage: React.FC<{
       currentTab="map"
       heading={t('map')}
       head={{
-        title: `${user.firstName}'s map | hiStories`,
+        title: `${user.firstName} ${user.lastName || ''} - ${t(
+          'map'
+        )} | Histories`,
+
         description: `${user.firstName}'s map of posts on HiStories`,
         canonical: `https://www.histories.cc/user/${user.username}/map`,
         openGraph: {
@@ -142,7 +145,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         variables: { input: { username: ctx.query.username } },
       });
 
-      if (userQuery.user === undefined)
+      if (userQuery.user == undefined)
         return SSRRedirect('/404?error=user_does_not_exist');
 
       const { data: postsData } = await client.query({

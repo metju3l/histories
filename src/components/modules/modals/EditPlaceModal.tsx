@@ -41,8 +41,6 @@ const EditPlaceModal: React.FC<IEditPlaceModalProps> = ({
       name: name || '',
       description: description || '',
     });
-
-    console.log(name, description);
   }, [name, description, preview]);
 
   return (

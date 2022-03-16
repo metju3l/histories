@@ -186,7 +186,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         },
       };
     } catch (e) {
-      console.log(e);
       return SSRRedirect('/404?error=collection_does_not_exist');
     }
   }
