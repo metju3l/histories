@@ -8,7 +8,7 @@ import {
   CollectionQuery,
 } from '@graphql/queries/collection.graphql';
 import { usePostsQuery } from '@graphql/queries/post.graphql';
-import { Menu, Transition } from '@headlessui/react';
+import { Dialog, Menu, Transition } from '@headlessui/react';
 import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 import {
   GetCookieFromServerSideProps,
@@ -28,7 +28,7 @@ const CheckPost: React.FC<{
   const { data, loading, error } = usePostsQuery({
     variables: { input: { filter: { collectionId: collection.id } } },
   });
-  const [photoDetail, setPhotoDetail] = useState<number | null>(null);
+  const [photoDetail, setPhotoDetail] = useState<number | null>(null); // when open value is id of opened post, otherwise null
   const { t } = useTranslation<string>();
   const [isDeleteCollectionModalOpen, setIsDeleteCollectionModalOpen] =
     useState<boolean>(false);
@@ -54,6 +54,100 @@ const CheckPost: React.FC<{
         },
       }}
     >
+      {photoDetail !== null && (
+        <Transition appear show={photoDetail !== null} as={Fragment}>
+          <Dialog
+            as="div"
+            className="fixed inset-0 z-10 overflow-y-auto"
+            onClose={() => setPhotoDetail(null)}
+          >
+            <div className="min-h-screen px-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Dialog.Overlay className="fixed inset-0 bg-gray-900 opacity-50" />
+              </Transition.Child>
+
+              {/* This element is to trick the browser into centering the modal contents. */}
+              <span
+                className="inline-block h-screen align-middle"
+                aria-hidden="true"
+              >
+                &#8203;
+              </span>
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <div className="inline-block w-full h-full max-h-[70vh] max-w-md p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
+                  <div className="flex w-full">
+                    {(data?.posts.findIndex(
+                      (post) => post.id === photoDetail
+                    ) || 0) > 0 && (
+                      <button
+                        onClick={() => {
+                          const postIndex =
+                            data?.posts.findIndex(
+                              (post) => post.id === photoDetail
+                            ) || 0;
+                          setPhotoDetail(data!.posts[postIndex - 1].id);
+                        }}
+                      >
+                        {'<'}
+                      </button>
+                    )}
+                    <div className="relative w-full h-12">
+                      <Image
+                        src={
+                          UrlPrefix +
+                          data?.posts[
+                            data!.posts.findIndex(
+                              (post) => post.id === photoDetail
+                            )
+                          ].photos[0].hash
+                        }
+                        layout="fill"
+                        objectFit="contain"
+                        placeholder="empty"
+                        objectPosition="center"
+                        alt="Photo"
+                      />
+                    </div>
+                    {(data?.posts.findIndex(
+                      (post) => post.id === photoDetail
+                    ) || 0) <
+                      (data?.posts?.length || 0) - 1 && (
+                      <button
+                        onClick={() => {
+                          const postIndex =
+                            data?.posts.findIndex(
+                              (post) => post.id === photoDetail
+                            ) || 0;
+                          setPhotoDetail(data!.posts[postIndex + 1].id);
+                        }}
+                      >
+                        {'>'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </Transition.Child>
+            </div>
+          </Dialog>
+        </Transition>
+      )}
+
       <DeleteCollectionModal
         isOpen={isDeleteCollectionModalOpen}
         setIsOpen={setIsDeleteCollectionModalOpen}
@@ -112,8 +206,10 @@ const CheckPost: React.FC<{
         </Card>
       ) : (
         <section className="mt-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 ">
-          {data?.posts.map((post, index) => (
-            <PostMiniature key={index} post={post} />
+          {data?.posts.map((post) => (
+            <div onClick={() => setPhotoDetail(post.id)} key={post.id}>
+              <PostMiniature post={post} />
+            </div>
           ))}
         </section>
       )}
