@@ -15,11 +15,6 @@ import { orange_main } from '../../shared/constants/colors';
 
 function MyApp({ Component, pageProps, router }: AppProps): JSX.Element {
   const apolloClient = useApollo(null);
-  const { i18n } = useTranslation();
-  useEffect(() => {
-    // on load get browser language
-    i18n.changeLanguage(navigator.language);
-  }, []);
 
   // todo: use language from database
 
@@ -57,6 +52,12 @@ interface MeProviderProps {
 const MeProvider: React.FC<MeProviderProps> = ({ children }) => {
   // fetch me data
   const { data, loading, error, refetch } = useMeQuery();
+
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    // on load get browser language
+    i18n.changeLanguage(data?.me?.locale || navigator.language);
+  }, [data]);
 
   return (
     <MeContext.Provider

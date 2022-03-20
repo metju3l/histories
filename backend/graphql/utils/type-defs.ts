@@ -336,6 +336,7 @@ export default gql`
     followers: [User!]
     collections: [Collection]
     posts: [Post!]!
+    locale: String
     notificationSettings: NotificationsSettings!
   }
 

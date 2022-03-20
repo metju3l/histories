@@ -34,7 +34,7 @@ const EditPlaceModal: React.FC<IEditPlaceModalProps> = ({
   function OnClose() {
     setIsOpen(false);
   }
-  const { register, handleSubmit, reset, watch } = useForm<IFormInput>();
+  const { register, handleSubmit, reset } = useForm<IFormInput>();
 
   useEffect(() => {
     reset({

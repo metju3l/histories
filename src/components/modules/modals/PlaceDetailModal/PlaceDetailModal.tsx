@@ -16,7 +16,7 @@ const PlaceDetailModal: React.FC<PlaceDetailModalProps> = ({
   isOpen,
   setIsOpen,
 }) => {
-  const { data, loading, error } = usePlaceDetailModalQuery({
+  const { data } = usePlaceDetailModalQuery({
     variables: { id },
   });
   const { t } = useTranslation<string>(); // i18n
