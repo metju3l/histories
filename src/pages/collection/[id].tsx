@@ -90,7 +90,7 @@ const CheckPost: React.FC<{
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <div className="inline-block w-full h-full max-h-[70vh] max-w-md p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl transition-all transform rounded-2xl">
+                <div className="inline-block w-full h-full max-w-md p-6 my-8 overflow-hidden text-left align-middle bg-white shadow-xl max-h-[70vh] transition-all transform rounded-2xl">
                   <div className="flex w-full">
                     {(data?.posts.findIndex(
                       (post) => post.id === photoDetail

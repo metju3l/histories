@@ -3,7 +3,6 @@ import Button from '@components/elements/buttons/Button';
 import { Layout } from '@components/layouts';
 import Search from '@components/modules/Search';
 import { useCreatePostMutation } from '@graphql/mutations/post.graphql';
-import { useMeQuery } from '@graphql/queries/user.graphql';
 import { Tab } from '@headlessui/react';
 import {
   GetCookieFromServerSideProps,
@@ -107,9 +106,7 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
-  const { data, loading, error } = useMeQuery();
   const [createPostMutation] = useCreatePostMutation();
-  const [coordinates, setCoordinates] = useState([21, 20]);
 
   const [timeSelectMode, setTimeSelectMode] = useState<number>(0);
 
@@ -123,7 +120,10 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(function (position) {
-      setCoordinates([position.coords.latitude, position.coords.longitude]);
+      setSearchCoordinates({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      });
     });
   }, []);
 
@@ -177,8 +177,6 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
   } = useForm<ICreatePostInput>();
 
   const { t } = useTranslation();
-  if (loading) return <div>loading xxx</div>;
-  if (error) return <div>error</div>;
 
   const onSubmit: SubmitHandler<ICreatePostInput> = async (data) => {
     setIsLoading(true);

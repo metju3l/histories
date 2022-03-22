@@ -22,7 +22,6 @@ const CreateCollectionPage: React.FC = () => {
     register,
     handleSubmit,
     formState: {},
-    setValue,
   } = useForm<CreateCollectionInput>();
 
   const onSubmit: SubmitHandler<CreateCollectionInput> = async (data) => {
@@ -80,7 +79,7 @@ const CreateCollectionPage: React.FC = () => {
             options={{}}
           />
 
-          <Button>Submit</Button>
+          <Button loading={loading}>Submit</Button>
         </form>
       </div>
     </Layout>

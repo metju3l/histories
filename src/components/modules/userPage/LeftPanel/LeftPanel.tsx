@@ -49,7 +49,7 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
   return (
     <div className="relative top-0 lg:sticky lg:col-span-4 md:col-span-12 col-span-12">
       {/* PROFILE PICTURE */}
-      <Link href={'/user/' + user.username} passHref>
+      <Link href={`/user/${user.username}/profile`} passHref>
         <div className="relative -mt-8 border-8 rounded-full sm:-mt-14 bg-[#FAFBFB] dark:bg-[#171716] border-[#FAFBFB] dark:border-[#171716] w-28 h-28 sm:h-40 sm:w-40 transition-all duration-400 ease-in-out">
           <Image
             src={

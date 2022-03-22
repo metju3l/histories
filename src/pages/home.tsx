@@ -144,6 +144,7 @@ const HomePage: React.FC = () => {
                       <Link
                         href={`/?lat=${place.latitude}&lng=${place.longitude}&zoom=11&place=${place.id}`}
                         key={place.id}
+                        passHref
                       >
                         <abbr
                           title={place.name || ''}

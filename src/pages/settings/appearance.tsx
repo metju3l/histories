@@ -5,7 +5,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { HiMoon, HiOutlineDesktopComputer, HiSun } from 'react-icons/hi';
 
-const Account = () => {
+const Account: React.FC = () => {
   const { t } = useTranslation();
   const { theme, setTheme } = useTheme();
 
@@ -78,7 +78,7 @@ const ThemeCard: React.FC<{
   onClick: () => void;
   title: string;
   active: boolean;
-}> = ({ children, title, onClick, active }) => {
+}> = ({ children, onClick, active }) => {
   return (
     <div
       className={`rounded-xl px-3 py-3 flex flex-col cursor-pointer group border-2 transition ease-in-out border-gray-300 w-36 h-32
