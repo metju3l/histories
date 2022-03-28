@@ -2,6 +2,37 @@ import { gql } from '@apollo/client';
 
 export default gql`
   scalar Upload
+  scalar Date
+
+  enum Sort {
+    ASC
+    DESC
+  }
+
+  union SearchResult = User | Post | Comment | Collection | Place
+  # union CustomPost = Post | HistoricalPost
+
+  interface IUser {
+    id: ID!
+    createdAt: Date!
+    username: String!
+    firstName: String!
+    lastName: String
+    bio: String
+    profile: String!
+    postCount: Int!
+    verified: Boolean!
+  }
+
+  interface IPost {
+    id: ID!
+    createdAt: Date!
+    description: String
+    tags: [Tag!]!
+    author: User!
+    comments: [Comment!]!
+    liked: Boolean!
+  }
 
   type Query {
     "Example query"
@@ -93,17 +124,11 @@ export default gql`
 
   input CommentsInput {
     targetID: Int
-    "ASC | DESC"
-    sort: String
+    sort: Sort
     "popularity | createdAt"
     sortBy: String
     skip: Int
     take: Int
-  }
-
-  type SearchResult {
-    users: [User!]!
-    posts: [Post!]!
   }
 
   input Radius {
@@ -149,8 +174,7 @@ export default gql`
 
   input PostsInput {
     filter: PostsFilter
-    " asc | desc // default is asc"
-    sort: String
+    sort: Sort
     " id | createdAt | likeCount | commentsCount | distance"
     sortBy: String
   }
@@ -201,11 +225,11 @@ export default gql`
     id: Float!
   }
 
-  type Post {
-    createdAt: Float!
+  type Post implements IPost {
+    id: ID!
+    createdAt: Date!
     description: String
-    hashtags: [Hashtag]
-    id: Int!
+    tags: [Tag!]!
     author: User!
     likes: [User!]!
     likeCount: Int!
@@ -213,7 +237,7 @@ export default gql`
     photos: [Photo!]!
     liked: Boolean!
     place: Place!
-    comments: [Comment]!
+    comments: [Comment!]!
     nsfw: Boolean!
 
     startDay: Int
@@ -231,16 +255,18 @@ export default gql`
   }
 
   type Comment {
-    id: Int!
-    createdAt: Float!
+    id: ID!
+    createdAt: Date!
     content: String!
     liked: Boolean!
     author: User!
     target: CommentTarget!
   }
 
-  type Hashtag {
+  type Tag {
+    id: ID!
     name: String!
+    description: String
   }
 
   input LikeInput {
@@ -250,7 +276,7 @@ export default gql`
 
   input CreatePostInput {
     description: String
-    hashtags: [String!]
+    tags: [String!]
     latitude: Float
     longitude: Float
     placeID: Int
@@ -269,7 +295,7 @@ export default gql`
     id: Int!
     nsfw: Boolean
     description: String
-    hashtags: [String!]
+    tags: [String!]
     latitude: Float
     longitude: Float
     placeID: Int
@@ -316,7 +342,7 @@ export default gql`
     newsletter: Boolean!
   }
 
-  type Me {
+  type Me implements IUser {
     username: String!
     email: String!
     firstName: String!
@@ -324,12 +350,12 @@ export default gql`
     bio: String
     profile: String!
     verified: Boolean!
-    createdAt: Float!
+    createdAt: Date!
     isFollowing: Boolean!
     followerCount: Int!
     followingCount: Int!
     postCount: Int!
-    id: Float!
+    id: ID!
     isAdmin: Boolean!
     hasPassword: Boolean!
     following: [User!]
@@ -340,20 +366,19 @@ export default gql`
     notificationSettings: NotificationsSettings!
   }
 
-  type User {
+  type User implements IUser {
     username: String!
-    email: String!
     firstName: String!
     lastName: String
     bio: String
     profile: String!
     verified: Boolean!
-    createdAt: Float!
+    createdAt: Date!
     isFollowing: Boolean!
     followerCount: Int!
     followingCount: Int!
     postCount: Int!
-    id: Float!
+    id: ID!
     following: [User!]!
     followers: [User!]!
     collections: [Collection]
