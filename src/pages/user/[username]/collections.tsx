@@ -2,7 +2,6 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import UserLayout from '@components/layouts/User';
 import Card from '@components/modules/userPage/Card';
 import { UserDocument, UserQuery } from '@graphql/queries/user.graphql';
-import MeContext from '@src/contexts/MeContext';
 import {
   GetCookieFromServerSideProps,
   IsJwtValid,
@@ -10,7 +9,7 @@ import {
 } from '@src/functions';
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
-import React, { useContext } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { HiFolderOpen } from 'react-icons/hi';
 
