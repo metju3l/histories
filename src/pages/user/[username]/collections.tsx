@@ -1,5 +1,4 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
-import Button from '@components/elements/buttons/Button';
 import UserLayout from '@components/layouts/User';
 import Card from '@components/modules/userPage/Card';
 import { UserDocument, UserQuery } from '@graphql/queries/user.graphql';
@@ -13,7 +12,7 @@ import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { HiFolderOpen, HiPlusCircle } from 'react-icons/hi';
+import { HiFolderOpen } from 'react-icons/hi';
 
 import { ValidateUsername } from '../../../../shared/validation';
 
@@ -43,16 +42,6 @@ const CollectionsPage: React.FC<{
         },
       }}
     >
-      <div className="py-3">
-        {user.id == meContext.me?.id && (
-          <Link href="/create/collection" passHref>
-            <Button size="sm">
-              <HiPlusCircle className="w-5 h-5" /> {t('new_collection')}
-            </Button>
-          </Link>
-        )}
-      </div>
-
       {userQuery.user?.collections?.length == 0 ? (
         <Card>
           <HiFolderOpen className="w-8 h-8" />

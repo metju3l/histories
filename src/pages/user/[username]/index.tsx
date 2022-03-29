@@ -4,7 +4,6 @@ import {
   InMemoryCache,
   QueryResult,
 } from '@apollo/client';
-import { Button } from '@components/elements';
 import UserLayout from '@components/layouts/User';
 import { Post } from '@components/modules/post';
 import Card from '@components/modules/userPage/Card';
@@ -22,10 +21,8 @@ import {
   SSRRedirect,
 } from '@src/functions';
 import { GetServerSidePropsContext } from 'next';
-import Link from 'next/link';
 import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { HiPlusCircle } from 'react-icons/hi';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Exact, InputMaybe, PostsInput } from '../../../../.cache/__types__';
@@ -88,15 +85,6 @@ const PostsPage: React.FC<{
         },
       }}
     >
-      <div className="py-3">
-        {user.id == meContext.me?.id && (
-          <Link href="/create/post" passHref>
-            <Button size="sm">
-              <HiPlusCircle className="w-5 h-5" /> {t('new_post')}
-            </Button>
-          </Link>
-        )}
-      </div>
       <div className="w-full">
         <InfiniteScroll
           dataLength={data!.posts.length} //This is important field to render the next data

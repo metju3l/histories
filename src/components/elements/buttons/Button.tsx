@@ -24,8 +24,7 @@ export type ButtonProps = {
 };
 
 export const ButtonStyles = {
-  primary_solid:
-    'bg-blue-500 hover:bg-blue-600 border border-blue-500 text-white focus:ring-blue-600',
+  primary_solid: 'bg-brand hover:bg-brand border border-brand text-white',
   warning_solid:
     'bg-orange-500 hover:bg-orange-600 border border-orange-600 text-white focus:ring-orange-600',
   danger_solid:

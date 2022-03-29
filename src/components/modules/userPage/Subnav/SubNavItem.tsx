@@ -16,10 +16,10 @@ const UserSubNavItem: React.FC<UserSubNavItemProps> = ({
   return (
     <Link href={href}>
       <a
-        className={`flex items-center px-3 py-1 font-bold ${
+        className={`flex items-center px-3 py-2 font-bold ${
           currentTab === name
-            ? 'bg-violet-100 text-violet-500 dark:hover:bg-opacity-20 bg-opacity-100 text-brand-500'
-            : 'hover:bg-violet-100 hover:text-violet-500 dark:hover:bg-opacity-20 hover:bg-opacity-100 bg-brand-100 text-brand-500 text-gray-500'
+            ? 'bg-brand text-white'
+            : 'hover:bg-zinc-200 text-zinc-500'
         } rounded-lg gap-1 space-x-2`}
       >
         {children}
