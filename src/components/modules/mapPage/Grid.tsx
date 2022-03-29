@@ -27,7 +27,7 @@ const MapPageGrid: React.FC = () => {
           className={`w-full h-full grid grid-rows-1 ${''} `}
         >
           {/* LEFT PANEL */}
-          <div className="relative w-full h-full p-2 col-span-2 md:col-span-1">
+          <div className="relative w-full h-full col-span-2 md:col-span-1">
             {/* HIDE SIDEBAR ARROW ICON */}
             <button
               onClick={() => mapContext.setShowSidebar(!mapContext.showSidebar)}

@@ -22,6 +22,7 @@ import {
   HiOutlineHeart,
   HiPaperAirplane,
 } from 'react-icons/hi';
+import TimeAgo from 'react-timeago';
 
 import { IsValidComment } from '../../../../shared/validation/InputValidation';
 
@@ -254,7 +255,11 @@ const PostDetailCommentSection: React.FC<PostDetailCommentSectionProps> = ({
                       </Link>
                       <div className="flex flex-col p-2 bg-white border border-gray-200 rounded-t-lg rounded-r-lg w-fit">
                         <span className="text-sm font-semibold">
-                          {comment.author.firstName} {comment.author?.lastName}
+                          <Link href={`/user/${comment?.author.username}`}>
+                            {`${comment.author.firstName} ${comment.author?.lastName}`}
+                          </Link>
+                          {' · '}
+                          <TimeAgo date={comment.createdAt} />
                         </span>
                         <div className="break-all">
                           <StringWithMentions text={comment?.content} />

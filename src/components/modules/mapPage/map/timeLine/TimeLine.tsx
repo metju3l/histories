@@ -40,7 +40,7 @@ const TimeLine: React.FC = ({}) => {
             {handles.map(({ id, value, percent }) => (
               <div
                 key={id}
-                className={`absolute px-2 cursor-pointer py-1 bg-white dark:bg-zinc-700 text-xs rounded shadow border border-gray-300 dark:border-zinc-600 -translate-x-1/2 -translate-y-1/2 z-20 font-bold text-indigo-500 dark:text-indigo-300`}
+                className={`absolute px-2 cursor-pointer py-1 bg-white dark:bg-zinc-700 text-xs rounded shadow border border-gray-300 dark:border-zinc-600 -translate-x-1/2 -translate-y-1/2 z-20 font-bold text-brand`}
                 style={{
                   top: `${percent}%`,
                 }}
@@ -58,7 +58,7 @@ const TimeLine: React.FC = ({}) => {
             {tracks.map(({ id, source, target }) => (
               <div
                 key={id}
-                className="absolute z-10 w-2 bg-indigo-500 -translate-x-1/2"
+                className="absolute z-10 w-2 bg-brand -translate-x-1/2"
                 style={{
                   top: `${source.percent}%`,
                   height: `${target.percent - source.percent}%`,

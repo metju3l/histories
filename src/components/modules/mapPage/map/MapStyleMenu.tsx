@@ -15,7 +15,7 @@ const MapStyleMenu: React.FC<IMapStyleMenu> = ({ viewport, setMapStyle }) => {
     <Menu>
       <Menu.Button
         as="button"
-        className="flex items-center bg-white border-2 shadow-2xl rounded-md hover:bg-gray-200 border-[#C0C2CA]"
+        className="flex items-center bg-white border shadow-2xl rounded-md hover:bg-gray-200 border-[#C0C2CA]"
       >
         <BiLayer className="p-1 text-gray-900 w-[29px] h-[29px]" />
       </Menu.Button>

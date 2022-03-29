@@ -2,10 +2,13 @@ import { PlaceDetailModal } from '@components/modules/modals/PlaceDetailModal';
 import PostDetailCommentSection from '@components/modules/postDetail/Comments';
 import { PostQuery } from '@graphql/queries/post.graphql';
 import UrlPrefix from '@src/constants/IPFSUrlPrefix';
+import MeContext from '@src/contexts/MeContext';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import Link from 'next/link';
+import React, { useContext, useState } from 'react';
 import { Blurhash } from 'react-blurhash';
 import { useTranslation } from 'react-i18next';
+import { HiOutlineLocationMarker, HiOutlinePlusCircle } from 'react-icons/hi';
 
 interface PostDetailTemplateProps {
   post: PostQuery['post'];
@@ -16,6 +19,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
   const [currentPhoto, setCurrentPhoto] = useState<number>(0);
   const [placeDetailModal, setPlaceDetailModal] = useState<boolean>(false); // open place detail modal
   const [showImage, setShowImage] = useState<boolean>(false);
+  const meContext = useContext(MeContext);
 
   return (
     <main
@@ -53,7 +57,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
           {post.nsfw &&
             (showImage ? (
               <button
-                className="absolute text-black right-4 bottom-4"
+                className="absolute z-30 flex items-center px-2 py-1 font-semibold text-black bg-white border border-gray-200 rounded shadow-sm gap-1.5 bottom-2 right-2"
                 onClick={() => setShowImage(false)}
               >
                 {t('hide')}
@@ -75,9 +79,9 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
               </div>
             ))}
 
-          <div className="absolute flex p-1 bg-white border border-gray-200 top-3 right-4 rounded-xl shadow-sm">
+          <div className="absolute flex bg-white border border-gray-200 p-0.5 top-3 right-4 rounded-xl shadow-sm">
             <div
-              className="relative w-20 h-20 border rounded-xl aspect-square"
+              className="relative w-20 h-20 rounded-xl aspect-square"
               onClick={() => setPlaceDetailModal(true)}
             >
               <Blurhash
@@ -95,8 +99,25 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
                 alt="Image of the place"
               />
             </div>
-            <div className="flex flex-col items-center py-2 w-80">
+            <div className="flex flex-col items-center h-20 overflow-y-hidden p-1.5 w-80">
               <a className="font-semibold">{post.place.name}</a>
+              <div className="flex justify-center py-2 gap-2">
+                <Link
+                  href={`/?lat=${post.place.latitude}&lng=${post.place.longitude}&zoom=28.5&place=${post.place.id}`}
+                >
+                  <a className="flex items-center px-2 py-1 rounded-lg gap-1.5 hover:bg-gray-100">
+                    <HiOutlineLocationMarker /> {t('show_on_map')}
+                  </a>
+                </Link>
+                {meContext.data?.me && (
+                  <Link href={`/create/post?placeID=${post.place.id}`}>
+                    <a className="flex items-center px-2 py-1 rounded-lg gap-1.5 hover:bg-gray-100">
+                      <HiOutlinePlusCircle />
+                      {t('add_photo')}
+                    </a>
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -57,7 +57,7 @@ const Map: React.FC = () => {
         zoom={mapContext.viewport.zoom}
         width="100%"
         height="100%"
-        className="relative rounded-lg"
+        className="relative"
         mapStyle={GetMapStyle(mapStyle, resolvedTheme)}
         mapboxApiAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
         ref={(instance) => (mapRef.current = instance)}
@@ -156,7 +156,7 @@ const Map: React.FC = () => {
       </div>
 
       {/* MAP STYLE */}
-      <div className="absolute z-40 right-4 bottom-4">
+      <div className="absolute z-40 right-2 bottom-2">
         <MapStyleMenu
           setMapStyle={setMapStyle}
           viewport={mapContext.viewport}

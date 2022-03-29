@@ -1,25 +1,24 @@
-import { Loading } from '@components/elements';
 import EditPlaceModal from '@components/modules/modals/EditPlaceModal';
 import { useMapSidebarPlaceQuery } from '@graphql/queries/place.graphql';
 import { useMapSidebarPostsQuery } from '@graphql/queries/post.graphql';
 import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 import { MapContext } from '@src/contexts/MapContext';
 import MeContext from '@src/contexts/MeContext';
+import i18n from '@src/translation/i18n';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import {
-  HiOutlineChevronDown,
   HiOutlineChevronLeft,
-  HiOutlineChevronUp,
-  HiOutlineLightningBolt,
   HiOutlineLocationMarker,
   HiOutlinePlusCircle,
   HiOutlineShare,
-  HiOutlineStar,
+  HiPencil,
+  HiPlus,
 } from 'react-icons/hi';
+import TimeAgo from 'react-timeago';
 
 interface PlaceProps {
   id: number;
@@ -34,15 +33,15 @@ const PlacePost: React.FC<{ post: any }> = ({ post }) => {
       key={post.id}
       passHref
     >
-      <div className="flex flex-col w-full h-64 text-left bg-white border border-gray-200 rounded-lg hover:border-gray-400 hover:shadow-sm">
+      <div className="flex flex-col w-full h-64 text-left bg-white rounded-lg hover:border-gray-400 hover:shadow-sm">
         {post.photos && (
-          <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
+          <div className="relative w-full h-full rounded-lg cursor-pointer bg-secondary">
             <Image
               src={UrlPrefix + post.photos[0].hash}
               layout="fill"
               objectFit="cover"
               objectPosition="center"
-              className="rounded-t-lg"
+              className="rounded-lg"
               alt=""
               quality={60}
             />
@@ -54,18 +53,67 @@ const PlacePost: React.FC<{ post: any }> = ({ post }) => {
                 </div>
               </div>
             )}
+
+            <div className="absolute top-0 left-0 flex items-center justify-between w-full p-1 rounded-t-lg bg-white/80">
+              <div className="flex items-center gap-1">
+                <Link href={`/user/${post.author.username}`} passHref>
+                  <Image
+                    className="rounded-full"
+                    src={
+                      post.author.profile.startsWith('http')
+                        ? post.author.profile
+                        : UrlPrefix + post.author.profile
+                    }
+                    width={30}
+                    height={30}
+                    alt={t('profile_picture')}
+                  />
+                </Link>
+                <Link href={`/user/${post.author.username}`}>
+                  <a className="font-semibold text-black">
+                    {post.author.firstName} {post.author?.lastName}
+                  </a>
+                </Link>
+              </div>
+              <span>
+                <TimeAgo date={post.createdAt} />
+              </span>
+            </div>
+            <div className="absolute bottom-0 left-0 flex w-full p-1 rounded-b-lg bg-white/80">
+              <div className="flex items-center m-auto gap-1 font-semibold">
+                <span>
+                  {post.startDay && `${post.startDay}. `}
+                  {post.startMonth &&
+                    `${new Date(0, post.startMonth, 0).toLocaleString(
+                      i18n.language,
+                      {
+                        month: 'long',
+                      }
+                    )} `}
+                  {post.startYear}
+                </span>
+                {(post.startDay !== post.endDay ||
+                  post.startMonth !== post.endMonth ||
+                  post.startYear !== post.endYear) && (
+                  <>
+                    -
+                    <span>
+                      {post.endDay && `${post.endDay}. `}
+                      {post.endMonth &&
+                        `${new Date(0, post.endMonth, 0).toLocaleString(
+                          i18n.language,
+                          {
+                            month: 'long',
+                          }
+                        )} `}
+                      {post.endYear}
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         )}
-        <div className="px-4 py-2">
-          <Link href={`/user/${post.author.username}`} passHref>
-            <h2 className="text-lg font-medium cursor-pointer">
-              {post.author.firstName} {post.author.lastName}
-            </h2>
-          </Link>
-          <h3 className="text-gray-600" style={{ fontSize: '12px' }}>
-            {post.description}
-          </h3>
-        </div>
       </div>
     </Link>
   );
@@ -96,42 +144,44 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
       />
 
       <div className="relative w-full">
-        <button
-          className="flex items-center px-4 py-2 border borer-gray-400 rounded-xl hover:bg-gray-100 gap-2"
-          onClick={() => mapContext.setSidebarPlace(null)}
-        >
-          <HiOutlineChevronLeft /> {t('show_all_places')}
-        </button>
-        <div className="pt-2">
-          <div className="relative w-full rounded-lg cursor-pointer h-52 md:h-72 bg-secondary">
+        <div className="">
+          <div className="relative w-full cursor-pointer h-52 md:h-72 bg-secondary">
             {!placeQuery.loading && (
               <Image
                 src={UrlPrefix + placeQuery.data?.place.preview?.hash}
                 layout="fill"
                 objectFit="cover"
                 objectPosition="center"
-                className="bg-gray-100 rounded-lg"
+                className="bg-zinc-300"
                 alt="Place picture"
               />
             )}
 
-            <div className="absolute bottom-0 left-0 z-20 w-full h-full text-left rounded-lg bg-gradient-to-t from-[#000000ee] via-transparent to-transparent">
-              <h1 className="absolute text-white bottom-3 left-3">
+            <div className="absolute bottom-0 left-0 z-20 w-full h-full text-center bg-gradient-to-t from-[#000000ee] via-transparent to-transparent">
+              <a className="text-white font-bold text-4xl absolute bottom-8 -translate-x-1/2">
                 {placeQuery.data?.place.name ?? 'Place detail'}
-              </h1>
+              </a>
             </div>
             {meContext.me?.isAdmin && (
               <button
                 onClick={() => setOpenEditPlaceModal(true)}
-                className="absolute z-30 px-2 py-1 font-semibold text-gray-200 border rounded top-2 right-2 backdrop-blur-sm bg-white/30 border-gray-300/30 hover:bg-white/40"
+                className="shadow-sm flex items-center gap-1.5 absolute z-30 px-2 py-1 font-semibold text-black border rounded top-2 right-2 bg-white border-gray-200"
               >
+                <HiPencil className="w-5 h-5" />
                 {t('edit_place')}
               </button>
             )}
+
+            <button
+              className="shadow-sm flex items-center gap-1.5 absolute z-30 px-2 py-1 font-semibold text-black border rounded top-2 left-2 bg-white border-gray-200"
+              onClick={() => mapContext.setSidebarPlace(null)}
+            >
+              <HiOutlineChevronLeft className="w-5 h-5" />
+            </button>
           </div>
           <div className="flex justify-center py-2 gap-2">
             <button
-              className="flex items-center px-4 py-2 border borer-gray-400 rounded-xl hover:bg-gray-100 gap-2"
+              className="flex items-center px-4 py-2 border borer-gray-400 rounded-lg hover:bg-gray-100 gap-2"
               onClick={() => {
                 if (!placeQuery.data) return;
                 mapContext.setViewport({
@@ -145,7 +195,7 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
               <HiOutlineLocationMarker /> {t('show_on_map')}
             </button>
             <button
-              className="flex items-center px-4 py-2 border borer-gray-400 rounded-xl hover:bg-gray-100 gap-2"
+              className="flex items-center px-4 py-2 border borer-gray-400 rounded-lg hover:bg-gray-100 gap-2"
               onClick={async () => {
                 await navigator.clipboard.writeText(
                   `https://www.histories.cc/?lat=${placeQuery.data?.place.latitude}&lng=${placeQuery.data?.place.longitude}&zoom=19&place=${mapContext.sidebarPlace}`
@@ -161,56 +211,50 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
                   href={`/create/post?placeID=${mapContext.sidebarPlace}`}
                   passHref
                 >
-                  <button className="flex items-center px-4 py-2 border borer-gray-400 rounded-xl hover:bg-gray-100 gap-2">
+                  <button className="flex items-center px-4 py-2 border borer-gray-400 rounded-lg hover:bg-gray-100 gap-2">
                     <HiOutlinePlusCircle />
                     {t('add_photo')}
-                  </button>
-                </Link>
-                <Link
-                  href={`/create/post?place=${mapContext.sidebarPlace}`}
-                  passHref
-                >
-                  <button className="flex items-center px-4 py-2 border borer-gray-400 rounded-xl hover:bg-gray-100 gap-2">
-                    <HiOutlineStar />
-                    {t('add_to_favorites')}
                   </button>
                 </Link>
               </>
             )}
           </div>
           {/* DESCRIPTION */}
-          <div className="px-4">
-            <h3 className="text-lg font-semibold">{t('description')}</h3>
-            <p className="pt-1 pb-4">{placeQuery.data?.place.description}</p>
-          </div>
+          {placeQuery.data?.place.description && (
+            <div className="px-4">
+              <h3 className="text-lg font-semibold">{t('description')}:</h3>
+              <p className="pt-1 pb-4">{placeQuery.data?.place.description}</p>
+            </div>
+          )}
           <div className="w-full border-b border-gray-200 dark:border-gray-800" />
           <div className="px-4">
-            <h3 className="py-4 text-lg font-semibold">Photos</h3>
-            <div className="flex items-center pb-4 gap-2">
-              <span className="font-medium">Sort by: </span>{' '}
-              <button className="flex items-center px-4 py-2 border borer-gray-400 rounded-xl hover:bg-gray-100 gap-2">
-                <HiOutlineChevronUp /> Newest
-              </button>
-              <button className="flex items-center px-4 py-2 border borer-gray-400 rounded-xl hover:bg-gray-100 gap-2">
-                <HiOutlineChevronDown /> Oldest
-              </button>
-              <button className="flex items-center px-4 py-2 border borer-gray-400 rounded-xl hover:bg-gray-100 gap-2">
-                <HiOutlineLightningBolt /> Popular
-              </button>
-            </div>
-            <div>
+            <h3 className="py-4 text-lg font-semibold">{t('posts')}:</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {postsQuery.loading ? (
-                <div className="flex justify-around w-full pt-24">
-                  <Loading size="xl" />
-                </div>
+                [null, null, null, null, null].map((_, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col w-full h-64 text-left border border-gray-200 rounded-lg bg-zinc-200 animate-pulse"
+                  />
+                ))
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <>
                   {postsQuery.data?.posts
                     .filter((post) => post.photos[0]?.hash)
                     .map((post) => (
                       <PlacePost key={post.id} post={post} />
-                    ))}
-                </div>
+                    ))}{' '}
+                  <Link
+                    href={`/create/post?placeID=${mapContext.sidebarPlace}`}
+                    passHref
+                  >
+                    <div className="flex items-center justify-center w-full h-64 border border-gray-200 rounded-lg bg-zinc-200 hover:bg-zinc-300">
+                      <div className="p-2 rounded-lg border-2 border-zinc-400 text-zinc-500">
+                        <HiPlus className="w-5 h-5" />
+                      </div>
+                    </div>
+                  </Link>
+                </>
               )}
             </div>
           </div>

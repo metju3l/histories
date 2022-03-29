@@ -21,9 +21,9 @@ const UserLayout: React.FC<UserLayoutProps> = ({
 }) => {
   return (
     <Layout head={head}>
-      <div className="px-4 m-auto grid grid-cols-12 lg:gap-8 max-w-screen-2xl gap-6 pt-[10vh] h-[calc(100vh - 300px)]">
+      <div className="px-4 m-auto grid grid-cols-12 lg:gap-8 max-w-screen-2xl gap-6 pt-16 h-[calc(100vh - 300px)]">
         <LeftPanel user={user} />
-        <div className="h-full lg:col-span-8 md:col-span-12 col-span-12 space-y-2">
+        <div className="h-full lg:col-start-4 md:col-start-6 col-start-0 lg:col-span-8 md:col-span-12 col-span-full space-y-2">
           {/* SUBNAV */}
           <SubNav currentTab={currentTab} user={user} />
           <main className="w-full" style={{ height: 'calc(100vh - 400px)' }}>

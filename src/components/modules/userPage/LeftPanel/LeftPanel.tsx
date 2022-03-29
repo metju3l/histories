@@ -48,7 +48,7 @@ const UserLeftPanel: React.FC<UserLeftPanelProps> = ({ user }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="relative top-0 flex flex-col items-center lg:col-span-4 md:col-span-12 col-span-12">
+    <div className="block md:fixed top-24 flex flex-col items-center lg:col-span-4 md:col-span-12 col-span-full">
       {/* PROFILE PICTURE */}
       <Link href={`/user/${user.username}/profile`} passHref>
         <div className="relative w-48 h-48 rounded-full sm:h-40 sm:w-40 transition-all duration-400 ease-in-out">
