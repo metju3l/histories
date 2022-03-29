@@ -1,28 +1,11 @@
-import { Tooltip } from '@components/elements';
 import { PlaceDetailModal } from '@components/modules/modals/PlaceDetailModal';
 import PostDetailCommentSection from '@components/modules/postDetail/Comments';
-import {
-  useLikeMutation,
-  useUnlikeMutation,
-} from '@graphql/mutations/relations.graphql';
 import { PostQuery } from '@graphql/queries/post.graphql';
 import UrlPrefix from '@src/constants/IPFSUrlPrefix';
-import MeContext from '@src/contexts/MeContext';
-import i18n from '@src/translation/i18n';
-import { motion } from 'framer-motion';
 import Image from 'next/image';
-import Link from 'next/link';
 import React, { useState } from 'react';
 import { Blurhash } from 'react-blurhash';
-import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
-import {
-  HiArrowSmLeft,
-  HiArrowSmRight,
-  HiOutlineCalendar,
-  HiOutlineHeart,
-  HiOutlineLocationMarker,
-} from 'react-icons/hi';
 
 interface PostDetailTemplateProps {
   post: PostQuery['post'];
@@ -92,7 +75,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
               </div>
             ))}
 
-          <div className="flex p-1 absolute top-3 right-4 bg-white rounded-xl">
+          <div className="absolute flex p-1 bg-white top-3 right-4 rounded-xl">
             <div
               className="relative w-20 h-20 border rounded-xl shadow-sm aspect-square col-start-2 col-span-1"
               onClick={() => setPlaceDetailModal(true)}
@@ -112,7 +95,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
                 alt="Image of the place"
               />
             </div>
-            <div className="flex flex-col w-80 items-center py-2">
+            <div className="flex flex-col items-center py-2 w-80">
               <a className="font-semibold">{post.place.name}</a>
             </div>
           </div>

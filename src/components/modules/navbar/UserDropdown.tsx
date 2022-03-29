@@ -16,24 +16,24 @@ const UserDropdown: React.FC = () => {
 
   return (
     <Menu as="div" className="relative">
-      <Menu.Button
-        as="div"
-        className="relative w-8 h-8 border-2 border-transparent rounded-full cursor-pointer transition ease-in-out hover:border-gray-200"
-      >
-        <Image
-          className="rounded-full gray-400"
-          src={
-            // if user has a profile picture add IPFS gateway to hash
-            meContext.data!.me!.profile.startsWith('http')
-              ? meContext.data!.me!.profile
-              : UrlPrefix + meContext.data!.me!.profile
-          }
-          layout="fill"
-          objectFit="contain"
-          objectPosition="center"
-          alt="Profile picture"
-          quality={40}
-        />
+      <Menu.Button as="div" className="flex items-center gap-1">
+        <div className="relative w-8 h-8 border-2 border-transparent rounded-full cursor-pointer transition ease-in-out hover:border-gray-200">
+          <Image
+            className="rounded-full gray-400"
+            src={
+              // if user has a profile picture add IPFS gateway to hash
+              meContext.data!.me!.profile.startsWith('http')
+                ? meContext.data!.me!.profile
+                : UrlPrefix + meContext.data!.me!.profile
+            }
+            layout="fill"
+            objectFit="contain"
+            objectPosition="center"
+            alt="Profile picture"
+            quality={20}
+          />
+        </div>
+        <a className="font-semibold">{meContext.data!.me?.firstName}</a>
       </Menu.Button>
       <Transition as={Fragment} {...DropdownTransition}>
         <Menu.Items as="div" className="dropdown">

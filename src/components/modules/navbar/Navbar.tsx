@@ -81,9 +81,16 @@ const Navbar: React.FC = () => {
         </span>
 
         {/* RIGHT SIDE */}
-        <span className="flex items-center gap-2 pr-č">
+        <span className="flex items-center gap-4">
           {userIsLogged ? (
-            <UserDropdown />
+            <>
+              <Link href="/create/post">
+                <a className="px-4 py-2 text-white rounded-lg bg-brand">
+                  {t('create_post')}
+                </a>
+              </Link>
+              <UserDropdown />
+            </>
           ) : (
             <>
               <span className="hidden md:block">
