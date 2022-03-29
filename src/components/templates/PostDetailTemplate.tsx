@@ -75,9 +75,9 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
               </div>
             ))}
 
-          <div className="absolute flex p-1 bg-white top-3 right-4 rounded-xl">
+          <div className="absolute flex p-1 bg-white border border-gray-200 top-3 right-4 rounded-xl shadow-sm">
             <div
-              className="relative w-20 h-20 border rounded-xl shadow-sm aspect-square col-start-2 col-span-1"
+              className="relative w-20 h-20 border rounded-xl aspect-square"
               onClick={() => setPlaceDetailModal(true)}
             >
               <Blurhash

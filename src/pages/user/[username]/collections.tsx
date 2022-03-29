@@ -21,7 +21,6 @@ const CollectionsPage: React.FC<{
   anonymous: boolean;
 }> = ({ userQuery }) => {
   const user = userQuery.user as NonNullable<UserQuery['user']>;
-  const meContext = useContext(MeContext);
 
   const { t } = useTranslation();
 
