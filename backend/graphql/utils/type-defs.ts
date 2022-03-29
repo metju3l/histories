@@ -254,7 +254,7 @@ export default gql`
     latitude: Float
     longitude: Float
     placeID: Int
-    photo: [Upload!]
+    photo: [Upload!]!
 
     startDay: Int
     startMonth: Int
