@@ -225,13 +225,7 @@ const mutations = {
 
     const historicalDate = IsValidHistoricalDate(input);
 
-    // if last post / collection was created less than 10 seconds ago
-    if (
-      new Date().getTime() -
-        parseInt(await LastPost({ userID: context.decoded.id })) <
-      10000
-    )
-      throw new Error('you can create post every 10sec');
+    if (input.photo.length < 1) throw new Error('Invalid photos');
 
     const photos: Array<{
       hash: string;

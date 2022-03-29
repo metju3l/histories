@@ -1,1 +1,1 @@
-export const orange_main = '#3b82f6';
+export const orange_main = '#FF4F00';
