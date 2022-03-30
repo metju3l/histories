@@ -1,6 +1,6 @@
 import { MapContext } from '@src/contexts/MapContext';
 import { GetDistance } from '@src/functions/map';
-import React from 'react';
+import React, { useContext } from 'react';
 import { MapRef } from 'react-map-gl';
 import useSupercluster from 'use-supercluster';
 
@@ -9,7 +9,7 @@ import GetPoints from './GetPoints';
 import Marker from './Marker';
 
 interface ILeaf {
-  properties: { preview: string | null };
+  properties: { preview: string | null; id: number };
   geometry: { coordinates: [number, number] };
 }
 
@@ -25,12 +25,12 @@ interface ICluster {
   geometry: { coordinates: [number, number] };
 }
 
-interface ClustersProps {
+interface IClustersProps {
   mapRef: React.MutableRefObject<Maybe<MapRef>>;
 }
 
-const Clusters: React.FC<ClustersProps> = ({ mapRef }) => {
-  const mapContext = React.useContext(MapContext);
+const Clusters: React.FC<IClustersProps> = ({ mapRef }) => {
+  const mapContext = useContext(MapContext);
 
   const { clusters, supercluster } = useSupercluster({
     points: GetPoints(), // get places from query in correct format
@@ -85,7 +85,11 @@ const Clusters: React.FC<ClustersProps> = ({ mapRef }) => {
           <Marker
             key={index}
             place={{
-              id: cluster.properties.id,
+              id: isCluster
+                ? supercluster
+                    .getLeaves(cluster.id)
+                    .map((leaf: ILeaf) => leaf.properties.id)
+                : [cluster.properties.id],
               longitude: cluster.geometry.coordinates[0],
               latitude: cluster.geometry.coordinates[1],
               isCluster,

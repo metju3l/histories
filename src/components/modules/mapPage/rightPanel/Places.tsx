@@ -2,21 +2,20 @@ import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 import { MapContext } from '@src/contexts/MapContext';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import React from 'react';
+import React, { useContext } from 'react';
 
 const Places: React.FC = () => {
-  const mapContext = React.useContext(MapContext);
+  const mapContext = useContext(MapContext);
 
   return (
     <>
       {mapContext.placesQuery?.data?.places
-        .filter(
-          (place) =>
-            place.years.filter(
-              (year) =>
-                year >= mapContext.timeLimitation[0] &&
-                year <= mapContext.timeLimitation[1]
-            ).length > 0
+        .filter((place) =>
+          place.years.some(
+            (year) =>
+              year >= mapContext.timeLimitation[0] &&
+              year <= mapContext.timeLimitation[1]
+          )
         )
         .filter(
           (place) =>
@@ -27,14 +26,12 @@ const Places: React.FC = () => {
             place?.preview?.hash
         )
         .map(
-          (place) =>
+          (place, index) =>
             place.preview && (
               <motion.div
-                key={place.id}
-                className={`flex flex-col w-full h-64 bg-white border border-gray-200 rounded-lg ${
-                  mapContext.hoverPlaceId === place.id
-                    ? 'border-black shadow-sm'
-                    : ''
+                key={index}
+                className={`flex flex-col w-full h-64 bg-white rounded-md ${
+                  mapContext.hoverPlaceId === place.id ? 'shadow-lg' : ''
                 }`}
                 onClick={() => mapContext.setSidebarPlace(place.id)}
                 onMouseEnter={() => mapContext.setHoverPlaceId(place.id)}
@@ -47,23 +44,22 @@ const Places: React.FC = () => {
                 }}
               >
                 {place.preview && (
-                  <div className="relative w-full h-full rounded-t-lg cursor-pointer bg-secondary">
+                  <div className="relative w-full h-full cursor-pointer bg-secondary">
                     <Image
                       src={UrlPrefix + place.preview.hash}
                       layout="fill"
                       objectFit="cover"
                       objectPosition="center"
-                      className="rounded-t-lg"
+                      className="rounded-md"
                       alt="Profile picture"
                     />
+                    <div className="absolute bottom-0 left-0 w-full h-full text-center rounded-md bg-gradient-to-t from-[#000000ee] via-transparent to-transparent">
+                      <a className="absolute w-full px-2 text-base font-bold text-white bottom-2 -translate-x-1/2">
+                        {place?.name}
+                      </a>
+                    </div>
                   </div>
                 )}
-                <div className="px-4 py-2">
-                  <h2 className="text-lg font-medium">{place?.name}</h2>
-                  <h3 className="text-gray-600" style={{ fontSize: '12px' }}>
-                    {place.description?.substring(0, 35)}...
-                  </h3>
-                </div>
               </motion.div>
             )
         ) ?? null}

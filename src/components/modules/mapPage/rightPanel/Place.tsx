@@ -4,7 +4,6 @@ import { useMapSidebarPostsQuery } from '@graphql/queries/post.graphql';
 import UrlPrefix from '@src/constants/IPFSUrlPrefix';
 import { MapContext } from '@src/contexts/MapContext';
 import MeContext from '@src/contexts/MeContext';
-import i18n from '@src/translation/i18n';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -47,7 +46,7 @@ const PlacePost: React.FC<{ post: any }> = ({ post }) => {
             />
 
             {post.nsfw && (
-              <div className="absolute inset-0 flex items-center justify-center backdrop-blur-2xl bg-black/40">
+              <div className="absolute inset-0 flex items-center justify-center backdrop-blur-2xl rounded-xl bg-black/40">
                 <div className="text-center text-white">
                   {t('nsfw_warning')}
                 </div>
@@ -80,34 +79,11 @@ const PlacePost: React.FC<{ post: any }> = ({ post }) => {
               </span>
             </div>
             <div className="absolute bottom-0 left-0 flex w-full p-1 rounded-b-lg bg-white/80">
-              <div className="flex items-center m-auto gap-1 font-semibold">
-                <span>
-                  {post.startDay && `${post.startDay}. `}
-                  {post.startMonth &&
-                    `${new Date(0, post.startMonth, 0).toLocaleString(
-                      i18n.language,
-                      {
-                        month: 'long',
-                      }
-                    )} `}
-                  {post.startYear}
-                </span>
-                {(post.startDay !== post.endDay ||
-                  post.startMonth !== post.endMonth ||
-                  post.startYear !== post.endYear) && (
+              <div className="flex items-center m-auto font-semibold gap-1">
+                <span>{post.startYear}</span>
+                {post.startYear !== post.endYear && (
                   <>
-                    -
-                    <span>
-                      {post.endDay && `${post.endDay}. `}
-                      {post.endMonth &&
-                        `${new Date(0, post.endMonth, 0).toLocaleString(
-                          i18n.language,
-                          {
-                            month: 'long',
-                          }
-                        )} `}
-                      {post.endYear}
-                    </span>
+                    -<span>{post.endYear}</span>
                   </>
                 )}
               </div>
@@ -158,7 +134,7 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
             )}
 
             <div className="absolute bottom-0 left-0 z-20 w-full h-full text-center bg-gradient-to-t from-[#000000ee] via-transparent to-transparent">
-              <a className="text-white font-bold text-4xl absolute bottom-8 -translate-x-1/2">
+              <a className="text-white font-bold w-full px-2 text-4xl absolute bottom-8 -translate-x-1/2">
                 {placeQuery.data?.place.name ?? 'Place detail'}
               </a>
             </div>

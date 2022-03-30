@@ -7,7 +7,7 @@ import { Marker as MapGLMarker } from 'react-map-gl';
 
 interface MarkerProps {
   place: {
-    id: number;
+    id: number[];
     longitude: number;
     latitude: number;
     icon?: string | null;
@@ -29,19 +29,29 @@ const Marker: React.FC<MarkerProps> = ({ place, onClick, numberOfPlaces }) => {
     <MapGLMarker latitude={place.latitude} longitude={place.longitude}>
       <div className="relative">
         <div
-          className={`absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full 
-              ${hasIcon ? 'w-24 h-24' : 'w-16 h-16'}
+          className={`absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full transition-all duration-200 ease-in-out 
               ${
-                !loadingImage ? 'border-2' : '' // don't show border when showing placeholder icon
+                hasIcon
+                  ? 'w-24 h-24'
+                  : mapContext.hoverPlaceId !== null &&
+                    place.id.includes(mapContext.hoverPlaceId)
+                  ? 'w-20 h-20'
+                  : 'w-16 h-16 hover:w-20 hover:h-20'
               }
               ${
-                !hasIcon && mapContext.hoverPlaceId === place.id
-                  ? 'border-blue-500'
+                !loadingImage ? 'border-2' : 'border-0' // don't show border when showing placeholder icon
+              }
+              ${
+                !hasIcon &&
+                mapContext.hoverPlaceId !== null &&
+                place.id.includes(mapContext.hoverPlaceId)
+                  ? 'border-white'
                   : 'border-white'
               }`}
-          onMouseEnter={() =>
-            !place.isCluster && mapContext.setHoverPlaceId(place.id)
-          }
+          onMouseEnter={() => {
+            if (place.id.length > 1)
+              !place.isCluster && mapContext.setHoverPlaceId(place.id[0]);
+          }}
           onMouseLeave={() =>
             !place.isCluster && mapContext.setHoverPlaceId(null)
           }
@@ -52,7 +62,7 @@ const Marker: React.FC<MarkerProps> = ({ place, onClick, numberOfPlaces }) => {
             <div
               className={`absolute ${
                 loadingImage ? 'top-0 right-0' : '-top-2 -right-2'
-              } w-6 h-6 text-white text-center bg-blue-500 rounded-full z-20`}
+              } w-6 h-6 text-white text-center bg-brand rounded-full z-20`}
             >
               {numberOfPlaces}
             </div>
@@ -61,7 +71,7 @@ const Marker: React.FC<MarkerProps> = ({ place, onClick, numberOfPlaces }) => {
           {/* PLACE ICON/PREVIEW */}
           {loadingImage &&
             !hasIcon && ( // if image is loading show universal place icon
-              <div className="p-4 text-blue-500">
+              <div className="p-4 text-brand">
                 <PhotoMarkerIcon />
               </div>
             )}
