@@ -3,9 +3,12 @@ import { MapContext } from '@src/contexts/MapContext';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React, { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Places: React.FC = () => {
   const mapContext = useContext(MapContext);
+
+  const { t } = useTranslation();
 
   return (
     <>
@@ -30,7 +33,7 @@ const Places: React.FC = () => {
             place.preview && (
               <motion.div
                 key={index}
-                className={`flex flex-col w-full h-64 bg-white rounded-md ${
+                className={`flex flex-col w-full h-64 bg-zinc-300 dark:bg-zinc-800/80 rounded-md ${
                   mapContext.hoverPlaceId === place.id ? 'shadow-lg' : ''
                 }`}
                 onClick={() => mapContext.setSidebarPlace(place.id)}
@@ -51,7 +54,7 @@ const Places: React.FC = () => {
                       objectFit="cover"
                       objectPosition="center"
                       className="rounded-md"
-                      alt="Profile picture"
+                      alt={t('place_preview')}
                     />
                     <div className="absolute bottom-0 left-0 w-full h-full text-center rounded-md bg-gradient-to-t from-[#000000ee] via-transparent to-transparent">
                       <a className="absolute w-full px-2 text-base font-bold text-white bottom-2 -translate-x-1/2">

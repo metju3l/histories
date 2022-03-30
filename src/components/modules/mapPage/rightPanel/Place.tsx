@@ -6,7 +6,7 @@ import { MapContext } from '@src/contexts/MapContext';
 import MeContext from '@src/contexts/MeContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import {
@@ -32,7 +32,7 @@ const PlacePost: React.FC<{ post: any }> = ({ post }) => {
       key={post.id}
       passHref
     >
-      <div className="flex flex-col w-full h-64 text-left bg-white rounded-lg hover:border-gray-400 hover:shadow-sm">
+      <div className="flex flex-col w-full h-64 text-left rounded-lg bg-zinc-200 dark:bg-zinc-800/80 hover:bg-zinc-300 dark:hover:bg-zinc-800 hover:shadow-sm dark:text-white text-black">
         {post.photos && (
           <div className="relative w-full h-full rounded-lg cursor-pointer bg-secondary">
             <Image
@@ -53,7 +53,7 @@ const PlacePost: React.FC<{ post: any }> = ({ post }) => {
               </div>
             )}
 
-            <div className="absolute top-0 left-0 flex items-center justify-between w-full p-1 rounded-t-lg bg-white/80">
+            <div className="absolute top-0 left-0 flex items-center justify-between w-full p-1 rounded-t-lg bg-white/80 dark:bg-zinc-900/80">
               <div className="flex items-center gap-1">
                 <Link href={`/user/${post.author.username}`} passHref>
                   <Image
@@ -69,7 +69,7 @@ const PlacePost: React.FC<{ post: any }> = ({ post }) => {
                   />
                 </Link>
                 <Link href={`/user/${post.author.username}`}>
-                  <a className="font-semibold text-black">
+                  <a className="font-semibold">
                     {post.author.firstName} {post.author?.lastName}
                   </a>
                 </Link>
@@ -78,7 +78,7 @@ const PlacePost: React.FC<{ post: any }> = ({ post }) => {
                 <TimeAgo date={post.createdAt} />
               </span>
             </div>
-            <div className="absolute bottom-0 left-0 flex w-full p-1 rounded-b-lg bg-white/80">
+            <div className="absolute bottom-0 left-0 flex w-full p-1 rounded-b-lg bg-white/80 dark:bg-zinc-900/80">
               <div className="flex items-center m-auto font-semibold gap-1">
                 <span>{post.startYear}</span>
                 {post.startYear !== post.endYear && (
@@ -96,8 +96,8 @@ const PlacePost: React.FC<{ post: any }> = ({ post }) => {
 };
 
 const Place: React.FC<PlaceProps> = ({ id }) => {
-  const mapContext = React.useContext(MapContext); // get map context
-  const meContext = React.useContext(MeContext); // get me context
+  const mapContext = useContext(MapContext); // get map context
+  const meContext = useContext(MeContext); // get me context
   const { t } = useTranslation<string>();
   const placeQuery = useMapSidebarPlaceQuery({
     variables: { id },
@@ -119,121 +119,119 @@ const Place: React.FC<PlaceProps> = ({ id }) => {
         refetch={async () => await placeQuery.refetch()}
       />
 
-      <div className="relative w-full">
-        <div className="">
-          <div className="relative w-full cursor-pointer h-52 md:h-72 bg-secondary">
-            {!placeQuery.loading && (
-              <Image
-                src={UrlPrefix + placeQuery.data?.place.preview?.hash}
-                layout="fill"
-                objectFit="cover"
-                objectPosition="center"
-                className="bg-zinc-300"
-                alt="Place picture"
-              />
-            )}
+      <div className="relative w-full text-black dark:text-white cursor-pointer h-52 md:h-72 bg-secondary">
+        {!placeQuery.loading && (
+          <Image
+            src={UrlPrefix + placeQuery.data?.place.preview?.hash}
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center"
+            className="bg-zinc-300 dark:bg-zinc-800/80"
+            alt="Place picture"
+          />
+        )}
 
-            <div className="absolute bottom-0 left-0 z-20 w-full h-full text-center bg-gradient-to-t from-[#000000ee] via-transparent to-transparent">
-              <a className="text-white font-bold w-full px-2 text-4xl absolute bottom-8 -translate-x-1/2">
-                {placeQuery.data?.place.name ?? 'Place detail'}
-              </a>
-            </div>
-            {meContext.me?.isAdmin && (
-              <button
-                onClick={() => setOpenEditPlaceModal(true)}
-                className="shadow-sm flex items-center gap-1.5 absolute z-30 px-2 py-1 font-semibold text-black border rounded top-2 right-2 bg-white border-gray-200"
-              >
-                <HiPencil className="w-5 h-5" />
-                {t('edit_place')}
+        <div className="absolute bottom-0 left-0 z-20 w-full h-full text-center bg-gradient-to-t from-[#000000ee] via-transparent to-transparent">
+          <a className="font-bold w-full px-2 text-4xl absolute bottom-8 -translate-x-1/2">
+            {placeQuery.data?.place.name ?? 'Place detail'}
+          </a>
+        </div>
+        {meContext.me?.isAdmin && (
+          <button
+            onClick={() => setOpenEditPlaceModal(true)}
+            className="shadow-sm flex items-center gap-1.5 absolute z-30 px-2 py-1 font-semibold border rounded top-2 right-2 bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-900"
+          >
+            <HiPencil className="w-5 h-5" />
+            {t('edit_place')}
+          </button>
+        )}
+
+        <button
+          className="shadow-sm flex items-center gap-1.5 absolute z-30 px-2 py-1 font-semibold border rounded top-2 left-2 bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-900"
+          onClick={() => mapContext.setSidebarPlace(null)}
+        >
+          <HiOutlineChevronLeft className="w-5 h-5" />
+        </button>
+      </div>
+      <div className="flex justify-center py-2 gap-2">
+        <button
+          className="flex items-center px-4 py-2 border borer-gray-400 rounded-lg hover:bg-gray-100 gap-2"
+          onClick={() => {
+            if (!placeQuery.data) return;
+            mapContext.setViewport({
+              ...mapContext.viewport,
+              latitude: placeQuery.data?.place.latitude,
+              longitude: placeQuery.data?.place.longitude,
+              zoom: 19,
+            });
+          }}
+        >
+          <HiOutlineLocationMarker /> {t('show_on_map')}
+        </button>
+        <button
+          className="flex items-center px-4 py-2 border borer-gray-400 rounded-lg hover:bg-gray-100 gap-2"
+          onClick={async () => {
+            await navigator.clipboard.writeText(
+              `https://www.histories.cc/?lat=${placeQuery.data?.place.latitude}&lng=${placeQuery.data?.place.longitude}&zoom=19&place=${mapContext.sidebarPlace}`
+            );
+            toast.success(t('link_copied'));
+          }}
+        >
+          <HiOutlineShare /> {t('share')}
+        </button>
+        {meContext.data?.me && (
+          <>
+            <Link
+              href={`/create/post?placeID=${mapContext.sidebarPlace}`}
+              passHref
+            >
+              <button className="flex items-center px-4 py-2 border borer-gray-400 rounded-lg hover:bg-gray-100 gap-2">
+                <HiOutlinePlusCircle />
+                {t('add_photo')}
               </button>
-            )}
-
-            <button
-              className="shadow-sm flex items-center gap-1.5 absolute z-30 px-2 py-1 font-semibold text-black border rounded top-2 left-2 bg-white border-gray-200"
-              onClick={() => mapContext.setSidebarPlace(null)}
-            >
-              <HiOutlineChevronLeft className="w-5 h-5" />
-            </button>
-          </div>
-          <div className="flex justify-center py-2 gap-2">
-            <button
-              className="flex items-center px-4 py-2 border borer-gray-400 rounded-lg hover:bg-gray-100 gap-2"
-              onClick={() => {
-                if (!placeQuery.data) return;
-                mapContext.setViewport({
-                  ...mapContext.viewport,
-                  latitude: placeQuery.data?.place.latitude,
-                  longitude: placeQuery.data?.place.longitude,
-                  zoom: 19,
-                });
-              }}
-            >
-              <HiOutlineLocationMarker /> {t('show_on_map')}
-            </button>
-            <button
-              className="flex items-center px-4 py-2 border borer-gray-400 rounded-lg hover:bg-gray-100 gap-2"
-              onClick={async () => {
-                await navigator.clipboard.writeText(
-                  `https://www.histories.cc/?lat=${placeQuery.data?.place.latitude}&lng=${placeQuery.data?.place.longitude}&zoom=19&place=${mapContext.sidebarPlace}`
-                );
-                toast.success(t('link_copied'));
-              }}
-            >
-              <HiOutlineShare /> {t('share')}
-            </button>
-            {meContext.data?.me && (
-              <>
+            </Link>
+          </>
+        )}
+      </div>
+      {/* DESCRIPTION */}
+      {placeQuery.data?.place.description && (
+        <div className="px-4">
+          <h3 className="text-lg font-semibold">{t('description')}:</h3>
+          <p className="pt-1 pb-4">{placeQuery.data?.place.description}</p>
+        </div>
+      )}
+      <div className="w-full border-b border-gray-200 dark:border-gray-800" />
+      <div className="px-4">
+        <h3 className="py-4 text-lg font-semibold">{t('posts')}:</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {postsQuery.loading ? (
+            [null, null, null].map((_, index) => (
+              <div
+                key={index}
+                className="flex flex-col w-full h-64 text-left rounded-lg bg-zinc-200 dark:bg-zinc-800/80  animate-pulse"
+              />
+            ))
+          ) : (
+            <>
+              {postsQuery.data?.posts
+                .filter((post) => post.photos[0]?.hash)
+                .map((post) => (
+                  <PlacePost key={post.id} post={post} />
+                ))}
+              {meContext.data?.me && (
                 <Link
                   href={`/create/post?placeID=${mapContext.sidebarPlace}`}
                   passHref
                 >
-                  <button className="flex items-center px-4 py-2 border borer-gray-400 rounded-lg hover:bg-gray-100 gap-2">
-                    <HiOutlinePlusCircle />
-                    {t('add_photo')}
-                  </button>
-                </Link>
-              </>
-            )}
-          </div>
-          {/* DESCRIPTION */}
-          {placeQuery.data?.place.description && (
-            <div className="px-4">
-              <h3 className="text-lg font-semibold">{t('description')}:</h3>
-              <p className="pt-1 pb-4">{placeQuery.data?.place.description}</p>
-            </div>
-          )}
-          <div className="w-full border-b border-gray-200 dark:border-gray-800" />
-          <div className="px-4">
-            <h3 className="py-4 text-lg font-semibold">{t('posts')}:</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {postsQuery.loading ? (
-                [null, null, null, null, null].map((_, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-col w-full h-64 text-left border border-gray-200 rounded-lg bg-zinc-200 animate-pulse"
-                  />
-                ))
-              ) : (
-                <>
-                  {postsQuery.data?.posts
-                    .filter((post) => post.photos[0]?.hash)
-                    .map((post) => (
-                      <PlacePost key={post.id} post={post} />
-                    ))}{' '}
-                  <Link
-                    href={`/create/post?placeID=${mapContext.sidebarPlace}`}
-                    passHref
-                  >
-                    <div className="flex items-center justify-center w-full h-64 border border-gray-200 rounded-lg bg-zinc-200 hover:bg-zinc-300">
-                      <div className="p-2 rounded-lg border-2 border-zinc-400 text-zinc-500">
-                        <HiPlus className="w-5 h-5" />
-                      </div>
+                  <div className="flex items-center justify-center w-full h-64  rounded-lg bg-zinc-200 dark:bg-zinc-800/80 hover:bg-zinc-300 dark:hover:bg-zinc-800">
+                    <div className="p-2 rounded-lg border-2 border-zinc-400 dark:border-zinc-700 text-zinc-600">
+                      <HiPlus className="w-5 h-5" />
                     </div>
-                  </Link>
-                </>
+                  </div>
+                </Link>
               )}
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </div>
     </>

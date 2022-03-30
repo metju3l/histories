@@ -1,17 +1,17 @@
 import { MapContext } from '@src/contexts/MapContext';
 import { AnimatePresence, motion } from 'framer-motion';
-import React from 'react';
+import React, { useContext } from 'react';
 import { HiOutlineChevronLeft } from 'react-icons/hi';
 
 import { Map } from './map';
 import RightPanel from './rightPanel/RightPanel';
 
 const MapPageGrid: React.FC = () => {
-  const mapContext = React.useContext(MapContext);
+  const mapContext = useContext(MapContext);
 
   return (
     <div
-      className="w-full bg-[#FAFBFB] dark:bg-[#171716]"
+      className="w-full bg-[#FAFBFB] dark:bg-[#171716] text-black dark:text-white"
       style={{ height: 'calc(100vh - 56px)' }}
     >
       <AnimatePresence>
@@ -31,10 +31,10 @@ const MapPageGrid: React.FC = () => {
             {/* HIDE SIDEBAR ARROW ICON */}
             <button
               onClick={() => mapContext.setShowSidebar(!mapContext.showSidebar)}
-              className="absolute z-40 flex items-center invisible h-8 py-1 text-gray-500 bg-white border border-gray-200 top-4 right-4 hover:text-black hover:border-gray-400 rounded-xl md:visible"
+              className="absolute z-10 flex items-center invisible py-2 px-1 bg-[#FAFBFB] dark:bg-[#171716] top-1/2 transform -translate-y-1/2 right-0 rounded-l-lg md:visible"
             >
               <HiOutlineChevronLeft
-                className={`w-8 py-1 h-8 transition-all duration-500 ease-in-out ${
+                className={`w-6 h-6 transition-all duration-500 ease-in-out ${
                   mapContext.showSidebar ? 'rotate-180' : 'rotate-0'
                 }`}
               />

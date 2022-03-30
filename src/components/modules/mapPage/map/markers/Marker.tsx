@@ -45,8 +45,8 @@ const Marker: React.FC<MarkerProps> = ({ place, onClick, numberOfPlaces }) => {
                 !hasIcon &&
                 mapContext.hoverPlaceId !== null &&
                 place.id.includes(mapContext.hoverPlaceId)
-                  ? 'border-white'
-                  : 'border-white'
+                  ? 'border-white dark:border-zinc-700'
+                  : 'border-white dark:border-zinc-700'
               }`}
           onMouseEnter={() => {
             if (place.id.length > 1)
