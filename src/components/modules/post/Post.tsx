@@ -156,31 +156,35 @@ const Post: React.FC<PostProps> = ({
 
         {photos && (
           <div className="relative w-full bg-white cursor-pointer dark:bg-black h-[360px] bg-secondary">
-            <div className="flex items-center justify-center w-full h-full">
-              <Blurhash
-                hash={photos[0].blurhash}
-                width={
-                  photos[0].width > photos[0].height
-                    ? 405
-                    : (photos[0].width / photos[0].height) * 360
-                }
-                height={
-                  photos[0].height > photos[0].width
-                    ? 360
-                    : (photos[0].height / photos[0].width) * 360
-                }
-                punch={1}
-              />
-            </div>
-            <Image
-              src={UrlPrefix + photos[0].hash}
-              layout="fill"
-              objectFit="contain"
-              placeholder="blur"
-              blurDataURL={'https://ipfs.io/ipfs' + photos[0].hash}
-              objectPosition="center"
-              alt="Post photo"
-            />
+            <Link href={`/post/${id}`} passHref>
+              <div>
+                <div className="flex items-center justify-center w-full h-full">
+                  <Blurhash
+                    hash={photos[0].blurhash}
+                    width={
+                      photos[0].width > photos[0].height
+                        ? 405
+                        : (photos[0].width / photos[0].height) * 360
+                    }
+                    height={
+                      photos[0].height > photos[0].width
+                        ? 360
+                        : (photos[0].height / photos[0].width) * 360
+                    }
+                    punch={1}
+                  />
+                </div>
+                <Image
+                  src={UrlPrefix + photos[0].hash}
+                  layout="fill"
+                  objectFit="contain"
+                  placeholder="blur"
+                  blurDataURL={'https://ipfs.io/ipfs' + photos[0].hash}
+                  objectPosition="center"
+                  alt="Post photo"
+                />
+              </div>
+            </Link>
             {/* NSFW accept */}
             {isNsfw &&
               (showImage ? (
