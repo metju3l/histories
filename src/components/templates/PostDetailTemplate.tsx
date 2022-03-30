@@ -36,7 +36,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
         place={post.place}
       />
 
-      <div className="flex w-full h-full">
+      <div className="flex lg:flex-row flex-col  w-full h-full">
         <div className="relative w-full h-full">
           <Blurhash
             hash={post.photos[currentPhoto].blurhash}
@@ -79,7 +79,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
               </div>
             ))}
 
-          <div className="absolute flex bg-white border border-gray-200 p-0.5 top-3 right-4 rounded-xl shadow-sm">
+          <div className="absolute flex bg-white border border-gray-200 p-0.5 top-3 right-[10%] lg:right-4 rounded-xl shadow-sm lg:w-80 w-[80%]">
             <div
               className="relative w-20 h-20 rounded-xl aspect-square"
               onClick={() => setPlaceDetailModal(true)}
@@ -99,7 +99,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
                 alt="Image of the place"
               />
             </div>
-            <div className="flex flex-col items-center h-20 overflow-y-hidden p-1.5 w-80">
+            <div className="flex flex-col items-center h-20 overflow-y-hidden p-1.5 w-full">
               <a className="font-semibold">{post.place.name}</a>
               <div className="flex justify-center py-2 gap-2">
                 <Link
@@ -121,7 +121,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
             </div>
           </div>
         </div>
-        <div className="w-full max-w-md">
+        <div className="w-full lg:max-w-md">
           <PostDetailCommentSection post={post} />
         </div>
       </div>
