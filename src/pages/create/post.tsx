@@ -238,7 +238,7 @@ const CreatePostPage: React.FC<CreatePostPageProps> = ({
         className="w-full grid grid-cols-2"
         style={{ height: 'calc(100vh - 56px)' }}
       >
-        <div className="w-full h-full relative">
+        <div className="relative w-full h-full">
           <MapGL
             latitude={viewport.latitude}
             longitude={viewport.longitude}

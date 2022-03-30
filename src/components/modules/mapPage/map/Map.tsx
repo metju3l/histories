@@ -6,7 +6,7 @@ import { IViewport, MapStyles } from '@src/types/map';
 import Link from 'next/link';
 import Router from 'next/router';
 import { useTheme } from 'next-themes';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import ReactMapGL, {
@@ -23,9 +23,9 @@ import Clusters from './markers/Clusters';
 import { TimeLine } from './timeLine';
 
 const Map: React.FC = () => {
-  const mapContext = React.useContext(MapContext); // get map context
-  const meContext = React.useContext(MeContext); // get me context
-  const { t } = useTranslation<string>();
+  const mapContext = useContext(MapContext); // get map context
+  const meContext = useContext(MeContext); // get me context
+  const { t } = useTranslation();
   const [mapStyle, setMapStyle] = useState<MapStyles>('theme'); // possible map styles, defaults to theme
   const { resolvedTheme } = useTheme(); // get current theme
   const mapRef = useRef<Maybe<MapRef>>(null); // map ref to get map instance

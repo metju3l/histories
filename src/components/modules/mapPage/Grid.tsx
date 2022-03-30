@@ -11,7 +11,7 @@ const MapPageGrid: React.FC = () => {
 
   return (
     <div
-      className="w-full bg-[#FAFBFB] dark:bg-[#171716] text-black dark:text-white"
+      className="w-full text-black bg-[#FAFBFB] dark:bg-[#171716] dark:text-white"
       style={{ height: 'calc(100vh - 56px)' }}
     >
       <AnimatePresence>
@@ -31,7 +31,7 @@ const MapPageGrid: React.FC = () => {
             {/* HIDE SIDEBAR ARROW ICON */}
             <button
               onClick={() => mapContext.setShowSidebar(!mapContext.showSidebar)}
-              className="absolute z-10 flex items-center invisible py-2 px-1 bg-[#FAFBFB] dark:bg-[#171716] top-1/2 transform -translate-y-1/2 right-0 rounded-l-lg md:visible"
+              className="absolute right-0 z-10 flex items-center invisible px-1 py-2 rounded-l-lg bg-[#FAFBFB] dark:bg-[#171716] top-1/2 transform -translate-y-1/2 md:visible"
             >
               <HiOutlineChevronLeft
                 className={`w-6 h-6 transition-all duration-500 ease-in-out ${

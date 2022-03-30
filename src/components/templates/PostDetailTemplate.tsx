@@ -36,7 +36,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
         place={post.place}
       />
 
-      <div className="flex lg:flex-row flex-col  w-full h-full">
+      <div className="flex flex-col w-full h-full lg:flex-row">
         <div className="relative w-full h-full">
           <Blurhash
             hash={post.photos[currentPhoto].blurhash}
@@ -99,7 +99,7 @@ const PostDetailTemplate: React.FC<PostDetailTemplateProps> = ({ post }) => {
                 alt="Image of the place"
               />
             </div>
-            <div className="flex flex-col items-center h-20 overflow-y-hidden p-1.5 w-full">
+            <div className="flex flex-col items-center w-full h-20 overflow-y-hidden p-1.5">
               <a className="font-semibold">{post.place.name}</a>
               <div className="flex justify-center py-2 gap-2">
                 <Link

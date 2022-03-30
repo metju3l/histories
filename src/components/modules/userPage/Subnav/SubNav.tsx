@@ -17,7 +17,7 @@ const SubNav: React.FC<UserSubNavProps> = ({ currentTab, user }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-center md:justify-between justify-center w-full px-2 pt-2 transition-all duration-500 ease-in-out">
+    <div className="flex items-center justify-center w-full px-2 pt-2 md:justify-between transition-all duration-500 ease-in-out">
       <div className="flex flex-wrap sm:gap-3 gap-5">
         <UserSubNavItem
           href={`/user/${user.username}`}
@@ -25,7 +25,7 @@ const SubNav: React.FC<UserSubNavProps> = ({ currentTab, user }) => {
           name="posts"
         >
           <HiOutlineCollection className="w-6 h-6" />
-          <span className="md:block hidden">{t('posts')}</span>
+          <span className="hidden md:block">{t('posts')}</span>
         </UserSubNavItem>
         <UserSubNavItem
           href={`/user/${user.username}/collections`}
@@ -33,7 +33,7 @@ const SubNav: React.FC<UserSubNavProps> = ({ currentTab, user }) => {
           name="collections"
         >
           <HiFolderOpen className="w-6 h-6" />
-          <span className="md:block hidden">{t('collections')}</span>
+          <span className="hidden md:block">{t('collections')}</span>
         </UserSubNavItem>
         <UserSubNavItem
           href={`/user/${user.username}/map`}
@@ -41,7 +41,7 @@ const SubNav: React.FC<UserSubNavProps> = ({ currentTab, user }) => {
           name="map"
         >
           <HiOutlineMap className="w-6 h-6" />
-          <span className="md:block hidden">
+          <span className="hidden md:block">
             {`${user.firstName}'s ${t('map')}`}
           </span>
         </UserSubNavItem>
